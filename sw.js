@@ -1,11 +1,12 @@
-const CACHE = 'wasteland-v2';
+const CACHE = 'wasteland-v3';
 const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
-  './audio/RadioWasteland1.mp3'
+  './audio/RadioWasteland1.mp3',
+  './audio/AmbientMap.mp3'
 ];
 
 self.addEventListener('install', (event) => {

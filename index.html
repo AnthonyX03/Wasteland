@@ -103,14 +103,74 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 .bottom-bar {
   flex-shrink: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: stretch;
   gap: 6px;
 }
-.panel-aside {
-  flex-shrink: 0;
-  max-height: 28vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+.bottom-bar .tabs {
+  flex: 1;
+  margin: 0;
+}
+.btn-settings {
+  width: 44px;
+  min-width: 44px;
+  font-size: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #001a00;
+  border: 1px solid var(--line);
+}
+.cap-icon {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 2px;
+}
+.time-weather {
+  font-size: 10px;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.map-compact .world-grid {
+  max-width: 260px;
+  gap: 2px;
+  padding: 4px;
+  margin: 4px auto;
+}
+.map-compact .world-cell {
+  font-size: 12px;
+  min-height: 22px;
+}
+.map-compact .map-box {
+  min-height: 0;
+  padding: 6px;
+}
+.map-compact .map-controls {
+  margin-top: 4px;
+  max-width: 340px;
+  gap: 4px;
+}
+.map-compact .map-arrows button {
+  padding: 6px 3px;
+  font-size: 13px;
+}
+.map-compact .quick-meds button,
+.map-compact .quick-radio button {
+  font-size: 10px;
+  padding: 5px 3px;
+}
+.map-compact .quick-travel button {
+  font-size: 10px;
+  padding: 5px 3px;
+  width: 100%;
+}
+.world-cell.settlement {
+  background: #1a0030;
+  color: #cc88ff;
+  border-color: #aa55ff;
 }
 
 .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px; }
@@ -323,15 +383,20 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 
 .vault-container { grid-template-columns: 1fr; }
 .spec-grid { grid-template-columns: 1fr 1fr; }
-.aside-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 8px; }
-.aside-actions button { font-size: 11px; padding: 7px 4px; }
 .row { font-size: 12px; padding: 4px 0; }
+.name-btn {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-weight: bold;
+  padding: 4px 10px;
+  font-size: 14px;
+}
 
 @media (min-width: 700px) {
   .app { max-width: 720px; }
   .tabs { grid-template-columns: repeat(6, 1fr); }
   .log { height: 90px; }
-  .panel-aside { max-height: none; }
 }
 </style>
 </head>
@@ -341,9 +406,10 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   <header>
     <h1>☢ WASTELAND</h1>
     <div class="stats">
+      <span class="time-weather"><b id="st-datetime">1/1/2290 09:00</b> · <b id="st-weather">Día</b></span>
       <span>NV <b id="st-lvl">1</b></span>
       <span>XP <b id="st-xp">0</b>/<b id="st-maxxp">100</b></span>
-      <span style="color:var(--gold)">● <b id="st-caps">75</b></span>
+      <span><img class="cap-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAHx0lEQVR4nI2Xa0hUXRfHfzNnZlKzvOR0cZAeyszGQbSQsjSjC5WWXXH6UgrdiIQMKRCLqKiQCLp8MTKKLgoRhV3MLiSZBWU4iEN2paKyskZtLKc505n1fOj1dLF6nwUbzj5nr/Xfe+31X2sdAyD8RQwGA4qiEAwGCQaDf1sKgNFo/Os6w58ADQYDRqMRTdP0d0lJSUybNo2kpCSioqLw+XwEAgFevHjBjRs3uHXrFpqmYTAYABDpa/q3gD8qDBs2jBUrVpCdnU1YWBhNTU3cvn2bp0+f8u7dOwYOHMiQIUNITU0lMjKSK1eucPHiRd3O70Dlx2E0GgUQRVFk27Zt0t3dLTdv3pTp06fra1JTU2Xx4sVSXFwsS5culQkTJkhISIiYTCZxOp2ydu1aCQkJEUAMBoP8gvF90vsxJiZGGhsbpb29XXJzcwUQu90uJ06cEJ/PJ7+Tjo4OOXTokAwePFjsdruUlJSIxWIRRVF+Bf0OZjQaJTQ0VB48eCANDQ0SGhoqZrNZjh8/rhtuaWmRQCAgjY2N4vV6xe/3/7SJjo4OSU5OloyMDCkpKdG9pXuw16+90XXq1Cna2trIyMggNjaW06dPc//+fS5cuMD48ePZtm0btbW1uFwuFEXBYrEQEhJCMBhEVVWioqKoqamhoaEBh8NBWloawWAQo/EblBFAURQ0TWPBggWMGTOGvLw84uPjqaio4PDhw3g8HjweD+/evSMqKora2locDgc+n4/m5mYqKirwer1YLBZUVcVms5GZmUldXR07duxARPRANP4YvkuXLmXDhg3ExcWxdetWpkyZwogRIxg8eDAul4u0tDTS09N5/fo1paWlrFy5ktTUVOrr6zEYDPh8PkSEYDCI1WrF5XIxY8YM0tLS0DQNRVEw9pJ65syZfPjwAa/Xy6RJk3A6ncybN4/GxkZUVSUyMpKwsDDKy8t59eoV0dHRpKenU1hYSFxcHMuWLWPmzJl4vV6MRiNNTU1EREQgIqxcuVKnhKn3wel0cufOHRISEkhJSUFRFJxOJykpKdjtds6cOcOQIUOIjo5m0KBBvH37lqNHjxIXF8eYMWOIj4+ntbWV169f09LSwvPnz8nPz8dgMJCVlUVkZCRdXV3fiB8eHk51dTVHjhxh1KhRTJ06lYyMDH1XOTk52Gw2vn79iqqqFBcXk5qait/vp7CwEI/Hg6ZptLe3A/Dw4UO6urpwu908evSIO3fu0NraSnV19bcTjh49muHDhxMWFkYgENCzjKqqmM1mJk6ciKqqWK1WLBYLxcXFdHV1MXnyZDRNY8eOHXz69AmbzUZBQQGdnZ3MmTMHu91Oc3Mz/fr148uXL99dGh8fz/nz5+nu7sZms3Hv3j39hCJCaWkpb968AWDAgAHExsby4cMHrl+/zujRo8nPz6enp4fk5GSuXr1KREQEZWVl+P1+wsPDsVqtXLlyRaeGrF69WhYvXixZWVly8uRJcTgc0tHRISIigUBA/H6/TmxN037KMH6/XyorKyUqKkond1VVlYiIbNq0SbZv3y5lZWV6xjECREdHU1RURG5uLpcuXcLpdJKeno7b7cZkMmGxWPT71Hcpwt27dyksLGTNmjV0dnYSEhLCiRMnWLJkCYFAAK/XS2JiIm63G6vV+o2PgBw7doyxY8eSkJDA7NmzSUhIIDw8nDNnzpCSkkJWVhajRo3CYrHw/v17Wltbqaur4/bt23z9+hUAu91OeXk5mZmZtLW1UVBQwIIFC1i0aBHz58/n7t27BIPBb3eYlpbGli1bsNvtXLt2jezsbD5//szUqVN5+fIl+/btQ1VVenp68Hg8P5Uam83GqlWrWLduHREREQAcOHCAly9fYrVa8Xg8PHr0SK+TJgBVVRkxYgSNjY3U1dVRU1NDVVUVx48f5+PHjwwYMAARITQ0FEVR6N+/Pw6Hg5ycHObMmYPNZgPA5XJRUlJCdnY25eXlDBs2jPr6et0LvSLr16+Xs2fPyq1btyQ+Pl7WrVunB0VXV5c0NDTIxYsX5fLly9LU1CQ9PT19Asflckl4eLgAUlZWJsFgUNauXSvp6ek/VQsAGTlypLS3t4umaTJ+/HhxOBxy7tw5KSoqktbW1j61r62tTSorK+XJkyeyceNGGTdunOzatUvmzp0rhw4dktzcXHnx4oUeuT/WQxPA8+fPUVUVo9HI0KFDiY2N5fr16+zdu5eYmBiSkpJ49uwZAwcO5J9//iEvL4+Ojg727NnDnj170DSNsLAwzp07R2RkJMnJyezfvx+fz9enqTL1hnhFRQWdnZ04HA5mzJhBVlYWPT09fPnyhc2bN+N2u0lMTCQzMxOz2YzZbEZRFFpaWvj48SMFBQWYTCaam5tZvnw5brebP4nexwBSVFSku27nzp1SVVUlb9++lZycHImIiJDDhw9Le3u7lJaWyvLly/W1jx8/lnv37kliYmKfKv/L+J9vTSZRFEViYmJk8+bNUllZKQcPHpSnT5/qRvPy8qS7u1uf19fXi4jIqVOnZOHChWK32/8fmPyxLwVISUlh9+7dXLt2DbPZzKxZs0hMTOTAgQO8f/+e/Px8qqur2blzp67T2z38SfoA9nbaItJHcdCgQfTr14+2tjZ+p/NfuvO/nrC3D1EUBUAnsMn0rW73Zo//8gvQK/8CE75xUJw+m+gAAAAASUVORK5CYII=" alt="caps"><b id="st-caps">75</b></span>
       <span>Peso <b id="st-weight">0</b>/<b id="st-maxweight">35</b></span>
     </div>
   </header>
@@ -370,32 +436,16 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
     <div class="tabs panel" style="margin:0; padding:6px;">
       <button id="btn-tab-map" class="active" onclick="switchTab('map', this)">MAPA</button>
       <button onclick="switchTab('char', this)">PERS.</button>
+      <button onclick="switchTab('quests', this)">MISIONES</button>
       <button onclick="switchTab('inv', this)">INV.</button>
       <button onclick="switchTab('vault', this)">REFUGIO</button>
-      <button onclick="switchTab('quests', this)">MISIONES</button>
-      <button onclick="switchTab('shop', this)">TIENDA</button>
+      <button onclick="switchTab('shop', this)">COMERCIO</button>
     </div>
-
-    <aside class="panel panel-aside">
-      <h3 style="margin:0 0 4px 0; color:var(--accent); font-size:13px;" id="aside-name">SUPERVIVIENTE</h3>
-      <div class="row"><span>Vida</span><span id="aside-hp">100/100</span></div>
-      <div class="row"><span>Radiación</span><span id="aside-rad" style="color:#ff6600;">0 / 1000</span></div>
-      <div class="row"><span>Res. RAD</span><span id="aside-radres">0%</span></div>
-      <div class="row"><span>Daño</span><span id="aside-dmg">8</span></div>
-      <div class="row"><span>Defensa</span><span id="aside-def">2</span></div>
-      <div class="row"><span>Munición</span><span id="aside-ammo">--</span></div>
-      <div class="row"><span>Arma</span><span id="aside-wpn">Pistola oxidada</span></div>
-      <div class="row"><span>Armadura</span><span id="aside-arm">Ropa de superviviente</span></div>
-      <div class="aside-actions">
-        <button onclick="renameSurvivor()">Renombrar</button>
-        <button onclick="saveGame()">Guardar</button>
-        <button onclick="loadGame()">Cargar</button>
-        <button onclick="resetGame()">Reiniciar</button>
-      </div>
-    </aside>
+    <button class="btn-settings panel" title="Ajustes" onclick="openSettings()">⚙</button>
   </div>
 
   <audio id="radio-audio" loop preload="auto" src="./audio/RadioWasteland1.mp3"></audio>
+  <audio id="ambient-audio" loop preload="auto" src="./audio/AmbientMap.mp3"></audio>
 </div>
 
 <div class="modal" id="modal">
@@ -661,7 +711,26 @@ const DB_ITEMS = [
   // --- OTROS / TARTERAS ---
   { id: 14, name: "Tartera de Vault-Tec", type: "other", weight: 1, value: 100, stackable: true, shopTier: 1 },
   { id: 15, name: "Tartera Nuka-Cola", type: "other", weight: 1, value: 150, stackable: true, shopTier: 1 },
-  { id: 29, name: "Tartera Legendaria", type: "other", weight: 1, value: 500, stackable: true, shopTier: 1 }
+  { id: 29, name: "Tartera Legendaria", type: "other", weight: 1, value: 500, stackable: true, shopTier: 1 },
+
+  // --- OBJETOS DE MISIÓN DE FACCIÓN (solo aparecen con misión activa) ---
+  { id: 901, name: "Núcleo de fusión antiguo", type: "quest", weight: 1, value: 0, stackable: true, shopTier: 99, questOnly: true },
+  { id: 902, name: "Holocinta de la Hermandad", type: "quest", weight: 0.2, value: 0, stackable: true, shopTier: 99, questOnly: true },
+  { id: 903, name: "Chip genético del Enclave", type: "quest", weight: 0.2, value: 0, stackable: true, shopTier: 99, questOnly: true },
+  { id: 904, name: "Código de acceso del Enclave", type: "quest", weight: 0.1, value: 0, stackable: true, shopTier: 99, questOnly: true },
+  { id: 905, name: "Placa de servoarmadura marcada", type: "quest", weight: 2, value: 0, stackable: true, shopTier: 99, questOnly: true },
+  { id: 906, name: "Emblema de los Proscritos", type: "quest", weight: 0.3, value: 0, stackable: true, shopTier: 99, questOnly: true },
+  { id: 907, name: "Bolsa de semillas de cultivo", type: "quest", weight: 0.4, value: 0, stackable: true, shopTier: 99, questOnly: true },
+  { id: 908, name: "Caja de medicinas de colono", type: "quest", weight: 0.8, value: 0, stackable: true, shopTier: 99, questOnly: true },
+  { id: 909, name: "Paquete cifrado del Ferrocarril", type: "quest", weight: 0.5, value: 0, stackable: true, shopTier: 99, questOnly: true },
+  { id: 910, name: "Tarjeta de agente del Ferrocarril", type: "quest", weight: 0.1, value: 0, stackable: true, shopTier: 99, questOnly: true },
+
+  // Colgantes de prisioneros (captura de compañeros)
+  { id: 920, name: "Colgante para Prisioneros MK1", type: "other", weight: 0.2, value: 400, stackable: true, shopTier: 3, captureChance: 0.20 },
+  { id: 921, name: "Colgante para Prisioneros MK2", type: "other", weight: 0.2, value: 900, stackable: true, shopTier: 5, captureChance: 0.40 },
+  { id: 922, name: "Colgante para Prisioneros MK3", type: "other", weight: 0.2, value: 1800, stackable: true, shopTier: 7, captureChance: 0.60 },
+  { id: 923, name: "Colgante para Prisioneros MK4", type: "other", weight: 0.2, value: 3500, stackable: true, shopTier: 9, captureChance: 0.80 },
+  { id: 924, name: "Colgante para Prisioneros MK5", type: "other", weight: 0.2, value: 7000, stackable: true, shopTier: 10, captureChance: 1.00 }
 ];
 
 // ========== HABILIDADES LEGENDARIAS DE ARMAS (20) ==========
@@ -792,6 +861,13 @@ const UPGRADE_COSTS = {
     [{ id: 28, qty: 1 }, { id: 31, qty: 6 }, { id: 33, qty: 3 }],
     [{ id: 28, qty: 2 }, { id: 36, qty: 2 }, { id: 39, qty: 4 }]
   ],
+  prison: [
+    [{ id: 21, qty: 6 }, { id: 20, qty: 8 }, { id: 22, qty: 4 }],
+    [{ id: 21, qty: 8 }, { id: 23, qty: 5 }, { id: 13, qty: 4 }],
+    [{ id: 21, qty: 10 }, { id: 28, qty: 2 }, { id: 23, qty: 6 }],
+    [{ id: 28, qty: 3 }, { id: 13, qty: 6 }, { id: 36, qty: 3 }],
+    [{ id: 28, qty: 4 }, { id: 23, qty: 8 }, { id: 36, qty: 4 }]
+  ],
   storage: null // especial: escala dinámicamente
 };
 
@@ -856,6 +932,14 @@ let P = {
   rads: 0,
   radioSignal: null,
   location: null,
+  // Tiempo del juego: horas desde 1/1/2290 00:00 → empezamos a las 9:00 del día 1
+  worldHours: 9,
+  weather: 'day',
+  volMusic: 0.6,
+  volSfx: 0.7,
+  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0 },
+  factionQuestPool: {},
+  activeFactionQuests: [],
   baseMaxWeight: 25, 
   bagUpgradeCost: 50,
   shopLevel: 1,
@@ -894,7 +978,14 @@ let P = {
   craftPage: 0,
   storagePage: 0,
   shopSubtab: 'weapon',
-  activeQuests: []
+  activeQuests: [],
+  fastTravelUnlocked: [],
+  ownedHouses: [],
+  prison: [],
+  equippedCompanionId: null,
+  prisonLevel: 1,
+  prisonPage: 0,
+  travelPage: 0
 };
 
 // Estado del combate por turnos
@@ -902,34 +993,51 @@ let combatState = null;
 
 // Enemigos con nivel. Solo aparecen si nivel <= jugador
 const ENEMIES = [
-  { name: "Rata irradiada", level: 1, hp: 18, dmg: 4, loot: [7, 20, 9], caps: [3, 10] },
+  { name: "Rata irradiada", level: 1, hp: 18, dmg: 4, loot: [7, 20], caps: [3, 10] },
   { name: "Saqueador novato", level: 1, hp: 25, dmg: 6, loot: [1, 7, 9, 20], caps: [5, 15] },
   { name: "Perro salvaje", level: 2, hp: 28, dmg: 7, loot: [7, 24], caps: [4, 12] },
+  { name: "Moscas de sangre", level: 2, hp: 20, dmg: 5, loot: [7, 20], caps: [3, 8] },
   { name: "Saqueador", level: 3, hp: 35, dmg: 8, loot: [1, 7, 9, 20, 21], caps: [8, 22] },
   { name: "Necrófago débil", level: 3, hp: 32, dmg: 9, loot: [7, 9, 20], caps: [6, 18] },
+  { name: "Saqueador con tubería", level: 3, hp: 33, dmg: 8, loot: [4, 7, 20], caps: [7, 18] },
+  { name: "Topo mutante", level: 4, hp: 38, dmg: 9, loot: [7, 24, 21], caps: [7, 16] },
   { name: "Bestia mutada pequeña", level: 4, hp: 42, dmg: 10, loot: [7, 24, 26], caps: [8, 20] },
   { name: "Saqueador armado", level: 5, hp: 50, dmg: 12, loot: [101, 7, 9, 21], caps: [12, 28] },
   { name: "Necrófago", level: 5, hp: 48, dmg: 11, loot: [7, 9, 13], caps: [10, 25] },
+  { name: "Saqueador con escopeta", level: 5, hp: 52, dmg: 13, loot: [2, 7, 9], caps: [12, 30] },
   { name: "Bestia mutada", level: 6, hp: 55, dmg: 13, loot: [7, 24, 26, 21], caps: [12, 30] },
+  { name: "Protectron oxidado", level: 6, hp: 58, dmg: 12, loot: [13, 22, 20], caps: [14, 32] },
   { name: "Robot defectuoso", level: 7, hp: 65, dmg: 14, loot: [3, 11, 13, 22, 23], caps: [15, 35] },
+  { name: "Saqueador psicópata", level: 7, hp: 60, dmg: 15, loot: [101, 7, 21], caps: [16, 36] },
   { name: "Saqueador veterano", level: 8, hp: 70, dmg: 16, loot: [101, 7, 301, 21], caps: [18, 40] },
   { name: "Necrófago feroz", level: 9, hp: 75, dmg: 17, loot: [7, 8, 13, 20], caps: [20, 45] },
+  { name: "Mr. Handy hostil", level: 9, hp: 72, dmg: 16, loot: [13, 22, 30], caps: [20, 42] },
   { name: "Robot de seguridad", level: 10, hp: 85, dmg: 18, loot: [105, 11, 13, 22, 28], caps: [22, 50] },
+  { name: "Supermutante novato", level: 10, hp: 90, dmg: 18, loot: [21, 7, 23], caps: [22, 48] },
+  { name: "Mercenario del Yermo", level: 11, hp: 88, dmg: 19, loot: [109, 7, 301, 21], caps: [25, 55] },
   { name: "Saqueador de élite", level: 12, hp: 95, dmg: 20, loot: [109, 7, 301, 28], caps: [28, 60] },
   { name: "Bestia mutada alfa", level: 12, hp: 100, dmg: 21, loot: [7, 24, 26, 28], caps: [25, 55] },
+  { name: "Sanguinario joven", level: 13, hp: 105, dmg: 22, loot: [7, 24, 28], caps: [28, 58] },
   { name: "Sintético defectuoso", level: 14, hp: 110, dmg: 22, loot: [105, 13, 22, 28], caps: [30, 65] },
   { name: "Supermutante", level: 15, hp: 130, dmg: 24, loot: [141, 7, 21, 23], caps: [35, 75] },
   { name: "Saqueador jefe", level: 16, hp: 120, dmg: 25, loot: [112, 7, 310, 28], caps: [40, 80] },
+  { name: "Asesino de la Hermandad", level: 17, hp: 125, dmg: 26, loot: [113, 7, 305, 28], caps: [42, 85] },
+  { name: "Centinela robótico", level: 17, hp: 135, dmg: 26, loot: [117, 13, 28], caps: [44, 88] },
   { name: "Robot militar", level: 18, hp: 145, dmg: 27, loot: [117, 11, 13, 28], caps: [45, 90] },
+  { name: "Supermutante con tablón", level: 18, hp: 150, dmg: 28, loot: [141, 21, 23], caps: [46, 92] },
+  { name: "Sanguinario", level: 19, hp: 160, dmg: 29, loot: [7, 24, 28], caps: [48, 95] },
   { name: "Supermutante brutal", level: 20, hp: 170, dmg: 30, loot: [157, 7, 21, 28], caps: [50, 100] },
   { name: "Cazador del Yermo", level: 22, hp: 155, dmg: 28, loot: [114, 7, 310, 13], caps: [55, 110] },
+  { name: "Supermutante francotirador", level: 22, hp: 165, dmg: 31, loot: [114, 21, 28], caps: [55, 112] },
+  { name: "Sanguinario alfa", level: 24, hp: 185, dmg: 33, loot: [7, 24, 28, 13], caps: [65, 125] },
   { name: "Centinela del Enclave", level: 25, hp: 190, dmg: 32, loot: [117, 13, 28, 319], caps: [70, 130] },
-  { name: "Moscas de sangre", level: 2, hp: 20, dmg: 5, loot: [7, 20], caps: [3, 8] },
-  { name: "Topo mutante", level: 4, hp: 38, dmg: 9, loot: [7, 24, 21], caps: [7, 16] },
-  { name: "Mercenario del Yermo", level: 11, hp: 88, dmg: 19, loot: [109, 7, 301, 21], caps: [25, 55] },
-  { name: "Asesino de la Hermandad", level: 17, hp: 125, dmg: 26, loot: [113, 7, 305, 28], caps: [42, 85] },
+  { name: "Sentry Bot dañado", level: 26, hp: 210, dmg: 34, loot: [117, 13, 28, 22], caps: [75, 140] },
   { name: "Devorador de muerte", level: 28, hp: 250, dmg: 38, loot: [163, 7, 28, 316], caps: [90, 160] },
-  { name: "Behemoth mutante", level: 30, hp: 320, dmg: 42, loot: [158, 21, 23, 28], caps: [100, 180] }
+  { name: "Behemoth mutante", level: 30, hp: 320, dmg: 42, loot: [158, 21, 23, 28], caps: [100, 180] },
+  { name: "Supermutante señor de la guerra", level: 28, hp: 240, dmg: 36, loot: [157, 21, 28], caps: [85, 155] },
+  { name: "Saqueador nuclear", level: 14, hp: 100, dmg: 23, loot: [109, 7, 301], caps: [32, 70] },
+  { name: "Necrófago brillante", level: 11, hp: 80, dmg: 18, loot: [7, 8, 13], caps: [24, 52] },
+  { name: "Assaultron defectuosa", level: 20, hp: 175, dmg: 31, loot: [105, 13, 28], caps: [52, 105] }
 ];
 
 const LEGENDARY_ENEMIES = [
@@ -940,8 +1048,146 @@ const LEGENDARY_ENEMIES = [
   { name: "Supermutante Enfurecido", level: 15, hp: 200, dmg: 32, loot: [21, 23, 28], caps: [80, 160] },
   { name: "Cazador del Yermo Legendario", level: 18, hp: 180, dmg: 30, loot: [101, 7, 13], caps: [75, 150] },
   { name: "Señor de la Guerra Saqueador", level: 20, hp: 220, dmg: 35, loot: [112, 7, 28], caps: [100, 180] },
-  { name: "Coloso Mutante", level: 25, hp: 280, dmg: 40, loot: [158, 21, 28], caps: [120, 220] }
+  { name: "Sanguinario Legendario", level: 22, hp: 240, dmg: 36, loot: [7, 24, 28], caps: [110, 200] },
+  { name: "Assaultron Legendaria", level: 24, hp: 260, dmg: 38, loot: [105, 13, 28], caps: [115, 210] },
+  { name: "Coloso Mutante", level: 25, hp: 280, dmg: 40, loot: [158, 21, 28], caps: [120, 220] },
+  { name: "Devorador de Muerte Legendario", level: 28, hp: 320, dmg: 45, loot: [163, 28, 316], caps: [140, 250] },
+  { name: "Behemoth Legendario", level: 30, hp: 400, dmg: 48, loot: [158, 21, 28], caps: [160, 280] }
 ];
+
+
+// 20 habilidades legendarias de compañeros
+const COMPANION_LEGENDARY_ABILITIES = [
+  { id: 'c_fury', name: 'Furia del Yermo', desc: '+25% daño cuando la vida del compañero está por debajo del 40%.' },
+  { id: 'c_iron', name: 'Piel de Hierro', desc: '+20% defensa permanente.' },
+  { id: 'c_regen', name: 'Regeneración Mutante', desc: 'Recupera 5% de vida máxima al final de cada turno.' },
+  { id: 'c_crit', name: 'Golpe Letal', desc: '+30% probabilidad de crítico.' },
+  { id: 'c_rad', name: 'Aura Radiactiva', desc: 'El enemigo recibe +8 daño extra por turno.' },
+  { id: 'c_shield', name: 'Escudo Absorbente', desc: 'Absorbe el 15% del daño recibido.' },
+  { id: 'c_swift', name: 'Reflejos de Asalto', desc: '15% de probabilidad de atacar dos veces.' },
+  { id: 'c_poison', name: 'Veneno Persistente', desc: 'Envenena al enemigo 3 turnos (+6 daño/turno).' },
+  { id: 'c_terror', name: 'Presencia Aterradora', desc: 'El enemigo inflige 15% menos daño.' },
+  { id: 'c_overcharge', name: 'Sobrealimentación', desc: '+18 daño plano en cada ataque.' },
+  { id: 'c_armorbreak', name: 'Rompeblindajes', desc: 'Reduce 3 defensa enemiga acumulativa por golpe.' },
+  { id: 'c_lucky', name: 'Golpe de Suerte', desc: '10% de probabilidad de daño x3.' },
+  { id: 'c_vamp', name: 'Robo de Vida', desc: 'Cura al compañero un 20% del daño infligido.' },
+  { id: 'c_shock', name: 'Descarga Eléctrica', desc: '+12 daño y 10% de aturdir (enemigo pierde turno).' },
+  { id: 'c_pack', name: 'Instinto de Manada', desc: '+10% daño por cada compañero en prisión (máx +40%).' },
+  { id: 'c_hard', name: 'Caparazón Endurecido', desc: 'Ignora el primer golpe del combate.' },
+  { id: 'c_berserk', name: 'Berserker', desc: '+40% daño, -10% defensa.' },
+  { id: 'c_precise', name: 'Puntería Perfecta', desc: 'Los críticos hacen x2.2 en lugar de x1.5.' },
+  { id: 'c_tank', name: 'Baluarte', desc: '+35% vida máxima.' },
+  { id: 'c_legend', name: 'Presencia Legendaria', desc: '+15% a todas las estadísticas de combate.' }
+];
+
+function enemyWeaponType(name) {
+  let n = (name || '').toLowerCase();
+  if (n.includes('robot') || n.includes('protectron') || n.includes('sentry') || n.includes('assaultron') || n.includes('handy') || n.includes('sintético') || n.includes('centinela')) {
+    return 'robot';
+  }
+  if (n.includes('supermutante') || n.includes('behemoth')) return 'supermutant';
+  if (n.includes('sanguinario') || n.includes('devorador') || n.includes('bestia') || n.includes('topo') || n.includes('rata') || n.includes('perro') || n.includes('mosca')) return 'creature';
+  if (n.includes('necrófago')) return 'ghoul';
+  if (n.includes('saqueador') || n.includes('mercenario') || n.includes('cazador') || n.includes('asesino') || n.includes('enclave')) return 'human';
+  return 'other';
+}
+
+function rollCompanionSpecial() {
+  const r = () => 1 + Math.floor(Math.random() * 10);
+  return { S: r(), P: r(), E: r(), C: r(), I: r(), A: r(), L: r() };
+}
+
+function getCompanionWeaponName(type, isLeg) {
+  if (type === 'robot') return isLeg ? 'Cañón de plasma robótico' : 'Láser integrado';
+  if (type === 'supermutant') return isLeg ? 'Tabla de clavos legendaria' : 'Tabla de clavos';
+  if (type === 'human') return isLeg ? 'Rifle de asalto modificado' : 'Arma improvisada';
+  return null; // creature/ghoul/other: sin arma
+}
+
+function createCompanionFromEnemy(enemyName, enemyLevel, baseHp, baseDmg, isLegendary) {
+  let type = enemyWeaponType(enemyName);
+  let special = rollCompanionSpecial();
+  let ability = null;
+  if (isLegendary) {
+    ability = COMPANION_LEGENDARY_ABILITIES[Math.floor(Math.random() * COMPANION_LEGENDARY_ABILITIES.length)];
+  }
+  let maxHp = baseHp;
+  if (ability && ability.id === 'c_tank') maxHp = Math.floor(maxHp * 1.35);
+  if (ability && ability.id === 'c_legend') maxHp = Math.floor(maxHp * 1.15);
+  return {
+    id: 'comp_' + Date.now() + '_' + Math.floor(Math.random() * 9999),
+    name: enemyName.replace(/\s*\(Nv\.\d+\)/, '').replace(/^★\s*/, ''),
+    level: enemyLevel || 1,
+    xp: 0,
+    type: type,
+    special: special,
+    maxHp: maxHp,
+    hp: maxHp,
+    baseDmg: baseDmg,
+    baseDef: Math.max(1, Math.floor(baseDmg * 0.35) + Math.floor(special.E / 2)),
+    weapon: getCompanionWeaponName(type, !!isLegendary),
+    isLegendary: !!isLegendary,
+    ability: ability,
+    resting: false,
+    hardSkinUsed: false
+  };
+}
+
+function getPrisonCapacity() {
+  return 10 + ((P.prisonLevel || 1) - 1) * 10;
+}
+
+function getEquippedCompanion() {
+  if (!P.equippedCompanionId || !P.prison) return null;
+  return P.prison.find(c => c.id === P.equippedCompanionId) || null;
+}
+
+function companionRequiredXP(lvl) {
+  return 40 + (lvl * 25);
+}
+
+function addCompanionXP(comp, amount) {
+  if (!comp) return;
+  comp.xp = (comp.xp || 0) + amount;
+  let req = companionRequiredXP(comp.level);
+  while (comp.xp >= req) {
+    comp.xp -= req;
+    comp.level++;
+    // subir stats de combate, no SPECIAL
+    comp.maxHp = Math.floor(comp.maxHp * 1.08) + 3;
+    comp.baseDmg = Math.floor(comp.baseDmg * 1.06) + 1;
+    comp.baseDef = Math.floor(comp.baseDef * 1.05) + 1;
+    if (comp.hp > 0 && !comp.resting) {
+      comp.hp = Math.min(comp.maxHp, comp.hp + Math.floor(comp.maxHp * 0.15));
+    }
+    logMsg(comp.name + " sube a nivel " + comp.level + "!");
+    req = companionRequiredXP(comp.level);
+  }
+}
+
+function getCompanionCombatStats(comp) {
+  if (!comp) return null;
+  let dmg = comp.baseDmg + Math.floor((comp.special.S || 1) * 0.5);
+  let def = comp.baseDef;
+  let maxHp = comp.maxHp;
+  let ab = comp.ability;
+  if (ab) {
+    if (ab.id === 'c_iron') def = Math.floor(def * 1.20);
+    if (ab.id === 'c_overcharge') dmg += 18;
+    if (ab.id === 'c_berserk') { dmg = Math.floor(dmg * 1.40); def = Math.floor(def * 0.90); }
+    if (ab.id === 'c_legend') { dmg = Math.floor(dmg * 1.15); def = Math.floor(def * 1.15); }
+    if (ab.id === 'c_pack') {
+      let n = Math.min(4, (P.prison || []).length);
+      dmg = Math.floor(dmg * (1 + n * 0.10));
+    }
+    if (ab.id === 'c_fury' && comp.hp / comp.maxHp < 0.4) dmg = Math.floor(dmg * 1.25);
+  }
+  // escala suave por nivel
+  let lvlBonus = Math.max(0, (comp.level || 1) - 1);
+  dmg += Math.floor(lvlBonus * 0.8);
+  def += Math.floor(lvlBonus * 0.4);
+  return { dmg, def, maxHp };
+}
 
 // Genera un objeto legendario (arma o armadura) con habilidad aleatoria
 function generateLegendaryItem(preferType = null) {
@@ -1171,6 +1417,27 @@ function countItemsByBaseId(baseId) {
   return P.inv.filter(i => i.id === baseId).reduce((acc, i) => acc + (i.qty || 1), 0);
 }
 
+function removeItemsByBaseId(baseId, qty) {
+  let left = qty;
+  for (let i = P.inv.length - 1; i >= 0 && left > 0; i--) {
+    if (P.inv[i].id !== baseId) continue;
+    let q = P.inv[i].qty || 1;
+    if (q <= left) {
+      left -= q;
+      P.inv.splice(i, 1);
+    } else {
+      P.inv[i].qty = q - left;
+      left = 0;
+    }
+  }
+  return qty - left;
+}
+function removeAllItemsByBaseId(baseId) {
+  P.inv = (P.inv || []).filter(x => x.id !== baseId);
+  if (P.storage) P.storage = P.storage.filter(x => x.id !== baseId);
+}
+
+
 function getEquippedWeapon() {
   let inst = P.inv.find(i => i.uid === P.equippedWeaponUid);
   if (!inst) return { name: "Desarmado", damage: 2, ammoType: "Ninguna (Cuerpo a cuerpo)", mods: [], legendary: false };
@@ -1232,6 +1499,7 @@ function updateStats() {
   document.getElementById('st-xp').textContent = P.xp;
   document.getElementById('st-maxxp').textContent = reqXp;
   document.getElementById('st-caps').textContent = P.caps;
+  document.getElementById('st-caps').style.color = '#e05050';
   document.getElementById('st-weight').textContent = wCap.toFixed(1);
   document.getElementById('st-maxweight').textContent = maxw;
 
@@ -1247,24 +1515,20 @@ function updateStats() {
   if ((P.rads || 0) >= 800) totalDmg = Math.max(1, totalDmg - 2);
 
   let rads = P.rads || 0;
-  let radRes = getRadResistance();
   let radColor = rads >= 600 ? '#ff003c' : (rads >= 200 ? '#ff6600' : 'var(--accent)');
 
-  let nameEl = document.getElementById('aside-name');
-  if (nameEl) nameEl.textContent = (P.playerName || "SUPERVIVIENTE").toUpperCase();
-  document.getElementById('aside-hp').textContent = P.hp + "/" + maxhp;
-  let asideRad = document.getElementById('aside-rad');
-  if (asideRad) {
-    asideRad.textContent = rads + " / 1000 (" + getRadStatusText() + ")";
-    asideRad.style.color = radColor;
+  // Bonos/penalizaciones de clima
+  let wInfo = getWeatherInfo();
+  if (wInfo.dmgMod) totalDmg = Math.max(1, totalDmg + wInfo.dmgMod);
+  if (wInfo.defMod) totalDef = Math.max(0, totalDef + wInfo.defMod);
+
+  let dtEl = document.getElementById('st-datetime');
+  if (dtEl) dtEl.textContent = formatGameDateTime();
+  let weEl = document.getElementById('st-weather');
+  if (weEl) {
+    weEl.textContent = wInfo.label;
+    weEl.style.color = wInfo.color || 'var(--gold)';
   }
-  let asideRadRes = document.getElementById('aside-radres');
-  if (asideRadRes) asideRadRes.textContent = radRes + "%";
-  document.getElementById('aside-wpn').textContent = w.name;
-  document.getElementById('aside-arm').textContent = a.name;
-  document.getElementById('aside-dmg').textContent = totalDmg;
-  document.getElementById('aside-def').textContent = totalDef;
-  document.getElementById('aside-ammo').textContent = ammoDisplay;
 
   document.getElementById('qs-hp').textContent = P.hp + "/" + maxhp;
   let qsRad = document.getElementById('qs-rad');
@@ -1362,16 +1626,28 @@ function renderCharacter() {
   let maxhp = getMaxHp();
   let maxw = getMaxWeight();
   let reqXp = getRequiredXP();
+  let w = getEquippedWeapon();
+  let a = getEquippedArmor();
+  let wInfo = getWeatherInfo();
 
   let html = `
-    <h2>ESTADO DEL JUGADOR</h2>
-    <div class="row"><span>Nivel Actual</span><b>${P.lvl}</b></div>
-    <div class="row"><span>Puntos de Experiencia</span><b>${P.xp} / ${reqXp}</b></div>
-    <div class="row"><span>Salud Actual</span><b>${P.hp} / ${maxhp}</b></div>
+    <h2 style="text-align:center; color:var(--accent); margin:4px 0;">${P.playerName || 'Superviviente'}</h2>
+    <div class="row"><span>Nivel</span><b>${P.lvl}</b></div>
+    <div class="row"><span>Experiencia</span><b>${P.xp} / ${reqXp}</b></div>
+    <div class="row"><span>Salud</span><b>${P.hp} / ${maxhp}</b></div>
     <div class="row"><span>Radiación</span><b style="color:#ff6600;">${P.rads || 0} / 1000 (${getRadStatusText()})</b></div>
     <div class="row"><span>Res. Radiación</span><b>${getRadResistance()}%</b></div>
-    <div class="row"><span>Capacidad de Carga Total</span><b>${maxw} kg</b></div>
-    <p style="font-size:11px; color:#8d9880;">La radiación reduce tu vida máxima: Baja 90% · Alta 75% · Grave 55% · Crítica 35%.</p>
+    <div class="row"><span>Arma equipada</span><b>${w.name}</b></div>
+    <div class="row"><span>Armadura</span><b>${a.name}</b></div>
+    <div class="row"><span>Carga máxima</span><b>${maxw} kg</b></div>
+    <div class="row"><span>Fecha / clima</span><b>${formatGameDateTime()} · ${wInfo.label}</b></div>
+    <h3 style="color:var(--accent); font-size:13px; margin-top:10px;">Reputación de facciones</h3>
+    ${Object.keys(FACTIONS).map(fid => {
+      let f = FACTIONS[fid];
+      let r = (P.reputation && P.reputation[fid]) || 0;
+      return '<div class="row"><span style="color:' + f.color + '">' + f.name + '</span><b>' + r + '/1000</b></div>';
+    }).join('')}
+    <p style="font-size:10px; color:#8d9880;">Radiación limita HP. Clima afecta combate. Asentamientos ⚑ en el mapa.</p>
 
     <h3 style="color:var(--accent); margin-top:15px;">ATRIBUTOS S.P.E.C.I.A.L. (Puntos Libres: ${P.specialPts})</h3>
     <div class="spec-grid">
@@ -1444,6 +1720,9 @@ function ensureVaultDefaults() {
   if (!P.cookLevel) P.cookLevel = 1;
   if (!P.storage) P.storage = [];
   if (P.storageMaxWeight === undefined) P.storageMaxWeight = 100;
+  if (P.prisonLevel === undefined) P.prisonLevel = 1;
+  if (!P.prison) P.prison = [];
+  if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
   if (P.storageUpgradeRank === undefined) P.storageUpgradeRank = 0;
   if (!P.activeEffects) P.activeEffects = [];
   if (!P.fabricSubtab) P.fabricSubtab = 'crafting';
@@ -1514,8 +1793,9 @@ function renderVault(sub = P.vaultSubtab || 'lunchboxes') {
     <div class="subtabs" >
       <button class="${sub === 'lunchboxes' ? 'active' : ''}" onclick="renderVault('lunchboxes')">Tarteras</button>
       <button class="${sub === 'fabric' ? 'active' : ''}" onclick="renderVault('fabric')">Fabricación</button>
-      <button class="${sub === 'storage' ? 'active' : ''}" onclick="renderVault('storage')">Almacén</button>
       <button class="${sub === 'scrap' ? 'active' : ''}" onclick="renderVault('scrap')">Desguace</button>
+      <button class="${sub === 'storage' ? 'active' : ''}" onclick="renderVault('storage')">Almacén</button>
+      <button class="${sub === 'prison' ? 'active' : ''}" onclick="renderVault('prison')">Prisión</button>
       <button class="${sub === 'upgrades' ? 'active' : ''}" onclick="renderVault('upgrades')">Mejoras</button>
     </div>
   `;
@@ -1553,7 +1833,12 @@ function renderVault(sub = P.vaultSubtab || 'lunchboxes') {
     html += renderStorageUI();
   } else if (sub === 'scrap') {
     html += renderScrapUI();
-  } else if (sub === 'upgrades') {
+  } else 
+  if (sub === 'prison') {
+    html += renderPrisonUI();
+  }
+
+  if (sub === 'upgrades') {
     html += renderVaultUpgradesUI();
   }
 
@@ -1745,6 +2030,96 @@ function getStorageUpgradeCost() {
   ];
 }
 
+
+function renderPrisonUI() {
+  if (!P.prison) P.prison = [];
+  if (!P.prisonLevel) P.prisonLevel = 1;
+  if (P.prisonPage === undefined) P.prisonPage = 0;
+  let cap = getPrisonCapacity();
+  let page = P.prisonPage || 0;
+  let per = 5;
+  let totalPages = Math.max(1, Math.ceil(P.prison.length / per));
+  if (page >= totalPages) page = totalPages - 1;
+  P.prisonPage = page;
+  let slice = P.prison.slice(page * per, page * per + per);
+  let eq = getEquippedCompanion();
+  let html = `<p style="font-size:12px;color:#8d9880;">Prisión Nv.${P.prisonLevel}/5 · Celdas ${P.prison.length}/${cap}. Equipa 1 compañero.</p>`;
+  if (eq) {
+    html += `<div class="item" style="border-color:var(--accent);"><b>Equipado:</b> ${eq.isLegendary ? '★ ' : ''}${eq.name} Nv.${eq.level} · HP ${eq.hp}/${eq.maxHp}${eq.resting ? ' · DESCANSANDO' : ''}</div>`;
+  }
+  if (slice.length === 0) {
+    html += `<p style="font-size:12px;color:#8d9880;">Sin prisioneros. Usa Colgantes en combate para capturar enemigos.</p>`;
+  } else {
+    slice.forEach(c => {
+      let st = getCompanionCombatStats(c);
+      let ab = c.ability ? `<br><span style="color:var(--gold);font-size:11px;">★ ${c.ability.name}: ${c.ability.desc}</span>` : '';
+      let weap = c.weapon ? `Arma: ${c.weapon}` : 'Sin arma (cuerpo a cuerpo)';
+      html += `<div class="item" style="${c.id === P.equippedCompanionId ? 'border-color:var(--accent);' : ''}">
+        <b>${c.isLegendary ? '★ ' : ''}${c.name}</b> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
+        ${c.resting ? ' <span style="color:var(--danger);">[DESCANSANDO]</span>' : ''}
+        <br><span style="font-size:11px;color:#8d9880;">HP ${c.hp}/${c.maxHp} · ATK ${st.dmg} · DEF ${st.def} · ${weap}</span>
+        <br><span style="font-size:10px;">S${c.special.S} P${c.special.P} E${c.special.E} C${c.special.C} I${c.special.I} A${c.special.A} L${c.special.L}</span>
+        ${ab}
+        <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;">
+          <button style="font-size:11px;" ${c.resting ? 'disabled' : ''} onclick="equipCompanion('${c.id}')">${c.id === P.equippedCompanionId ? 'Equipado' : 'Equipar'}</button>
+          <button style="font-size:11px;" onclick="showCompanionStats('${c.id}')">Stats</button>
+          <button style="font-size:11px;border-color:var(--danger);color:var(--danger);" onclick="freeCompanion('${c.id}')">Liberar</button>
+        </div>
+      </div>`;
+    });
+  }
+  html += `<div style="display:flex;justify-content:space-between;margin-top:8px;">
+    <button ${page <= 0 ? 'disabled' : ''} onclick="P.prisonPage=${page-1};renderVault('prison')">◀</button>
+    <span style="font-size:11px;">Pág. ${page+1}/${totalPages}</span>
+    <button ${page >= totalPages-1 ? 'disabled' : ''} onclick="P.prisonPage=${page+1};renderVault('prison')">▶</button>
+  </div>`;
+  return html;
+}
+
+function equipCompanion(id) {
+  let c = (P.prison || []).find(x => x.id === id);
+  if (!c || c.resting) { logMsg("No se puede equipar."); return; }
+  if (P.equippedCompanionId === id) {
+    P.equippedCompanionId = null;
+    logMsg("Compañero retirado.");
+  } else {
+    P.equippedCompanionId = id;
+    logMsg("Compañero equipado: " + c.name);
+  }
+  renderVault('prison');
+  updateStats();
+}
+
+function freeCompanion(id) {
+  if (!confirm("¿Liberar a este compañero? Se irá para siempre.")) return;
+  P.prison = (P.prison || []).filter(c => c.id !== id);
+  if (P.equippedCompanionId === id) P.equippedCompanionId = null;
+  logMsg("Compañero liberado.");
+  renderVault('prison');
+}
+
+function showCompanionStats(id) {
+  let c = (P.prison || []).find(x => x.id === id);
+  if (!c) return;
+  let st = getCompanionCombatStats(c);
+  let ab = c.ability ? `<p style="color:var(--gold);"><b>★ ${c.ability.name}</b><br>${c.ability.desc}</p>` : '<p style="color:#8d9880;">Sin habilidad legendaria.</p>';
+  let m = document.getElementById('modal');
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:var(--accent);margin-top:0;">${c.isLegendary ? '★ ' : ''}${c.name}</h2>
+    <p style="font-size:12px;">Nivel ${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)} · Tipo: ${c.type}</p>
+    <div class="row"><span>Salud</span><b>${c.hp} / ${c.maxHp}</b></div>
+    <div class="row"><span>Ataque</span><b>${st.dmg}</b></div>
+    <div class="row"><span>Defensa</span><b>${st.def}</b></div>
+    <div class="row"><span>Arma</span><b>${c.weapon || 'Ninguna (melee)'}</b></div>
+    <div class="row"><span>Estado</span><b>${c.resting ? 'Descansando' : 'Listo'}</b></div>
+    <h3 style="color:var(--accent);font-size:13px;">S.P.E.C.I.A.L.</h3>
+    <p style="font-size:12px;">S${c.special.S} P${c.special.P} E${c.special.E} C${c.special.C} I${c.special.I} A${c.special.A} L${c.special.L}</p>
+    ${ab}
+    <button style="width:100%;margin-top:8px;" onclick="closeModal();renderVault('prison');">Cerrar</button>
+  `;
+  m.classList.add('show');
+}
+
 function renderVaultUpgradesUI() {
   ensureVaultDefaults();
   let facilities = [
@@ -1753,7 +2128,8 @@ function renderVaultUpgradesUI() {
     { key: 'lunchbox', name: '📦 Tarteras Vault-Tec', level: P.lunchboxLevel, max: 5, desc: 'Mejores recompensas de tarteras.' },
     { key: 'scrap', name: '🔩 Desguace', level: P.scrapLevel, max: 5, desc: 'Más chatarra al desguazar.' },
     { key: 'alchemy', name: '⚗️ Alquimia', level: P.alchemyLevel, max: 5, desc: 'Nuevas recetas de químicos y medicinas.' },
-    { key: 'cook', name: '🍳 Cocina', level: P.cookLevel, max: 5, desc: 'Nuevas recetas de comida.' }
+    { key: 'cook', name: '🍳 Cocina', level: P.cookLevel, max: 5, desc: 'Nuevas recetas de comida.' },
+    { key: 'prison', name: '⛓ Prisión', level: P.prisonLevel || 1, max: 5, desc: '+10 celdas por nivel (base 10).' }
   ];
 
   let html = `<h3 style="color:var(--accent);">MEJORAS DEL REFUGIO</h3>
@@ -1788,7 +2164,7 @@ function renderVaultUpgradesUI() {
 
 function upgradeVaultFacility(type) {
   ensureVaultDefaults();
-  let levelKey = { craft: 'craftLevel', mod: 'modLevel', lunchbox: 'lunchboxLevel', scrap: 'scrapLevel', alchemy: 'alchemyLevel', cook: 'cookLevel' }[type];
+  let levelKey = { craft: 'craftLevel', mod: 'modLevel', lunchbox: 'lunchboxLevel', scrap: 'scrapLevel', alchemy: 'alchemyLevel', cook: 'cookLevel', prison: 'prisonLevel' }[type];
   if (!levelKey) return;
   if (P[levelKey] >= 5) return;
   let costs = (UPGRADE_COSTS[type] || [])[P[levelKey] - 1];
@@ -2048,7 +2424,17 @@ function updateQuestProgress(type, amount = 1) {
       q.current = Math.min(q.target, q.current + amount);
       if (q.current >= q.target) {
         q.completed = true;
-        logMsg("¡Misión completada: '" + q.title + "'! Reclama tu recompensa en la pestaña Misiones.");
+        logMsg("¡Misión secundaria completada: '" + q.title + "'! Reclama en Misiones.");
+      }
+    }
+  });
+  if (!P.activeFactionQuests) P.activeFactionQuests = [];
+  P.activeFactionQuests.forEach(q => {
+    if (q.type === type && !q.completed) {
+      q.current = Math.min(q.target, q.current + amount);
+      if (q.current >= q.target) {
+        q.completed = true;
+        logMsg("¡Misión de facción completada: '" + q.title + "'! Reclama en el asentamiento.");
       }
     }
   });
@@ -2115,9 +2501,27 @@ function claimReward(questId) {
 }
 
 function renderQuests() {
+  ensureFactionDefaults();
   let html = `<h2>REGISTRO DE MISIONES</h2>`;
+  html += `<h3 style="color:var(--gold); font-size:13px;">Principales de facción</h3>`;
+  html += `<p style="font-size:11px;color:#8d9880;">Se aceptan y reclaman dentro del asentamiento (⚑ en el mapa).</p>`;
+  if (!P.activeFactionQuests || P.activeFactionQuests.length === 0) {
+    html += `<p style="font-size:12px;color:#8d9880;">Ninguna misión de facción activa.</p>`;
+  } else {
+    P.activeFactionQuests.forEach(q => {
+      let fac = FACTIONS[q.faction];
+      let pct = Math.floor((q.current / q.target) * 100);
+      html += `<div class="item" style="border-color:${fac ? fac.color : 'var(--line)'};">
+        <b>${q.title}</b> <span style="font-size:10px;color:var(--gold);">PRINCIPAL · ${fac ? fac.name : q.faction}</span><br>
+        <span style="font-size:11px;">${q.desc}</span><br>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:var(--accent);"></div></div>
+        <span style="font-size:11px;">${q.current}/${q.target} ${q.completed ? '— Completada (reclama en el asentamiento)' : ''}</span>
+      </div>`;
+    });
+  }
+  html += `<h3 style="color:var(--accent); font-size:13px; margin-top:12px;">Secundarias</h3>`;
   if (P.activeQuests.length === 0) {
-    html += `<p style="font-size:12px; color:#8d9880;">No tienes ninguna misión activa en este momento. Explora el mapa para encontrar supervivientes y encargos.</p>`;
+    html += `<p style="font-size:12px; color:#8d9880;">No tienes misiones secundarias. Explora el mapa para encontrar encargos.</p>`;
   } else {
     P.activeQuests.forEach(q => {
       let pct = Math.floor((q.current / q.target) * 100);
@@ -2164,7 +2568,119 @@ const ZONE_DEFS = {
   ruin:   { icon: '⌂',  label: 'Ruinas',            cls: 'ruin',   enterable: true,  radChance: 0.25, exploreBias: 'combat' },
   city:   { icon: '▣',  label: 'Ciudad derruida',   cls: 'city',   enterable: true,  radChance: 0.35, exploreBias: 'combat' },
   poi:    { icon: '★',  label: 'Lugar de interés',  cls: 'poi',    enterable: true,  radChance: 0.20, exploreBias: 'loot' },
-  camp:   { icon: '⛺', label: 'Campamento',        cls: 'camp',   enterable: true,  radChance: 0.15, exploreBias: 'combat' }
+  camp:   { icon: '⛺', label: 'Campamento',        cls: 'camp',   enterable: true,  radChance: 0.15, exploreBias: 'combat' },
+  settlement: { icon: '⚑', label: 'Asentamiento', cls: 'settlement', enterable: true, radChance: 0.05, exploreBias: 'loot' }
+};
+
+// Facciónes y asentamientos fijos en el mapa
+const FACTIONS = {
+  bos: { id: 'bos', name: 'Hermandad del Acero', color: '#6688ff', shopLevels: [100, 250, 500, 750, 1000] },
+  enclave: { id: 'enclave', name: 'El Enclave', color: '#ff6666', shopLevels: [100, 250, 500, 750, 1000] },
+  outcasts: { id: 'outcasts', name: 'Proscritos de la Hermandad', color: '#aa88ff', shopLevels: [100, 250, 500, 750, 1000] },
+  settlers: { id: 'settlers', name: 'Colonos', color: '#88cc66', shopLevels: [100, 250, 500, 750, 1000] },
+  railroad: { id: 'railroad', name: 'El Ferrocarril', color: '#cccc66', shopLevels: [100, 250, 500, 750, 1000] }
+};
+function getFactionShopLevel(fid) {
+  let rep = getFactionRep(fid);
+  let levels = (FACTIONS[fid] && FACTIONS[fid].shopLevels) || [100, 250, 500, 750, 1000];
+  let lvl = 0;
+  for (let i = 0; i < levels.length; i++) {
+    if (rep >= levels[i]) lvl = i + 1;
+  }
+  return lvl; // 0 = bloqueada, 1-5 = niveles
+}
+
+const SETTLEMENTS = [
+  { id: 'citadel', name: 'La Ciudadela', faction: 'bos', x: 3, y: 2 },
+  { id: 'enclave_base', name: 'Base del Enclave', faction: 'enclave', x: -4, y: 5 },
+  { id: 'outcast_outpost', name: 'Puesto de Proscritos', faction: 'outcasts', x: 6, y: -3 },
+  { id: 'sanctuary', name: 'Santuario de Colonos', faction: 'settlers', x: -2, y: -4 },
+  { id: 'rail_hq', name: 'Cuartel del Ferrocarril', faction: 'railroad', x: 5, y: 6 }
+];
+
+// Misiones principales por facción (se rotan de 3 en 3)
+// type collect + itemId: el objeto solo aparece en el Yermo si la misión está activa
+const FACTION_QUEST_POOL = {
+  bos: [
+    { id: 'bos_q1', title: 'Caza de saqueadores', desc: 'Derrota a 5 saqueadores o enemigos del Yermo.', type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'bos_q2', title: 'Recuperar el núcleo de fusión antiguo', desc: 'Encuentra 1 Núcleo de fusión antiguo (solo aparece con esta misión).', type: 'collect', itemId: 901, target: 1, reward: { caps: 120, xp: 80, rep: 15 }, minRep: 0 },
+    { id: 'bos_q3', title: 'Patrulla de reconocimiento', desc: 'Explora 8 zonas del mapa.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'bos_q4', title: 'Holocinta de la Hermandad', desc: 'Recupera 1 Holocinta de la Hermandad del Yermo.', type: 'collect', itemId: 902, target: 1, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 200 },
+    { id: 'bos_q5', title: 'Purga de amenazas', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 200, xp: 140, rep: 18 }, minRep: 400 },
+    { id: 'bos_q6', title: 'Caza de legendarios', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 350, xp: 220, rep: 20 }, minRep: 700 }
+  ],
+  enclave: [
+    { id: 'enc_q1', title: 'Protocolo de limpieza', desc: 'Elimina 6 amenazas del Yermo.', type: 'kill', target: 6, reward: { caps: 110, xp: 75, rep: 12 }, minRep: 0 },
+    { id: 'enc_q2', title: 'Recuperar chip genético', desc: 'Encuentra 1 Chip genético del Enclave.', type: 'collect', itemId: 903, target: 1, reward: { caps: 130, xp: 85, rep: 15 }, minRep: 0 },
+    { id: 'enc_q3', title: 'Cartografía táctica', desc: 'Explora 10 zonas.', type: 'explore', target: 10, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'enc_q4', title: 'Códigos de acceso clasificados', desc: 'Recupera 1 Código de acceso del Enclave.', type: 'collect', itemId: 904, target: 1, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
+    { id: 'enc_q5', title: 'Dominio regional', desc: 'Derrota 12 enemigos.', type: 'kill', target: 12, reward: { caps: 220, xp: 150, rep: 18 }, minRep: 400 },
+    { id: 'enc_q6', title: 'Amenaza legendaria', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 380, xp: 240, rep: 20 }, minRep: 700 }
+  ],
+  outcasts: [
+    { id: 'out_q1', title: 'Independencia armada', desc: 'Derrota 5 enemigos en combate.', type: 'kill', target: 5, reward: { caps: 95, xp: 65, rep: 12 }, minRep: 0 },
+    { id: 'out_q2', title: 'Placa de servoarmadura perdida', desc: 'Encuentra 1 Placa de servoarmadura marcada.', type: 'collect', itemId: 905, target: 1, reward: { caps: 125, xp: 80, rep: 15 }, minRep: 0 },
+    { id: 'out_q3', title: 'Rutas seguras', desc: 'Explora 7 zonas.', type: 'explore', target: 7, reward: { caps: 85, xp: 55, rep: 12 }, minRep: 0 },
+    { id: 'out_q4', title: 'Emblema de los Proscritos', desc: 'Recupera 1 Emblema de los Proscritos.', type: 'collect', itemId: 906, target: 1, reward: { caps: 190, xp: 125, rep: 18 }, minRep: 200 },
+    { id: 'out_q5', title: 'Golpe quirúrgico', desc: 'Derrota 9 enemigos.', type: 'kill', target: 9, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 400 },
+    { id: 'out_q6', title: 'Trofeo legendario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 360, xp: 230, rep: 20 }, minRep: 700 }
+  ],
+  settlers: [
+    { id: 'set_q1', title: 'Defensa del asentamiento', desc: 'Derrota 4 enemigos que amenazan a los colonos.', type: 'kill', target: 4, reward: { caps: 70, xp: 50, rep: 12 }, minRep: 0 },
+    { id: 'set_q2', title: 'Semillas de cultivos irradiados', desc: 'Recoge 1 Bolsa de semillas de cultivo.', type: 'collect', itemId: 907, target: 1, reward: { caps: 90, xp: 55, rep: 12 }, minRep: 0 },
+    { id: 'set_q3', title: 'Rutas comerciales', desc: 'Explora 6 zonas buscando rutas.', type: 'explore', target: 6, reward: { caps: 65, xp: 45, rep: 10 }, minRep: 0 },
+    { id: 'set_q4', title: 'Medicina para el refugio', desc: 'Encuentra 1 Caja de medicinas de colono.', type: 'collect', itemId: 908, target: 1, reward: { caps: 150, xp: 100, rep: 15 }, minRep: 200 },
+    { id: 'set_q5', title: 'Protección civil', desc: 'Derrota 8 enemigos.', type: 'kill', target: 8, reward: { caps: 170, xp: 120, rep: 18 }, minRep: 400 },
+    { id: 'set_q6', title: 'Héroes del pueblo', desc: 'Derrota 2 enemigos legendarios.', type: 'kill_leg', target: 2, reward: { caps: 280, xp: 190, rep: 20 }, minRep: 700 }
+  ],
+  railroad: [
+    { id: 'rr_q1', title: 'Silenciar amenazas', desc: 'Derrota 5 enemigos en la ruta.', type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'rr_q2', title: 'Paquete del Ferrocarril', desc: 'Recupera 1 Paquete cifrado del Ferrocarril.', type: 'collect', itemId: 909, target: 1, reward: { caps: 120, xp: 80, rep: 15 }, minRep: 0 },
+    { id: 'rr_q3', title: 'Ruta de escape', desc: 'Explora 7 zonas para marcar la ruta.', type: 'explore', target: 7, reward: { caps: 95, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'rr_q4', title: 'Tarjeta de agente encubierto', desc: 'Encuentra 1 Tarjeta de agente del Ferrocarril.', type: 'collect', itemId: 910, target: 1, reward: { caps: 185, xp: 125, rep: 18 }, minRep: 200 },
+    { id: 'rr_q5', title: 'Operación sombra', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 400 },
+    { id: 'rr_q6', title: 'Objetivo prioritario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 370, xp: 235, rep: 20 }, minRep: 700 }
+  ]
+};
+
+// Tienda de facción: shopLevel 1=100rep ... 5=1000rep
+const FACTION_SHOP_ITEMS = {
+  bos: [
+    { id: 7, shopLevel: 1 }, { id: 8, shopLevel: 1 }, { id: 20, shopLevel: 1 }, { id: 21, shopLevel: 1 }, { id: 301, shopLevel: 1 },
+    { id: 101, shopLevel: 2 }, { id: 109, shopLevel: 2 }, { id: 18, shopLevel: 2 }, { id: 13, shopLevel: 2 },
+    { id: 111, shopLevel: 3 }, { id: 28, shopLevel: 3 }, { id: 14, shopLevel: 3 },
+    { id: 112, shopLevel: 4 }, { id: 29, shopLevel: 4 }, { id: 77, shopLevel: 4 },
+    { id: 210, shopLevel: 5 }, { id: 15, shopLevel: 5 }, { id: 51, shopLevel: 5 }
+  ],
+ 
+  enclave: [
+    { id: 7, shopLevel: 1 }, { id: 76, shopLevel: 1 }, { id: 22, shopLevel: 1 }, { id: 75, shopLevel: 1 },
+    { id: 111, shopLevel: 2 }, { id: 72, shopLevel: 2 }, { id: 13, shopLevel: 2 },
+    { id: 112, shopLevel: 3 }, { id: 77, shopLevel: 3 }, { id: 28, shopLevel: 3 },
+    { id: 117, shopLevel: 4 }, { id: 29, shopLevel: 4 }, { id: 319, shopLevel: 4 },
+    { id: 210, shopLevel: 5 }, { id: 51, shopLevel: 5 }, { id: 15, shopLevel: 5 }
+  ],
+  outcasts: [
+    { id: 7, shopLevel: 1 }, { id: 16, shopLevel: 1 }, { id: 23, shopLevel: 1 }, { id: 17, shopLevel: 1 },
+    { id: 121, shopLevel: 2 }, { id: 25, shopLevel: 2 }, { id: 13, shopLevel: 2 },
+    { id: 112, shopLevel: 3 }, { id: 28, shopLevel: 3 }, { id: 15, shopLevel: 3 },
+    { id: 157, shopLevel: 4 }, { id: 29, shopLevel: 4 }, { id: 77, shopLevel: 4 },
+    { id: 210, shopLevel: 5 }, { id: 51, shopLevel: 5 }, { id: 14, shopLevel: 5 }
+  ],
+  settlers: [
+    { id: 7, shopLevel: 1 }, { id: 40, shopLevel: 1 }, { id: 44, shopLevel: 1 }, { id: 48, shopLevel: 1 },
+    { id: 80, shopLevel: 2 }, { id: 50, shopLevel: 2 }, { id: 14, shopLevel: 2 },
+    { id: 83, shopLevel: 3 }, { id: 51, shopLevel: 3 }, { id: 15, shopLevel: 3 },
+    { id: 86, shopLevel: 4 }, { id: 70, shopLevel: 4 }, { id: 28, shopLevel: 4 },
+    { id: 29, shopLevel: 5 }, { id: 77, shopLevel: 5 }, { id: 52, shopLevel: 5 }
+  ],
+  railroad: [
+    { id: 7, shopLevel: 1 }, { id: 73, shopLevel: 1 }, { id: 30, shopLevel: 1 }, { id: 70, shopLevel: 1 },
+    { id: 109, shopLevel: 2 }, { id: 36, shopLevel: 2 }, { id: 13, shopLevel: 2 },
+    { id: 77, shopLevel: 3 }, { id: 29, shopLevel: 3 }, { id: 51, shopLevel: 3 },
+    { id: 112, shopLevel: 4 }, { id: 28, shopLevel: 4 }, { id: 15, shopLevel: 4 },
+    { id: 210, shopLevel: 5 }, { id: 52, shopLevel: 5 }, { id: 14, shopLevel: 5 }
+  ]
 };
 
 const INTERIOR_TEMPLATES = {
@@ -2196,37 +2712,160 @@ const INTERIOR_TEMPLATES = {
 };
 
 const POI_NAMES = {
-  ruin: ["Casa derruida", "Gasolinera abandonada", "Fábrica oxidada", "Granja fantasma", "Taller mecánico"],
-  city: ["Ciudad de cenizas", "Distrito comercial", "Barrio residencial", "Puerto industrial", "Casco antiguo"],
-  poi: ["Búnker Vault-Tec", "Clínica abandonada", "Estación de metro", "Torre de radio", "Laboratorio secreto"],
-  camp: ["Campamento de saqueadores", "Puesto de caza", "Caravana varada", "Refugio improvisado"]
+  ruin: [
+    "Casa derruida", "Gasolinera abandonada", "Fábrica oxidada", "Granja fantasma", "Taller mecánico",
+    "Comisaría abandonada", "Restaurante Red Rocket", "Escuela en ruinas", "Biblioteca quemada", "Iglesia derruida",
+    "Hospital viejo", "Farmacia saqueada", "Supermercado vacío", "Cine abandonado", "Hotel en ruinas",
+    "Banco derrumbado", "Oficina de correos", "Estación de tren", "Almacén industrial", "Aserradero",
+    "Molino de viento", "Silo de grano", "Casa solariega", "Búnker familiar", "Garaje oxidado",
+    "Lavandería", "Peluquería", "Bar del Yermo", "Bowling abandonado", "Gimnasio en ruinas"
+  ],
+  city: [
+    "Ciudad de cenizas", "Distrito comercial", "Barrio residencial", "Puerto industrial", "Casco antiguo",
+    "Plaza del mercado", "Callejón de los saqueadores", "Zona portuaria", "Barrio chino irradiado", "Distrito financiero",
+    "Parque central muerto", "Puente colapsado", "Estadio abandonado", "Universidad en ruinas", "Ayuntamiento",
+    "Zona militar", "Gueto de necrófagos", "Mercadillo negro", "Torres residenciales", "Subterráneo urbano"
+  ],
+  poi: [
+    "Búnker Vault-Tec", "Clínica abandonada", "Estación de metro", "Torre de radio", "Laboratorio secreto",
+    "Base militar", "Hangar de aviones", "Centro de investigación", "Planta nuclear", "Observatorio",
+    "Fábrica de robots", "Almacén de Nuka-Cola", "Sede de RobCo", "Instalación de Poseidon Energy", "Cárcel estatal",
+    "Museo de la guerra", "Zoológico mutante", "Acueducto antiguo", "Mina abandonada", "Cueva de cristales",
+    "Templo olvidado", "Nave estrellada", "Radar militar", "Depósito de armas", "Criadero de brahmanes"
+  ],
+  camp: [
+    "Campamento de saqueadores", "Puesto de caza", "Caravana varada", "Refugio improvisado",
+    "Campamento de supervivientes", "Puesto comercial", "Base de la Hermandad", "Campamento de esclavistas",
+    "Hogar de ermitaño", "Fogata de viajeros", "Puesto de vigilancia", "Campamento necrófago"
+  ],
+  empty: [
+    "Yermo vacío", "Llanura irradiada", "Desierto de polvo", "Campo de escombros", "Cráter antiguo",
+    "Dunas tóxicas", "Páramo silencioso", "Valle muerto", "Meseta rocosa", "Erial de huesos"
+  ],
+  road: [
+    "Carretera rota", "Autopista colapsada", "Camino de tierra", "Puente semi-derruido", "Túnel de carretera",
+    "Peaje abandonado", "Intercambiador", "Ruta 66 del Yermo"
+  ],
+  river: [
+    "Río contaminado", "Arroyo tóxico", "Lago irradiado", "Marisma venenosa", "Canal industrial",
+    "Cascada radiactiva", "Delta muerto"
+  ]
 };
 
-function getZoneAt(x, y) {
-  let h = hashCoord(x, y);
-  // Ríos: bandas horizontales/verticales
-  if (Math.abs((y * 3 + x) % 11) === 0 || Math.abs((x * 5 - y) % 13) === 0) {
-    return { type: 'river', ...ZONE_DEFS.river, name: 'Río contaminado' };
-  }
-  // Carreteras
-  if (x % 7 === 0 || y % 9 === 0) {
-    return { type: 'road', ...ZONE_DEFS.road, name: 'Carretera rota' };
-  }
+const WEATHER_TYPES = {
+  day:   { label: '☀ Día', color: '#ffcc00', radMult: 1, dmgMod: 0, defMod: 0, combatMod: 0 },
+  night: { label: '🌙 Noche', color: '#88aaff', radMult: 0.7, dmgMod: -1, defMod: 0, combatMod: 0.05 },
+  rain:  { label: '🌧 Lluvia', color: '#66aacc', radMult: 1.2, dmgMod: 0, defMod: -1, combatMod: 0 },
+  radrain:{ label: '☢ Lluvia rad.', color: '#ff6600', radMult: 2.5, dmgMod: -1, defMod: -2, combatMod: 0.05 },
+  fog:   { label: '🌫 Niebla', color: '#aaaaaa', radMult: 1, dmgMod: -2, defMod: 0, combatMod: 0.08 },
+  storm: { label: '⛈ Tormenta', color: '#ff4444', radMult: 1.5, dmgMod: -2, defMod: -1, combatMod: 0.1 },
+  clear_night: { label: '✨ Noche clara', color: '#ccddee', radMult: 0.5, dmgMod: 0, defMod: 1, combatMod: 0 }
+};
+
+function formatGameDateTime() {
+  let h = P.worldHours || 9;
+  let day = Math.floor(h / 24) + 1;
+  let hour = h % 24;
+  // Meses simples de 30 días
+  let month = Math.floor((day - 1) / 30) + 1;
+  let dom = ((day - 1) % 30) + 1;
+  let year = 2290 + Math.floor((month - 1) / 12);
+  month = ((month - 1) % 12) + 1;
+  return dom + '/' + month + '/' + year + ' ' + String(hour).padStart(2, '0') + ':00';
+}
+
+function getWeatherInfo() {
+  let key = P.weather || 'day';
+  return WEATHER_TYPES[key] || WEATHER_TYPES.day;
+}
+
+function updateWeatherFromTime() {
+  let hour = (P.worldHours || 9) % 24;
+  let h = hashCoord(Math.floor((P.worldHours || 0) / 6), P.x + P.y);
   let roll = h % 100;
+  let isNight = (hour >= 20 || hour < 6);
+
+  if (isNight) {
+    if (roll < 15) P.weather = 'radrain';
+    else if (roll < 30) P.weather = 'fog';
+    else if (roll < 45) P.weather = 'storm';
+    else if (roll < 70) P.weather = 'clear_night';
+    else P.weather = 'night';
+  } else {
+    if (roll < 12) P.weather = 'radrain';
+    else if (roll < 25) P.weather = 'rain';
+    else if (roll < 35) P.weather = 'fog';
+    else if (roll < 45) P.weather = 'storm';
+    else P.weather = 'day';
+  }
+}
+
+function advanceTime(hours = 1) {
+  P.worldHours = (P.worldHours || 9) + hours;
+  let prev = P.weather;
+  updateWeatherFromTime();
+  // Efectos climáticos por hora
+  let w = getWeatherInfo();
+  if (w.radMult > 1 && Math.random() < 0.4 * (w.radMult - 1)) {
+    addRads(Math.floor(3 * w.radMult));
+  }
+  if (P.weather !== prev) {
+    logMsg("Clima: " + w.label);
+  }
+  // Compañeros descansando regeneran vida cada hora
+  if (P.prison && P.prison.length) {
+    for (let h = 0; h < hours; h++) {
+      P.prison.forEach(c => {
+        if (c.hp < c.maxHp) {
+          let heal = Math.max(1, Math.floor(c.maxHp * 0.12));
+          c.hp = Math.min(c.maxHp, c.hp + heal);
+          if (c.resting && c.hp >= c.maxHp) {
+            c.resting = false;
+            c.hp = c.maxHp;
+            logMsg(c.name + " se ha recuperado y está listo.");
+          }
+        }
+      });
+    }
+  }
+}
+
+function getSettlementAt(x, y) {
+  return SETTLEMENTS.find(s => s.x === x && s.y === y) || null;
+}
+
+function getZoneAt(x, y) {
+  let sett = getSettlementAt(x, y);
+  if (sett) {
+    let fac = FACTIONS[sett.faction];
+    return {
+      type: 'settlement',
+      ...ZONE_DEFS.settlement,
+      name: sett.name,
+      settlementId: sett.id,
+      faction: sett.faction,
+      factionName: fac ? fac.name : sett.faction
+    };
+  }
+  let h = hashCoord(x, y);
   let type;
-  if (roll < 35) type = 'empty';
-  else if (roll < 50) type = 'ruin';
-  else if (roll < 62) type = 'camp';
-  else if (roll < 74) type = 'poi';
-  else if (roll < 86) type = 'city';
-  else type = 'empty';
+  if (Math.abs((y * 3 + x) % 11) === 0 || Math.abs((x * 5 - y) % 13) === 0) {
+    type = 'river';
+  } else if (x % 7 === 0 || y % 9 === 0) {
+    type = 'road';
+  } else {
+    let roll = h % 100;
+    if (roll < 32) type = 'empty';
+    else if (roll < 50) type = 'ruin';
+    else if (roll < 60) type = 'camp';
+    else if (roll < 74) type = 'poi';
+    else if (roll < 88) type = 'city';
+    else type = 'empty';
+  }
 
   let def = ZONE_DEFS[type];
-  let name = def.label;
-  if (POI_NAMES[type]) {
-    let names = POI_NAMES[type];
-    name = names[h % names.length];
-  }
+  let names = POI_NAMES[type] || [def.label];
+  let name = names[h % names.length];
   return { type, ...def, name };
 }
 
@@ -2263,11 +2902,15 @@ function renderWorldGrid() {
       cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
     }
   }
-  return `<div class="world-grid">${cells}</div>
-    <p style="font-size:10px; color:#8d9880; text-align:center;">· vacío  ═ carretera  ≈ río  ⌂ ruinas  ▣ ciudad  ★ interés  ⛺ campamento</p>`;
+  return `<div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:280px;">${cells}</div>
+    <p style="font-size:9px;color:#8d9880;text-align:center;margin:2px 0;">· vacío · ═ carretera · ≈ río · ⌂ ruinas · ▣ ciudad · ★ interés · ⛺ camp · ⚑ asentamiento</p>`;
 }
 
 function renderMap() {
+  if (P.location && P.location.type === 'settlement') {
+    renderSettlementUI(P.location.settlementId, 'missions');
+    return;
+  }
   if (P.location) {
     renderInteriorMap();
     return;
@@ -2286,38 +2929,42 @@ function renderMap() {
     signalHint = `<p style="font-size:11px; color:${here ? 'var(--gold)' : '#8d9880'};">📡 Señal en [${sx}, ${sy}]${here ? ' — ¡AQUÍ! Usa la Radio.' : ''}</p>`;
   }
 
-  let actions = `<button onclick="pipClick(); exploreZone()">EXPLORAR ZONA</button>`;
-  if (zone.enterable) {
-    actions += ` <button style="background:var(--accent); color:#111; font-weight:bold;" onclick="pipClick(); enterLocation()">ENTRAR →</button>`;
+  let actions = `<button style="padding:5px 8px;margin:1px;font-size:11px;" onclick="exploreZone()">EXPLORAR</button>`;
+  if (zone.type === 'settlement') {
+    actions += ` <button style="padding:5px 8px;margin:1px;font-size:11px;background:var(--accent);color:#111;font-weight:bold;" onclick="enterSettlement('${zone.settlementId}')">ENTRAR AL ASENTAMIENTO</button>`;
+  } else if (zone.enterable) {
+    actions += ` <button style="padding:5px 8px;margin:1px;font-size:11px;background:var(--accent);color:#111;font-weight:bold;" onclick="enterLocation()">ENTRAR →</button>`;
   }
   if (zone.type === 'river') {
-    actions += `<p style="font-size:11px; color:#00aacc; margin-top:6px;">⚠ Zona altamente irradiada</p>`;
+    actions += `<div style="font-size:11px; color:#00aacc; margin-top:4px;">⚠ Zona altamente irradiada</div>`;
+  }
+  if (zone.type === 'settlement') {
+    let rep = (P.reputation && P.reputation[zone.faction]) || 0;
+    actions += `<div style="font-size:11px; color:#cc88ff; margin-top:4px;">⚑ ${zone.factionName} · Reputación: ${rep}</div>`;
   }
 
   document.getElementById('main-view').innerHTML = `
-    <div><b>SECTOR [${fmtX}, ${fmtY}]</b> <span class="zone-badge">${zone.icon} ${zone.name}</span></div>
-    <p style="font-size:12px; color:#8d9880;">Muévete por el Yermo. Las casillas con borde se pueden <b>entrar</b>.</p>
+    <div class="map-compact">
+    <div style="text-align:center;font-size:11px;"><b>[${fmtX},${fmtY}]</b> ${zone.icon} <b style="color:var(--accent);">${zone.name}</b>
+    ${zone.enterable ? ' <span style="color:var(--gold);font-size:11px;">(entrable)</span>' : ''}
+    </div>
     ${signalHint}
     ${renderWorldGrid()}
-    <div class="map-box">
-      <div>
-        <b style="color:var(--accent); font-size:16px;">${zone.icon} ${zone.name}</b><br>
-        <span style="font-size:11px; color:#8d9880;">${zone.enterable ? 'Puedes entrar a explorar el interior.' : 'Zona exterior abierta.'}</span><br><br>
-        ${actions}
-      </div>
-    </div>
+    <div style="text-align:center;margin:3px 0;">${actions}</div>
     <div class="map-controls">
       <div class="quick-meds">
-        <button onclick="pipClick(); quickUseStim()" ${stims === 0 ? 'disabled' : ''}>💉 Stim (${stims})</button>
-        <button onclick="pipClick(); quickUseRadAway()" ${radaways === 0 ? 'disabled' : ''}>☢ RadAway (${radaways})</button>
+        <button onclick="quickUseStim()" ${stims === 0 ? 'disabled' : ''}>💉 Stim (${stims})</button>
+        <button onclick="quickUseRadAway()" ${radaways === 0 ? 'disabled' : ''}>☢ RadAway (${radaways})</button>
       </div>
       <div class="map-arrows">
-        <div></div><button onclick="pipClick(); move(0, 1)">▲</button><div></div>
-        <button onclick="pipClick(); move(-1, 0)">◀</button><button onclick="pipClick(); move(0, -1)">▼</button><button onclick="pipClick(); move(1, 0)">▶</button>
+        <div></div><button onclick="move(0, 1)">▲</button><div></div>
+        <button onclick="move(-1, 0)">◀</button><button onclick="move(0, -1)">▼</button><button onclick="move(1, 0)">▶</button>
       </div>
       <div class="quick-radio">
-        <button onclick="pipClick(); openRadioUI()" style="background:#003300; border-color:var(--accent);">📻 RADIO</button>
+        <button onclick="openRadioUI()" style="background:#003300; border-color:var(--accent);">📻 RADIO</button>
+        <button onclick="openFastTravelUI()" style="background:#1a0030; border-color:#aa55ff; margin-top:3px;">⚡ VIAJE</button>
       </div>
+    </div>
     </div>
   `;
 }
@@ -2406,12 +3053,313 @@ function interiorMove(dir) {
   let next = getCurrentRoom();
   logMsg("Te mueves a: " + (next ? next.name : '...') + ".");
   tickEffects();
-  // Pequeña chance de encuentro al moverse dentro
-  if (Math.random() < 0.18) {
+  advanceTime(1);
+  let combatChance = 0.18 + (getWeatherInfo().combatMod || 0);
+  if (Math.random() < combatChance) {
     startCombat(false);
     return;
   }
   renderMap();
+  updateStats();
+}
+
+function openSettings() {
+  let vm = P.volMusic !== undefined ? P.volMusic : 0.6;
+  let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
+  let m = document.getElementById('modal');
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:var(--accent); text-align:center; margin-top:0;">⚙ AJUSTES</h2>
+    <p style="font-size:12px; color:#8d9880; text-align:center;">${P.playerName || 'Superviviente'} · ${formatGameDateTime()}</p>
+    <div class="item" style="margin:8px 0;">
+      <b>Volumen música</b>
+      <input id="vol-music" type="range" min="0" max="100" value="${Math.round(vm * 100)}" style="width:100%;" oninput="setVolMusic(this.value)">
+    </div>
+    <div class="item" style="margin:8px 0;">
+      <b>Volumen efectos</b>
+      <input id="vol-sfx" type="range" min="0" max="100" value="${Math.round(vs * 100)}" style="width:100%;" oninput="setVolSfx(this.value)">
+    </div>
+    <button style="width:100%; margin:6px 0;" onclick="saveGame(); closeModal();">💾 Guardar partida</button>
+    <button style="width:100%; margin:6px 0;" onclick="loadGame(); closeModal();">📂 Cargar partida</button>
+    <button style="width:100%; margin:6px 0;" onclick="renameSurvivor(); closeModal();">✏ Renombrar</button>
+    <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
+    <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland ver1.0</div>
+  `;
+  m.classList.add('show');
+}
+
+function setVolMusic(v) {
+  P.volMusic = Math.max(0, Math.min(1, Number(v) / 100));
+  let radio = document.getElementById('radio-audio');
+  if (radio) radio.volume = P.volMusic;
+  let amb = document.getElementById('ambient-audio');
+  if (amb) amb.volume = P.volMusic;
+}
+
+function setVolSfx(v) {
+  P.volSfx = Math.max(0, Math.min(1, Number(v) / 100));
+}
+
+function ensureFactionDefaults() {
+  if (!P.reputation) P.reputation = { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0 };
+  if (!P.activeFactionQuests) P.activeFactionQuests = [];
+  if (!P.factionQuestPool) P.factionQuestPool = {};
+  if (P.volMusic === undefined) P.volMusic = 0.6;
+  if (P.volSfx === undefined) P.volSfx = 0.7;
+}
+
+function getFactionRep(fid) {
+  ensureFactionDefaults();
+  return P.reputation[fid] || 0;
+}
+
+function addFactionRep(fid, amount) {
+  ensureFactionDefaults();
+  P.reputation[fid] = Math.min(1000, (P.reputation[fid] || 0) + amount);
+  logMsg("Reputación con " + (FACTIONS[fid]?.name || fid) + ": " + P.reputation[fid]);
+}
+
+function getAvailableFactionQuests(fid) {
+  ensureFactionDefaults();
+  let rep = getFactionRep(fid);
+  let pool = FACTION_QUEST_POOL[fid] || [];
+  let activeIds = (P.activeFactionQuests || []).map(q => q.id);
+  // Rotación: mantener 3 slots por facción en factionQuestPool
+  if (!P.factionQuestPool[fid] || P.factionQuestPool[fid].length === 0) {
+    let eligible = pool.filter(q => q.minRep <= rep && !activeIds.includes(q.id));
+    // Mezclar y coger 3
+    eligible = eligible.sort(() => Math.random() - 0.5).slice(0, 3);
+    P.factionQuestPool[fid] = eligible.map(q => q.id);
+  }
+  // Refrescar si alguna ya no aplica
+  P.factionQuestPool[fid] = P.factionQuestPool[fid].filter(id => {
+    let q = pool.find(x => x.id === id);
+    return q && q.minRep <= rep;
+  });
+  while (P.factionQuestPool[fid].length < 3) {
+    let candidates = pool.filter(q => q.minRep <= rep && !P.factionQuestPool[fid].includes(q.id) && !activeIds.includes(q.id));
+    if (candidates.length === 0) break;
+    let pick = candidates[Math.floor(Math.random() * candidates.length)];
+    P.factionQuestPool[fid].push(pick.id);
+  }
+  return P.factionQuestPool[fid].map(id => pool.find(q => q.id === id)).filter(Boolean);
+}
+
+function enterSettlement(settlementId) {
+  let sett = SETTLEMENTS.find(s => s.id === settlementId);
+  if (!sett) return;
+  if (P.x !== sett.x || P.y !== sett.y) {
+    logMsg("Debes estar en el asentamiento.");
+    return;
+  }
+  P.location = { type: 'settlement', settlementId: sett.id, name: sett.name, faction: sett.faction };
+  logMsg("Entras en " + sett.name + " (" + FACTIONS[sett.faction].name + ").");
+  renderSettlementUI(sett.id, 'missions');
+  updateStats();
+}
+
+function renderSettlementUI(settlementId, tab) {
+  ensureFactionDefaults();
+  let sett = SETTLEMENTS.find(s => s.id === settlementId);
+  if (!sett) { renderMap(); return; }
+  let fac = FACTIONS[sett.faction];
+  let rep = getFactionRep(sett.faction);
+  tab = tab || 'missions';
+
+  let html = `
+    <div style="text-align:center;">
+      <h2 style="color:${fac.color}; margin:4px 0;">⚑ ${sett.name}</h2>
+      <div style="font-size:12px; color:#8d9880;">${fac.name} · Reputación: <b style="color:${fac.color};">${rep}/1000</b></div>
+    </div>
+    <div class="subtabs" style="margin-top:8px;">
+      <button class="${tab === 'missions' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','missions')">Misiones</button>
+      <button class="${tab === 'shop' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','shop')">Tienda</button>
+      <button class="${tab === 'base' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','base')">Base</button>
+    </div>
+  `;
+
+  if (tab === 'missions') {
+    html += `<h3 style="color:var(--accent); font-size:13px;">Misiones principales (reclamar aquí)</h3>`;
+    // Activas de esta facción
+    let mine = (P.activeFactionQuests || []).filter(q => q.faction === sett.faction);
+    if (mine.length > 0) {
+      mine.forEach(q => {
+        html += `<div class="item" style="border-color:${fac.color};">
+          <b>${q.title}</b> <span style="font-size:10px;color:var(--gold);">PRINCIPAL</span><br>
+          <span style="font-size:11px;color:#8d9880;">${q.desc}</span><br>
+          <span style="font-size:11px;">Progreso: ${q.current}/${q.target}</span><br>`;
+        if (q.completed) {
+          html += `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="claimFactionQuest('${q.id}')">RECLAMAR RECOMPENSA</button>`;
+        } else {
+          html += `<span style="font-size:11px;color:#8d9880;">En curso...</span>`;
+        }
+        html += `</div>`;
+      });
+    }
+    // Disponibles
+    let avail = getAvailableFactionQuests(sett.faction).filter(q => !(P.activeFactionQuests || []).some(a => a.id === q.id));
+    html += `<h3 style="color:var(--gold); font-size:13px;">Disponibles (${avail.length}/3 rotación)</h3>`;
+    if (avail.length === 0) {
+      html += `<p style="font-size:12px;color:#8d9880;">No hay misiones nuevas. Completa las activas o sube reputación.</p>`;
+    } else {
+      avail.forEach(q => {
+        html += `<div class="item">
+          <b>${q.title}</b><br>
+          <span style="font-size:11px;color:#8d9880;">${q.desc}</span><br>
+          <span style="font-size:11px;">Recompensa: ${q.reward.caps} chapas · ${q.reward.xp} XP · +${q.reward.rep} rep</span><br>
+          <button style="margin-top:6px;" onclick="acceptFactionQuest('${sett.faction}','${q.id}')">ACEPTAR</button>
+        </div>`;
+      });
+    }
+  } else if (tab === 'shop') {
+    let shopLvl = getFactionShopLevel(sett.faction);
+    let thresholds = fac.shopLevels || [100, 250, 500, 750, 1000];
+    if (shopLvl < 1) {
+      html += `<p style="font-size:13px;color:var(--danger);">Tienda bloqueada. Necesitas reputación ${thresholds[0]} (tienes ${rep}).</p>`;
+    } else {
+      html += `<p style="font-size:12px;color:#8d9880;">Tienda nivel ${shopLvl}/5 · Rep ${rep}/1000 · Umbrales: ${thresholds.join('/')}</p>`;
+      let items = (FACTION_SHOP_ITEMS[sett.faction] || []).filter(it => shopLvl >= (it.shopLevel || 1));
+      if (items.length === 0) {
+        html += `<p style="font-size:12px;color:#8d9880;">Sin mercancía.</p>`;
+      } else {
+        items.forEach(entry => {
+          let it = getItemBase(entry.id);
+          if (!it) return;
+          let price = Math.max(1, Math.floor(it.value * 1.8));
+          html += `<div class="item">
+            <b>${it.name}</b> — ${price} chapas
+            <span style="font-size:10px;color:#8d9880;"> (Nv.${entry.shopLevel || 1})</span><br>
+            <button style="margin-top:4px;" onclick="buyFactionItem('${sett.faction}',${entry.id},${price})">Comprar</button>
+          </div>`;
+        });
+      }
+    }
+  } else {
+    // BASE: médico, casa, vale de ruta
+    let hasVoucher = P.fastTravelUnlocked && P.fastTravelUnlocked.includes(sett.id);
+    let hasHouse = P.ownedHouses && P.ownedHouses.includes(sett.id);
+    let maxhp = getMaxHp();
+    let needHp = Math.max(0, maxhp - P.hp);
+    let needRad = P.rads || 0;
+    // Curar HP: 2 chapas por punto; radiación: 5 chapas por punto (más caro)
+    let costHp = Math.ceil(needHp / 2);
+    let costRad = needRad * 1;
+    html += `<div class="item">
+      <b>${fac.name}</b> · Rep ${rep}/1000<br>
+      <span style="font-size:11px;color:#8d9880;">Tienda: Nv1@100 · Nv2@250 · Nv3@500 · Nv4@750 · Nv5@1000</span>
+    </div>
+    <div class="item" style="border-color:var(--accent);">
+      <b>🩺 Médico del asentamiento</b><br>
+      <span style="font-size:12px;color:#8d9880;">Cura total de salud y/o radiación. La radiación cuesta más.</span><br>
+      <span style="font-size:11px;">HP: ${P.hp}/${maxhp} → coste ${costHp} chapas · RAD: ${needRad} → coste ${costRad} chapas</span><br>
+      <button style="margin-top:6px;" ${needHp === 0 || P.caps < costHp ? 'disabled' : ''} onclick="settlementHealHp('${sett.id}')">Curar salud (${costHp})</button>
+      <button style="margin-top:6px;" ${needRad === 0 || P.caps < costRad ? 'disabled' : ''} onclick="settlementHealRad('${sett.id}')">Curar radiación (${costRad})</button>
+      <button style="margin-top:6px;" ${(needHp === 0 && needRad === 0) || P.caps < (costHp + costRad) ? 'disabled' : ''} onclick="settlementHealFull('${sett.id}')">Curar todo (${costHp + costRad})</button>
+    </div>
+    <div class="item" style="border-color:var(--gold);">
+      <b>🏠 Casa en ${sett.name}</b> — 2000 chapas<br>
+      <span style="font-size:12px;color:#8d9880;">Descansa 1–24 h. Recuperas salud según tu nivel. El compañero NO se cura aquí.</span><br>
+      ${hasHouse
+        ? `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHouseRestUI('${sett.id}')">Entrar y descansar</button>`
+        : `<button style="margin-top:6px;" ${P.caps < 2000 ? 'disabled' : ''} onclick="buySettlementHouse('${sett.id}')">Comprar casa (2000)</button>`}
+    </div>
+    <div class="item" style="border-color:#aa55ff;">
+      <b>⚡ Vale de Ruta</b> — 1000 chapas<br>
+      <span style="font-size:12px;color:#8d9880;">Desbloquea viaje rápido a este asentamiento.</span><br>
+      ${hasVoucher
+        ? '<button style="margin-top:6px;" disabled>Ya adquirido</button>'
+        : `<button style="margin-top:6px;" ${P.caps < 1000 ? 'disabled' : ''} onclick="buyRouteVoucher('${sett.id}')">Comprar vale (1000 chapas)</button>`}
+    </div>`;
+  }
+
+  html += `<button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function exitSettlement() {
+  P.location = null;
+  logMsg("Sales del asentamiento al Yermo.");
+  renderMap();
+  updateStats();
+}
+
+function acceptFactionQuest(factionId, questId) {
+  ensureFactionDefaults();
+  let pool = FACTION_QUEST_POOL[factionId] || [];
+  let base = pool.find(q => q.id === questId);
+  if (!base) return;
+  if ((P.activeFactionQuests || []).some(q => q.id === questId)) return;
+  // Siempre empezar de cero: no contar objetos viejos del inventario
+  if (base.type === 'collect' && base.itemId) {
+    removeAllItemsByBaseId(base.itemId);
+  }
+  P.activeFactionQuests.push({
+    ...base,
+    faction: factionId,
+    current: 0,
+    completed: false
+  });
+  // Quitar del pool de rotación y rellenar después al completar
+  if (P.factionQuestPool[factionId]) {
+    P.factionQuestPool[factionId] = P.factionQuestPool[factionId].filter(id => id !== questId);
+  }
+  logMsg("Misión de facción aceptada: " + base.title);
+  let sett = SETTLEMENTS.find(s => s.faction === factionId && s.x === P.x && s.y === P.y);
+  if (sett) renderSettlementUI(sett.id, 'missions');
+  else updateStats();
+}
+
+function claimFactionQuest(questId) {
+  ensureFactionDefaults();
+  let idx = P.activeFactionQuests.findIndex(q => q.id === questId);
+  if (idx === -1) return;
+  let q = P.activeFactionQuests[idx];
+  if (!q.completed) return;
+  // Consumir objetos de misión requeridos
+  if (q.type === 'collect' && q.itemId) {
+    let need = q.target || 1;
+    let have = countItemsByBaseId(q.itemId);
+    if (have < need) {
+      logMsg("Te faltan objetos de misión para reclamar.");
+      q.completed = false;
+      q.current = have;
+      return;
+    }
+    removeItemsByBaseId(q.itemId, need);
+  }
+  P.caps += q.reward.caps || 0;
+  addXP(q.reward.xp || 0);
+  addFactionRep(q.faction, q.reward.rep || 5);
+  // Rotar: invalidar pool para que salga nueva misión
+  if (P.factionQuestPool[q.faction]) {
+    P.factionQuestPool[q.faction] = P.factionQuestPool[q.faction].filter(id => id !== q.id);
+  }
+  P.activeFactionQuests.splice(idx, 1);
+  logMsg("Recompensa de facción reclamada: " + q.title);
+  let sett = SETTLEMENTS.find(s => s.faction === q.faction && s.x === P.x && s.y === P.y);
+  if (sett) renderSettlementUI(sett.id, 'missions');
+  updateStats();
+}
+
+function buyFactionItem(factionId, itemId, price) {
+  let fac = FACTIONS[factionId];
+  if (getFactionShopLevel(factionId) < 1) {
+    logMsg("Tienda bloqueada. Necesitas 100 de reputación.");
+    return;
+  }
+  if (P.caps < price) {
+    logMsg("No tienes suficientes chapas.");
+    return;
+  }
+  P.caps -= price;
+  if (addItemToInv(itemId, 1)) {
+    logMsg("Compraste en la tienda de facción: " + getItemBase(itemId).name);
+  } else {
+    P.caps += price;
+    logMsg("No cabe en el inventario.");
+  }
+  let sett = SETTLEMENTS.find(s => s.faction === factionId && s.x === P.x && s.y === P.y);
+  if (sett) renderSettlementUI(sett.id, 'shop');
   updateStats();
 }
 
@@ -2440,6 +3388,192 @@ function quickUseRadAway() {
   renderMap();
 }
 
+
+function openFastTravelUI() {
+  if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+  if (P.travelPage === undefined) P.travelPage = 0;
+  let unlocked = SETTLEMENTS.filter(s => P.fastTravelUnlocked.includes(s.id));
+  let page = P.travelPage || 0;
+  let per = 5;
+  let totalPages = Math.max(1, Math.ceil(unlocked.length / per));
+  if (page >= totalPages) page = 0;
+  let slice = unlocked.slice(page * per, page * per + per);
+  let html = `<h2 style="color:var(--accent);margin-top:0;">⚡ VIAJE RÁPIDO</h2>
+    <p style="font-size:12px;color:#8d9880;">Compra un Vale de Ruta (1000 chapas) en la Info del asentamiento para desbloquearlo.</p>`;
+  if (slice.length === 0) {
+    html += `<p style="font-size:12px;color:#8d9880;">Ningún destino desbloqueado.</p>`;
+  } else {
+    slice.forEach(s => {
+      let fac = FACTIONS[s.faction];
+      html += `<div class="item">
+        <b style="color:${fac ? fac.color : 'var(--txt)'}">⚑ ${s.name}</b><br>
+        <span style="font-size:11px;color:#8d9880;">${fac ? fac.name : ''} · [${s.x >= 0 ? '+' : ''}${s.x}, ${s.y >= 0 ? '+' : ''}${s.y}]</span><br>
+        <button style="margin-top:4px;" onclick="doFastTravel('${s.id}')">Viajar aquí</button>
+      </div>`;
+    });
+  }
+  html += `<div style="display:flex;justify-content:space-between;margin-top:8px;">
+    <button ${page <= 0 ? 'disabled' : ''} onclick="P.travelPage=${page-1};openFastTravelUI()">◀</button>
+    <span style="font-size:11px;">Pág. ${page+1}/${totalPages}</span>
+    <button ${page >= totalPages-1 ? 'disabled' : ''} onclick="P.travelPage=${page+1};openFastTravelUI()">▶</button>
+  </div>
+  <button style="width:100%;margin-top:8px;" onclick="closeModal();renderMap();">Cerrar</button>`;
+  let m = document.getElementById('modal');
+  document.getElementById('modal-body').innerHTML = html;
+  m.classList.add('show');
+}
+
+function doFastTravel(settlementId) {
+  if (!P.fastTravelUnlocked || !P.fastTravelUnlocked.includes(settlementId)) {
+    logMsg("Destino no desbloqueado.");
+    return;
+  }
+  let s = SETTLEMENTS.find(x => x.id === settlementId);
+  if (!s) return;
+  if (P.location) {
+    logMsg("Sal del interior/asentamiento antes de viajar.");
+    return;
+  }
+  P.x = s.x;
+  P.y = s.y;
+  advanceTime(2);
+  logMsg("Viaje rápido a " + s.name + ".");
+  closeModal();
+  renderMap();
+  updateStats();
+}
+
+function buyRouteVoucher(settlementId) {
+  let s = SETTLEMENTS.find(x => x.id === settlementId);
+  if (!s) return;
+  if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+  if (P.fastTravelUnlocked.includes(settlementId)) {
+    logMsg("Ya tienes el vale de este asentamiento.");
+    return;
+  }
+  if (P.caps < 1000) {
+    logMsg("Necesitas 1000 chapas.");
+    return;
+  }
+  P.caps -= 1000;
+  P.fastTravelUnlocked.push(settlementId);
+  logMsg("¡Vale de ruta comprado! Viaje rápido a " + s.name + " desbloqueado.");
+  renderSettlementUI(settlementId, 'base');
+  updateStats();
+}
+
+
+function settlementHealHp(settlementId) {
+  let maxhp = getMaxHp();
+  let need = Math.max(0, maxhp - P.hp);
+  let cost = Math.ceil(need / 2);
+  if (need <= 0) { logMsg("Ya estás a máxima salud."); return; }
+  if (P.caps < cost) { logMsg("No tienes chapas suficientes."); return; }
+  P.caps -= cost;
+  P.hp = maxhp;
+  logMsg("El médico te cura por completo (" + cost + " chapas).");
+  renderSettlementUI(settlementId, 'base');
+  updateStats();
+}
+
+function settlementHealRad(settlementId) {
+  let need = P.rads || 0;
+  let cost = need * 1;
+  if (need <= 0) { logMsg("No tienes radiación."); return; }
+  if (P.caps < cost) { logMsg("No tienes chapas suficientes."); return; }
+  P.caps -= cost;
+  P.rads = 0;
+  logMsg("El médico elimina toda tu radiación (" + cost + " chapas).");
+  renderSettlementUI(settlementId, 'base');
+  updateStats();
+}
+
+function settlementHealFull(settlementId) {
+  let maxhp = getMaxHp();
+  let needHp = Math.max(0, maxhp - P.hp);
+  let needRad = P.rads || 0;
+  let cost = Math.ceil(needHp / 2) + needRad * 1;
+  if (needHp <= 0 && needRad <= 0) { logMsg("Ya estás en perfectas condiciones."); return; }
+  if (P.caps < cost) { logMsg("No tienes chapas suficientes."); return; }
+  P.caps -= cost;
+  P.hp = maxhp;
+  P.rads = 0;
+  logMsg("El médico te cura por completo (salud y radiación, " + cost + " chapas).");
+  renderSettlementUI(settlementId, 'base');
+  updateStats();
+}
+
+function buySettlementHouse(settlementId) {
+  if (!P.ownedHouses) P.ownedHouses = [];
+  if (P.ownedHouses.includes(settlementId)) {
+    logMsg("Ya tienes casa aquí.");
+    return;
+  }
+  if (P.caps < 2000) {
+    logMsg("Necesitas 2000 chapas.");
+    return;
+  }
+  P.caps -= 2000;
+  P.ownedHouses.push(settlementId);
+  let s = SETTLEMENTS.find(x => x.id === settlementId);
+  logMsg("Has comprado una casa en " + (s ? s.name : settlementId) + ".");
+  renderSettlementUI(settlementId, 'base');
+  updateStats();
+}
+
+function openHouseRestUI(settlementId) {
+  if (!P.ownedHouses || !P.ownedHouses.includes(settlementId)) {
+    logMsg("No tienes casa aquí.");
+    return;
+  }
+  let maxhp = getMaxHp();
+  // Curación por hora ≈ 4% de max HP + bonus por nivel (mín 2)
+  let perHour = Math.max(2, Math.floor(maxhp * 0.04) + Math.floor(P.lvl * 0.5));
+  let hoursOpts = '';
+  for (let h = 1; h <= 24; h++) {
+    hoursOpts += `<option value="${h}">${h} hora${h > 1 ? 's' : ''} (~${Math.min(maxhp - P.hp, perHour * h)} HP)</option>`;
+  }
+  let m = document.getElementById('modal');
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:var(--accent);margin-top:0;">🏠 Descansar en casa</h2>
+    <p style="font-size:12px;color:#8d9880;">Salud actual: ${P.hp}/${maxhp}. Recuperación ≈ ${perHour} HP/hora (según tu nivel). El compañero no se cura.</p>
+    <label style="font-size:12px;">Horas (1–24):</label>
+    <select id="rest-hours" style="width:100%;margin:8px 0;padding:8px;background:#111;color:var(--txt);border:1px solid var(--line);">
+      ${hoursOpts}
+    </select>
+    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;" onclick="doHouseRest('${settlementId}')">Descansar</button>
+    <button style="width:100%;margin-top:6px;" onclick="closeModal();renderSettlementUI('${settlementId}','base');">Cancelar</button>
+  `;
+  m.classList.add('show');
+}
+
+function doHouseRest(settlementId) {
+  let sel = document.getElementById('rest-hours');
+  let hours = sel ? parseInt(sel.value, 10) : 1;
+  if (isNaN(hours) || hours < 1) hours = 1;
+  if (hours > 24) hours = 24;
+  let maxhp = getMaxHp();
+  let perHour = Math.max(2, Math.floor(maxhp * 0.04) + Math.floor(P.lvl * 0.5));
+  let heal = perHour * hours;
+  let before = P.hp;
+  P.hp = Math.min(maxhp, P.hp + heal);
+  let snap = {};
+  if (P.prison) {
+    P.prison.forEach(c => { if (!c.resting) snap[c.id] = c.hp; });
+  }
+  advanceTime(hours);
+  if (P.prison) {
+    P.prison.forEach(c => {
+      if (!c.resting && snap[c.id] !== undefined) c.hp = snap[c.id];
+    });
+  }
+  logMsg("Descansas " + hours + " h en tu casa. Recuperas " + (P.hp - before) + " HP.");
+  closeModal();
+  renderSettlementUI(settlementId, 'base');
+  updateStats();
+}
+
+
 function openRadioUI() {
   let signalInfo = "Sin señal marcada.";
   if (P.radioSignal) {
@@ -2465,8 +3599,7 @@ function openRadioUI() {
 
       <div class="item" style="border-color:var(--accent);">
         <b style="color:var(--accent);">🎵 RADIO WASTELAND</b><br>
-        <span style="font-size:12px;">Emisión local offline</span><br>
-        <p class="radio-status" id="music-status">${isRadioPlaying() ? '♪ Reproduciendo Radio Wasteland...' : 'Radio apagada.'}</p>
+                <p class="radio-status" id="music-status">${isRadioPlaying() ? '♪ Reproduciendo Radio Wasteland...' : 'Radio apagada.'}</p>
         <div style="display:flex; gap:8px; margin-top:8px;">
           <button style="flex:1; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioMusic()">▶ ENCENDER</button>
           <button style="flex:1;" onclick="stopRadioMusic()">■ APAGAR</button>
@@ -2537,6 +3670,25 @@ function isRadioPlaying() {
   return radioPlaying && !audio.paused;
 }
 
+function pauseAmbientMusic() {
+  let amb = document.getElementById('ambient-audio');
+  if (amb) amb.pause();
+}
+
+function startAmbientMusic() {
+  if (radioPlaying) return;
+  let amb = document.getElementById('ambient-audio');
+  if (!amb) return;
+  if (!amb.src || amb.src.indexOf('AmbientMap') === -1) {
+    amb.src = './audio/AmbientMap.mp3';
+  }
+  amb.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
+  amb.loop = true;
+  amb.play().catch(() => {
+    // Autoplay bloqueado hasta interacción del usuario
+  });
+}
+
 function startRadioMusic() {
   let audio = document.getElementById('radio-audio');
   if (!audio) return;
@@ -2544,6 +3696,8 @@ function startRadioMusic() {
   if (!audio.src || audio.src.indexOf('RadioWasteland1') === -1) {
     audio.src = './audio/RadioWasteland1.mp3';
   }
+  audio.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
+  pauseAmbientMusic();
   audio.play().then(() => {
     radioPlaying = true;
     let st = document.getElementById('music-status');
@@ -2551,6 +3705,7 @@ function startRadioMusic() {
     logMsg("Radio Wasteland sintonizada.");
   }).catch((err) => {
     radioPlaying = false;
+    startAmbientMusic();
     let st = document.getElementById('music-status');
     if (st) st.textContent = "No se pudo reproducir. ¿Está audio/RadioWasteland1.mp3?";
     logMsg("No se pudo iniciar la radio. Comprueba el archivo de audio.");
@@ -2567,6 +3722,7 @@ function stopRadioMusic() {
   let st = document.getElementById('music-status');
   if (st) st.textContent = "Radio apagada.";
   logMsg("Radio apagada.");
+  startAmbientMusic();
 }
 
 function move(dx, dy) {
@@ -2580,11 +3736,13 @@ function move(dx, dy) {
   logMsg("Te desplazas a [" + fmtCoord(P.x) + ", " + fmtCoord(P.y) + "] — " + zone.icon + " " + zone.name + ".");
   updateQuestProgress('explore', 1);
   tickEffects();
-  // Radiación al cruzar ríos
+  advanceTime(1);
+  // Radiación al cruzar ríos + clima
+  let wMult = getWeatherInfo().radMult || 1;
   if (zone.type === 'river') {
-    addRads(15 + Math.floor(Math.random() * 25));
-  } else if (Math.random() < zone.radChance * 0.3) {
-    addRads(3 + Math.floor(Math.random() * 8));
+    addRads(Math.floor((15 + Math.floor(Math.random() * 25)) * wMult));
+  } else if (Math.random() < zone.radChance * 0.3 * wMult) {
+    addRads(Math.floor((3 + Math.floor(Math.random() * 8)) * wMult));
   }
   if (Math.random() < 0.12) radioEvent();
   renderMap();
@@ -2593,6 +3751,7 @@ function move(dx, dy) {
 
 function exploreZone() {
   tickEffects();
+  advanceTime(1);
   let zone = P.location ? { type: P.location.type, radChance: 0.2, exploreBias: 'loot', name: getCurrentRoom()?.name } : getZoneAt(P.x, P.y);
 
   // Interior: evitar doble registro de misma habitación reduce loot
@@ -2698,7 +3857,25 @@ function renderCombatUI() {
   let maxhp = getMaxHp();
   let enemyPct = Math.max(0, Math.floor((combatState.enemyHp / combatState.enemyMaxHp) * 100));
   let playerPct = Math.max(0, Math.floor((P.hp / maxhp) * 100));
-
+  let comp = getEquippedCompanion();
+  let compHtml = '';
+  if (comp && !comp.resting && comp.hp > 0) {
+    let cp = Math.max(0, Math.floor((comp.hp / comp.maxHp) * 100));
+    compHtml = `
+    <div class="combat-entity">
+      <div class="combat-entity-name player">
+        <span>🤝 ${comp.isLegendary ? '★ ' : ''}${comp.name}</span>
+        <span>${comp.hp} / ${comp.maxHp}</span>
+      </div>
+      <div class="combat-hp-bar">
+        <div class="combat-hp-fill player" style="width:${cp}%;background:#6688aa;"></div>
+      </div>
+    </div>`;
+  }
+  let hasPendant = (P.inv || []).some(x => {
+    let b = getItemBase(x.id);
+    return b && b.captureChance !== undefined && x.qty > 0;
+  });
   let logHtml = combatState.log.map(msg => `<div>> ${msg}</div>`).join('') || '<div style="color:#556;">Esperando acción...</div>';
 
   let m = document.getElementById('modal');
@@ -2725,6 +3902,7 @@ function renderCombatUI() {
         <div class="combat-hp-fill player" style="width:${playerPct}%;"></div>
       </div>
     </div>
+    ${compHtml}
 
     <div class="combat-log" id="combat-log-box">
       ${logHtml}
@@ -2732,17 +3910,241 @@ function renderCombatUI() {
 
     <div class="combat-buttons">
       <button class="combat-btn-attack" onclick="combatAttack()">Atacar (${w.name})</button>
+      ${comp && !comp.resting && comp.hp > 0 ? '<button class="combat-btn-attack" style="background:#224466;" onclick="companionAttack()">Compañero ataca</button>' : ''}
+      ${hasPendant ? '<button style="border-color:var(--gold);color:var(--gold);" onclick="openCaptureUI()">Capturar</button>' : ''}
       <button class="combat-btn-flee" onclick="combatFlee()">Huir</button>
     </div>
   `;
   m.classList.add('show');
 
-  // Auto-scroll del log
   setTimeout(() => {
     let box = document.getElementById('combat-log-box');
     if (box) box.scrollTop = box.scrollHeight;
   }, 30);
 }
+
+function openCaptureUI() {
+  if (!combatState) return;
+  let pendants = (P.inv || []).filter(x => {
+    let b = getItemBase(x.id);
+    return b && b.captureChance !== undefined && x.qty > 0;
+  });
+  if (pendants.length === 0) {
+    combatLog("No tienes colgantes de prisionero.");
+    renderCombatUI();
+    return;
+  }
+  let html = `<h3 style="color:var(--gold);margin-top:0;">Capturar enemigo</h3>
+    <p style="font-size:12px;">Elige un colgante. Si fallas, el enemigo contraataca.</p>`;
+  pendants.forEach(p => {
+    let b = getItemBase(p.id);
+    let pct = Math.round((b.captureChance || 0) * 100);
+    html += `<div class="item"><b>${b.name}</b> (${p.qty}) — ${pct}%
+      <button style="margin-top:4px;" onclick="tryCapture(${p.uid})">Usar</button></div>`;
+  });
+  html += `<button style="width:100%;margin-top:8px;" onclick="renderCombatUI()">Cancelar</button>`;
+  document.getElementById('modal-body').innerHTML = html;
+}
+
+function tryCapture(uid) {
+  if (!combatState) return;
+  let inst = (P.inv || []).find(x => x.uid === uid);
+  if (!inst) { renderCombatUI(); return; }
+  let base = getItemBase(inst.id);
+  if (!base || base.captureChance === undefined) { renderCombatUI(); return; }
+  if (!P.prison) P.prison = [];
+  let cap = getPrisonCapacity();
+  if (P.prison.length >= cap) {
+    combatLog("¡Prisión llena! Mejora las celdas en el Refugio.");
+    renderCombatUI();
+    return;
+  }
+  // consumir 1
+  if (inst.qty > 1) inst.qty--;
+  else P.inv = P.inv.filter(x => x.uid !== uid);
+
+  let chance = base.captureChance;
+  if (Math.random() < chance) {
+    let cleanName = combatState.enemyName.replace(/\s*\(Nv\.\d+\)/, '').replace(/^★\s*/, '');
+    let comp = createCompanionFromEnemy(
+      cleanName,
+      combatState.enemyLevel || 1,
+      combatState.enemyMaxHp,
+      combatState.enemyDmg,
+      !!combatState.isLegendary
+    );
+    P.prison.push(comp);
+    let msg = "¡Captura exitosa! " + (comp.isLegendary ? "★ " : "") + comp.name + " Nv." + comp.level + " entra en la prisión.";
+    if (comp.ability) msg += " Habilidad: " + comp.ability.name + ".";
+    logMsg(msg);
+    combatLog(msg);
+    // cerrar combate sin loot de muerte
+    combatState = null;
+    let m = document.getElementById('modal');
+    document.getElementById('modal-body').innerHTML = `
+      <h2 style="color:var(--accent);">CAPTURA EXITOSA</h2>
+      <p style="font-size:14px;">${comp.isLegendary ? '★ ' : ''}<b>${comp.name}</b> (Nv.${comp.level})</p>
+      <p style="font-size:12px;color:#8d9880;">Tipo: ${comp.type} · HP ${comp.maxHp} · ATK ${comp.baseDmg}</p>
+      ${comp.ability ? '<p style="color:var(--gold);font-size:12px;">★ ' + comp.ability.name + ': ' + comp.ability.desc + '</p>' : ''}
+      <button style="width:100%;margin-top:10px;" onclick="closeModal();renderMap();updateStats();">Continuar</button>
+    `;
+    m.classList.add('show');
+    updateStats();
+    return;
+  } else {
+    combatLog("¡El colgante falló! El enemigo se enfurece.");
+    // enemigo contraataca
+    let a = getEquippedArmor();
+    let aAb = getArmorAbility();
+    let totalDef = a.def + getDefenseBonusFromEndurance() + getEffectBonus('def');
+    let dmgTaken = Math.max(1, combatState.enemyDmg - totalDef);
+    // daño a compañero primero si hay
+    let comp = getEquippedCompanion();
+    if (comp && !comp.resting && comp.hp > 0) {
+      let st = getCompanionCombatStats(comp);
+      let cdmg = Math.max(1, combatState.enemyDmg - st.def);
+      if (comp.ability && comp.ability.id === 'c_hard' && !comp.hardSkinUsed) {
+        comp.hardSkinUsed = true;
+        combatLog(comp.name + " bloquea el golpe con Caparazón Endurecido.");
+      } else {
+        if (comp.ability && comp.ability.id === 'c_shield') cdmg = Math.floor(cdmg * 0.85);
+        if (comp.ability && comp.ability.id === 'c_terror') cdmg = Math.floor(cdmg * 0.85);
+        comp.hp -= cdmg;
+        combatLog(combatState.enemyName + " golpea a " + comp.name + " por " + cdmg + ".");
+        if (comp.hp <= 0) {
+          comp.hp = 0;
+          comp.resting = true;
+          if (P.equippedCompanionId === comp.id) { /* sigue equipado pero descansa */ }
+          combatLog(comp.name + " cae y debe descansar en la prisión.");
+        }
+      }
+    } else {
+      P.hp -= dmgTaken;
+      combatLog(combatState.enemyName + " te golpea por " + dmgTaken + ".");
+      if (P.hp <= 0) {
+        P.hp = 0;
+        endCombat(false);
+        return;
+      }
+    }
+    renderCombatUI();
+  }
+}
+
+function companionAttack() {
+  if (!combatState) return;
+  let comp = getEquippedCompanion();
+  if (!comp || comp.resting || comp.hp <= 0) {
+    combatLog("Tu compañero no puede atacar.");
+    renderCombatUI();
+    return;
+  }
+  let st = getCompanionCombatStats(comp);
+  let attacks = 1;
+  if (comp.ability && comp.ability.id === 'c_swift' && Math.random() < 0.15) {
+    attacks = 2;
+    combatLog(comp.name + " ataca dos veces (Reflejos de Asalto)!");
+  }
+  let totalHit = 0;
+  for (let i = 0; i < attacks; i++) {
+    let hit = Math.max(1, st.dmg + Math.floor(Math.random() * 4));
+    let critChance = 0.05 + (comp.special.L || 1) * 0.02;
+    if (comp.ability && comp.ability.id === 'c_crit') critChance += 0.30;
+    if (Math.random() < critChance) {
+      let mult = (comp.ability && comp.ability.id === 'c_precise') ? 2.2 : 1.5;
+      hit = Math.floor(hit * mult);
+      combatLog("¡Crítico de " + comp.name + "!");
+    }
+    if (comp.ability && comp.ability.id === 'c_lucky' && Math.random() < 0.10) {
+      hit = Math.floor(hit * 3);
+      combatLog("¡Golpe de Suerte de " + comp.name + "!");
+    }
+    if (comp.ability && comp.ability.id === 'c_armorbreak') {
+      combatState.armorBroken = (combatState.armorBroken || 0) + 3;
+      hit += 3;
+    }
+    totalHit += hit;
+    if (comp.ability && comp.ability.id === 'c_vamp') {
+      let heal = Math.floor(hit * 0.20);
+      comp.hp = Math.min(comp.maxHp, comp.hp + heal);
+    }
+    if (comp.ability && comp.ability.id === 'c_poison') {
+      combatState.poisonTurns = Math.max(combatState.poisonTurns || 0, 3);
+      combatState.compPoison = true;
+    }
+    if (comp.ability && comp.ability.id === 'c_shock' && Math.random() < 0.10) {
+      combatState.enemyStunnedNext = true;
+      combatLog("¡Descarga eléctrica! El enemigo puede perder el turno.");
+    }
+  }
+  if (comp.ability && comp.ability.id === 'c_rad') {
+    totalHit += 8;
+    combatLog("Aura Radiactiva: +8.");
+  }
+  combatState.enemyHp -= totalHit;
+  combatLog(comp.name + " ataca e inflige " + totalHit + " de daño" + (comp.weapon ? " con " + comp.weapon : "") + ".");
+
+  if (comp.ability && comp.ability.id === 'c_regen') {
+    let rh = Math.max(1, Math.floor(comp.maxHp * 0.05));
+    comp.hp = Math.min(comp.maxHp, comp.hp + rh);
+  }
+
+  if (combatState.enemyHp <= 0) {
+    combatState.enemyHp = 0;
+    endCombat(true);
+    return;
+  }
+
+  // turno enemigo simplificado
+  enemyCombatTurn();
+  if (!combatState) return;
+  if (P.hp <= 0) {
+    endCombat(false);
+    return;
+  }
+  renderCombatUI();
+}
+
+function enemyCombatTurn() {
+  if (!combatState) return;
+  if (combatState.enemyStunnedNext) {
+    combatState.enemyStunnedNext = false;
+    combatLog("El enemigo está aturdido y pierde el turno.");
+    return;
+  }
+  let a = getEquippedArmor();
+  let aAb = getArmorAbility();
+  let enemyDmgMult = 1;
+  let comp = getEquippedCompanion();
+  if (comp && comp.ability && comp.ability.id === 'c_terror') enemyDmgMult *= 0.85;
+
+  // daño preferente al compañero activo
+  if (comp && !comp.resting && comp.hp > 0) {
+    let st = getCompanionCombatStats(comp);
+    let cdmg = Math.max(1, Math.floor(combatState.enemyDmg * enemyDmgMult) - st.def);
+    if (comp.ability && comp.ability.id === 'c_hard' && !comp.hardSkinUsed) {
+      comp.hardSkinUsed = true;
+      combatLog(comp.name + " absorbe el golpe (Caparazón Endurecido).");
+      return;
+    }
+    if (comp.ability && comp.ability.id === 'c_shield') cdmg = Math.floor(cdmg * 0.85);
+    comp.hp -= cdmg;
+    combatLog(combatState.enemyName + " golpea a " + comp.name + " por " + cdmg + ".");
+    if (comp.hp <= 0) {
+      comp.hp = 0;
+      comp.resting = true;
+      combatLog(comp.name + " cae inconsciente. Descansará en la prisión.");
+    }
+    return;
+  }
+
+  let totalDef = a.def + (((P.perks && P.perks.p_skin) || 0) * 2) + getDefenseBonusFromEndurance() + getEffectBonus('def');
+  if (aAb && aAb.id === 'a_tank') totalDef += 15;
+  let dmgTaken = Math.max(1, Math.floor(combatState.enemyDmg * enemyDmgMult) - totalDef);
+  P.hp -= dmgTaken;
+  combatLog(combatState.enemyName + " te golpea por " + dmgTaken + ".");
+}
+
 
 function combatLog(msg) {
   if (combatState) {
@@ -2800,7 +4202,11 @@ function combatAttack() {
   }
 
   for (let atk = 0; atk < attacks; atk++) {
-    if (hasAmmo || isMelee) {
+    // Cada disparo a distancia consume 1 bala
+    let canShoot = isMelee || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] > 0);
+    if (!isMelee && aAb && aAb.id === 'a_ammo' && Math.random() < 0.10) canShoot = true;
+    if (canShoot || isMelee) {
+      playWeaponSound(w);
       hit = Math.max(1, baseDmg + Math.floor(Math.random() * 4));
 
       // Penetración de Blindaje
@@ -3032,8 +4438,13 @@ function endCombat(victory) {
     if (wAb && wAb.id === 'w_xp') xpGain = Math.floor(xpGain * 1.40);
     if (aAb && aAb.id === 'a_xp') xpGain = Math.floor(xpGain * 1.25);
     addXP(xpGain);
-    updateQuestProgress('kill', 1);
-    if (combatState.isLegendary) updateQuestProgress('kill_legend', 1);
+    
+    let comp = getEquippedCompanion();
+    if (comp && !comp.resting) {
+      addCompanionXP(comp, 15 + Math.floor((combatState.enemyLevel || 1) * 3) + (combatState.isLegendary ? 40 : 0));
+    }
+updateQuestProgress('kill', 1);
+    if (combatState.isLegendary) updateQuestProgress('kill_leg', 1);
 
     let lootTxt = added ? " y " + formatItemGainName(itemObj, itemQty) : " (mochila llena para el objeto)";
 
@@ -3072,6 +4483,33 @@ function endCombat(victory) {
 }
 
 function findLoot() {
+  // Objetos de misión de facción: solo con misión activa y sin tener ya el cupo
+  if (P.activeFactionQuests) {
+    for (let q of P.activeFactionQuests) {
+      if (q.type !== 'collect' || !q.itemId || q.completed) continue;
+      let have = countItemsByBaseId(q.itemId);
+      // Parche: no generar otro objeto único si ya tienes los necesarios
+      if (have >= (q.target || 1)) {
+        q.current = q.target || 1;
+        q.completed = true;
+        continue;
+      }
+      if (Math.random() < 0.35) {
+        if (addItemToInv(q.itemId, 1)) {
+          logMsg("¡Has encontrado el objeto de misión: " + getItemBase(q.itemId).name + "!");
+          have = countItemsByBaseId(q.itemId);
+          q.current = Math.min(q.target || 1, have);
+          if (q.current >= (q.target || 1)) {
+            q.completed = true;
+            logMsg("¡Misión de facción lista para reclamar: " + q.title + "!");
+          }
+          updateStats();
+          return;
+        }
+      }
+    }
+  }
+
   // 4% Tartera Legendaria
   if (Math.random() < 0.04) {
     if (addItemToInv(29, 1)) {
@@ -3153,10 +4591,10 @@ function renderInv(sub = P.subtab, page) {
       <button class="${sub === 'weapon' ? 'active' : ''}" onclick="renderInv('weapon')">Armas</button>
       <button class="${sub === 'armor' ? 'active' : ''}" onclick="renderInv('armor')">Armaduras</button>
       <button class="${sub === 'med' ? 'active' : ''}" onclick="renderInv('med')">Ayuda</button>
-      <button class="${sub === 'ammo' ? 'active' : ''}" onclick="renderInv('ammo')">Munición</button>
-      <button class="${sub === 'junk' ? 'active' : ''}" onclick="renderInv('junk')">Chatarra</button>
       <button class="${sub === 'food' ? 'active' : ''}" onclick="renderInv('food')">Comida/Bebida</button>
       <button class="${sub === 'ingredient' ? 'active' : ''}" onclick="renderInv('ingredient')">Ingredientes</button>
+      <button class="${sub === 'junk' ? 'active' : ''}" onclick="renderInv('junk')">Chatarra</button>
+      <button class="${sub === 'ammo' ? 'active' : ''}" onclick="renderInv('ammo')">Munición</button>
       <button class="${sub === 'other' ? 'active' : ''}" onclick="renderInv('other')">Otros</button>
     </div>
   `;
@@ -3180,7 +4618,7 @@ function renderInv(sub = P.subtab, page) {
     if (sub === 'junk') return it.type === 'junk';
     if (sub === 'food') return it.type === 'food' || it.type === 'drink';
     if (sub === 'ingredient') return it.type === 'ingredient';
-    if (sub === 'other') return it.type === 'other';
+    if (sub === 'other') return it.type === 'other' || it.type === 'quest';
     return false;
   });
 
@@ -3369,8 +4807,8 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
       <button class="${sub === 'weapon' ? 'active' : ''}" onclick="renderShop('weapon')">Armas</button>
       <button class="${sub === 'armor' ? 'active' : ''}" onclick="renderShop('armor')">Armaduras</button>
       <button class="${sub === 'med' ? 'active' : ''}" onclick="renderShop('med')">Ayuda</button>
-      <button class="${sub === 'ammo' ? 'active' : ''}" onclick="renderShop('ammo')">Munición</button>
       <button class="${sub === 'junk' ? 'active' : ''}" onclick="renderShop('junk')">Chatarra</button>
+      <button class="${sub === 'ammo' ? 'active' : ''}" onclick="renderShop('ammo')">Munición</button>
       <button class="${sub === 'other' ? 'active' : ''}" onclick="renderShop('other')">Otros</button>
     </div>
 
@@ -3399,7 +4837,7 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
     if (sub === 'med') return it.type === 'med' || it.type === 'chem';
     if (sub === 'ammo') return it.type === 'ammo';
     if (sub === 'junk') return it.type === 'junk';
-    if (sub === 'other') return it.type === 'other';
+    if (sub === 'other') return it.type === 'other' || it.type === 'quest';
     return false;
   });
 
@@ -3517,24 +4955,71 @@ function closeModal() {
   if (combatState) combatState = null;
 }
 
-// Sonido estilo Pip-Boy (clic UI)
+// Sonido estilo Pip-Boy (clic UI) y SFX de combate
 let _pipCtx = null;
+function getAudioCtx() {
+  if (!_pipCtx) _pipCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_pipCtx.state === 'suspended') _pipCtx.resume();
+  return _pipCtx;
+}
 function pipClick() {
   try {
-    if (!_pipCtx) _pipCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (_pipCtx.state === 'suspended') _pipCtx.resume();
-    let t = _pipCtx.currentTime;
-    let osc = _pipCtx.createOscillator();
-    let gain = _pipCtx.createGain();
+    let ctx = getAudioCtx();
+    let vol = (P.volSfx !== undefined ? P.volSfx : 0.7);
+    let t = ctx.currentTime;
+    let osc = ctx.createOscillator();
+    let gain = ctx.createGain();
     osc.type = 'square';
     osc.frequency.setValueAtTime(880, t);
     osc.frequency.exponentialRampToValueAtTime(440, t + 0.04);
-    gain.gain.setValueAtTime(0.08, t);
+    gain.gain.setValueAtTime(0.08 * vol, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
     osc.connect(gain);
-    gain.connect(_pipCtx.destination);
+    gain.connect(ctx.destination);
     osc.start(t);
     osc.stop(t + 0.06);
+  } catch (e) {}
+}
+
+function playWeaponSound(weapon) {
+  try {
+    let ctx = getAudioCtx();
+    let vol = (P.volSfx !== undefined ? P.volSfx : 0.7) * 0.35;
+    let t = ctx.currentTime;
+    let ammo = (weapon && weapon.ammoType) || 'Ninguna';
+    let name = ((weapon && weapon.name) || '').toLowerCase();
+    let isMelee = ammo.includes('Ninguna');
+    let osc = ctx.createOscillator();
+    let gain = ctx.createGain();
+    let type = 'square';
+    let f0 = 200, f1 = 80, dur = 0.12;
+
+    if (isMelee) {
+      // Golpe cuerpo a cuerpo
+      type = 'sawtooth'; f0 = 120; f1 = 40; dur = 0.1;
+    } else if (ammo.includes('escopeta') || name.includes('escopeta')) {
+      type = 'sawtooth'; f0 = 180; f1 = 60; dur = 0.18; vol *= 1.2;
+    } else if (ammo.includes('Misil') || ammo.includes('Mini') || name.includes('lanzacohetes') || name.includes('fat man')) {
+      type = 'sawtooth'; f0 = 90; f1 = 30; dur = 0.25; vol *= 1.4;
+    } else if (ammo.includes('plasma') || ammo.includes('energ') || ammo.includes('fusión') || ammo.includes('microfusión') || name.includes('láser')) {
+      type = 'sine'; f0 = 1200; f1 = 400; dur = 0.1;
+    } else if (ammo.includes('10mm') || ammo.includes('.38') || ammo.includes('.45') || ammo.includes('pistola') || name.includes('pistola')) {
+      type = 'square'; f0 = 400; f1 = 100; dur = 0.08;
+    } else if (ammo.includes('5.56') || ammo.includes('7.62') || ammo.includes('.308') || name.includes('rifle') || name.includes('fusil')) {
+      type = 'square'; f0 = 500; f1 = 120; dur = 0.09;
+    } else {
+      type = 'square'; f0 = 350; f1 = 90; dur = 0.09;
+    }
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(f0, t);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur);
+    gain.gain.setValueAtTime(vol, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + dur + 0.02);
   } catch (e) {}
 }
 
@@ -3573,6 +5058,21 @@ function loadGame() {
     if (!parsed.storage) parsed.storage = [];
     if (!parsed.activeEffects) parsed.activeEffects = [];
     if (parsed.storageMaxWeight === undefined) parsed.storageMaxWeight = 100;
+    if (parsed.worldHours === undefined) parsed.worldHours = 9;
+    if (!parsed.weather) parsed.weather = 'day';
+    if (!parsed.reputation) parsed.reputation = { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0 };
+    if (!parsed.activeFactionQuests) parsed.activeFactionQuests = [];
+    if (!parsed.factionQuestPool) parsed.factionQuestPool = {};
+    if (parsed.volMusic === undefined) parsed.volMusic = 0.6;
+    if (parsed.volSfx === undefined) parsed.volSfx = 0.7;
+    if (!parsed.fastTravelUnlocked) parsed.fastTravelUnlocked = [];
+    if (!parsed.ownedHouses) parsed.ownedHouses = [];
+    if (!parsed.prison) parsed.prison = [];
+    if (parsed.equippedCompanionId === undefined) parsed.equippedCompanionId = null;
+    if (parsed.prisonLevel === undefined) parsed.prisonLevel = 1;
+    if (parsed.prisonPage === undefined) parsed.prisonPage = 0;
+    if (parsed.travelPage === undefined) parsed.travelPage = 0;
+    if (parsed.location === undefined) parsed.location = null;
     P = parsed;
     stopRadioMusic();
     logMsg("Partida cargada. Bienvenido, " + (P.playerName || "Superviviente") + ".");
@@ -3618,6 +5118,20 @@ if (savedData) {
     if (!parsed.playerName) parsed.playerName = "Superviviente";
     if (parsed.radioSignal === undefined) parsed.radioSignal = null;
     if (parsed.location === undefined) parsed.location = null;
+    if (parsed.worldHours === undefined) parsed.worldHours = 9;
+    if (!parsed.weather) parsed.weather = 'day';
+    if (!parsed.reputation) parsed.reputation = { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0 };
+    if (!parsed.activeFactionQuests) parsed.activeFactionQuests = [];
+    if (!parsed.factionQuestPool) parsed.factionQuestPool = {};
+    if (parsed.volMusic === undefined) parsed.volMusic = 0.6;
+    if (parsed.volSfx === undefined) parsed.volSfx = 0.7;
+    if (!parsed.fastTravelUnlocked) parsed.fastTravelUnlocked = [];
+    if (!parsed.ownedHouses) parsed.ownedHouses = [];
+    if (!parsed.prison) parsed.prison = [];
+    if (parsed.equippedCompanionId === undefined) parsed.equippedCompanionId = null;
+    if (parsed.prisonLevel === undefined) parsed.prisonLevel = 1;
+    if (parsed.prisonPage === undefined) parsed.prisonPage = 0;
+    if (parsed.travelPage === undefined) parsed.travelPage = 0;
     if (parsed.ammoBox) {
       for (let k in P.ammoBox) {
         if (parsed.ammoBox[k] === undefined) parsed.ammoBox[k] = P.ammoBox[k];
@@ -3630,6 +5144,14 @@ if (savedData) {
 logMsg("Bienvenido al Yermo. Fabrica, modifica tus objetos y sobrevive.");
 renderMap();
 updateStats();
+
+// Música ambiente offline (se pausa con la radio)
+startAmbientMusic();
+// Desbloquear audio tras primera interacción (políticas del navegador)
+document.addEventListener('pointerdown', function ambientUnlockOnce() {
+  startAmbientMusic();
+  document.removeEventListener('pointerdown', ambientUnlockOnce);
+}, { once: true });
 
 // Clic Pip-Boy en todos los botones
 document.addEventListener('click', function(e) {
