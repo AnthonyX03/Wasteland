@@ -2322,6 +2322,21 @@ function upgradeStorageCapacity() {
   updateStats();
 }
 
+
+function getStorageItemStyle(inst, it) {
+  let isLeg = !!inst.legendary;
+  let border = '';
+  let color = '';
+  if (isLeg) { border = 'border-color:var(--gold);'; color = 'color:var(--gold);'; }
+  else if (it && it.id === 14) { border = 'border-color:#3388ff;'; color = 'color:#55aaff;'; }
+  else if (it && it.id === 15) { border = 'border-color:#e05050;'; color = 'color:#e05050;'; }
+  else if (it && it.id === 29) { border = 'border-color:var(--gold);'; color = 'color:var(--gold);'; }
+  let name = (isLeg ? '★ ' : '') + (it ? it.name : '?');
+  if (it && (it.type === 'weapon' || it.type === 'armor')) name += ' Lv:' + (inst.itemLevel || 1);
+  if (inst.qty > 1) name += ' x' + inst.qty;
+  return { border, color, name };
+}
+
 function renderStorageUI() {
   ensureVaultDefaults();
   let sub = P.storageSubtab || 'weapon';
@@ -2360,8 +2375,8 @@ function renderStorageUI() {
   invList.forEach(inst => {
     let it = getItemBase(inst.id);
     let isEq = inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid;
-    let name = (inst.legendary ? '★ ' : '') + it.name + (inst.qty > 1 ? ' x' + inst.qty : '');
-    html += `<div class="item"><b>${name}</b> ${isEq ? '<span class="equipped-tag">EQUIPADO</span>' : ''}
+    let st = getStorageItemStyle(inst, it);
+    html += `<div class="item" style="${st.border}"><b style="${st.color}">${st.name}</b> ${isEq ? '<span class="equipped-tag">EQUIPADO</span>' : ''}
       ${!isEq ? `<button style="margin-left:8px; font-size:11px; padding:3px 8px;" onclick="moveToStorage(${inst.uid})">→ Almacén</button>` : '<span style="font-size:11px; color:#8d9880;"> (desequipa primero)</span>'}
     </div>`;
   });
@@ -2379,8 +2394,8 @@ function renderStorageUI() {
   if (slice.length === 0) html += `<p style="font-size:11px; color:#8d9880;">Vacío en esta categoría.</p>`;
   slice.forEach(inst => {
     let it = getItemBase(inst.id);
-    let name = (inst.legendary ? '★ ' : '') + it.name + (inst.qty > 1 ? ' x' + inst.qty : '');
-    html += `<div class="item"><b>${name}</b>
+    let st = getStorageItemStyle(inst, it);
+    html += `<div class="item" style="${st.border}"><b style="${st.color}">${st.name}</b>
       <button style="margin-left:8px; font-size:11px; padding:3px 8px;" onclick="moveFromStorage(${inst.uid})">← Inventario</button>
     </div>`;
   });
@@ -2943,8 +2958,8 @@ const FACTION_QUEST_POOL = {
 
   rnc: [
     { id: 'rnc_q1', title: 'Patrulla fronteriza', desc: 'Derrota 5 enemigos en territorio RNC.', type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'rnc_q2', title: 'Suministros militares', desc: 'Explora 8 zonas.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
-    { id: 'rnc_q3', title: 'Informe de inteligencia', desc: 'Consigue 4 botines.', type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'rnc_q2', title: 'Cartografía militar', desc: 'Explora 8 zonas del mapa.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'rnc_q3', title: 'Recuperar botín de campo', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
     { id: 'rnc_q4', title: 'Operación pacificación', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 200 },
     { id: 'rnc_q5', title: 'Cartografía del desierto', desc: 'Explora 12 zonas.', type: 'explore', target: 12, reward: { caps: 160, xp: 110, rep: 16 }, minRep: 400 },
     { id: 'rnc_q6', title: 'Amenaza legendaria RNC', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 320, xp: 200, rep: 20 }, minRep: 700 }
@@ -2952,7 +2967,7 @@ const FACTION_QUEST_POOL = {
   strip: [
     { id: 'str_q1', title: 'Seguridad del Strip', desc: 'Derrota 4 enemigos cerca del Strip.', type: 'kill', target: 4, reward: { caps: 110, xp: 65, rep: 12 }, minRep: 0 },
     { id: 'str_q2', title: 'Turismo del Yermo', desc: 'Explora 6 zonas.', type: 'explore', target: 6, reward: { caps: 80, xp: 50, rep: 10 }, minRep: 0 },
-    { id: 'str_q3', title: 'Botín de la suerte', desc: 'Consigue 3 botines.', type: 'loot', target: 3, reward: { caps: 90, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'str_q3', title: 'Botín de la suerte', desc: 'Consigue 3 botines explorando.', type: 'loot', target: 3, reward: { caps: 90, xp: 55, rep: 10 }, minRep: 0 },
     { id: 'str_q4', title: 'Limpieza de bandidos', desc: 'Derrota 9 enemigos.', type: 'kill', target: 9, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
     { id: 'str_q5', title: 'Rutas de clientes', desc: 'Explora 14 zonas.', type: 'explore', target: 14, reward: { caps: 170, xp: 115, rep: 16 }, minRep: 400 },
     { id: 'str_q6', title: 'Jackpot legendario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 350, xp: 210, rep: 20 }, minRep: 700 }
@@ -2960,7 +2975,7 @@ const FACTION_QUEST_POOL = {
   institute: [
     { id: 'ins_q1', title: 'Recolección de datos', desc: 'Explora 7 zonas.', type: 'explore', target: 7, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
     { id: 'ins_q2', title: 'Prueba de combate', desc: 'Derrota 5 enemigos.', type: 'kill', target: 5, reward: { caps: 110, xp: 75, rep: 12 }, minRep: 0 },
-    { id: 'ins_q3', title: 'Muestras de campo', desc: 'Consigue 4 botines.', type: 'loot', target: 4, reward: { caps: 95, xp: 60, rep: 10 }, minRep: 0 },
+    { id: 'ins_q3', title: 'Muestras de campo', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 95, xp: 60, rep: 10 }, minRep: 0 },
     { id: 'ins_q4', title: 'Eliminar variables', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 190, xp: 135, rep: 18 }, minRep: 200 },
     { id: 'ins_q5', title: 'Expansión del relé', desc: 'Explora 13 zonas.', type: 'explore', target: 13, reward: { caps: 175, xp: 120, rep: 16 }, minRep: 400 },
     { id: 'ins_q6', title: 'Protocolo legendario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 360, xp: 220, rep: 20 }, minRep: 700 }
@@ -2972,38 +2987,38 @@ const FACTION_QUEST_POOL = {
 function __expandFactionQuests() {
   const extra = {
     bos: [
-      { id: 'bos_q7', title: 'Escolta de suministro', desc: 'Explora 5 zonas.', type: 'explore', target: 5, reward: { caps: 70, xp: 45, rep: 10 }, minRep: 0 },
-      { id: 'bos_q8', title: 'Caza de robots', desc: 'Derrota 6 enemigos.', type: 'kill', target: 6, reward: { caps: 110, xp: 70, rep: 12 }, minRep: 100 },
-      { id: 'bos_q9', title: 'Reliquia del Yermo', desc: 'Consigue 5 botines.', type: 'loot', target: 5, reward: { caps: 130, xp: 80, rep: 14 }, minRep: 300 }
+      { id: 'bos_q7', title: 'Reconocimiento corto', desc: 'Explora 5 zonas del mapa.', type: 'explore', target: 5, reward: { caps: 70, xp: 45, rep: 10 }, minRep: 0 },
+      { id: 'bos_q8', title: 'Baja de hostiles', desc: 'Derrota 6 enemigos del Yermo.', type: 'kill', target: 6, reward: { caps: 110, xp: 70, rep: 12 }, minRep: 100 },
+      { id: 'bos_q9', title: 'Recuperación de botín', desc: 'Consigue 5 botines explorando.', type: 'loot', target: 5, reward: { caps: 130, xp: 80, rep: 14 }, minRep: 300 }
     ],
     enclave: [
-      { id: 'enc_q7', title: 'Barrido de zona', desc: 'Explora 6 zonas.', type: 'explore', target: 6, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
-      { id: 'enc_q8', title: 'Neutralizar hostiles', desc: 'Derrota 7 enemigos.', type: 'kill', target: 7, reward: { caps: 120, xp: 80, rep: 12 }, minRep: 100 },
-      { id: 'enc_q9', title: 'Material clasificado', desc: 'Consigue 5 botines.', type: 'loot', target: 5, reward: { caps: 140, xp: 85, rep: 14 }, minRep: 300 }
+      { id: 'enc_q7', title: 'Cartografía de zona', desc: 'Explora 6 zonas del mapa.', type: 'explore', target: 6, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+      { id: 'enc_q8', title: 'Neutralizar hostiles', desc: 'Derrota 7 enemigos del Yermo.', type: 'kill', target: 7, reward: { caps: 120, xp: 80, rep: 12 }, minRep: 100 },
+      { id: 'enc_q9', title: 'Recuperar material', desc: 'Consigue 5 botines explorando.', type: 'loot', target: 5, reward: { caps: 140, xp: 85, rep: 14 }, minRep: 300 }
     ],
     outcasts: [
-      { id: 'out_q7', title: 'Patrulla independiente', desc: 'Explora 5 zonas.', type: 'explore', target: 5, reward: { caps: 75, xp: 50, rep: 10 }, minRep: 0 },
-      { id: 'out_q8', title: 'Emboscada', desc: 'Derrota 6 enemigos.', type: 'kill', target: 6, reward: { caps: 115, xp: 75, rep: 12 }, minRep: 100 }
+      { id: 'out_q7', title: 'Patrulla de exploración', desc: 'Explora 5 zonas del mapa.', type: 'explore', target: 5, reward: { caps: 75, xp: 50, rep: 10 }, minRep: 0 },
+      { id: 'out_q8', title: 'Emboscada ofensiva', desc: 'Derrota 6 enemigos del Yermo.', type: 'kill', target: 6, reward: { caps: 115, xp: 75, rep: 12 }, minRep: 100 }
     ],
     settlers: [
-      { id: 'set_q7', title: 'Caza de alimañas', desc: 'Derrota 4 enemigos.', type: 'kill', target: 4, reward: { caps: 60, xp: 40, rep: 10 }, minRep: 0 },
-      { id: 'set_q8', title: 'Recolección de suministros', desc: 'Consigue 4 botines.', type: 'loot', target: 4, reward: { caps: 70, xp: 50, rep: 12 }, minRep: 100 }
+      { id: 'set_q7', title: 'Caza de alimañas', desc: 'Derrota 4 enemigos del Yermo.', type: 'kill', target: 4, reward: { caps: 60, xp: 40, rep: 10 }, minRep: 0 },
+      { id: 'set_q8', title: 'Recogida de botín', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 70, xp: 50, rep: 12 }, minRep: 100 }
     ],
     railroad: [
-      { id: 'rr_q7', title: 'Camino seguro', desc: 'Explora 5 zonas.', type: 'explore', target: 5, reward: { caps: 80, xp: 55, rep: 10 }, minRep: 0 },
-      { id: 'rr_q8', title: 'Silenciar rastreadores', desc: 'Derrota 6 enemigos.', type: 'kill', target: 6, reward: { caps: 120, xp: 80, rep: 12 }, minRep: 100 }
+      { id: 'rr_q7', title: 'Marcar camino seguro', desc: 'Explora 5 zonas del mapa.', type: 'explore', target: 5, reward: { caps: 80, xp: 55, rep: 10 }, minRep: 0 },
+      { id: 'rr_q8', title: 'Eliminar rastreadores', desc: 'Derrota 6 enemigos del Yermo.', type: 'kill', target: 6, reward: { caps: 120, xp: 80, rep: 12 }, minRep: 100 }
     ],
     rnc: [
-      { id: 'rnc_q7', title: 'Ley del Yermo', desc: 'Derrota 5 enemigos.', type: 'kill', target: 5, reward: { caps: 90, xp: 60, rep: 10 }, minRep: 0 },
-      { id: 'rnc_q8', title: 'Inspección de rutas', desc: 'Explora 8 zonas.', type: 'explore', target: 8, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 100 }
+      { id: 'rnc_q7', title: 'Aplicar la ley', desc: 'Derrota 5 enemigos del Yermo.', type: 'kill', target: 5, reward: { caps: 90, xp: 60, rep: 10 }, minRep: 0 },
+      { id: 'rnc_q8', title: 'Inspección de rutas', desc: 'Explora 8 zonas del mapa.', type: 'explore', target: 8, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 100 }
     ],
     strip: [
-      { id: 'str_q7', title: 'Clientes problemáticos', desc: 'Derrota 5 enemigos.', type: 'kill', target: 5, reward: { caps: 100, xp: 60, rep: 10 }, minRep: 0 },
-      { id: 'str_q8', title: 'Publicidad del Strip', desc: 'Explora 7 zonas.', type: 'explore', target: 7, reward: { caps: 90, xp: 55, rep: 12 }, minRep: 100 }
+      { id: 'str_q7', title: 'Echar a problemáticos', desc: 'Derrota 5 enemigos del Yermo.', type: 'kill', target: 5, reward: { caps: 100, xp: 60, rep: 10 }, minRep: 0 },
+      { id: 'str_q8', title: 'Promoción del Strip', desc: 'Explora 7 zonas del mapa.', type: 'explore', target: 7, reward: { caps: 90, xp: 55, rep: 12 }, minRep: 100 }
     ],
     institute: [
-      { id: 'ins_q7', title: 'Observación de campo', desc: 'Explora 6 zonas.', type: 'explore', target: 6, reward: { caps: 95, xp: 65, rep: 10 }, minRep: 0 },
-      { id: 'ins_q8', title: 'Eliminar interferencias', desc: 'Derrota 6 enemigos.', type: 'kill', target: 6, reward: { caps: 115, xp: 75, rep: 12 }, minRep: 100 }
+      { id: 'ins_q7', title: 'Observación de campo', desc: 'Explora 6 zonas del mapa.', type: 'explore', target: 6, reward: { caps: 95, xp: 65, rep: 10 }, minRep: 0 },
+      { id: 'ins_q8', title: 'Eliminar interferencias', desc: 'Derrota 6 enemigos del Yermo.', type: 'kill', target: 6, reward: { caps: 115, xp: 75, rep: 12 }, minRep: 100 }
     ]
   };
   for (let fid in extra) {
@@ -3571,21 +3586,28 @@ function getAvailableFactionQuests(fid) {
   ensureFactionDefaults();
   let rep = getFactionRep(fid);
   let pool = FACTION_QUEST_POOL[fid] || [];
-  let activeIds = (P.activeFactionQuests || []).map(q => q.id);
-  // Rotación: mantener 3 slots por facción en factionQuestPool
-  if (!P.factionQuestPool[fid] || P.factionQuestPool[fid].length === 0) {
-    let eligible = pool.filter(q => q.minRep <= rep && !activeIds.includes(q.id));
-    // Mezclar y coger 3
-    eligible = eligible.sort(() => Math.random() - 0.5).slice(0, 3);
-    P.factionQuestPool[fid] = eligible.map(q => q.id);
-  }
-  // Refrescar si alguna ya no aplica
+  let activeIds = (P.activeFactionQuests || []).filter(q => q.faction === fid).map(q => q.id);
+  let activeCount = activeIds.length;
+  // Slots de oferta = 3 menos las ya activas (máx 3 activas por facción)
+  let offerSlots = Math.max(0, 3 - activeCount);
+  if (!P.factionQuestPool[fid]) P.factionQuestPool[fid] = [];
+  // Quitar del pool las ya activas o inválidas
   P.factionQuestPool[fid] = P.factionQuestPool[fid].filter(id => {
+    if (activeIds.includes(id)) return false;
     let q = pool.find(x => x.id === id);
     return q && q.minRep <= rep;
   });
-  while (P.factionQuestPool[fid].length < 3) {
-    let candidates = pool.filter(q => q.minRep <= rep && !P.factionQuestPool[fid].includes(q.id) && !activeIds.includes(q.id));
+  // Cap duro a offerSlots
+  if (P.factionQuestPool[fid].length > offerSlots) {
+    P.factionQuestPool[fid] = P.factionQuestPool[fid].slice(0, offerSlots);
+  }
+  // Rellenar hasta offerSlots
+  while (P.factionQuestPool[fid].length < offerSlots) {
+    let candidates = pool.filter(q =>
+      q.minRep <= rep &&
+      !P.factionQuestPool[fid].includes(q.id) &&
+      !activeIds.includes(q.id)
+    );
     if (candidates.length === 0) break;
     let pick = candidates[Math.floor(Math.random() * candidates.length)];
     P.factionQuestPool[fid].push(pick.id);
@@ -3650,7 +3672,11 @@ function renderSettlementUI(settlementId, tab) {
     }
     // Disponibles
     let avail = getAvailableFactionQuests(sett.faction).filter(q => !(P.activeFactionQuests || []).some(a => a.id === q.id));
-    html += `<h3 style="color:var(--gold); font-size:13px;">Disponibles (${avail.length}/3 rotación)</h3>`;
+    let activeCount = (P.activeFactionQuests || []).filter(q => q.faction === sett.faction).length;
+    html += `<h3 style="color:var(--gold); font-size:13px;">Disponibles (${avail.length}) · Activas ${activeCount}/3</h3>`;
+    if (activeCount >= 3) {
+      html += `<p style="font-size:11px;color:var(--danger);">Máximo de 3 misiones activas con esta facción. Completa alguna para aceptar más.</p>`;
+    }
     if (avail.length === 0) {
       html += `<p style="font-size:12px;color:#8d9880;">No hay misiones nuevas. Completa las activas o sube reputación.</p>`;
     } else {
@@ -4407,6 +4433,17 @@ function acceptFactionQuest(factionId, questId) {
   let base = pool.find(q => q.id === questId);
   if (!base) return;
   if ((P.activeFactionQuests || []).some(q => q.id === questId)) return;
+  // Máximo 3 misiones activas por facción
+  let activeForFac = (P.activeFactionQuests || []).filter(q => q.faction === factionId);
+  if (activeForFac.length >= 3) {
+    logMsg("Ya tienes 3 misiones activas con esta facción. Completa alguna primero.");
+    return;
+  }
+  // Solo aceptar si está en el pool de rotación actual
+  if (P.factionQuestPool[factionId] && !P.factionQuestPool[factionId].includes(questId)) {
+    logMsg("Esa misión no está disponible ahora.");
+    return;
+  }
   // Siempre empezar de cero: no contar objetos viejos del inventario
   if (base.type === 'collect' && base.itemId) {
     removeAllItemsByBaseId(base.itemId);
@@ -4417,7 +4454,7 @@ function acceptFactionQuest(factionId, questId) {
     current: 0,
     completed: false
   });
-  // Quitar del pool de rotación y rellenar después al completar
+  // Quitar del pool de rotación
   if (P.factionQuestPool[factionId]) {
     P.factionQuestPool[factionId] = P.factionQuestPool[factionId].filter(id => id !== questId);
   }
