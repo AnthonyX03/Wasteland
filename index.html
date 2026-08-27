@@ -2816,10 +2816,11 @@ function renderQuests() {
     P.activeFactionQuests.forEach(q => {
       let fac = FACTIONS[q.faction];
       let pct = Math.floor((q.current / q.target) * 100);
-      html += `<div class="item" style="border-color:${fac ? fac.color : 'var(--line)'};">
-        <b>${q.title}</b> <span style="font-size:10px;color:var(--gold);">PRINCIPAL · ${fac ? fac.name : q.faction}</span><br>
+      let fcol = fac ? fac.color : 'var(--line)';
+      html += `<div class="item" style="border-color:${fcol};">
+        <b style="color:${fcol};">${q.title}</b> <span style="font-size:10px;color:${fcol};">PRINCIPAL · ${fac ? fac.name : q.faction}</span><br>
         <span style="font-size:11px;">${q.desc}</span><br>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:var(--accent);"></div></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${fcol};"></div></div>
         <span style="font-size:11px;">${q.current}/${q.target} ${q.completed ? '— Completada (reclama en el asentamiento)' : ''}</span>
       </div>`;
     });
@@ -3653,13 +3654,13 @@ function renderSettlementUI(settlementId, tab) {
   `;
 
   if (tab === 'missions') {
-    html += `<h3 style="color:var(--accent); font-size:13px;">Misiones principales (reclamar aquí)</h3>`;
+    html += `<h3 style="color:${fac.color}; font-size:13px;">Misiones principales (reclamar aquí)</h3>`;
     // Activas de esta facción
     let mine = (P.activeFactionQuests || []).filter(q => q.faction === sett.faction);
     if (mine.length > 0) {
       mine.forEach(q => {
         html += `<div class="item" style="border-color:${fac.color};">
-          <b>${q.title}</b> <span style="font-size:10px;color:var(--gold);">PRINCIPAL</span><br>
+          <b style="color:${fac.color};">${q.title}</b> <span style="font-size:10px;color:${fac.color};">PRINCIPAL</span><br>
           <span style="font-size:11px;color:#8d9880;">${q.desc}</span><br>
           <span style="font-size:11px;">Progreso: ${q.current}/${q.target}</span><br>`;
         if (q.completed) {
@@ -3681,8 +3682,8 @@ function renderSettlementUI(settlementId, tab) {
       html += `<p style="font-size:12px;color:#8d9880;">No hay misiones nuevas. Completa las activas o sube reputación.</p>`;
     } else {
       avail.forEach(q => {
-        html += `<div class="item">
-          <b>${q.title}</b><br>
+        html += `<div class="item" style="border-color:${fac.color};">
+          <b style="color:${fac.color};">${q.title}</b><br>
           <span style="font-size:11px;color:#8d9880;">${q.desc}</span><br>
           <span style="font-size:11px;">Recompensa: ${q.reward.caps} chapas · ${q.reward.xp} XP · +${q.reward.rep} rep</span><br>
           <button style="margin-top:6px;" onclick="acceptFactionQuest('${sett.faction}','${q.id}')">ACEPTAR</button>
@@ -3733,8 +3734,8 @@ function renderSettlementUI(settlementId, tab) {
       <b>${fac.name}</b> · Rep ${rep}/1000<br>
       <span style="font-size:11px;color:#8d9880;">Tienda: Nv1@100 · Nv2@250 · Nv3@500 · Nv4@750 · Nv5@1000</span>
     </div>
-    <div class="item" style="border-color:var(--accent);">
-      <b>🩺 Médico del asentamiento</b><br>
+    <div class="item" style="border-color:#66b3ff; background:#0a1520;">
+      <b style="color:#66b3ff;">🩺 Médico del asentamiento</b><br>
       <span style="font-size:12px;color:#8d9880;">Cura total de salud y/o radiación. La radiación cuesta más.</span><br>
       <span style="font-size:11px;">HP: ${P.hp}/${maxhp} → coste ${costHp} chapas · RAD: ${needRad} → coste ${costRad} chapas</span><br>
       <button style="margin-top:6px;" ${needHp === 0 || P.caps < costHp ? 'disabled' : ''} onclick="settlementHealHp('${sett.id}')">Curar salud (${costHp})</button>
@@ -4321,8 +4322,8 @@ function renderPlayerSettlementUI(tab) {
     html += `</div>`;
 
     // Medic - unlock L8, free heal
-    html += `<div class="item" style="border-color:var(--accent);">
-      <b>🩺 Médico</b> ${ps.level < 8 ? '(se desbloquea en Nv.8)' : (ps.medicBuilt ? '— Disponible (GRATIS)' : '— Por construir')}<br>`;
+    html += `<div class="item" style="border-color:#66b3ff; background:#0a1520;">
+      <b style="color:#66b3ff;">🩺 Médico</b> ${ps.level < 8 ? '(se desbloquea en Nv.8)' : (ps.medicBuilt ? '— Disponible (GRATIS)' : '— Por construir')}<br>`;
     if (ps.level >= 8) {
       if (ps.medicBuilt) {
         let maxhp = getMaxHp();
