@@ -172,6 +172,12 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   color: #cc88ff;
   border-color: #aa55ff;
 }
+.world-cell.player-settlement,
+.world-cell.settlement.player-settlement {
+  background: #003322 !important;
+  color: #44ddaa !important;
+  border-color: #44ddaa !important;
+}
 
 .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px; }
 .log-title { font-weight: bold; color: var(--accent); font-size: 12px; }
@@ -410,6 +416,7 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
       <span>NV <b id="st-lvl">1</b></span>
       <span>XP <b id="st-xp">0</b>/<b id="st-maxxp">100</b></span>
       <span><img class="cap-icon" src="data:image/png;base64,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" alt="caps"><b id="st-caps">75</b></span>
+      <span><img class="cap-icon chip-icon" src="data:image/webp;base64,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" alt="fichas"><b id="st-chips" style="color:#ffffff;">0</b></span>
       <span>Peso <b id="st-weight">0</b>/<b id="st-maxweight">35</b></span>
     </div>
   </header>
@@ -713,6 +720,42 @@ const DB_ITEMS = [
   { id: 15, name: "Tartera Nuka-Cola", type: "other", weight: 1, value: 150, stackable: true, shopTier: 1 },
   { id: 29, name: "Tartera Legendaria", type: "other", weight: 1, value: 500, stackable: true, shopTier: 1 },
 
+
+  // --- EQUIPAMIENTO ÚNICO DE FACCIÓN (no aparece en Comercio) ---
+  { id: 2001, name: "Laserista de la Hermandad", type: "weapon", damage: 42, ammoType: "Célula de microfusión", weight: 6, value: 450, stackable: false, factionOnly: true, faction: "bos" },
+  { id: 2002, name: "Servoarmadura T-45 (BoS)", type: "armor", def: 55, weight: 35, value: 1200, stackable: false, factionOnly: true, faction: "bos" },
+  { id: 2003, name: "Rifle Gauss de la Hermandad", type: "weapon", damage: 95, ammoType: "Cartucho de 2mm", weight: 12, value: 1800, stackable: false, factionOnly: true, faction: "bos" },
+  { id: 2011, name: "Pistola de plasma del Enclave", type: "weapon", damage: 48, ammoType: "Cartucho de plasma", weight: 4, value: 600, stackable: false, factionOnly: true, faction: "enclave" },
+  { id: 2012, name: "Armadura avanzada del Enclave", type: "armor", def: 48, weight: 18, value: 900, stackable: false, factionOnly: true, faction: "enclave" },
+  { id: 2013, name: "Rifle Tesla del Enclave", type: "weapon", damage: 70, ammoType: "Célula de energía", weight: 9, value: 1400, stackable: false, factionOnly: true, faction: "enclave" },
+  { id: 2021, name: "Rifle de los Proscritos", type: "weapon", damage: 38, ammoType: "5.56mm", weight: 7, value: 380, stackable: false, factionOnly: true, faction: "outcasts" },
+  { id: 2022, name: "Armadura de combate proscrita", type: "armor", def: 32, weight: 14, value: 420, stackable: false, factionOnly: true, faction: "outcasts" },
+  { id: 2031, name: "Rifle de milicia colona", type: "weapon", damage: 28, ammoType: ".308", weight: 6, value: 220, stackable: false, factionOnly: true, faction: "settlers" },
+  { id: 2032, name: "Chaleco de colonos reforzado", type: "armor", def: 22, weight: 8, value: 180, stackable: false, factionOnly: true, faction: "settlers" },
+  { id: 2041, name: "Pistola del Ferrocarril", type: "weapon", damage: 30, ammoType: "10mm", weight: 3, value: 280, stackable: false, factionOnly: true, faction: "railroad" },
+  { id: 2042, name: "Abrigo de agente del Ferrocarril", type: "armor", def: 18, weight: 5, value: 250, stackable: false, factionOnly: true, faction: "railroad" },
+  { id: 2051, name: "Servicio Rifle RNC", type: "weapon", damage: 40, ammoType: "5.56mm", weight: 7, value: 400, stackable: false, factionOnly: true, faction: "rnc" },
+  { id: 2052, name: "Armadura de patrulla RNC", type: "armor", def: 30, weight: 12, value: 350, stackable: false, factionOnly: true, faction: "rnc" },
+  { id: 2053, name: "Carabina de élite RNC", type: "weapon", damage: 55, ammoType: ".308", weight: 8, value: 700, stackable: false, factionOnly: true, faction: "rnc" },
+  { id: 2061, name: "Pistola de la casa (Strip)", type: "weapon", damage: 36, ammoType: ".45 ACP", weight: 3, value: 500, stackable: false, factionOnly: true, faction: "strip" },
+  { id: 2062, name: "Traje de casino blindado", type: "armor", def: 20, weight: 6, value: 400, stackable: false, factionOnly: true, faction: "strip" },
+  { id: 2063, name: "Escopeta de seguridad del Strip", type: "weapon", damage: 50, ammoType: "Cartucho de escopeta", weight: 6, value: 550, stackable: false, factionOnly: true, faction: "strip" },
+  { id: 2071, name: "Rifle de pulsos del Instituto", type: "weapon", damage: 45, ammoType: "Célula de energía", weight: 5, value: 650, stackable: false, factionOnly: true, faction: "institute" },
+  { id: 2072, name: "Traje de científico reforzado", type: "armor", def: 25, weight: 7, value: 480, stackable: false, factionOnly: true, faction: "institute" },
+  { id: 2073, name: "Pistola sintética experimental", type: "weapon", damage: 58, ammoType: "Célula de energía", weight: 3.5, value: 900, stackable: false, factionOnly: true, faction: "institute" },
+
+  // --- Casino exclusivos (solo fichas) ---
+  { id: 2101, name: "Traje de Lucky 38", type: "armor", def: 28, weight: 5, value: 0, stackable: false, casinoOnly: true, chipCost: 250 },
+  { id: 2102, name: "Revólver de la suerte", type: "weapon", damage: 52, ammoType: ".44 Magnum", weight: 3.5, value: 0, stackable: false, casinoOnly: true, chipCost: 400 },
+  { id: 2103, name: "Anillo de la Fortuna", type: "other", weight: 0.1, value: 0, stackable: true, casinoOnly: true, chipCost: 150 },
+  { id: 2104, name: "Ficha dorada conmemorativa", type: "other", weight: 0.05, value: 0, stackable: true, casinoOnly: true, chipCost: 50 },
+  { id: 2105, name: "Chaqueta de crupier", type: "armor", def: 15, weight: 3, value: 0, stackable: false, casinoOnly: true, chipCost: 120 },
+  { id: 2106, name: "Escopeta de casino", type: "weapon", damage: 60, ammoType: "Cartucho de escopeta", weight: 5, value: 0, stackable: false, casinoOnly: true, chipCost: 500 },
+  { id: 2107, name: "Estimulante premium Tops", type: "med", heal: 80, weight: 0.3, value: 0, stackable: true, casinoOnly: true, chipCost: 40 },
+  { id: 2108, name: "Nuka-Cola Quantum de premio", type: "drink", weight: 0.5, value: 0, stackable: true, casinoOnly: true, chipCost: 80 },
+  { id: 2109, name: "Gafas de la suerte", type: "other", weight: 0.2, value: 0, stackable: true, casinoOnly: true, chipCost: 200 },
+  { id: 2110, name: "Maletín de fichas premium", type: "other", weight: 1, value: 0, stackable: true, casinoOnly: true, chipCost: 100 },
+
   // --- OBJETOS DE MISIÓN DE FACCIÓN (solo aparecen con misión activa) ---
   { id: 901, name: "Núcleo de fusión antiguo", type: "quest", weight: 1, value: 0, stackable: true, shopTier: 99, questOnly: true },
   { id: 902, name: "Holocinta de la Hermandad", type: "quest", weight: 0.2, value: 0, stackable: true, shopTier: 99, questOnly: true },
@@ -731,6 +774,21 @@ const DB_ITEMS = [
   { id: 922, name: "Colgante para Prisioneros MK3", type: "other", weight: 0.2, value: 1800, stackable: true, shopTier: 7, captureChance: 0.60 },
   { id: 923, name: "Colgante para Prisioneros MK4", type: "other", weight: 0.2, value: 3500, stackable: true, shopTier: 9, captureChance: 0.80 },
   { id: 924, name: "Colgante para Prisioneros MK5", type: "other", weight: 0.2, value: 7000, stackable: true, shopTier: 10, captureChance: 1.00 }
+,
+
+  // --- OBJETOS EXCLUSIVOS DEL CASINO (solo fichas) ---
+  { id: 3001, name: "Traje de The Tops", type: "armor", def: 20, weight: 4, value: 0, stackable: false, casinoOnly: true, chipCost: 80 },
+  { id: 3002, name: "Pistola de la suerte", type: "weapon", damage: 35, ammoType: "10mm", weight: 3, value: 0, stackable: false, casinoOnly: true, chipCost: 120 },
+  { id: 3003, name: "Anillo de la fortuna", type: "other", weight: 0.1, value: 0, stackable: true, casinoOnly: true, chipCost: 50 },
+  { id: 3004, name: "Ficha de oro macizo", type: "other", weight: 0.2, value: 200, stackable: true, casinoOnly: true, chipCost: 150 },
+  { id: 3005, name: "Cóctel Atomic Cocktail", type: "drink", weight: 0.3, value: 0, stackable: true, casinoOnly: true, chipCost: 25, effect: { dmg: 5, duration: 10 } },
+  { id: 3006, name: "Cigarro de la casa", type: "other", weight: 0.05, value: 0, stackable: true, casinoOnly: true, chipCost: 15 },
+  { id: 3007, name: "Chaqueta de crupier", type: "armor", def: 15, weight: 3, value: 0, stackable: false, casinoOnly: true, chipCost: 60 },
+  { id: 3008, name: "Revólver de mesa VIP", type: "weapon", damage: 55, ammoType: ".44 Magnum", weight: 4, value: 0, stackable: false, casinoOnly: true, chipCost: 250 },
+  { id: 3009, name: "Botella de vino pre-guerra", type: "drink", weight: 0.5, value: 0, stackable: true, casinoOnly: true, chipCost: 40 },
+  { id: 3010, name: "Dados cargados", type: "other", weight: 0.1, value: 0, stackable: true, casinoOnly: true, chipCost: 90 },
+  { id: 3011, name: "Traje formal del Strip", type: "armor", def: 28, weight: 5, value: 0, stackable: false, casinoOnly: true, chipCost: 180 },
+  { id: 3012, name: "Subfusil de seguridad VIP", type: "weapon", damage: 48, ammoType: "10mm", weight: 5, value: 0, stackable: false, casinoOnly: true, chipCost: 300 },
 ];
 
 // ========== HABILIDADES LEGENDARIAS DE ARMAS (20) ==========
@@ -937,7 +995,18 @@ let P = {
   weather: 'day',
   volMusic: 0.6,
   volSfx: 0.7,
-  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0 },
+  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0 },
+  chips: 0,
+  playerSettlement: {
+    claimed: false,
+    name: '',
+    level: 1,
+    settlers: 0,
+    farmCaps: 0,
+    houseBuilt: false,
+    travelBuilt: false,
+    medicBuilt: false
+  },
   factionQuestPool: {},
   activeFactionQuests: [],
   baseMaxWeight: 25, 
@@ -957,8 +1026,8 @@ let P = {
   perks: {},
   ammoBox: { ".38": 24, "Cartucho de escopeta": 6, "Célula de microfusión": 0, "5.56mm": 0, "10mm": 10, ".44 Magnum": 0, "Bengala": 0, "Cartucho de plasma": 0, "Célula de energía": 0, "Onda Gamma": 0, "Dardo": 0, "Clavo": 0, ".45 ACP": 0, ".308": 0, "Cartucho de 2mm": 0, ".45-70": 0, "5mm": 0, "Misil": 0, "Combustible de lanzallamas": 0, "Mini Nukes": 0, "Bala de cañón": 0, "7.62mm": 0, "Núcleo de fusión": 0, "Célula criogénica": 0 },
   inv: [
-    { uid: 101, id: 1, qty: 1, mods: [] },
-    { uid: 102, id: 5, qty: 1, mods: [] },
+    { uid: 101, id: 1, qty: 1, mods: [], itemLevel: 1 },
+    { uid: 102, id: 5, qty: 1, mods: [], itemLevel: 1 },
     { uid: 103, id: 7, qty: 2 },
     { uid: 104, id: 14, qty: 1 },
     { uid: 105, id: 20, qty: 5 },
@@ -1037,7 +1106,16 @@ const ENEMIES = [
   { name: "Supermutante señor de la guerra", level: 28, hp: 240, dmg: 36, loot: [157, 21, 28], caps: [85, 155] },
   { name: "Saqueador nuclear", level: 14, hp: 100, dmg: 23, loot: [109, 7, 301], caps: [32, 70] },
   { name: "Necrófago brillante", level: 11, hp: 80, dmg: 18, loot: [7, 8, 13], caps: [24, 52] },
-  { name: "Assaultron defectuosa", level: 20, hp: 175, dmg: 31, loot: [105, 13, 28], caps: [52, 105] }
+  { name: "Assaultron defectuosa", level: 20, hp: 175, dmg: 31, loot: [105, 13, 28], caps: [52, 105] },
+  { name: "Synth Gen-1", level: 8, hp: 70, dmg: 15, loot: [13, 22, 7], caps: [18, 40] },
+  { name: "Synth Gen-1 armado", level: 10, hp: 85, dmg: 18, loot: [105, 13, 7], caps: [22, 48] },
+  { name: "Synth Gen-2", level: 12, hp: 95, dmg: 20, loot: [13, 22, 28], caps: [28, 55] },
+  { name: "Synth Gen-2 infiltrado", level: 14, hp: 105, dmg: 22, loot: [109, 13, 7], caps: [32, 65] },
+  { name: "Synth Gen-3", level: 16, hp: 120, dmg: 24, loot: [105, 13, 28], caps: [40, 75] },
+  { name: "Synth Gen-3 Cazador", level: 20, hp: 150, dmg: 28, loot: [117, 13, 28], caps: [50, 95] },
+  { name: "Courser del Instituto", level: 24, hp: 180, dmg: 34, loot: [2071, 13, 28], caps: [70, 130] },
+  { name: "Synth defectuoso", level: 6, hp: 55, dmg: 12, loot: [13, 22], caps: [12, 28] },
+
 ];
 
 const LEGENDARY_ENEMIES = [
@@ -1082,6 +1160,7 @@ const COMPANION_LEGENDARY_ABILITIES = [
 
 function enemyWeaponType(name) {
   let n = (name || '').toLowerCase();
+  if (n.includes('synth') || n.includes('courser') || n.includes('sintético')) return 'synth';
   if (n.includes('robot') || n.includes('protectron') || n.includes('sentry') || n.includes('assaultron') || n.includes('handy') || n.includes('sintético') || n.includes('centinela')) {
     return 'robot';
   }
@@ -1098,6 +1177,7 @@ function rollCompanionSpecial() {
 }
 
 function getCompanionWeaponName(type, isLeg) {
+  if (type === 'synth') return isLeg ? 'Rifle de pulsos experimental' : 'Pistola de energía sintética';
   if (type === 'robot') return isLeg ? 'Cañón de plasma robótico' : 'Láser integrado';
   if (type === 'supermutant') return isLeg ? 'Tabla de clavos legendaria' : 'Tabla de clavos';
   if (type === 'human') return isLeg ? 'Rifle de asalto modificado' : 'Arma improvisada';
@@ -1360,6 +1440,22 @@ function formatItemGainName(item, count = 1) {
   return count > 1 ? `${count}x ${item.name}` : `1x ${item.name}`;
 }
 
+function addLeveledGearToInv(baseId) {
+  let it = getItemBase(baseId);
+  if (!it) return false;
+  let currentWeight = P.inv.reduce((acc, inst) => {
+    let base = getItemBase(inst.id);
+    return acc + ((base?.weight || 0) * (inst.qty || 1));
+  }, 0);
+  if (currentWeight + it.weight > getMaxWeight()) {
+    logMsg("¡Mochila llena!");
+    return false;
+  }
+  let newUid = Date.now() + Math.floor(Math.random() * 100000);
+  P.inv.push({ uid: newUid, id: baseId, qty: 1, mods: [], itemLevel: P.lvl || 1 });
+  return newUid;
+}
+
 function addItemToInv(baseId, count = 1) {
   let it = getItemBase(baseId);
   if (!it) return false;
@@ -1438,17 +1534,33 @@ function removeAllItemsByBaseId(baseId) {
 }
 
 
+function getItemLevelBonus(itemLevel) {
+  let lvl = Math.max(1, itemLevel || 1);
+  // +8% stats por nivel por encima de 1, suave
+  return 1 + (lvl - 1) * 0.08;
+}
+
+function getModLevelScale(itemLevel) {
+  // módulos escalan con el nivel del objeto sin romper el flat bonus
+  return 1 + Math.max(0, (itemLevel || 1) - 1) * 0.05;
+}
+
 function getEquippedWeapon() {
   let inst = P.inv.find(i => i.uid === P.equippedWeaponUid);
-  if (!inst) return { name: "Desarmado", damage: 2, ammoType: "Ninguna (Cuerpo a cuerpo)", mods: [], legendary: false };
+  if (!inst) return { name: "Desarmado", damage: 2, ammoType: "Ninguna (Cuerpo a cuerpo)", mods: [], legendary: false, itemLevel: 1 };
   let base = getItemBase(inst.id);
+  let ilvl = inst.itemLevel || 1;
+  let scale = getItemLevelBonus(ilvl);
+  let modScale = getModLevelScale(ilvl);
   let modDmg = (inst.mods || []).reduce((acc, mId) => {
     let m = MODS_DB.find(x => x.id === mId);
-    return acc + (m ? m.bonusDmg || 0 : 0);
+    return acc + (m ? Math.floor((m.bonusDmg || 0) * modScale) : 0);
   }, 0);
+  let dmg = Math.max(1, Math.floor(base.damage * scale) + modDmg);
   return { 
     ...base, 
-    damage: base.damage + modDmg, 
+    damage: dmg,
+    itemLevel: ilvl,
     mods: inst.mods || [],
     legendary: !!inst.legendary,
     abilityId: inst.abilityId || null,
@@ -1458,15 +1570,20 @@ function getEquippedWeapon() {
 
 function getEquippedArmor() {
   let inst = P.inv.find(i => i.uid === P.equippedArmorUid);
-  if (!inst) return { name: "Sin armadura", def: 0, mods: [], legendary: false };
+  if (!inst) return { name: "Sin armadura", def: 0, mods: [], legendary: false, itemLevel: 1 };
   let base = getItemBase(inst.id);
+  let ilvl = inst.itemLevel || 1;
+  let scale = getItemLevelBonus(ilvl);
+  let modScale = getModLevelScale(ilvl);
   let modDef = (inst.mods || []).reduce((acc, mId) => {
     let m = MODS_DB.find(x => x.id === mId);
-    return acc + (m ? m.bonusDef || 0 : 0);
+    return acc + (m ? Math.floor((m.bonusDef || 0) * modScale) : 0);
   }, 0);
+  let def = Math.max(0, Math.floor(base.def * scale) + modDef);
   return { 
     ...base, 
-    def: base.def + modDef, 
+    def: def,
+    itemLevel: ilvl,
     mods: inst.mods || [],
     legendary: !!inst.legendary,
     abilityId: inst.abilityId || null,
@@ -1500,6 +1617,8 @@ function updateStats() {
   document.getElementById('st-maxxp').textContent = reqXp;
   document.getElementById('st-caps').textContent = P.caps;
   document.getElementById('st-caps').style.color = '#e05050';
+  let chipsEl = document.getElementById('st-chips');
+  if (chipsEl) { chipsEl.textContent = P.chips || 0; chipsEl.style.color = '#ffffff'; }
   document.getElementById('st-weight').textContent = wCap.toFixed(1);
   document.getElementById('st-maxweight').textContent = maxw;
 
@@ -1637,12 +1756,21 @@ function renderCharacter() {
     <div class="row"><span>Salud</span><b>${P.hp} / ${maxhp}</b></div>
     <div class="row"><span>Radiación</span><b style="color:#ff6600;">${P.rads || 0} / 1000 (${getRadStatusText()})</b></div>
     <div class="row"><span>Res. Radiación</span><b>${getRadResistance()}%</b></div>
-    <div class="row"><span>Arma equipada</span><b>${w.name}</b></div>
-    <div class="row"><span>Armadura</span><b>${a.name}</b></div>
+    <div class="row"><span>Arma equipada</span><b style="${w.legendary?'color:var(--gold);':''}">${w.legendary?'★ ':''}${w.name} <span style="font-size:10px;color:#8d9880;">Lv:${w.itemLevel||1}</span></b></div>
+    <div class="row"><span>Armadura</span><b style="${a.legendary?'color:var(--gold);':''}">${a.legendary?'★ ':''}${a.name} <span style="font-size:10px;color:#8d9880;">Lv:${a.itemLevel||1}</span></b></div>
     <div class="row"><span>Carga máxima</span><b>${maxw} kg</b></div>
     <div class="row"><span>Fecha / clima</span><b>${formatGameDateTime()} · ${wInfo.label}</b></div>
+    ${(() => {
+      let ps = P.playerSettlement;
+      if (ps && ps.claimed && ps.name) {
+        return '<div class="item" style="border-color:#44ddaa; margin:10px 0 6px 0; padding:8px;">' +
+          '<div class="row" style="margin:0;"><span style="color:#44ddaa;font-weight:bold;">🏕 ' + ps.name + '</span>' +
+          '<b style="color:#44ddaa;">Colonos: ' + (ps.settlers||0) + '/10 · Nv.' + (ps.level||1) + '/10</b></div></div>';
+      }
+      return '';
+    })()}
     <h3 style="color:var(--accent); font-size:13px; margin-top:10px;">Reputación de facciones</h3>
-    ${Object.keys(FACTIONS).map(fid => {
+    ${Object.keys(FACTIONS).filter(fid => fid !== 'player').map(fid => {
       let f = FACTIONS[fid];
       let r = (P.reputation && P.reputation[fid]) || 0;
       return '<div class="row"><span style="color:' + f.color + '">' + f.name + '</span><b>' + r + '/1000</b></div>';
@@ -1807,23 +1935,23 @@ function renderVault(sub = P.vaultSubtab || 'lunchboxes') {
     html += `
       <p style="font-size:12px; color:#8d9880;">Nivel Tarteras Vault-Tec: <b style="color:var(--accent);">${P.lunchboxLevel}/5</b></p>
       <div class="vault-container" style="grid-template-columns: 1fr 1fr 1fr;">
-        <div class="lunchbox-card">
-          <h3 style="color:var(--accent); margin-top:0;">📦 TARTERA VAULT-TEC</h3>
+        <div class="lunchbox-card" style="border-color:#3388ff;">
+          <h3 style="color:#55aaff; margin-top:0;">📦 TARTERA VAULT-TEC</h3>
           <p style="font-size:11px; color:#8d9880;">Chapas y suministros. Nivel ${P.lunchboxLevel} mejora recompensas.</p>
-          <p style="font-size:16px;"><b>Disponibles: ${vaultBoxCount}</b></p>
-          <button style="width:100%; background:var(--accent); color:#111; font-weight:bold;" ${vaultBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(14)">ABRIR</button>
+          <p style="font-size:16px; color:#55aaff;"><b>Disponibles: ${vaultBoxCount}</b></p>
+          <button style="width:100%; background:#3388ff; color:#111; font-weight:bold;" ${vaultBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(14)">ABRIR</button>
         </div>
-        <div class="lunchbox-card">
-          <h3 style="color:var(--gold); margin-top:0;">🥤 TARTERA NUKA-COLA</h3>
+        <div class="lunchbox-card" style="border-color:#e05050;">
+          <h3 style="color:#e05050; margin-top:0;">🥤 TARTERA NUKA-COLA</h3>
           <p style="font-size:11px; color:#8d9880;">Arma o armadura de calidad.</p>
-          <p style="font-size:16px;"><b>Disponibles: ${nukaBoxCount}</b></p>
-          <button style="width:100%; background:var(--gold); color:#111; font-weight:bold;" ${nukaBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(15)">ABRIR</button>
+          <p style="font-size:16px; color:#e05050;"><b>Disponibles: ${nukaBoxCount}</b></p>
+          <button style="width:100%; background:#e05050; color:#111; font-weight:bold;" ${nukaBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(15)">ABRIR</button>
         </div>
-        <div class="lunchbox-card" style="border-color:#ff00aa;">
-          <h3 style="color:#ff66cc; margin-top:0;">★ TARTERA LEGENDARIA</h3>
+        <div class="lunchbox-card" style="border-color:var(--gold);">
+          <h3 style="color:var(--gold); margin-top:0;">★ TARTERA LEGENDARIA</h3>
           <p style="font-size:11px; color:#8d9880;">Objeto legendario garantizado.</p>
-          <p style="font-size:16px;"><b>Disponibles: ${legBoxCount}</b></p>
-          <button style="width:100%; background:#ff00aa; color:#111; font-weight:bold;" ${legBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(29)">ABRIR</button>
+          <p style="font-size:16px; color:var(--gold);"><b>Disponibles: ${legBoxCount}</b></p>
+          <button style="width:100%; background:var(--gold); color:#111; font-weight:bold;" ${legBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(29)">ABRIR</button>
         </div>
       </div>
     `;
@@ -1964,8 +2092,8 @@ function renderScrapUI() {
   } else {
     list.forEach(inst => {
       let it = getItemBase(inst.id);
-      let name = (inst.legendary ? '★ ' : '') + it.name;
-      html += `<div class="item"><b>${name}</b>
+      let name = (inst.legendary ? '★ ' : '') + it.name + ((it.type==='weapon'||it.type==='armor') ? (' Lv:' + (inst.itemLevel||1)) : '');
+      html += `<div class="item" style="${inst.legendary?'border-color:var(--gold);':''}"><b style="${inst.legendary?'color:var(--gold);':''}">${name}</b>
         <button style="margin-left:8px; font-size:11px;" onclick="scrapItem(${inst.uid})">Desguazar</button>
       </div>`;
     });
@@ -2055,7 +2183,7 @@ function renderPrisonUI() {
       let ab = c.ability ? `<br><span style="color:var(--gold);font-size:11px;">★ ${c.ability.name}: ${c.ability.desc}</span>` : '';
       let weap = c.weapon ? `Arma: ${c.weapon}` : 'Sin arma (cuerpo a cuerpo)';
       html += `<div class="item" style="${c.id === P.equippedCompanionId ? 'border-color:var(--accent);' : ''}">
-        <b>${c.isLegendary ? '★ ' : ''}${c.name}</b> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
+        <b style="${c.isLegendary ? 'color:var(--gold);' : ''}">${c.isLegendary ? '★ ' : ''}${c.name}</b> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
         ${c.resting ? ' <span style="color:var(--danger);">[DESCANSANDO]</span>' : ''}
         <br><span style="font-size:11px;color:#8d9880;">HP ${c.hp}/${c.maxHp} · ATK ${st.dmg} · DEF ${st.def} · ${weap}</span>
         <br><span style="font-size:10px;">S${c.special.S} P${c.special.P} E${c.special.E} C${c.special.C} I${c.special.I} A${c.special.A} L${c.special.L}</span>
@@ -2266,6 +2394,111 @@ function renderStorageUI() {
   return html;
 }
 
+function isStackableType(it) {
+  if (!it) return false;
+  if (it.stackable) return true;
+  return ['junk', 'med', 'chem', 'ingredient', 'other', 'food', 'drink', 'quest', 'ammo'].includes(it.type);
+}
+
+function promptQty(max, actionLabel) {
+  if (max <= 1) return 1;
+  let raw = prompt(actionLabel + " (1-" + max + "):", String(max));
+  if (raw === null) return 0;
+  let n = parseInt(raw, 10);
+  if (isNaN(n) || n < 1) return 0;
+  return Math.min(max, n);
+}
+
+function mergeOrPushStack(list, inst, qty) {
+  let base = getItemBase(inst.id);
+  if (isStackableType(base)) {
+    // Apilar siempre por id en tipos stackables (ignorar mods vacíos)
+    let existing = list.find(i => i.id === inst.id && !i.legendary);
+    if (existing) {
+      existing.qty = (existing.qty || 1) + qty;
+      return;
+    }
+  }
+  let copy = {
+    uid: Date.now() + Math.floor(Math.random() * 100000),
+    id: inst.id,
+    qty: qty,
+    mods: (inst.mods && inst.mods.length) ? [...inst.mods] : []
+  };
+  if (inst.itemLevel) copy.itemLevel = inst.itemLevel;
+  if (inst.legendary) copy.legendary = inst.legendary;
+  if (inst.ability) copy.ability = inst.ability;
+  list.push(copy);
+}
+
+
+function consolidateStacks(list) {
+  if (!list) return;
+  let map = {};
+  let out = [];
+  for (let inst of list) {
+    let base = getItemBase(inst.id);
+    if (isStackableType(base) && !inst.legendary) {
+      let key = inst.id;
+      if (map[key] !== undefined) {
+        out[map[key]].qty = (out[map[key]].qty || 1) + (inst.qty || 1);
+        continue;
+      }
+      map[key] = out.length;
+      out.push({ uid: inst.uid || (Date.now() + Math.floor(Math.random()*1e5)), id: inst.id, qty: inst.qty || 1, mods: [] });
+    } else {
+      out.push(inst);
+    }
+  }
+  list.length = 0;
+  out.forEach(x => list.push(x));
+}
+
+
+let _qtyPadState = null;
+function openQtyPad(maxQ, title, onConfirm) {
+  _qtyPadState = { max: maxQ, value: String(maxQ), onConfirm: onConfirm };
+  let m = document.getElementById('modal');
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:var(--accent);margin-top:0;text-align:center;">${title}</h2>
+    <p style="text-align:center;font-size:12px;color:#8d9880;">Disponible: ${maxQ}</p>
+    <div id="qty-display" style="text-align:center;font-size:28px;font-weight:bold;color:var(--gold);padding:12px;border:1px solid var(--line);margin:8px 0;background:#0a0c08;">${maxQ}</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+      ${[1,2,3,4,5,6,7,8,9,'C',0,'⌫'].map(k =>
+        `<button style="padding:14px;font-size:16px;" onclick="qtyPadKey('${k}')">${k}</button>`
+      ).join('')}
+    </div>
+    <button id="qty-confirm-btn" style="width:100%;margin-top:10px;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="qtyPadConfirm()">Confirmar</button>
+    <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cancelar</button>
+  `;
+  m.classList.add('show');
+}
+function qtyPadKey(k) {
+  if (!_qtyPadState) return;
+  let v = _qtyPadState.value || '';
+  if (k === 'C') v = '';
+  else if (k === '⌫') v = v.slice(0, -1);
+  else {
+    if (v === '0') v = '';
+    v += k;
+  }
+  let n = parseInt(v || '0', 10);
+  if (n > _qtyPadState.max) n = _qtyPadState.max;
+  _qtyPadState.value = v === '' ? '' : String(n);
+  let el = document.getElementById('qty-display');
+  if (el) el.textContent = _qtyPadState.value === '' ? '0' : _qtyPadState.value;
+}
+function qtyPadConfirm() {
+  if (!_qtyPadState) return;
+  let n = parseInt(_qtyPadState.value || '0', 10);
+  if (isNaN(n) || n < 1) { closeModal(); return; }
+  n = Math.min(_qtyPadState.max, n);
+  let cb = _qtyPadState.onConfirm;
+  _qtyPadState = null;
+  closeModal();
+  if (cb) cb(n);
+}
+
 function moveToStorage(uid) {
   ensureVaultDefaults();
   let idx = P.inv.findIndex(i => i.uid === uid);
@@ -2276,16 +2509,37 @@ function moveToStorage(uid) {
     return;
   }
   let base = getItemBase(inst.id);
-  let addW = (base?.weight || 0) * (inst.qty || 1);
-  if (getStorageWeight() + addW > P.storageMaxWeight) {
-    logMsg("Almacén lleno (" + P.storageMaxWeight + " kg). Mejora la capacidad en Mejoras.");
-    return;
+  let maxQ = inst.qty || 1;
+  const doStore = (qty) => {
+    if (qty <= 0) return;
+    let addW = (base?.weight || 0) * qty;
+    if (getStorageWeight() + addW > P.storageMaxWeight) {
+      logMsg("Almacén lleno (" + P.storageMaxWeight + " kg). Mejora la capacidad en Mejoras.");
+      return;
+    }
+    let i2 = P.inv.findIndex(i => i.uid === uid);
+    if (i2 === -1) return;
+    let inst2 = P.inv[i2];
+    let mq = inst2.qty || 1;
+    mergeOrPushStack(P.storage, inst2, qty);
+    if (qty >= mq) P.inv.splice(i2, 1);
+    else inst2.qty = mq - qty;
+    consolidateStacks(P.storage);
+    consolidateStacks(P.inv);
+    logMsg("Guardado en almacén: " + qty + "x " + base.name);
+    renderVault('storage');
+    updateStats();
+  };
+  if (isStackableType(base) && maxQ > 1) {
+    openQtyPad(maxQ, "Almacenar: " + base.name, doStore);
+    // rename confirm button after open
+    setTimeout(() => {
+      let btn = document.getElementById('qty-confirm-btn');
+      if (btn) btn.textContent = 'Almacenar';
+    }, 30);
+  } else {
+    doStore(maxQ);
   }
-  P.inv.splice(idx, 1);
-  P.storage.push(inst);
-  logMsg("Guardado en almacén: " + base.name);
-  renderVault('storage');
-  updateStats();
 }
 
 function moveFromStorage(uid) {
@@ -2294,20 +2548,56 @@ function moveFromStorage(uid) {
   if (idx === -1) return;
   let inst = P.storage[idx];
   let base = getItemBase(inst.id);
-  // Usar addItemToInv logic de peso
-  let currentWeight = P.inv.reduce((acc, i) => {
-    let b = getItemBase(i.id);
-    return acc + ((b?.weight || 0) * (i.qty || 1));
-  }, 0);
-  if (currentWeight + (base?.weight || 0) * (inst.qty || 1) > getMaxWeight()) {
-    logMsg("Inventario lleno. No puedes sacar el objeto.");
-    return;
+  let maxQ = inst.qty || 1;
+  const doTake = (qty) => {
+    if (qty <= 0) return;
+    let i2 = P.storage.findIndex(i => i.uid === uid);
+    if (i2 === -1) return;
+    let inst2 = P.storage[i2];
+    let mq = inst2.qty || 1;
+    let currentWeight = P.inv.reduce((acc, i) => {
+      let b = getItemBase(i.id);
+      return acc + ((b?.weight || 0) * (i.qty || 1));
+    }, 0);
+    if (currentWeight + (base?.weight || 0) * qty > getMaxWeight()) {
+      logMsg("Inventario lleno. No puedes sacar el objeto.");
+      return;
+    }
+    if (isStackableType(base)) {
+      let existing = P.inv.find(i => i.id === inst2.id && !i.legendary);
+      if (existing) existing.qty = (existing.qty || 1) + qty;
+      else {
+        let copy = { uid: Date.now() + Math.floor(Math.random() * 100000), id: inst2.id, qty: qty, mods: [] };
+        if (inst2.itemLevel) copy.itemLevel = inst2.itemLevel;
+        P.inv.push(copy);
+      }
+    } else {
+      if (qty >= mq) {
+        P.storage.splice(i2, 1);
+        P.inv.push(inst2);
+        logMsg("Sacado del almacén: " + base.name);
+        renderVault('storage');
+        updateStats();
+        return;
+      }
+    }
+    if (qty >= mq) P.storage.splice(i2, 1);
+    else inst2.qty = mq - qty;
+    consolidateStacks(P.storage);
+    consolidateStacks(P.inv);
+    logMsg("Sacado del almacén: " + qty + "x " + base.name);
+    renderVault('storage');
+    updateStats();
+  };
+  if (isStackableType(base) && maxQ > 1) {
+    openQtyPad(maxQ, "Sacar: " + base.name, doTake);
+    setTimeout(() => {
+      let btn = document.getElementById('qty-confirm-btn');
+      if (btn) btn.textContent = 'Sacar';
+    }, 30);
+  } else {
+    doTake(maxQ);
   }
-  P.storage.splice(idx, 1);
-  P.inv.push(inst);
-  logMsg("Sacado del almacén: " + base.name);
-  renderVault('storage');
-  updateStats();
 }
 
 function craftItem(recipeId) {
@@ -2578,7 +2868,11 @@ const FACTIONS = {
   enclave: { id: 'enclave', name: 'El Enclave', color: '#ff6666', shopLevels: [100, 250, 500, 750, 1000] },
   outcasts: { id: 'outcasts', name: 'Proscritos de la Hermandad', color: '#aa88ff', shopLevels: [100, 250, 500, 750, 1000] },
   settlers: { id: 'settlers', name: 'Colonos', color: '#88cc66', shopLevels: [100, 250, 500, 750, 1000] },
-  railroad: { id: 'railroad', name: 'El Ferrocarril', color: '#cccc66', shopLevels: [100, 250, 500, 750, 1000] }
+  railroad: { id: 'railroad', name: 'El Ferrocarril', color: '#cccc66', shopLevels: [100, 250, 500, 750, 1000] },
+  rnc: { id: 'rnc', name: 'RNC (República de Nueva California)', color: '#ddaa44', shopLevels: [100, 250, 500, 750, 1000] },
+  strip: { id: 'strip', name: 'El Strip de New Vegas', color: '#ff88cc', shopLevels: [100, 250, 500, 750, 1000] },
+  institute: { id: 'institute', name: 'El Instituto', color: '#66ccff', shopLevels: [100, 250, 500, 750, 1000] },
+  player: { id: 'player', name: 'Tu Asentamiento', color: '#44ddaa', shopLevels: [0, 0, 0, 0, 0] }
 };
 function getFactionShopLevel(fid) {
   let rep = getFactionRep(fid);
@@ -2591,11 +2885,15 @@ function getFactionShopLevel(fid) {
 }
 
 const SETTLEMENTS = [
-  { id: 'citadel', name: 'La Ciudadela', faction: 'bos', x: 3, y: 2 },
-  { id: 'enclave_base', name: 'Base del Enclave', faction: 'enclave', x: -4, y: 5 },
-  { id: 'outcast_outpost', name: 'Puesto de Proscritos', faction: 'outcasts', x: 6, y: -3 },
-  { id: 'sanctuary', name: 'Santuario de Colonos', faction: 'settlers', x: -2, y: -4 },
-  { id: 'rail_hq', name: 'Cuartel del Ferrocarril', faction: 'railroad', x: 5, y: 6 }
+  { id: 'citadel', name: 'La Ciudadela', faction: 'bos', x: 5, y: 4 },
+  { id: 'enclave_base', name: 'Base del Enclave', faction: 'enclave', x: -8, y: 7 },
+  { id: 'outcast_outpost', name: 'Puesto de Proscritos', faction: 'outcasts', x: 10, y: -6 },
+  { id: 'sanctuary', name: 'Santuario de Colonos', faction: 'settlers', x: -5, y: -8 },
+  { id: 'rail_hq', name: 'Cuartel del Ferrocarril', faction: 'railroad', x: 9, y: 10 },
+  { id: 'rnc_camp', name: 'Campamento RNC', faction: 'rnc', x: -12, y: 3 },
+  { id: 'strip_gate', name: 'Puerta del Strip', faction: 'strip', x: 14, y: 2 },
+  { id: 'institute_relay', name: 'Relé del Instituto', faction: 'institute', x: 1, y: 14 },
+  { id: 'player_home', name: 'Tu Asentamiento', faction: 'player', x: -10, y: -12, playerOwned: true }
 ];
 
 // Misiones principales por facción (se rotan de 3 en 3)
@@ -2641,7 +2939,79 @@ const FACTION_QUEST_POOL = {
     { id: 'rr_q5', title: 'Operación sombra', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 400 },
     { id: 'rr_q6', title: 'Objetivo prioritario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 370, xp: 235, rep: 20 }, minRep: 700 }
   ]
+,
+
+  rnc: [
+    { id: 'rnc_q1', title: 'Patrulla fronteriza', desc: 'Derrota 5 enemigos en territorio RNC.', type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'rnc_q2', title: 'Suministros militares', desc: 'Explora 8 zonas.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'rnc_q3', title: 'Informe de inteligencia', desc: 'Consigue 4 botines.', type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'rnc_q4', title: 'Operación pacificación', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 200 },
+    { id: 'rnc_q5', title: 'Cartografía del desierto', desc: 'Explora 12 zonas.', type: 'explore', target: 12, reward: { caps: 160, xp: 110, rep: 16 }, minRep: 400 },
+    { id: 'rnc_q6', title: 'Amenaza legendaria RNC', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 320, xp: 200, rep: 20 }, minRep: 700 }
+  ],
+  strip: [
+    { id: 'str_q1', title: 'Seguridad del Strip', desc: 'Derrota 4 enemigos cerca del Strip.', type: 'kill', target: 4, reward: { caps: 110, xp: 65, rep: 12 }, minRep: 0 },
+    { id: 'str_q2', title: 'Turismo del Yermo', desc: 'Explora 6 zonas.', type: 'explore', target: 6, reward: { caps: 80, xp: 50, rep: 10 }, minRep: 0 },
+    { id: 'str_q3', title: 'Botín de la suerte', desc: 'Consigue 3 botines.', type: 'loot', target: 3, reward: { caps: 90, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'str_q4', title: 'Limpieza de bandidos', desc: 'Derrota 9 enemigos.', type: 'kill', target: 9, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
+    { id: 'str_q5', title: 'Rutas de clientes', desc: 'Explora 14 zonas.', type: 'explore', target: 14, reward: { caps: 170, xp: 115, rep: 16 }, minRep: 400 },
+    { id: 'str_q6', title: 'Jackpot legendario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 350, xp: 210, rep: 20 }, minRep: 700 }
+  ],
+  institute: [
+    { id: 'ins_q1', title: 'Recolección de datos', desc: 'Explora 7 zonas.', type: 'explore', target: 7, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'ins_q2', title: 'Prueba de combate', desc: 'Derrota 5 enemigos.', type: 'kill', target: 5, reward: { caps: 110, xp: 75, rep: 12 }, minRep: 0 },
+    { id: 'ins_q3', title: 'Muestras de campo', desc: 'Consigue 4 botines.', type: 'loot', target: 4, reward: { caps: 95, xp: 60, rep: 10 }, minRep: 0 },
+    { id: 'ins_q4', title: 'Eliminar variables', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 190, xp: 135, rep: 18 }, minRep: 200 },
+    { id: 'ins_q5', title: 'Expansión del relé', desc: 'Explora 13 zonas.', type: 'explore', target: 13, reward: { caps: 175, xp: 120, rep: 16 }, minRep: 400 },
+    { id: 'ins_q6', title: 'Protocolo legendario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 360, xp: 220, rep: 20 }, minRep: 700 }
+  ]
+
 };
+
+// Misiones extra para más variedad (añadidas a cada facción)
+function __expandFactionQuests() {
+  const extra = {
+    bos: [
+      { id: 'bos_q7', title: 'Escolta de suministro', desc: 'Explora 5 zonas.', type: 'explore', target: 5, reward: { caps: 70, xp: 45, rep: 10 }, minRep: 0 },
+      { id: 'bos_q8', title: 'Caza de robots', desc: 'Derrota 6 enemigos.', type: 'kill', target: 6, reward: { caps: 110, xp: 70, rep: 12 }, minRep: 100 },
+      { id: 'bos_q9', title: 'Reliquia del Yermo', desc: 'Consigue 5 botines.', type: 'loot', target: 5, reward: { caps: 130, xp: 80, rep: 14 }, minRep: 300 }
+    ],
+    enclave: [
+      { id: 'enc_q7', title: 'Barrido de zona', desc: 'Explora 6 zonas.', type: 'explore', target: 6, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+      { id: 'enc_q8', title: 'Neutralizar hostiles', desc: 'Derrota 7 enemigos.', type: 'kill', target: 7, reward: { caps: 120, xp: 80, rep: 12 }, minRep: 100 },
+      { id: 'enc_q9', title: 'Material clasificado', desc: 'Consigue 5 botines.', type: 'loot', target: 5, reward: { caps: 140, xp: 85, rep: 14 }, minRep: 300 }
+    ],
+    outcasts: [
+      { id: 'out_q7', title: 'Patrulla independiente', desc: 'Explora 5 zonas.', type: 'explore', target: 5, reward: { caps: 75, xp: 50, rep: 10 }, minRep: 0 },
+      { id: 'out_q8', title: 'Emboscada', desc: 'Derrota 6 enemigos.', type: 'kill', target: 6, reward: { caps: 115, xp: 75, rep: 12 }, minRep: 100 }
+    ],
+    settlers: [
+      { id: 'set_q7', title: 'Caza de alimañas', desc: 'Derrota 4 enemigos.', type: 'kill', target: 4, reward: { caps: 60, xp: 40, rep: 10 }, minRep: 0 },
+      { id: 'set_q8', title: 'Recolección de suministros', desc: 'Consigue 4 botines.', type: 'loot', target: 4, reward: { caps: 70, xp: 50, rep: 12 }, minRep: 100 }
+    ],
+    railroad: [
+      { id: 'rr_q7', title: 'Camino seguro', desc: 'Explora 5 zonas.', type: 'explore', target: 5, reward: { caps: 80, xp: 55, rep: 10 }, minRep: 0 },
+      { id: 'rr_q8', title: 'Silenciar rastreadores', desc: 'Derrota 6 enemigos.', type: 'kill', target: 6, reward: { caps: 120, xp: 80, rep: 12 }, minRep: 100 }
+    ],
+    rnc: [
+      { id: 'rnc_q7', title: 'Ley del Yermo', desc: 'Derrota 5 enemigos.', type: 'kill', target: 5, reward: { caps: 90, xp: 60, rep: 10 }, minRep: 0 },
+      { id: 'rnc_q8', title: 'Inspección de rutas', desc: 'Explora 8 zonas.', type: 'explore', target: 8, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 100 }
+    ],
+    strip: [
+      { id: 'str_q7', title: 'Clientes problemáticos', desc: 'Derrota 5 enemigos.', type: 'kill', target: 5, reward: { caps: 100, xp: 60, rep: 10 }, minRep: 0 },
+      { id: 'str_q8', title: 'Publicidad del Strip', desc: 'Explora 7 zonas.', type: 'explore', target: 7, reward: { caps: 90, xp: 55, rep: 12 }, minRep: 100 }
+    ],
+    institute: [
+      { id: 'ins_q7', title: 'Observación de campo', desc: 'Explora 6 zonas.', type: 'explore', target: 6, reward: { caps: 95, xp: 65, rep: 10 }, minRep: 0 },
+      { id: 'ins_q8', title: 'Eliminar interferencias', desc: 'Derrota 6 enemigos.', type: 'kill', target: 6, reward: { caps: 115, xp: 75, rep: 12 }, minRep: 100 }
+    ]
+  };
+  for (let fid in extra) {
+    if (FACTION_QUEST_POOL[fid]) FACTION_QUEST_POOL[fid] = FACTION_QUEST_POOL[fid].concat(extra[fid]);
+  }
+}
+__expandFactionQuests();
+
 
 // Tienda de facción: shopLevel 1=100rep ... 5=1000rep
 const FACTION_SHOP_ITEMS = {
@@ -2680,8 +3050,54 @@ const FACTION_SHOP_ITEMS = {
     { id: 77, shopLevel: 3 }, { id: 29, shopLevel: 3 }, { id: 51, shopLevel: 3 },
     { id: 112, shopLevel: 4 }, { id: 28, shopLevel: 4 }, { id: 15, shopLevel: 4 },
     { id: 210, shopLevel: 5 }, { id: 52, shopLevel: 5 }, { id: 14, shopLevel: 5 }
+  ],
+  rnc: [
+    { id: 7, shopLevel: 1 }, { id: 20, shopLevel: 1 }, { id: 21, shopLevel: 1 }, { id: 301, shopLevel: 1 },
+    { id: 101, shopLevel: 2 }, { id: 13, shopLevel: 2 }, { id: 14, shopLevel: 2 },
+    { id: 28, shopLevel: 3 }, { id: 109, shopLevel: 3 },
+    { id: 29, shopLevel: 4 }, { id: 112, shopLevel: 4 },
+    { id: 15, shopLevel: 5 }, { id: 51, shopLevel: 5 }
+  ],
+  strip: [
+    { id: 7, shopLevel: 1 }, { id: 70, shopLevel: 1 }, { id: 80, shopLevel: 1 },
+    { id: 28, shopLevel: 2 }, { id: 14, shopLevel: 2 },
+    { id: 77, shopLevel: 3 }, { id: 15, shopLevel: 3 },
+    { id: 29, shopLevel: 4 }, { id: 51, shopLevel: 4 },
+    { id: 52, shopLevel: 5 }
+  ],
+  institute: [
+    { id: 7, shopLevel: 1 }, { id: 13, shopLevel: 1 }, { id: 22, shopLevel: 1 },
+    { id: 105, shopLevel: 2 }, { id: 28, shopLevel: 2 },
+    { id: 77, shopLevel: 3 }, { id: 14, shopLevel: 3 },
+    { id: 29, shopLevel: 4 }, { id: 15, shopLevel: 4 },
+    { id: 51, shopLevel: 5 }
   ]
 };
+
+// Extra: armas/armaduras de facción por nivel de tienda
+const FACTION_UNIQUE_SHOP = {
+  bos: [ { id: 2001, shopLevel: 2 }, { id: 2002, shopLevel: 3 }, { id: 2003, shopLevel: 5 } ],
+  enclave: [ { id: 2011, shopLevel: 2 }, { id: 2012, shopLevel: 3 }, { id: 2013, shopLevel: 5 } ],
+  outcasts: [ { id: 2021, shopLevel: 2 }, { id: 2022, shopLevel: 3 } ],
+  settlers: [ { id: 2031, shopLevel: 2 }, { id: 2032, shopLevel: 2 } ],
+  railroad: [ { id: 2041, shopLevel: 2 }, { id: 2042, shopLevel: 3 } ],
+  rnc: [
+    { id: 7, shopLevel: 1 }, { id: 2051, shopLevel: 1 }, { id: 2052, shopLevel: 2 },
+    { id: 20, shopLevel: 1 }, { id: 2053, shopLevel: 4 }, { id: 28, shopLevel: 3 },
+    { id: 101, shopLevel: 2 }, { id: 14, shopLevel: 3 }, { id: 15, shopLevel: 5 }
+  ],
+  strip: [
+    { id: 7, shopLevel: 1 }, { id: 2061, shopLevel: 1 }, { id: 2062, shopLevel: 2 },
+    { id: 2063, shopLevel: 3 }, { id: 80, shopLevel: 2 }, { id: 70, shopLevel: 2 },
+    { id: 28, shopLevel: 4 }, { id: 29, shopLevel: 5 }
+  ],
+  institute: [
+    { id: 7, shopLevel: 1 }, { id: 2071, shopLevel: 2 }, { id: 2072, shopLevel: 2 },
+    { id: 2073, shopLevel: 4 }, { id: 13, shopLevel: 1 }, { id: 22, shopLevel: 2 },
+    { id: 28, shopLevel: 3 }, { id: 77, shopLevel: 5 }
+  ]
+};
+
 
 const INTERIOR_TEMPLATES = {
   ruin: [
@@ -2813,6 +3229,11 @@ function advanceTime(hours = 1) {
     logMsg("Clima: " + w.label);
   }
   // Compañeros descansando regeneran vida cada hora
+  // Granja del jugador: chapas por hora
+  let ps = P.playerSettlement;
+  if (ps && ps.claimed && (ps.settlers || 0) > 0) {
+    ps.farmCaps = (ps.farmCaps || 0) + (ps.settlers * 2 * hours);
+  }
   if (P.prison && P.prison.length) {
     for (let h = 0; h < hours; h++) {
       P.prison.forEach(c => {
@@ -2838,13 +3259,25 @@ function getZoneAt(x, y) {
   let sett = getSettlementAt(x, y);
   if (sett) {
     let fac = FACTIONS[sett.faction];
+    let isPlayer = !!(sett.playerOwned || sett.id === 'player_home');
+    let displayName = sett.name;
+    if (isPlayer) {
+      if (P.playerSettlement && P.playerSettlement.claimed && P.playerSettlement.name) {
+        displayName = P.playerSettlement.name + ' (Nv.' + (P.playerSettlement.level || 1) + ')';
+      } else {
+        displayName = 'Lugar reclamable';
+      }
+    }
+    let def = { ...ZONE_DEFS.settlement };
+    if (isPlayer) def.cls = 'player-settlement';
     return {
       type: 'settlement',
-      ...ZONE_DEFS.settlement,
-      name: sett.name,
+      ...def,
+      name: displayName,
       settlementId: sett.id,
-      faction: sett.faction,
-      factionName: fac ? fac.name : sett.faction
+      faction: isPlayer ? null : sett.faction,
+      factionName: isPlayer ? null : (fac ? fac.name : sett.faction),
+      playerOwned: isPlayer
     };
   }
   let h = hashCoord(x, y);
@@ -2897,7 +3330,7 @@ function renderWorldGrid() {
       let zx = P.x + dx, zy = P.y + dy;
       let z = getZoneAt(zx, zy);
       let isPlayer = (dx === 0 && dy === 0);
-      let cls = 'world-cell ' + z.cls + (isPlayer ? ' player' : '') + (z.enterable ? ' enterable' : '');
+      let cls = 'world-cell ' + z.cls + (isPlayer ? ' player' : '') + (z.enterable ? ' enterable' : '') + (z.playerOwned ? ' player-settlement' : '');
       let icon = isPlayer ? '☺' : z.icon;
       cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
     }
@@ -2908,7 +3341,11 @@ function renderWorldGrid() {
 
 function renderMap() {
   if (P.location && P.location.type === 'settlement') {
-    renderSettlementUI(P.location.settlementId, 'missions');
+    if (P.location.settlementId === 'player_home') {
+      renderPlayerSettlementUI('base');
+    } else {
+      renderSettlementUI(P.location.settlementId, 'missions');
+    }
     return;
   }
   if (P.location) {
@@ -2939,8 +3376,17 @@ function renderMap() {
     actions += `<div style="font-size:11px; color:#00aacc; margin-top:4px;">⚠ Zona altamente irradiada</div>`;
   }
   if (zone.type === 'settlement') {
-    let rep = (P.reputation && P.reputation[zone.faction]) || 0;
-    actions += `<div style="font-size:11px; color:#cc88ff; margin-top:4px;">⚑ ${zone.factionName} · Reputación: ${rep}</div>`;
+    if (zone.playerOwned) {
+      let ps = P.playerSettlement;
+      if (ps && ps.claimed && ps.name) {
+        actions += `<div style="font-size:11px; color:#44ddaa; margin-top:4px;">🏕 ${ps.name} · Nv.${ps.level||1} · Colonos: ${ps.settlers||0}/10</div>`;
+      } else {
+        actions += `<div style="font-size:11px; color:#44ddaa; margin-top:4px;">🏕 Puedes reclamar este asentamiento</div>`;
+      }
+    } else {
+      let rep = (P.reputation && P.reputation[zone.faction]) || 0;
+      actions += `<div style="font-size:11px; color:#cc88ff; margin-top:4px;">⚑ ${zone.factionName} · Reputación: ${rep}</div>`;
+    }
   }
 
   document.getElementById('main-view').innerHTML = `
@@ -3083,7 +3529,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0;" onclick="renameSurvivor(); closeModal();">✏ Renombrar</button>
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland ver1.0</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland ver.2.0</div>
   `;
   m.classList.add('show');
 }
@@ -3094,6 +3540,8 @@ function setVolMusic(v) {
   if (radio) radio.volume = P.volMusic;
   let amb = document.getElementById('ambient-audio');
   if (amb) amb.volume = P.volMusic;
+  let cas = document.getElementById('casino-audio');
+  if (cas) cas.volume = P.volMusic;
 }
 
 function setVolSfx(v) {
@@ -3152,8 +3600,12 @@ function enterSettlement(settlementId) {
     logMsg("Debes estar en el asentamiento.");
     return;
   }
+  if (sett.playerOwned || sett.id === 'player_home') {
+    enterPlayerSettlement();
+    return;
+  }
   P.location = { type: 'settlement', settlementId: sett.id, name: sett.name, faction: sett.faction };
-  logMsg("Entras en " + sett.name + " (" + FACTIONS[sett.faction].name + ").");
+  logMsg("Entras en " + sett.name + " (" + (FACTIONS[sett.faction]?.name || '') + ").");
   renderSettlementUI(sett.id, 'missions');
   updateStats();
 }
@@ -3218,7 +3670,13 @@ function renderSettlementUI(settlementId, tab) {
       html += `<p style="font-size:13px;color:var(--danger);">Tienda bloqueada. Necesitas reputación ${thresholds[0]} (tienes ${rep}).</p>`;
     } else {
       html += `<p style="font-size:12px;color:#8d9880;">Tienda nivel ${shopLvl}/5 · Rep ${rep}/1000 · Umbrales: ${thresholds.join('/')}</p>`;
-      let items = (FACTION_SHOP_ITEMS[sett.faction] || []).filter(it => shopLvl >= (it.shopLevel || 1));
+      let baseItems = (FACTION_SHOP_ITEMS[sett.faction] || []).filter(it => shopLvl >= (it.shopLevel || 1));
+      let uniqueItems = (FACTION_UNIQUE_SHOP[sett.faction] || []).filter(it => shopLvl >= (it.shopLevel || 1));
+      // Uniques first for faction-only gear
+      let items = [...uniqueItems, ...baseItems];
+      // Deduplicate by id
+      let seen = {};
+      items = items.filter(e => { if (seen[e.id]) return false; seen[e.id] = true; return true; });
       if (items.length === 0) {
         html += `<p style="font-size:12px;color:#8d9880;">Sin mercancía.</p>`;
       } else {
@@ -3226,9 +3684,10 @@ function renderSettlementUI(settlementId, tab) {
           let it = getItemBase(entry.id);
           if (!it) return;
           let price = Math.max(1, Math.floor(it.value * 1.8));
+          let uniqueTag = it.factionOnly ? ' <span style="color:var(--gold);font-size:10px;">★ FACCIÓN</span>' : '';
           html += `<div class="item">
-            <b>${it.name}</b> — ${price} chapas
-            <span style="font-size:10px;color:#8d9880;"> (Nv.${entry.shopLevel || 1})</span><br>
+            <b>${it.name}</b>${uniqueTag} — ${price} chapas
+            <span style="font-size:10px;color:#8d9880;"> (Tienda Nv.${entry.shopLevel || 1} · Equipo Nv.${P.lvl})</span><br>
             <button style="margin-top:4px;" onclick="buyFactionItem('${sett.faction}',${entry.id},${price})">Comprar</button>
           </div>`;
         });
@@ -3270,11 +3729,670 @@ function renderSettlementUI(settlementId, tab) {
         ? '<button style="margin-top:6px;" disabled>Ya adquirido</button>'
         : `<button style="margin-top:6px;" ${P.caps < 1000 ? 'disabled' : ''} onclick="buyRouteVoucher('${sett.id}')">Comprar vale (1000 chapas)</button>`}
     </div>`;
+    if (sett.faction === 'railroad') {
+      html += `<div class="item" style="border-color:#cccc66;">
+        <b>🕊 Liberación de Synth</b><br>
+        <span style="font-size:12px;color:#8d9880;">Vende compañeros sintéticos a cambio de chapas (más nivel = más pago; legendarios pagan extra).</span><br>
+        <button style="margin-top:6px;" onclick="openSynthLiberationUI('${sett.id}')">Ver Synths en prisión</button>
+      </div>`;
+    }
+    if (sett.faction === 'institute') {
+      html += `<div class="item" style="border-color:#66ccff;">
+        <b>🤖 Contratación de Synth</b><br>
+        <span style="font-size:12px;color:#8d9880;">Contrata compañeros Synth según tu nivel. Puedes rerolear la oferta.</span><br>
+        <button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openSynthHireUI('${sett.id}')">Ver oferta de Synths</button>
+      </div>`;
+      if (getFactionRep('institute') >= 500) {
+        html += `<div class="item" style="border-color:#88ddff;">
+          <b>🤖 Contratación Gen-1 (rep 500+)</b><br>
+          <span style="font-size:12px;color:#8d9880;">Solo Synths de nivel 1. Más baratos. Reroleo infinito.</span><br>
+          <button style="margin-top:6px;" onclick="openSynthHireGen1UI('${sett.id}')">Oferta Gen-1</button>
+        </div>`;
+      }
+    }
+    if (sett.faction === 'strip') {
+      html += `<div class="item" style="border-color:#ff88cc;">
+        <b>🎰 Casino The Tops</b><br>
+        <span style="font-size:12px;color:#8d9880;">Intercambia chapas por fichas, juega y compra exclusivos.</span><br>
+        <button style="margin-top:6px;background:#aa2266;color:#fff;" onclick="openCasinoUI('${sett.id}')">Entrar al Casino</button>
+      </div>`;
+    }
   }
 
   html += `<button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
   document.getElementById('main-view').innerHTML = html;
 }
+
+
+// ===== SYNTH LIBERACIÓN / CONTRATACIÓN / CASINO =====
+function isSynthCompanion(c) {
+  if (!c) return false;
+  let n = (c.name || '').toLowerCase();
+  let t = (c.type || '').toLowerCase();
+  return t === 'synth' || n.includes('synth') || n.includes('sintético') || n.includes('courser');
+}
+
+function synthSellPrice(c) {
+  let base = 40 + (c.level || 1) * 15;
+  if (c.isLegendary) base = Math.floor(base * 2.5);
+  if ((c.name || '').toLowerCase().includes('courser') || (c.name || '').toLowerCase().includes('gen-3')) base = Math.floor(base * 1.3);
+  return base;
+}
+
+function openSynthLiberationUI(settlementId) {
+  let synths = (P.prison || []).filter(isSynthCompanion);
+  let html = `<h2 style="color:#cccc66;margin-top:0;">🕊 Liberación de Synth</h2>
+    <p style="font-size:12px;color:#8d9880;">El Ferrocarril paga por liberar Synths. Se eliminan de la prisión.</p>`;
+  if (synths.length === 0) {
+    html += `<p style="font-size:12px;color:#8d9880;">No tienes compañeros sintéticos en la prisión.</p>`;
+  } else {
+    synths.forEach(c => {
+      let price = synthSellPrice(c);
+      html += `<div class="item">
+        <b>${c.isLegendary ? '★ ' : ''}${c.name}</b> Nv.${c.level} — <span style="color:var(--gold);">${price} chapas</span><br>
+        <button style="margin-top:4px;" onclick="sellSynthCompanion('${c.id}','${settlementId}')">Liberar / Vender</button>
+      </div>`;
+    });
+  }
+  html += `<button style="width:100%;margin-top:8px;" onclick="renderSettlementUI('${settlementId}','base')">Volver</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function sellSynthCompanion(id, settlementId) {
+  let idx = (P.prison || []).findIndex(c => c.id === id);
+  if (idx < 0) return;
+  let c = P.prison[idx];
+  if (!isSynthCompanion(c)) return;
+  let price = synthSellPrice(c);
+  if (P.equippedCompanionId === id) P.equippedCompanionId = null;
+  P.prison.splice(idx, 1);
+  P.caps += price;
+  logMsg("Has liberado a " + c.name + " a cambio de " + price + " chapas.");
+  openSynthLiberationUI(settlementId);
+  updateStats();
+}
+
+function generateSynthOffer() {
+  let lvl = P.lvl || 1;
+  let names = [
+    'Synth Gen-1', 'Synth Gen-1 armado', 'Synth Gen-2', 'Synth Gen-2 infiltrado',
+    'Synth Gen-3', 'Synth Gen-3 Cazador', 'Courser', 'Synth de seguridad'
+  ];
+  let offers = [];
+  for (let i = 0; i < 3; i++) {
+    let name = names[Math.floor(Math.random() * names.length)];
+    let olvl = Math.max(1, lvl - 2 + Math.floor(Math.random() * 4));
+    let isLeg = Math.random() < 0.08;
+    let hp = 50 + olvl * 8 + (isLeg ? 40 : 0);
+    let dmg = 10 + olvl * 1.5 + (isLeg ? 10 : 0);
+    let cost = 80 + olvl * 25 + (isLeg ? 200 : 0);
+    let comp = createCompanionFromEnemy(name + (isLeg ? ' Legendario' : ''), olvl, Math.floor(hp), Math.floor(dmg), isLeg);
+    comp.type = 'synth';
+    offers.push({ companion: comp, cost: cost });
+  }
+  return offers;
+}
+
+let _synthHireOffers = null;
+
+function openSynthHireUI(settlementId) {
+  if (!_synthHireOffers) _synthHireOffers = generateSynthOffer();
+  let html = `<h2 style="color:#66ccff;margin-top:0;">🤖 Contratación de Synth</h2>
+    <p style="font-size:12px;color:#8d9880;">Oferta actual (acorde a tu nivel ${P.lvl}). Rerolear es gratis.</p>`;
+  _synthHireOffers.forEach((o, idx) => {
+    let c = o.companion;
+    let st = getCompanionCombatStats(c);
+    html += `<div class="item">
+      <b>${c.isLegendary ? '★ ' : ''}${c.name}</b> Nv.${c.level} — <span style="color:var(--gold);">${o.cost} chapas</span><br>
+      <span style="font-size:11px;color:#8d9880;">HP ${c.maxHp} · ATK ${st.dmg} · DEF ${st.def}</span><br>
+      <button style="margin-top:4px;" ${P.caps < o.cost ? 'disabled' : ''} onclick="hireSynthOffer(${idx},'${settlementId}')">Contratar</button>
+    </div>`;
+  });
+  html += `<button style="width:100%;margin-top:6px;" onclick="_synthHireOffers=generateSynthOffer();openSynthHireUI('${settlementId}')">🔄 Rerolear oferta</button>
+    <button style="width:100%;margin-top:6px;" onclick="renderSettlementUI('${settlementId}','base')">Volver</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function hireSynthOffer(idx, settlementId) {
+  if (!_synthHireOffers || !_synthHireOffers[idx]) return;
+  let o = _synthHireOffers[idx];
+  if (P.caps < o.cost) { logMsg("No tienes chapas."); return; }
+  if (!P.prison) P.prison = [];
+  if (P.prison.length >= getPrisonCapacity()) {
+    logMsg("Prisión llena.");
+    return;
+  }
+  P.caps -= o.cost;
+  P.prison.push(o.companion);
+  logMsg("Has contratado a " + o.companion.name + " por " + o.cost + " chapas.");
+  _synthHireOffers.splice(idx, 1);
+  if (_synthHireOffers.length === 0) _synthHireOffers = generateSynthOffer();
+  openSynthHireUI(settlementId);
+  updateStats();
+}
+
+let casinoActive = false;
+
+function startCasinoMusic() {
+  pauseAmbientMusic();
+  let audio = document.getElementById('casino-audio');
+  if (!audio) return;
+  if (!audio.src || audio.src.indexOf('CasinoStrip') === -1) audio.src = './audio/CasinoStrip.mp3';
+  audio.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
+  audio.loop = true;
+  audio.play().catch(() => {});
+}
+
+function stopCasinoMusic() {
+  let audio = document.getElementById('casino-audio');
+  if (audio) { audio.pause(); audio.currentTime = 0; }
+  if (!radioPlaying) startAmbientMusic();
+}
+
+function openCasinoUI(settlementId, tab) {
+  casinoActive = true;
+  startCasinoMusic();
+  tab = tab || 'main';
+  let html = `<h2 style="color:#ff88cc;margin-top:0;">🎰 Casino The Tops</h2>
+    <p style="font-size:12px;color:#8d9880;">Fichas: <b style="color:#fff;">${P.chips || 0}</b> · Chapas: <b style="color:#e05050;">${P.caps}</b></p>
+    <div class="subtabs">
+      <button class="${tab==='main'?'active':''}" onclick="openCasinoUI('${settlementId}','main')">Menú</button>
+      <button class="${tab==='exchange'?'active':''}" onclick="openCasinoUI('${settlementId}','exchange')">Intercambiar</button>
+      <button class="${tab==='play'?'active':''}" onclick="openCasinoUI('${settlementId}','play')">Jugar</button>
+      <button class="${tab==='shop'?'active':''}" onclick="openCasinoUI('${settlementId}','shop')">Tienda</button>
+    </div>`;
+  if (tab === 'main') {
+    html += `<p style="font-size:12px;">Bienvenido a The Tops. Cambia chapas por fichas, prueba suerte o compra exclusivos.</p>`;
+  } else if (tab === 'exchange') {
+    html += `<h3 style="color:var(--gold);font-size:13px;">Chapas → Fichas (10:1)</h3>
+      <button onclick="exchangeCapsToChips(100,10)">100 chapas → 10 fichas</button>
+      <button onclick="exchangeCapsToChips(1000,100)">1000 → 100 fichas</button>
+      <button onclick="exchangeCapsToChips(5000,500)">5000 → 500 fichas</button>
+      <button onclick="exchangeCapsToChips(10000,1000)">10000 → 1000 fichas</button>
+      <h3 style="color:var(--gold);font-size:13px;margin-top:10px;">Fichas → Chapas (1:10)</h3>
+      <button onclick="exchangeChipsToCaps(10,100)">10 fichas → 100 chapas</button>
+      <button onclick="exchangeChipsToCaps(100,1000)">100 → 1000 chapas</button>
+      <button onclick="exchangeChipsToCaps(500,5000)">500 → 5000 chapas</button>
+      <button onclick="exchangeChipsToCaps(1000,10000)">1000 → 10000 chapas</button>`;
+  } else if (tab === 'play') {
+    html += `<h3 style="color:var(--accent);font-size:13px;">Tabla de premios</h3>
+      <div class="item" style="font-size:11px;">
+        <b>Tragaperras</b> (apuesta 5/10/25 fichas): 🍒🍒🍒 x3 · 7️⃣7️⃣7️⃣ x10 · 💎💎💎 x25<br>
+        <b>Blackjack</b> (apuesta libre): Blackjack 3:2 · Victoria 1:1 · Empate devuelve<br>
+        <b>Ruleta</b> (apuesta 5+): Número exacto x35 · Color x2 · Par/Impar x2
+      </div>
+      <button onclick="playSlotsUI('${settlementId}')">🎰 Tragaperras</button>
+      <button onclick="playBlackjackUI('${settlementId}')">🃏 Blackjack</button>
+      <button onclick="playRouletteUI('${settlementId}')">🎡 Ruleta</button>`;
+  } else if (tab === 'shop') {
+    if (P.casinoShopPage === undefined) P.casinoShopPage = 0;
+    let items = DB_ITEMS.filter(i => i.casinoOnly);
+    let per = 5;
+    let totalPages = Math.max(1, Math.ceil(items.length / per));
+    if (P.casinoShopPage >= totalPages) P.casinoShopPage = totalPages - 1;
+    if (P.casinoShopPage < 0) P.casinoShopPage = 0;
+    let slice = items.slice(P.casinoShopPage * per, P.casinoShopPage * per + per);
+    slice.forEach(it => {
+      let cost = it.chipCost || 50;
+      html += `<div class="item"><b>${it.name}</b> — ${cost} fichas<br>
+        <button style="margin-top:4px;" ${(P.chips||0) < cost ? 'disabled' : ''} onclick="buyCasinoItem(${it.id},${cost},'${settlementId}')">Comprar</button></div>`;
+    });
+    html += `<div style="display:flex;justify-content:space-between;margin-top:8px;">
+      <button ${P.casinoShopPage<=0?'disabled':''} onclick="P.casinoShopPage--;openCasinoUI('${settlementId}','shop')">◀</button>
+      <span style="font-size:11px;">Pág. ${P.casinoShopPage+1}/${totalPages}</span>
+      <button ${P.casinoShopPage>=totalPages-1?'disabled':''} onclick="P.casinoShopPage++;openCasinoUI('${settlementId}','shop')">▶</button>
+    </div>`;
+  }
+  html += `<button style="width:100%;margin-top:10px;" onclick="exitCasino('${settlementId}')">← Salir del Casino</button>`;
+  document.getElementById('main-view').innerHTML = html;
+  updateStats();
+}
+
+function exitCasino(settlementId) {
+  casinoActive = false;
+  stopCasinoMusic();
+  renderSettlementUI(settlementId, 'base');
+}
+
+function exchangeCapsToChips(caps, chips) {
+  if (P.caps < caps) { logMsg("No tienes chapas."); return; }
+  P.caps -= caps;
+  P.chips = (P.chips || 0) + chips;
+  logMsg("Cambias " + caps + " chapas por " + chips + " fichas.");
+  openCasinoUI(P.location && P.location.settlementId, 'exchange');
+  updateStats();
+}
+function exchangeChipsToCaps(chips, caps) {
+  if ((P.chips || 0) < chips) { logMsg("No tienes fichas."); return; }
+  P.chips -= chips;
+  P.caps += caps;
+  logMsg("Cambias " + chips + " fichas por " + caps + " chapas.");
+  openCasinoUI(P.location && P.location.settlementId, 'exchange');
+  updateStats();
+}
+
+function buyCasinoItem(itemId, cost, settlementId) {
+  if ((P.chips || 0) < cost) { logMsg("Fichas insuficientes."); return; }
+  let it = getItemBase(itemId);
+  if (!it) return;
+  if (it.type === 'weapon' || it.type === 'armor') {
+    if (!addLeveledGearToInv(itemId)) return;
+  } else {
+    if (!addItemToInv(itemId, 1)) return;
+  }
+  P.chips -= cost;
+  logMsg("Comprado en casino: " + it.name);
+  openCasinoUI(settlementId, 'shop');
+  updateStats();
+}
+
+function playSlotsUI(settlementId) {
+  let html = `<h2 style="color:#ff88cc;">🎰 Tragaperras</h2>
+    <p style="font-size:12px;">Fichas: ${P.chips||0}</p>
+    <button onclick="doSlots(5,'${settlementId}')">Apostar 5</button>
+    <button onclick="doSlots(10,'${settlementId}')">Apostar 10</button>
+    <button onclick="doSlots(25,'${settlementId}')">Apostar 25</button>
+    <div id="slots-result" style="margin:10px 0;font-size:18px;text-align:center;"></div>
+    <button style="width:100%;" onclick="openCasinoUI('${settlementId}','play')">Volver</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function doSlots(bet, settlementId) {
+  if ((P.chips||0) < bet) { logMsg("Fichas insuficientes."); return; }
+  P.chips -= bet;
+  let symbols = ['🍒','🍋','7️⃣','💎','🔔'];
+  let a = symbols[Math.floor(Math.random()*symbols.length)];
+  let b = symbols[Math.floor(Math.random()*symbols.length)];
+  let c = symbols[Math.floor(Math.random()*symbols.length)];
+  let win = 0;
+  if (a===b && b===c) {
+    if (a==='💎') win = bet * 25;
+    else if (a==='7️⃣') win = bet * 10;
+    else win = bet * 3;
+  } else if (a===b || b===c || a===c) win = Math.floor(bet * 0.5);
+  P.chips += win;
+  let el = document.getElementById('slots-result');
+  if (el) el.innerHTML = a + ' ' + b + ' ' + c + (win ? '<br><span style="color:var(--gold);">+" + win + " fichas</span>' : '<br>Sin premio');
+  // fix string bug
+  if (el) el.innerHTML = a + ' ' + b + ' ' + c + (win ? ('<br><span style="color:var(--gold);">+' + win + ' fichas</span>') : '<br>Sin premio');
+  updateStats();
+}
+
+function playBlackjackUI(settlementId) {
+  let html = `<h2>🃏 Blackjack</h2>
+    <p style="font-size:12px;">Fichas: ${P.chips||0}. Blackjack paga 3:2, victoria 1:1.</p>
+    <button onclick="doBlackjack(10,'${settlementId}')">Apostar 10</button>
+    <button onclick="doBlackjack(25,'${settlementId}')">Apostar 25</button>
+    <button onclick="doBlackjack(50,'${settlementId}')">Apostar 50</button>
+    <div id="bj-result" style="margin:10px 0;font-size:13px;"></div>
+    <button style="width:100%;" onclick="openCasinoUI('${settlementId}','play')">Volver</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function cardVal() { return 1 + Math.floor(Math.random()*13); }
+function handScore(cards) {
+  let t = 0, aces = 0;
+  cards.forEach(c => { if (c === 1) { aces++; t += 11; } else t += Math.min(10, c); });
+  while (t > 21 && aces > 0) { t -= 10; aces--; }
+  return t;
+}
+
+function doBlackjack(bet, settlementId) {
+  if ((P.chips||0) < bet) { logMsg("Fichas insuficientes."); return; }
+  P.chips -= bet;
+  let player = [cardVal(), cardVal()];
+  let dealer = [cardVal(), cardVal()];
+  while (handScore(player) < 17) player.push(cardVal());
+  while (handScore(dealer) < 17) dealer.push(cardVal());
+  let ps = handScore(player), ds = handScore(dealer);
+  let msg = "Tú: " + ps + " · Banca: " + ds + " — ";
+  let win = 0;
+  if (ps > 21) msg += "Te pasas.";
+  else if (ds > 21 || ps > ds) {
+    win = (ps === 21 && player.length === 2) ? Math.floor(bet * 2.5) : bet * 2;
+    msg += "Ganas +" + (win - bet) + " fichas netas.";
+    P.chips += win;
+  } else if (ps === ds) {
+    P.chips += bet;
+    msg += "Empate. Apuesta devuelta.";
+  } else msg += "Pierdes.";
+  let el = document.getElementById('bj-result');
+  if (el) el.textContent = msg;
+  updateStats();
+}
+
+function playRouletteUI(settlementId) {
+  let html = `<h2>🎡 Ruleta</h2>
+    <p style="font-size:12px;">Fichas: ${P.chips||0}</p>
+    <button onclick="doRoulette(10,'red','${settlementId}')">Rojo x2 (10)</button>
+    <button onclick="doRoulette(10,'black','${settlementId}')">Negro x2 (10)</button>
+    <button onclick="doRoulette(10,'even','${settlementId}')">Par x2 (10)</button>
+    <button onclick="doRoulette(5,'number','${settlementId}')">Número exacto x35 (5)</button>
+    <div id="rou-result" style="margin:10px 0;font-size:13px;"></div>
+    <button style="width:100%;" onclick="openCasinoUI('${settlementId}','play')">Volver</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function doRoulette(bet, kind, settlementId) {
+  if ((P.chips||0) < bet) { logMsg("Fichas insuficientes."); return; }
+  P.chips -= bet;
+  let n = Math.floor(Math.random() * 37); // 0-36
+  let isRed = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(n);
+  let win = 0;
+  let msg = "Salió " + n + (n === 0 ? ' (verde)' : (isRed ? ' rojo' : ' negro')) + ". ";
+  if (kind === 'red' && isRed && n !== 0) win = bet * 2;
+  else if (kind === 'black' && !isRed && n !== 0) win = bet * 2;
+  else if (kind === 'even' && n !== 0 && n % 2 === 0) win = bet * 2;
+  else if (kind === 'number') {
+    // jugador "elige" aleatorio implícito: gana solo si sale 7 como número de la casa demo
+    if (n === 7) win = bet * 35;
+  }
+  if (win) { P.chips += win; msg += "Ganas " + win + " fichas!"; }
+  else msg += "Sin premio.";
+  let el = document.getElementById('rou-result');
+  if (el) el.textContent = msg;
+  updateStats();
+}
+
+
+
+// ===== SYNTH GEN-1 HIRE + PLAYER SETTLEMENT =====
+function generateSynthGen1Offer() {
+  let names = ['Synth Gen-1', 'Synth Gen-1 trabajador', 'Synth Gen-1 básico', 'Synth Gen-1 de servicio'];
+  let offers = [];
+  for (let i = 0; i < 3; i++) {
+    let name = names[Math.floor(Math.random() * names.length)];
+    let hp = 45 + Math.floor(Math.random() * 15);
+    let dmg = 8 + Math.floor(Math.random() * 5);
+    let cost = 50 + Math.floor(Math.random() * 30);
+    let comp = createCompanionFromEnemy(name, 1, hp, dmg, false);
+    comp.type = 'synth';
+    comp.level = 1;
+    offers.push({ companion: comp, cost: cost });
+  }
+  return offers;
+}
+let _synthGen1Offers = null;
+
+function openSynthHireGen1UI(settlementId) {
+  if (getFactionRep('institute') < 500) {
+    logMsg("Necesitas 500 de reputación con el Instituto.");
+    return;
+  }
+  if (!_synthGen1Offers) _synthGen1Offers = generateSynthGen1Offer();
+  let html = `<h2 style="color:#88ddff;margin-top:0;">🤖 Contratación Gen-1</h2>
+    <p style="font-size:12px;color:#8d9880;">Solo nivel 1. Rerolear gratis.</p>`;
+  _synthGen1Offers.forEach((o, idx) => {
+    let c = o.companion;
+    let st = getCompanionCombatStats(c);
+    html += `<div class="item">
+      <b>${c.name}</b> Nv.1 — <span style="color:var(--gold);">${o.cost} chapas</span><br>
+      <span style="font-size:11px;color:#8d9880;">HP ${c.maxHp} · ATK ${st.dmg} · DEF ${st.def}</span><br>
+      <button style="margin-top:4px;" ${P.caps < o.cost ? 'disabled' : ''} onclick="hireSynthGen1(${idx},'${settlementId}')">Contratar</button>
+    </div>`;
+  });
+  html += `<button style="width:100%;margin-top:6px;" onclick="_synthGen1Offers=generateSynthGen1Offer();openSynthHireGen1UI('${settlementId}')">🔄 Rerolear</button>
+    <button style="width:100%;margin-top:6px;" onclick="renderSettlementUI('${settlementId}','base')">Volver</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function hireSynthGen1(idx, settlementId) {
+  if (!_synthGen1Offers || !_synthGen1Offers[idx]) return;
+  let o = _synthGen1Offers[idx];
+  if (P.caps < o.cost) { logMsg("No tienes chapas."); return; }
+  if (!P.prison) P.prison = [];
+  if (P.prison.length >= getPrisonCapacity()) { logMsg("Prisión llena."); return; }
+  P.caps -= o.cost;
+  P.prison.push(o.companion);
+  logMsg("Has contratado a " + o.companion.name + " (Gen-1) por " + o.cost + " chapas.");
+  _synthGen1Offers.splice(idx, 1);
+  if (_synthGen1Offers.length === 0) _synthGen1Offers = generateSynthGen1Offer();
+  openSynthHireGen1UI(settlementId);
+  updateStats();
+}
+
+function ensurePlayerSettlement() {
+  if (!P.playerSettlement) {
+    P.playerSettlement = {
+      claimed: false, name: '', level: 1, settlers: 0, farmCaps: 0,
+      houseBuilt: false, travelBuilt: false, medicBuilt: false
+    };
+  }
+  return P.playerSettlement;
+}
+
+function getSettlerHireCost() {
+  let ps = ensurePlayerSettlement();
+  // Cada colono cuesta más: 200, 350, 550, 800...
+  let n = ps.settlers || 0;
+  return 200 + n * 150 + n * n * 25;
+}
+
+function getSettlementUpgradeCost(level) {
+  // level is current, cost to go to level+1
+  return {
+    1: [{ id: 20, qty: 8 }, { id: 21, qty: 6 }],
+    2: [{ id: 20, qty: 12 }, { id: 21, qty: 8 }, { id: 13, qty: 4 }],
+    3: [{ id: 21, qty: 12 }, { id: 23, qty: 6 }, { id: 13, qty: 6 }],
+    4: [{ id: 23, qty: 10 }, { id: 28, qty: 2 }, { id: 20, qty: 15 }],
+    5: [{ id: 28, qty: 3 }, { id: 13, qty: 10 }, { id: 23, qty: 12 }],
+    6: [{ id: 28, qty: 4 }, { id: 36, qty: 4 }, { id: 21, qty: 15 }],
+    7: [{ id: 28, qty: 5 }, { id: 36, qty: 6 }, { id: 13, qty: 12 }],
+    8: [{ id: 28, qty: 6 }, { id: 38, qty: 3 }, { id: 23, qty: 15 }],
+    9: [{ id: 28, qty: 8 }, { id: 38, qty: 4 }, { id: 36, qty: 8 }]
+  }[level] || [{ id: 28, qty: 10 }];
+}
+
+function enterPlayerSettlement() {
+  let ps = ensurePlayerSettlement();
+  P.location = { type: 'settlement', settlementId: 'player_home', name: ps.name || 'Tu Asentamiento', faction: 'player' };
+  if (!ps.claimed) {
+    renderPlayerClaimUI();
+  } else {
+    renderPlayerSettlementUI('base');
+  }
+  updateStats();
+}
+
+function renderPlayerClaimUI() {
+  let html = `<div style="text-align:center;">
+    <h2 style="color:#44ddaa;">🏕 Reclamar asentamiento</h2>
+    <p style="font-size:13px;color:#8d9880;">Has encontrado un lugar ideal para fundar tu propio asentamiento.</p>
+    <input id="sett-name-input" type="text" maxlength="24" placeholder="Nombre del asentamiento"
+      style="width:100%;padding:10px;margin:10px 0;background:#111;color:var(--txt);border:1px solid var(--line);font:inherit;">
+    <button style="width:100%;background:#44ddaa;color:#111;font-weight:bold;padding:12px;" onclick="claimPlayerSettlement()">RECLAMAR</button>
+    <button style="width:100%;margin-top:8px;" onclick="exitSettlement()">← Salir</button>
+  </div>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function claimPlayerSettlement() {
+  let inp = document.getElementById('sett-name-input');
+  let name = (inp && inp.value.trim()) || 'Mi Asentamiento';
+  if (name.length < 2) name = 'Mi Asentamiento';
+  let ps = ensurePlayerSettlement();
+  ps.claimed = true;
+  ps.name = name;
+  ps.level = 1;
+  logMsg("Has fundado el asentamiento \"" + name + "\".");
+  // Update SETTLEMENTS display name dynamically via getSettlementAt
+  renderPlayerSettlementUI('base');
+  updateStats();
+}
+
+function renderPlayerSettlementUI(tab) {
+  let ps = ensurePlayerSettlement();
+  if (!ps.claimed) { renderPlayerClaimUI(); return; }
+  tab = tab || 'base';
+  let html = `<div style="text-align:center;">
+    <h2 style="color:#44ddaa;margin:4px 0;">🏕 ${ps.name}</h2>
+    <div style="font-size:12px;color:#8d9880;">Tu asentamiento · Nivel <b style="color:#44ddaa;">${ps.level}/10</b> · Colonos granja: ${ps.settlers}/10</div>
+  </div>
+  <div class="subtabs" style="margin-top:8px;">
+    <button class="${tab==='farm'?'active':''}" onclick="renderPlayerSettlementUI('farm')">Granja</button>
+    <button class="${tab==='base'?'active':''}" onclick="renderPlayerSettlementUI('base')">Base</button>
+  </div>`;
+
+  if (tab === 'farm') {
+    let rate = (ps.settlers || 0) * 2; // 2 chapas/hora por colono
+    html += `<div class="item" style="border-color:#44ddaa;">
+      <b>🌾 Producción de la granja</b><br>
+      <span style="font-size:12px;color:#8d9880;">${ps.settlers} colonos · ${rate} chapas/hora</span><br>
+      <span style="font-size:14px;">Acumulado: <b style="color:var(--gold);">${ps.farmCaps || 0}</b> chapas</span><br>
+      <button style="margin-top:8px;background:var(--accent);color:#111;" ${(ps.farmCaps||0)<=0?'disabled':''} onclick="claimFarmCaps()">Reclamar chapas</button>
+    </div>
+    <div class="item">
+      <b>Contratar colono</b><br>
+      <span style="font-size:12px;color:#8d9880;">Máximo según nivel del asentamiento (${ps.level}). Coste: ${getSettlerHireCost()} chapas.</span><br>
+      <button style="margin-top:6px;" ${ps.settlers >= ps.level || ps.settlers >= 10 || P.caps < getSettlerHireCost() ? 'disabled' : ''} onclick="hireFarmSettler()">Contratar (${getSettlerHireCost()})</button>
+      ${ps.settlers >= ps.level && ps.level < 10 ? '<p style="font-size:11px;color:var(--danger);">Mejora el asentamiento para más colonos.</p>' : ''}
+    </div>`;
+  } else {
+    // BASE
+    html += `<div class="item" style="border-color:#44ddaa;">
+      <b>Mejorar asentamiento</b> — Nv.${ps.level}/10<br>
+      <span style="font-size:12px;color:#8d9880;">Cada nivel permite +1 colono en la granja (máx 10).</span><br>`;
+    if (ps.level >= 10) {
+      html += `<button disabled>MÁXIMO</button>`;
+    } else {
+      let costs = getSettlementUpgradeCost(ps.level);
+      html += `<span style="font-size:11px;">Coste: ${formatReqs(costs)}</span><br>
+        <button style="margin-top:6px;" ${!canPayReqs(costs)?'disabled':''} onclick="upgradePlayerSettlement()">Mejorar a Nv.${ps.level+1}</button>`;
+    }
+    html += `</div>`;
+
+    // House - unlock L2, then build
+    html += `<div class="item" style="border-color:var(--gold);">
+      <b>🏠 Casa</b> ${ps.level < 2 ? '(se desbloquea en Nv.2)' : (ps.houseBuilt ? '— Construida' : '— Por construir')}<br>`;
+    if (ps.level >= 2) {
+      if (ps.houseBuilt) {
+        html += `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHouseRestUI('player_home')">Entrar y descansar</button>`;
+      } else {
+        let hc = [{ id: 20, qty: 15 }, { id: 21, qty: 10 }, { id: 25, qty: 5 }];
+        html += `<span style="font-size:11px;">Construir: ${formatReqs(hc)}</span><br>
+          <button style="margin-top:6px;" ${!canPayReqs(hc)?'disabled':''} onclick="buildPlayerFacility('house')">Construir casa</button>`;
+      }
+    }
+    html += `</div>`;
+
+    // Travel - unlock L5
+    html += `<div class="item" style="border-color:#aa55ff;">
+      <b>⚡ Viaje rápido</b> ${ps.level < 5 ? '(se desbloquea en Nv.5)' : (ps.travelBuilt ? '— Activo' : '— Por construir')}<br>`;
+    if (ps.level >= 5) {
+      if (ps.travelBuilt) {
+        let hasV = P.fastTravelUnlocked && P.fastTravelUnlocked.includes('player_home');
+        if (!hasV) {
+          if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+          P.fastTravelUnlocked.push('player_home');
+        }
+        html += `<span style="font-size:12px;color:var(--accent);">Destino de viaje rápido desbloqueado.</span>`;
+      } else {
+        let tc = [{ id: 13, qty: 8 }, { id: 22, qty: 8 }, { id: 28, qty: 2 }];
+        html += `<span style="font-size:11px;">Construir: ${formatReqs(tc)}</span><br>
+          <button style="margin-top:6px;" ${!canPayReqs(tc)?'disabled':''} onclick="buildPlayerFacility('travel')">Construir baliza de viaje</button>`;
+      }
+    }
+    html += `</div>`;
+
+    // Medic - unlock L8, free heal
+    html += `<div class="item" style="border-color:var(--accent);">
+      <b>🩺 Médico</b> ${ps.level < 8 ? '(se desbloquea en Nv.8)' : (ps.medicBuilt ? '— Disponible (GRATIS)' : '— Por construir')}<br>`;
+    if (ps.level >= 8) {
+      if (ps.medicBuilt) {
+        let maxhp = getMaxHp();
+        let needHp = Math.max(0, maxhp - P.hp);
+        let needRad = P.rads || 0;
+        html += `<span style="font-size:12px;color:#8d9880;">Curación total gratuita de salud y radiación.</span><br>
+          <button style="margin-top:6px;" ${(needHp===0&&needRad===0)?'disabled':''} onclick="playerMedicHeal()">Curar todo (gratis)</button>`;
+      } else {
+        let mc = [{ id: 35, qty: 6 }, { id: 34, qty: 4 }, { id: 13, qty: 6 }];
+        let capsNeed = 500;
+        html += `<span style="font-size:11px;">Construir: ${formatReqs(mc)} + ${capsNeed} chapas</span><br>
+          <button style="margin-top:6px;" ${!canPayReqs(mc) || P.caps < capsNeed ? 'disabled':''} onclick="buildPlayerFacility('medic')">Construir enfermería</button>`;
+      }
+    }
+    html += `</div>`;
+  }
+
+  html += `<button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function claimFarmCaps() {
+  let ps = ensurePlayerSettlement();
+  let amt = ps.farmCaps || 0;
+  if (amt <= 0) return;
+  P.caps += amt;
+  ps.farmCaps = 0;
+  logMsg("Has reclamado " + amt + " chapas de la granja.");
+  renderPlayerSettlementUI('farm');
+  updateStats();
+}
+
+function hireFarmSettler() {
+  let ps = ensurePlayerSettlement();
+  if (ps.settlers >= 10 || ps.settlers >= ps.level) {
+    logMsg("No puedes contratar más colonos todavía.");
+    return;
+  }
+  let cost = getSettlerHireCost();
+  if (P.caps < cost) { logMsg("Chapas insuficientes."); return; }
+  P.caps -= cost;
+  ps.settlers++;
+  logMsg("Colono contratado. Granja: " + ps.settlers + " trabajadores.");
+  renderPlayerSettlementUI('farm');
+  updateStats();
+}
+
+function upgradePlayerSettlement() {
+  let ps = ensurePlayerSettlement();
+  if (ps.level >= 10) return;
+  let costs = getSettlementUpgradeCost(ps.level);
+  if (!canPayReqs(costs)) { logMsg("Faltan recursos."); return; }
+  payReqs(costs);
+  ps.level++;
+  logMsg(ps.name + " sube a nivel " + ps.level + ".");
+  renderPlayerSettlementUI('base');
+  updateStats();
+}
+
+function buildPlayerFacility(which) {
+  let ps = ensurePlayerSettlement();
+  if (which === 'house') {
+    let hc = [{ id: 20, qty: 15 }, { id: 21, qty: 10 }, { id: 25, qty: 5 }];
+    if (!canPayReqs(hc)) return;
+    payReqs(hc);
+    ps.houseBuilt = true;
+    logMsg("Casa construida en " + ps.name + ".");
+  } else if (which === 'travel') {
+    let tc = [{ id: 13, qty: 8 }, { id: 22, qty: 8 }, { id: 28, qty: 2 }];
+    if (!canPayReqs(tc)) return;
+    payReqs(tc);
+    ps.travelBuilt = true;
+    if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+    if (!P.fastTravelUnlocked.includes('player_home')) P.fastTravelUnlocked.push('player_home');
+    logMsg("Baliza de viaje rápido construida.");
+  } else if (which === 'medic') {
+    let mc = [{ id: 35, qty: 6 }, { id: 34, qty: 4 }, { id: 13, qty: 6 }];
+    if (!canPayReqs(mc) || P.caps < 500) return;
+    payReqs(mc);
+    P.caps -= 500;
+    ps.medicBuilt = true;
+    logMsg("Enfermería construida. Curación gratuita disponible.");
+  }
+  renderPlayerSettlementUI('base');
+  updateStats();
+}
+
+function playerMedicHeal() {
+  let maxhp = getMaxHp();
+  P.hp = maxhp;
+  P.rads = 0;
+  logMsg("El médico de tu asentamiento te cura por completo (gratis).");
+  renderPlayerSettlementUI('base');
+  updateStats();
+}
+
 
 function exitSettlement() {
   P.location = null;
@@ -3352,7 +4470,7 @@ function buyFactionItem(factionId, itemId, price) {
     return;
   }
   P.caps -= price;
-  if (addItemToInv(itemId, 1)) {
+  if ((getItemBase(itemId) && (getItemBase(itemId).type === "weapon" || getItemBase(itemId).type === "armor")) ? addLeveledGearToInv(itemId) : addItemToInv(itemId, 1)) {
     logMsg("Compraste en la tienda de facción: " + getItemBase(itemId).name);
   } else {
     P.caps += price;
@@ -3522,7 +4640,12 @@ function buySettlementHouse(settlementId) {
 }
 
 function openHouseRestUI(settlementId) {
-  if (!P.ownedHouses || !P.ownedHouses.includes(settlementId)) {
+  if (settlementId === 'player_home') {
+    if (!P.playerSettlement || !P.playerSettlement.houseBuilt) {
+      logMsg("Aún no has construido la casa.");
+      return;
+    }
+  } else if (!P.ownedHouses || !P.ownedHouses.includes(settlementId)) {
     logMsg("No tienes casa aquí.");
     return;
   }
@@ -3569,7 +4692,8 @@ function doHouseRest(settlementId) {
   }
   logMsg("Descansas " + hours + " h en tu casa. Recuperas " + (P.hp - before) + " HP.");
   closeModal();
-  renderSettlementUI(settlementId, 'base');
+  if (settlementId === 'player_home') renderPlayerSettlementUI('base');
+  else renderSettlementUI(settlementId, 'base');
   updateStats();
 }
 
@@ -4637,27 +5761,33 @@ function renderInv(sub = P.subtab, page) {
       let isEquipped = (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid);
       let itemQty = inst.qty || 1;
       let isLeg = !!inst.legendary;
+      let ilvl = inst.itemLevel || 1;
       let displayName = it.stackable && itemQty > 1 ? `${it.name} (x${itemQty})` : it.name;
       if (isLeg) displayName = "★ " + displayName;
+      // Colores tarteras
+      let nameColor = isLeg ? 'var(--gold)' : '';
+      if (it.id === 14) nameColor = '#55aaff';
+      if (it.id === 15) nameColor = '#e05050';
+      if (it.id === 29) nameColor = 'var(--gold)';
 
       let modDmg = (inst.mods || []).reduce((acc, mId) => acc + (MODS_DB.find(x => x.id === mId)?.bonusDmg || 0), 0);
       let modDef = (inst.mods || []).reduce((acc, mId) => acc + (MODS_DB.find(x => x.id === mId)?.bonusDef || 0), 0);
 
       html += `
-        <div class="item" style="${isLeg ? 'border-color:#ff00aa;' : ''}">
+        <div class="item" style="${isLeg ? 'border-color:var(--gold);' : (it.id===14?'border-color:#3388ff;':it.id===15?'border-color:#e05050;':it.id===29?'border-color:var(--gold);':'')}">
           <div class="item-head">
-            <b style="${isLeg ? 'color:#ff66cc;' : ''}">${displayName}</b>
+            <b style="${nameColor ? 'color:'+nameColor+';' : ''}">${displayName}</b>
             <span>
-              ${isLeg ? `<span class="equipped-tag" style="border-color:#ff00aa; color:#ff66cc;">LEGENDARIA</span> ` : ''}
+              ${isLeg ? `<span class="equipped-tag" style="border-color:var(--gold); color:var(--gold);">LEGENDARIA</span> ` : ''}
               ${isEquipped ? `<span class="equipped-tag">EQUIPADO</span>` : ''}
             </span>
           </div>
       `;
 
       if (sub === 'weapon') {
-        html += `<span style="font-size:12px; color:var(--accent);">Daño: +${it.damage + modDmg} | Munición: ${it.ammoType}</span><br>`;
+        html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Daño: +${it.damage + modDmg} | Munición: ${it.ammoType}</span><br>`;
       } else if (sub === 'armor') {
-        html += `<span style="font-size:12px; color:var(--accent);">Defensa: +${it.def + modDef}</span><br>`;
+        html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Defensa: +${it.def + modDef}</span><br>`;
       } else if (sub === 'med') {
         if (it.heal) html += `<span style="font-size:12px; color:var(--accent);">Curación: +${it.heal} Salud</span><br>`;
         if (it.effectDesc) html += `<span style="font-size:11px; color:var(--gold);">${it.effectDesc} (${it.effectActions || 0} acciones)</span><br>`;
@@ -4665,7 +5795,10 @@ function renderInv(sub = P.subtab, page) {
         if (it.heal) html += `<span style="font-size:12px; color:var(--accent);">Curación: +${it.heal}</span><br>`;
         if (it.effectDesc) html += `<span style="font-size:11px; color:var(--gold);">${it.effectDesc} (${it.effectActions || 0} acciones)</span><br>`;
       } else if (sub === 'other') {
-        html += `<span style="font-size:12px; color:var(--gold);">Abre este contenedor desde la pestaña REFUGIO.</span><br>`;
+        if (it.id === 14) html += `<span style="font-size:12px; color:#55aaff;">Tartera Vault-Tec — abre en REFUGIO.</span><br>`;
+        else if (it.id === 15) html += `<span style="font-size:12px; color:#e05050;">Tartera Nuka-Cola — abre en REFUGIO.</span><br>`;
+        else if (it.id === 29) html += `<span style="font-size:12px; color:var(--gold);">Tartera Legendaria — abre en REFUGIO.</span><br>`;
+        else html += `<span style="font-size:12px; color:var(--gold);">Objeto especial.</span><br>`;
       }
 
       if ((sub === 'weapon' || sub === 'armor') && inst.mods && inst.mods.length > 0) {
@@ -4674,7 +5807,7 @@ function renderInv(sub = P.subtab, page) {
       }
 
       if (isLeg && inst.abilityName) {
-        html += `<span style="font-size:12px; color:#ff66cc;">★ ${inst.abilityName}: ${inst.abilityDesc}</span><br>`;
+        html += `<span style="font-size:12px; color:var(--gold);">★ ${inst.abilityName}: ${inst.abilityDesc}</span><br>`;
       }
 
       let unitWeight = (it.weight * itemQty).toFixed(1);
@@ -4831,13 +5964,16 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
 
   let list = DB_ITEMS.filter(it => {
     if (!it) return false;
+    if (it.factionOnly) return false;
+    if (it.casinoOnly) return false;
+    if (it.shopTier === 99) return false;
     if (it.shopTier > P.shopLevel) return false;
     if (sub === 'weapon') return it.type === 'weapon';
     if (sub === 'armor') return it.type === 'armor';
     if (sub === 'med') return it.type === 'med' || it.type === 'chem';
     if (sub === 'ammo') return it.type === 'ammo';
     if (sub === 'junk') return it.type === 'junk';
-    if (sub === 'other') return it.type === 'other' || it.type === 'quest';
+    if (sub === 'other') return it.type === 'other';
     return false;
   });
 
@@ -4928,11 +6064,13 @@ function buyItem(id, price) {
     logMsg("No tienes suficientes chapas.");
     return;
   }
-  
-  let success = addItemToInv(id, 1);
+  let base = getItemBase(id);
+  let success = (base && (base.type === 'weapon' || base.type === 'armor'))
+    ? addLeveledGearToInv(id)
+    : addItemToInv(id, 1);
   if (success) {
     P.caps -= price;
-    logMsg("Compraste 1x " + getItemBase(id)?.name + ".");
+    logMsg("Compraste 1x " + (base?.name || id) + (base && (base.type === 'weapon' || base.type === 'armor') ? (" (Nv." + (P.lvl || 1) + ")") : "") + ".");
   }
   renderShop(P.shopSubtab);
   updateStats();
@@ -5064,6 +6202,8 @@ function loadGame() {
     if (!parsed.activeFactionQuests) parsed.activeFactionQuests = [];
     if (!parsed.factionQuestPool) parsed.factionQuestPool = {};
     if (parsed.volMusic === undefined) parsed.volMusic = 0.6;
+    if (parsed.chips === undefined) parsed.chips = 0;
+    if (!parsed.playerSettlement) parsed.playerSettlement = { claimed: false, name: '', level: 1, settlers: 0, farmCaps: 0, houseBuilt: false, travelBuilt: false, medicBuilt: false };
     if (parsed.volSfx === undefined) parsed.volSfx = 0.7;
     if (!parsed.fastTravelUnlocked) parsed.fastTravelUnlocked = [];
     if (!parsed.ownedHouses) parsed.ownedHouses = [];
