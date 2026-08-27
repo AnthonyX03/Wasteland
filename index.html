@@ -1,0 +1,3578 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wasteland">
+<meta name="description" content="Supervivencia en el Yermo: fabrica, combate y explora. Funciona offline.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Wasteland: Chapas & Taller - Edición Definitiva</title>
+<style>
+:root {
+  --bg: #000000;
+  --panel: #0a120a;
+  --line: #00ff41;
+  --txt: #00ff41;
+  --accent: #00ff41;
+  --danger: #ff003c;
+  --gold: #ffcc00;
+  --bar-bg: #001a00;
+  --enemy-bar: #ff003c;
+  --player-bar: #00ff41;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: monospace;
+}
+button {
+  font: inherit;
+  color: var(--txt);
+  background: #001a00;
+  border: 1px solid var(--line);
+  padding: 10px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+button:active { background: #003300; }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+.app { max-width: 1200px; margin: auto; padding: 12px; }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+h1 { margin: 0; color: var(--accent); font-size: 20px; }
+.stats { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.stats span { background: #001a00; border: 1px solid #00aa2a; padding: 4px 6px; }
+
+.layout { display: grid; grid-template-columns: 1fr 280px; gap: 12px; }
+.panel { background: var(--panel); border: 1px solid #00aa2a; border-radius: 4px; padding: 12px; margin-bottom: 12px; }
+
+.log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+.log-title { font-weight: bold; color: var(--accent); }
+.quick-status { display: flex; gap: 6px; font-size: 11px; }
+.quick-status span { background: #000800; border: 1px solid #00aa2a; padding: 2px 5px; }
+
+.log { height: 110px; overflow-y: auto; background: #000800; border: 1px solid #00aa2a; padding: 8px; font-size: 12px; }
+.log-item { margin-bottom: 4px; border-bottom: 1px dotted #003300; padding-bottom: 2px; }
+
+.tabs, .subtabs { display: grid; gap: 6px; }
+.tabs { grid-template-columns: repeat(6, 1fr); margin-bottom: 12px; }
+.subtabs { grid-template-columns: repeat(6, 1fr); margin-bottom: 12px; }
+.tabs button.active, .subtabs button.active { color: #000; background: var(--accent); font-weight: bold; }
+
+.map-box {
+  min-height: 120px;
+  background: linear-gradient(#001a00 1px, transparent 1px), linear-gradient(90deg, #001a00 1px, transparent 1px);
+  background-size: 24px 24px;
+  border: 1px solid #00aa2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+}
+.world-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  max-width: 280px;
+  margin: 10px auto;
+  background: #000800;
+  padding: 6px;
+  border: 1px solid #00aa2a;
+}
+.world-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: 1px solid #003300;
+  background: #001000;
+  color: #4a7a4a;
+  position: relative;
+  min-height: 32px;
+}
+.world-cell.player {
+  border-color: var(--accent);
+  background: #003300;
+  box-shadow: 0 0 8px #00ff4166;
+  color: var(--accent);
+  font-weight: bold;
+}
+.world-cell.river { background: #001a22; color: #00aacc; }
+.world-cell.city { background: #1a1000; color: #ccaa00; }
+.world-cell.ruin { background: #120800; color: #aa7744; }
+.world-cell.poi { background: #001a10; color: var(--gold); }
+.world-cell.camp { background: #101000; color: #aacc66; }
+.world-cell.empty { background: #000a00; color: #335533; }
+.world-cell.road { background: #0a0a00; color: #888866; }
+.world-cell.enterable { outline: 1px dashed var(--accent); }
+.zone-badge {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  margin: 2px;
+}
+.interior-room {
+  border: 1px solid var(--accent);
+  background: #001400;
+  padding: 12px;
+  margin: 8px 0;
+  text-align: center;
+}
+.map-controls {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  max-width: 420px;
+  margin: 12px auto 0 auto;
+  align-items: center;
+}
+.map-arrows {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  width: 160px;
+}
+.map-arrows button { font-size: 18px; font-weight: bold; padding: 10px; }
+.quick-meds, .quick-radio {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.quick-meds button, .quick-radio button {
+  font-size: 11px;
+  padding: 8px 6px;
+  white-space: nowrap;
+}
+.radio-panel {
+  border: 1px solid var(--accent);
+  background: #001400;
+  padding: 14px;
+  margin-top: 8px;
+}
+.radio-panel h3 { color: var(--accent); margin-top: 0; }
+.radio-status {
+  font-size: 12px;
+  color: var(--gold);
+  margin: 8px 0;
+  min-height: 18px;
+}
+
+.item { padding: 10px; border: 1px solid #00aa2a; background: #000a00; margin-bottom: 8px; }
+.item-head { display: flex; justify-content: space-between; align-items: center; }
+.equipped-tag { color: var(--accent); border: 1px solid var(--line); font-size: 10px; padding: 2px 4px; }
+.row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #003300; font-size: 13px; }
+
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.92); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 100; }
+.modal.show { display: flex; }
+.modal-content { background: var(--panel); border: 2px solid var(--accent); padding: 16px; max-width: 480px; width: 100%; max-height: 85vh; overflow-y: auto; }
+
+.progress-bar { background: var(--bar-bg); border: 1px solid #00aa2a; height: 14px; border-radius: 2px; overflow: hidden; margin: 4px 0 10px 0; }
+.progress-fill { height: 100%; width: 0%; transition: width 0.3s; }
+
+.spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.spec-box { background: #000a00; border: 1px solid #00aa2a; padding: 8px; display: flex; justify-content: space-between; align-items: center; }
+
+.vault-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.lunchbox-card { background: #000a00; border: 1px solid #00aa2a; padding: 12px; text-align: center; }
+
+/* ===== COMBATE ESTILO PIP-BOY ===== */
+.combat-title {
+  color: var(--danger);
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0 0 16px 0;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(255,0,60,0.6);
+}
+.combat-entity {
+  margin-bottom: 14px;
+}
+.combat-entity-name {
+  font-size: 14px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+.combat-entity-name.enemy { color: var(--danger); }
+.combat-entity-name.player { color: var(--accent); }
+.combat-hp-bar {
+  background: #001100;
+  border: 1px solid #00aa2a;
+  height: 18px;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.combat-hp-fill {
+  height: 100%;
+  transition: width 0.35s ease;
+}
+.combat-hp-fill.enemy { background: var(--enemy-bar); box-shadow: 0 0 10px rgba(255,0,60,0.5); }
+.combat-hp-fill.player { background: var(--player-bar); box-shadow: 0 0 10px rgba(0,255,65,0.4); }
+.combat-log {
+  background: #000800;
+  border: 1px solid #00aa2a;
+  height: 90px;
+  overflow-y: auto;
+  padding: 8px;
+  font-size: 12px;
+  margin: 12px 0;
+}
+.combat-log div { margin-bottom: 3px; border-bottom: 1px dotted #002200; padding-bottom: 2px; }
+.combat-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+.combat-btn-attack {
+  background: #330000;
+  border: 2px solid var(--danger);
+  color: var(--danger);
+  font-weight: bold;
+  padding: 14px 8px;
+  font-size: 14px;
+}
+.combat-btn-attack:active { background: #550000; }
+.combat-btn-flee {
+  background: #001a00;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-weight: bold;
+  padding: 14px 8px;
+  font-size: 14px;
+}
+.combat-btn-flee:active { background: #003300; }
+
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .tabs { grid-template-columns: repeat(3, 1fr); }
+  .subtabs { grid-template-columns: repeat(3, 1fr); }
+  .spec-grid { grid-template-columns: 1fr; }
+  .vault-container { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <h1>☢ WASTELAND</h1>
+    <div class="stats">
+      <span>NV <b id="st-lvl">1</b></span>
+      <span>XP <b id="st-xp">0</b>/<b id="st-maxxp">100</b></span>
+      <span style="color:var(--gold)">● <b id="st-caps">75</b></span>
+      <span>Peso <b id="st-weight">0</b>/<b id="st-maxweight">35</b></span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main>
+      <div class="panel">
+        <div class="log-header">
+          <span class="log-title">REGISTRO DE EVENTOS</span>
+          <div class="quick-status">
+            <span>HP: <b id="qs-hp" style="color:var(--accent);">100/100</b></span>
+            <span>RAD: <b id="qs-rad" style="color:#ff6600;">0</b></span>
+            <span>DMG: <b id="qs-dmg">8</b></span>
+            <span>DEF: <b id="qs-def">2</b></span>
+            <span>BALAS: <b id="qs-ammo">--</b></span>
+          </div>
+        </div>
+        <div id="log" class="log"></div>
+      </div>
+
+      <div class="panel">
+        <div class="tabs">
+          <button id="btn-tab-map" class="active" onclick="switchTab('map', this)">MAPA</button>
+          <button onclick="switchTab('char', this)">PERSONAJE</button>
+          <button onclick="switchTab('inv', this)">INVENTARIO</button>
+          <button onclick="switchTab('vault', this)">REFUGIO</button>
+          <button onclick="switchTab('quests', this)">MISIONES</button>
+          <button onclick="switchTab('shop', this)">COMERCIO</button>
+        </div>
+        <div id="main-view"></div>
+      </div>
+    </main>
+
+    <aside class="panel">
+      <h3 style="margin-top:0; color:var(--accent);" id="aside-name">SUPERVIVIENTE</h3>
+      <div class="row"><span>Vida</span><span id="aside-hp">100/100</span></div>
+      <div class="row"><span>Radiación</span><span id="aside-rad" style="color:#ff6600;">0 / 1000</span></div>
+      <div class="row"><span>Res. RAD</span><span id="aside-radres">0%</span></div>
+      <div class="row"><span>Daño</span><span id="aside-dmg">8</span></div>
+      <div class="row"><span>Defensa</span><span id="aside-def">2</span></div>
+      <div class="row"><span>Munición</span><span id="aside-ammo">--</span></div>
+      <div class="row"><span>Arma</span><span id="aside-wpn">Pistola oxidada</span></div>
+      <div class="row"><span>Armadura</span><span id="aside-arm">Ropa de superviviente</span></div>
+      
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; margin-top:12px;">
+        <button onclick="pipClick(); renameSurvivor()">Renombrar</button>
+        <button onclick="pipClick(); saveGame()">Guardar</button>
+        <button onclick="pipClick(); loadGame()">Cargar</button>
+        <button onclick="pipClick(); resetGame()">Reiniciar</button>
+      </div>
+    </aside>
+    <audio id="radio-audio" loop preload="none" crossorigin="anonymous"
+      src="https://archive.org/download/IDontWantToSetTheWorldOnFireTheInkSpots/I%20Don%27t%20Want%20To%20Set%20The%20World%20On%20Fire-The%20Ink%20Spots.mp3"></audio>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-content" id="modal-body"></div>
+</div>
+
+<script>
+const DB_ITEMS = [
+  // --- 100 ARMAS (Estilo Fallout) ---
+  { id: 1, name: "Pistola oxidada", type: "weapon", damage: 8, ammoType: ".38", weight: 3, value: 20, stackable: false, shopTier: 1 },
+  { id: 2, name: "Escopeta recortada", type: "weapon", damage: 16, ammoType: "Cartucho de escopeta", weight: 5, value: 65, stackable: false, shopTier: 1 },
+  { id: 3, name: "Rifle de energía", type: "weapon", damage: 24, ammoType: "Célula de microfusión", weight: 6, value: 180, stackable: false, shopTier: 2 },
+  { id: 4, name: "Tubería con púas", type: "weapon", damage: 10, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 15, stackable: false, shopTier: 1 },
+  { id: 16, name: "Rifle de Asalto Casero", type: "weapon", damage: 20, ammoType: "5.56mm", weight: 4.5, value: 110, stackable: false, shopTier: 1 },
+  { id: 17, name: "Machete Reforzado", type: "weapon", damage: 14, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2.5, value: 45, stackable: false, shopTier: 1 },
+  { id: 101, name: "Pistola 10mm", type: "weapon", damage: 18, ammoType: "10mm", weight: 3.5, value: 80, stackable: false, shopTier: 1 },
+  { id: 102, name: "Pistola del 44", type: "weapon", damage: 45, ammoType: ".44 Magnum", weight: 4, value: 220, stackable: false, shopTier: 3 },
+  { id: 103, name: "Pistola de Bengalas", type: "weapon", damage: 5, ammoType: "Bengala", weight: 2, value: 30, stackable: false, shopTier: 1 },
+  { id: 104, name: "Pistola de Plasma", type: "weapon", damage: 32, ammoType: "Cartucho de plasma", weight: 4, value: 290, stackable: false, shopTier: 4 },
+  { id: 105, name: "Pistola Láser", type: "weapon", damage: 22, ammoType: "Célula de energía", weight: 3, value: 150, stackable: false, shopTier: 2 },
+  { id: 106, name: "Pistola Gamma", type: "weapon", damage: 35, ammoType: "Onda Gamma", weight: 3, value: 350, stackable: false, shopTier: 6 },
+  { id: 107, name: "Pistola Lanzadardos", type: "weapon", damage: 12, ammoType: "Dardo", weight: 2.5, value: 95, stackable: false, shopTier: 2 },
+  { id: 108, name: "Pistola de Clavos", type: "weapon", damage: 25, ammoType: "Clavo", weight: 5, value: 130, stackable: false, shopTier: 3 },
+  { id: 109, name: "Subfusil 10mm", type: "weapon", damage: 28, ammoType: "10mm", weight: 5.5, value: 170, stackable: false, shopTier: 2 },
+  { id: 110, name: "Subfusil Thompson", type: "weapon", damage: 34, ammoType: ".45 ACP", weight: 6, value: 240, stackable: false, shopTier: 3 },
+  { id: 111, name: "Rifle de Caza", type: "weapon", damage: 38, ammoType: ".308", weight: 7, value: 210, stackable: false, shopTier: 2 },
+  { id: 112, name: "Rifle de Asalto Militar", type: "weapon", damage: 42, ammoType: "5.56mm", weight: 8, value: 310, stackable: false, shopTier: 4 },
+  { id: 113, name: "Rifle de Combate", type: "weapon", damage: 48, ammoType: ".45 ACP", weight: 7.5, value: 380, stackable: false, shopTier: 4 },
+  { id: 114, name: "Rifle de Francotirador", type: "weapon", damage: 75, ammoType: ".308", weight: 9, value: 650, stackable: false, shopTier: 5 },
+  { id: 115, name: "Rifle Gauss", type: "weapon", damage: 120, ammoType: "Cartucho de 2mm", weight: 12, value: 1200, stackable: false, shopTier: 7 },
+  { id: 116, name: "Rifle de Plasma avanzado", type: "weapon", damage: 65, ammoType: "Cartucho de plasma", weight: 6.5, value: 550, stackable: false, shopTier: 5 },
+  { id: 117, name: "Rifle Láser militar", type: "weapon", damage: 50, ammoType: "Célula de energía", weight: 6, value: 420, stackable: false, shopTier: 4 },
+  { id: 118, name: "Fusil de Asalto Incursor", type: "weapon", damage: 36, ammoType: "5.56mm", weight: 13, value: 280, stackable: false, shopTier: 3 },
+  { id: 119, name: "Carabina de Palanca", type: "weapon", damage: 52, ammoType: ".45-70", weight: 6.5, value: 450, stackable: false, shopTier: 4 },
+  { id: 120, name: "Rifle Radiactivo del Descendiente", type: "weapon", damage: 85, ammoType: "Onda Gamma", weight: 8, value: 950, stackable: false, shopTier: 7 },
+  { id: 121, name: "Escopeta de Bombeo", type: "weapon", damage: 40, ammoType: "Cartucho de escopeta", weight: 7, value: 230, stackable: false, shopTier: 3 },
+  { id: 122, name: "Escopeta de Doble Cañón", type: "weapon", damage: 55, ammoType: "Cartucho de escopeta", weight: 6, value: 340, stackable: false, shopTier: 3 },
+  { id: 123, name: "Escopeta de Combate", type: "weapon", damage: 68, ammoType: "Cartucho de escopeta", weight: 8.5, value: 580, stackable: false, shopTier: 5 },
+  { id: 124, name: "Ametralladora Ligera", type: "weapon", damage: 60, ammoType: ".308", weight: 14, value: 750, stackable: false, shopTier: 6 },
+  { id: 125, name: "Minigun", type: "weapon", damage: 95, ammoType: "5mm", weight: 25, value: 1400, stackable: false, shopTier: 7 },
+  { id: 126, name: "Lanzamisiles", type: "weapon", damage: 180, ammoType: "Misil", weight: 20, value: 1600, stackable: false, shopTier: 6 },
+  { id: 127, name: "Lanzallamas", type: "weapon", damage: 70, ammoType: "Combustible de lanzallamas", weight: 16, value: 850, stackable: false, shopTier: 5 },
+  { id: 128, name: "Fat Man (Lanzanukes)", type: "weapon", damage: 500, ammoType: "Mini Nukes", weight: 30, value: 4500, stackable: false, shopTier: 10 },
+  { id: 129, name: "Cañón de Brondes", type: "weapon", damage: 110, ammoType: "Bala de cañón", weight: 22, value: 1100, stackable: false, shopTier: 8 },
+  { id: 130, name: "Chatarrero automático", type: "weapon", damage: 45, ammoType: "5mm", weight: 11, value: 490, stackable: false, shopTier: 5 },
+  { id: 131, name: "Pistola Western", type: "weapon", damage: 50, ammoType: ".44 Magnum", weight: 3.8, value: 390, stackable: false, shopTier: 4 },
+  { id: 132, name: "Rifle de Infantería", type: "weapon", damage: 44, ammoType: "5.56mm", weight: 7, value: 320, stackable: false, shopTier: 4 },
+  { id: 133, name: "Rifle de Asalto Pesado", type: "weapon", damage: 58, ammoType: "7.62mm", weight: 12, value: 680, stackable: false, shopTier: 6 },
+  { id: 134, name: "Ametralladora de Tambor", type: "weapon", damage: 62, ammoType: "7.62mm", weight: 13, value: 820, stackable: false, shopTier: 6 },
+  { id: 135, name: "Pistola de Pulsos", type: "weapon", damage: 38, ammoType: "Célula de energía", weight: 3.2, value: 310, stackable: false, shopTier: 5 },
+  { id: 136, name: "Rifle de Conversión Láser", type: "weapon", damage: 56, ammoType: "Célula de microfusión", weight: 6.5, value: 610, stackable: false, shopTier: 5 },
+  { id: 137, name: "Pistola Incursora", type: "weapon", damage: 15, ammoType: ".38", weight: 2.8, value: 40, stackable: false, shopTier: 1 },
+  { id: 138, name: "Rifle de Francotirador Experimental", type: "weapon", damage: 140, ammoType: ".308", weight: 10, value: 1800, stackable: false, shopTier: 8 },
+  { id: 139, name: "Pistola de Plasma pesada", type: "weapon", damage: 46, ammoType: "Cartucho de plasma", weight: 5, value: 480, stackable: false, shopTier: 5 },
+  { id: 140, name: "Rifle Laser-Gatling", type: "weapon", damage: 115, ammoType: "Núcleo de fusión", weight: 28, value: 2500, stackable: false, shopTier: 9 },
+  { id: 141, name: "Bate de béisbol", type: "weapon", damage: 15, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 3, value: 25, stackable: false, shopTier: 1 },
+  { id: 142, name: "Bate con pinchos", type: "weapon", damage: 22, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 3.5, value: 50, stackable: false, shopTier: 2 },
+  { id: 143, name: "Tubo de plomo", type: "weapon", damage: 12, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 4, value: 18, stackable: false, shopTier: 1 },
+  { id: 144, name: "Llave inglesa", type: "weapon", damage: 13, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 3, value: 20, stackable: false, shopTier: 1 },
+  { id: 145, name: "Destornillador modificado", type: "weapon", damage: 9, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 1, value: 12, stackable: false, shopTier: 1 },
+  { id: 146, name: "Cuchillo de combate", type: "weapon", damage: 16, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 1.5, value: 35, stackable: false, shopTier: 1 },
+  { id: 147, name: "Puño americano", type: "weapon", damage: 18, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 1, value: 40, stackable: false, shopTier: 1 },
+  { id: 148, name: "Puño de hierro", type: "weapon", damage: 26, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 85, stackable: false, shopTier: 2 },
+  { id: 149, name: "Espada china", type: "weapon", damage: 28, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 3, value: 110, stackable: false, shopTier: 3 },
+  { id: 150, name: "Wakizashi", type: "weapon", damage: 32, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2.5, value: 150, stackable: false, shopTier: 3 },
+  { id: 151, name: "Machete de kook", type: "weapon", damage: 24, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 75, stackable: false, shopTier: 2 },
+  { id: 152, name: "Hacha de mano", type: "weapon", damage: 25, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 3, value: 70, stackable: false, shopTier: 2 },
+  { id: 153, name: "Hacha de bombero", type: "weapon", damage: 38, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 6, value: 160, stackable: false, shopTier: 4 },
+  { id: 154, name: "Sartenazo", type: "weapon", damage: 20, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 4, value: 45, stackable: false, shopTier: 1 },
+  { id: 155, name: "Porra de policía", type: "weapon", damage: 17, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 30, stackable: false, shopTier: 1 },
+  { id: 156, name: "Porra electrificada", type: "weapon", damage: 35, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 3, value: 200, stackable: false, shopTier: 4 },
+  { id: 157, name: "Supermartillo", type: "weapon", damage: 75, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 15, value: 650, stackable: false, shopTier: 6 },
+  { id: 158, name: "Martillo de Supermutante", type: "weapon", damage: 88, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 20, value: 800, stackable: false, shopTier: 6 },
+  { id: 159, name: "Motosierra", type: "weapon", damage: 65, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 18, value: 550, stackable: false, shopTier: 5 },
+  { id: 160, name: "Ripper (Cuchilla a motor)", type: "weapon", damage: 50, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 7, value: 420, stackable: false, shopTier: 4 },
+  { id: 161, name: "Espada de Revolución", type: "weapon", damage: 42, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 3.5, value: 310, stackable: false, shopTier: 4 },
+  { id: 162, name: "Puño Asistido (Power Fist)", type: "weapon", damage: 85, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 12, value: 900, stackable: false, shopTier: 7 },
+  { id: 163, name: "Guantelete de Garra de Sanguinario", type: "weapon", damage: 110, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 10, value: 1500, stackable: false, shopTier: 8 },
+  { id: 164, name: "Cuchillo de Carnicero", type: "weapon", damage: 19, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 40, stackable: false, shopTier: 1 },
+  { id: 165, name: "Bate de Diamantes en Bruto", type: "weapon", damage: 60, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 5, value: 480, stackable: false, shopTier: 5 },
+  { id: 166, name: "Lanza de cazador", type: "weapon", damage: 30, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 4, value: 90, stackable: false, shopTier: 2 },
+  { id: 167, name: "Pica de Robot", type: "weapon", damage: 55, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 6, value: 500, stackable: false, shopTier: 5 },
+  { id: 168, name: "Hacha de incursor", type: "weapon", damage: 28, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 4, value: 80, stackable: false, shopTier: 2 },
+  { id: 169, name: "Espada corta oxidada", type: "weapon", damage: 14, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 20, stackable: false, shopTier: 1 },
+  { id: 170, name: "Maza pesada", type: "weapon", damage: 48, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 12, value: 320, stackable: false, shopTier: 4 },
+  { id: 171, name: "Pistola de Ciberdelincuente", type: "weapon", damage: 30, ammoType: "Célula de energía", weight: 3, value: 220, stackable: false, shopTier: 3 },
+  { id: 172, name: "Subfusil de Incursor", type: "weapon", damage: 25, ammoType: ".38", weight: 4.5, value: 120, stackable: false, shopTier: 2 },
+  { id: 173, name: "Rifle de Asalto Vault-Tec", type: "weapon", damage: 54, ammoType: "5.56mm", weight: 9, value: 700, stackable: false, shopTier: 6 },
+  { id: 174, name: "Pistola Magnética", type: "weapon", damage: 62, ammoType: "Cartucho de 2mm", weight: 6, value: 890, stackable: false, shopTier: 7 },
+  { id: 175, name: "Lanzamisiles Cuádruple", type: "weapon", damage: 250, ammoType: "Misil", weight: 26, value: 2800, stackable: false, shopTier: 9 },
+  { id: 176, name: "Carabina Láser", type: "weapon", damage: 45, ammoType: "Célula de energía", weight: 5, value: 380, stackable: false, shopTier: 4 },
+  { id: 177, name: "Pistola de Clavos neumática", type: "weapon", damage: 35, ammoType: "Clavo", weight: 5.5, value: 260, stackable: false, shopTier: 4 },
+  { id: 178, name: "Rifle Antidisturbios", type: "weapon", damage: 52, ammoType: "5.56mm", weight: 7.5, value: 510, stackable: false, shopTier: 5 },
+  { id: 179, name: "Pistola de Precisión", type: "weapon", damage: 38, ammoType: "10mm", weight: 3.5, value: 300, stackable: false, shopTier: 3 },
+  { id: 180, name: "Escopeta Recortada Táctica", type: "weapon", damage: 45, ammoType: "Cartucho de escopeta", weight: 4.5, value: 340, stackable: false, shopTier: 3 },
+  { id: 181, name: "Rifle de Cerrojo Pesado", type: "weapon", damage: 85, ammoType: ".308", weight: 9.5, value: 920, stackable: false, shopTier: 6 },
+  { id: 182, name: "Pistola Silenciada", type: "weapon", damage: 28, ammoType: ".38", weight: 3, value: 180, stackable: false, shopTier: 2 },
+  { id: 183, name: "Rifle de Asalto Silenciado", type: "weapon", damage: 48, ammoType: ".45 ACP", weight: 8, value: 740, stackable: false, shopTier: 6 },
+  { id: 184, name: "Pistola de Emergencia", type: "weapon", damage: 10, ammoType: ".38", weight: 2, value: 25, stackable: false, shopTier: 1 },
+  { id: 185, name: "Rifle de Explorador", type: "weapon", damage: 32, ammoType: ".308", weight: 6, value: 190, stackable: false, shopTier: 2 },
+  { id: 186, name: "Cañón de Plasma Pesado", type: "weapon", damage: 95, ammoType: "Cartucho de plasma", weight: 14, value: 1350, stackable: false, shopTier: 7 },
+  { id: 187, name: "Lanzadardos Venenosos", type: "weapon", damage: 40, ammoType: "Dardo", weight: 3, value: 330, stackable: false, shopTier: 4 },
+  { id: 188, name: "Pistola Criogénica", type: "weapon", damage: 55, ammoType: "Célula criogénica", weight: 7, value: 850, stackable: false, shopTier: 6 },
+  { id: 189, name: "Rifle Criogénico", type: "weapon", damage: 90, ammoType: "Célula criogénica", weight: 12, value: 1600, stackable: false, shopTier: 8 },
+  { id: 190, name: "Lanzallamas Pesado", type: "weapon", damage: 110, ammoType: "Combustible de lanzallamas", weight: 22, value: 1450, stackable: false, shopTier: 7 },
+  { id: 191, name: "Ametralladora rotativa pesada", type: "weapon", damage: 80, ammoType: "5mm", weight: 21, value: 1150, stackable: false, shopTier: 6 },
+  { id: 192, name: "Fusil de Pulso EMP", type: "weapon", damage: 70, ammoType: "Célula de energía", weight: 7, value: 980, stackable: false, shopTier: 6 },
+  { id: 193, name: "Rifle de Precisión Láser", type: "weapon", damage: 68, ammoType: "Célula de energía", weight: 6.5, value: 810, stackable: false, shopTier: 5 },
+  { id: 194, name: "Pistola de Abolladuras", type: "weapon", damage: 12, ammoType: ".38", weight: 2.5, value: 30, stackable: false, shopTier: 1 },
+  { id: 195, name: "Rifle Casero Doble", type: "weapon", damage: 35, ammoType: "5.56mm", weight: 5, value: 240, stackable: false, shopTier: 3 },
+  { id: 196, name: "Pistola Láser de Incursor", type: "weapon", damage: 20, ammoType: "Célula de energía", weight: 3, value: 130, stackable: false, shopTier: 2 },
+  { id: 197, name: "Escopeta Industrial", type: "weapon", damage: 72, ammoType: "Cartucho de escopeta", weight: 9, value: 710, stackable: false, shopTier: 6 },
+  { id: 198, name: "Rifle de Asalto Táctico", type: "weapon", damage: 64, ammoType: "5.56mm", weight: 8.5, value: 920, stackable: false, shopTier: 7 },
+  { id: 199, name: "Lanzanukes Experimental (Fat Man MKII)", type: "weapon", damage: 700, ammoType: "Mini Nukes", weight: 32, value: 6000, stackable: false, shopTier: 10 },
+  { id: 200, name: "El Destructor del Yermo (Arma Legendaria)", type: "weapon", damage: 250, ammoType: "Cartucho de 2mm", weight: 10, value: 10000, stackable: false, shopTier: 10 },
+
+  // --- 50 ARMADURAS (Incluyendo Servoarmaduras) ---
+  { id: 5, name: "Ropa de superviviente", type: "armor", def: 2, weight: 2, value: 15, stackable: false, shopTier: 1 },
+  { id: 6, name: "Chaqueta blindada", type: "armor", def: 7, weight: 6, value: 90, stackable: false, shopTier: 2 },
+  { id: 18, name: "Chaleco Táctico", type: "armor", def: 12, weight: 8, value: 160, stackable: false, shopTier: 3 },
+  { id: 19, name: "Cuero Reforzado", type: "armor", def: 5, weight: 3.5, value: 50, stackable: false, shopTier: 1 },
+  { id: 201, name: "Armadura de cuero completa", type: "armor", def: 9, weight: 5, value: 110, stackable: false, shopTier: 2 },
+  { id: 202, name: "Armadura de cuero robusta", type: "armor", def: 14, weight: 7, value: 200, stackable: false, shopTier: 3 },
+  { id: 203, name: "Armadura de cuero pesada", type: "armor", def: 20, weight: 11, value: 350, stackable: false, shopTier: 4 },
+  { id: 204, name: "Armadura de saqueador", type: "armor", def: 8, weight: 6, value: 80, stackable: false, shopTier: 1 },
+  { id: 205, name: "Armadura de saqueador destrozada", type: "armor", def: 11, weight: 7.5, value: 130, stackable: false, shopTier: 2 },
+  { id: 206, name: "Armadura metálica ligera", type: "armor", def: 15, weight: 9, value: 220, stackable: false, shopTier: 3 },
+  { id: 207, name: "Armadura metálica robusta", type: "armor", def: 22, weight: 13, value: 390, stackable: false, shopTier: 4 },
+  { id: 208, name: "Armadura metálica pesada", type: "armor", def: 30, weight: 18, value: 650, stackable: false, shopTier: 5 },
+  { id: 209, name: "Armadura de combate ligera", type: "armor", def: 25, weight: 10, value: 500, stackable: false, shopTier: 5 },
+  { id: 210, name: "Armadura de combate robusta", type: "armor", def: 35, weight: 14, value: 850, stackable: false, shopTier: 6 },
+  { id: 211, name: "Armadura de combate pesada", type: "armor", def: 45, weight: 20, value: 1200, stackable: false, shopTier: 7 },
+  { id: 212, name: "Armadura de sintetizador ligera", type: "armor", def: 22, weight: 8, value: 450, stackable: false, shopTier: 4 },
+  { id: 213, name: "Armadura de sintetizador robusta", type: "armor", def: 32, weight: 12, value: 780, stackable: false, shopTier: 5 },
+  { id: 214, name: "Armadura de sintetizador pesada", type: "armor", def: 42, weight: 17, value: 1100, stackable: false, shopTier: 6 },
+  { id: 215, name: "Mono del Refugio 111", type: "armor", def: 4, weight: 3, value: 40, stackable: false, shopTier: 1 },
+  { id: 216, name: "Mono del Refugio blindado", type: "armor", def: 10, weight: 4, value: 150, stackable: false, shopTier: 2 },
+  { id: 217, name: "Uniforme militar de fatiga", type: "armor", def: 6, weight: 3, value: 70, stackable: false, shopTier: 1 },
+  { id: 218, name: "Traje de la Hermandad del Acero", type: "armor", def: 12, weight: 4, value: 300, stackable: false, shopTier: 4 },
+  { id: 219, name: "Traje de hazmat (Antirradiación)", type: "armor", def: 5, weight: 5, value: 400, stackable: false, shopTier: 3 },
+  { id: 220, name: "Traje espacial de la Vault-Tec", type: "armor", def: 18, weight: 12, value: 550, stackable: false, shopTier: 4 },
+  { id: 221, name: "Abrigo de cuero de vagabundo", type: "armor", def: 8, weight: 5, value: 95, stackable: false, shopTier: 2 },
+  { id: 222, name: "Gabardina de detective", type: "armor", def: 10, weight: 6, value: 180, stackable: false, shopTier: 3 },
+  { id: 223, name: "Chaqueta de motorista del Yermo", type: "armor", def: 9, weight: 5, value: 110, stackable: false, shopTier: 2 },
+  { id: 224, name: "Traje de cientifico loco", type: "armor", def: 4, weight: 3, value: 60, stackable: false, shopTier: 2 },
+  { id: 225, name: "Uniforme de artillero", type: "armor", def: 14, weight: 7, value: 210, stackable: false, shopTier: 3 },
+  { id: 226, name: "Armadura de artillero pesada", type: "armor", def: 28, weight: 15, value: 580, stackable: false, shopTier: 5 },
+  { id: 227, name: "Camisa a cuadros y tirantes", type: "armor", def: 3, weight: 2, value: 25, stackable: false, shopTier: 1 },
+  { id: 228, name: "Ropa de granjero", type: "armor", def: 3, weight: 2, value: 20, stackable: false, shopTier: 1 },
+  { id: 229, name: "Vestido elegante", type: "armor", def: 1, weight: 1.5, value: 50, stackable: false, shopTier: 2 },
+  { id: 230, name: "Esmoquin", type: "armor", def: 2, weight: 2, value: 70, stackable: false, shopTier: 2 },
+  { id: 231, name: "Armadura de merodeador", type: "armor", def: 13, weight: 8, value: 175, stackable: false, shopTier: 3 },
+  { id: 232, name: "Armadura de explorador", type: "armor", def: 16, weight: 7, value: 260, stackable: false, shopTier: 3 },
+  { id: 233, name: "Armadura antidisturbios", type: "armor", def: 38, weight: 16, value: 950, stackable: false, shopTier: 6 },
+  { id: 234, name: "Armadura de explorador de élite", type: "armor", def: 48, weight: 18, value: 1400, stackable: false, shopTier: 7 },
+  { id: 235, name: "Servoarmadura T-45 (Completa)", type: "armor", def: 75, weight: 45, value: 3500, stackable: false, shopTier: 7 },
+  { id: 236, name: "Servoarmadura T-51 (Completa)", type: "armor", def: 95, weight: 48, value: 5000, stackable: false, shopTier: 8 },
+  { id: 237, name: "Servoarmadura T-60 (Completa)", type: "armor", def: 120, weight: 52, value: 7500, stackable: false, shopTier: 9 },
+  { id: 238, name: "Servoarmadura X-01 (Avanzada del Enclave)", type: "armor", def: 150, weight: 55, value: 12000, stackable: false, shopTier: 10 },
+  { id: 239, name: "Servoarmadura de Incursor (Chatarra)", type: "armor", def: 60, weight: 40, value: 2400, stackable: false, shopTier: 6 },
+  { id: 240, name: "Servoarmadura de la Hermandad del Acero", type: "armor", def: 130, weight: 53, value: 9000, stackable: false, shopTier: 9 },
+  { id: 241, name: "Armadura de cuero tachonado", type: "armor", def: 12, weight: 6, value: 140, stackable: false, shopTier: 2 },
+  { id: 242, name: "Armadura metálica pintada", type: "armor", def: 18, weight: 10, value: 280, stackable: false, shopTier: 3 },
+  { id: 243, name: "Armadura de combate sombría", type: "armor", def: 40, weight: 15, value: 980, stackable: false, shopTier: 6 },
+  { id: 244, name: "Traje de aislamiento avanzado", type: "armor", def: 15, weight: 6, value: 480, stackable: false, shopTier: 4 },
+  { id: 245, name: "Armadura pesada de Operador", type: "armor", def: 50, weight: 22, value: 1500, stackable: false, shopTier: 7 },
+  { id: 246, name: "Servoarmadura Nuka-Cola Quantum (Única)", type: "armor", def: 180, weight: 58, value: 18000, stackable: false, shopTier: 10 },
+
+  // --- MEDICINAS ---
+  { id: 7, name: "Estimulante", type: "med", heal: 30, weight: 0.5, value: 25, stackable: true, shopTier: 1 },
+  { id: 8, name: "Superestimulante", type: "med", heal: 65, weight: 0.5, value: 60, stackable: true, shopTier: 3 },
+
+  // --- MUNICIONES ---
+  { id: 9, name: "Calibre .38", type: "ammo", ammoKey: ".38", qty: 20, weight: 0.1, value: 10, stackable: true, shopTier: 1 },
+  { id: 10, name: "Cartuchos de escopeta", type: "ammo", ammoKey: "Cartucho de escopeta", qty: 8, weight: 0.2, value: 15, stackable: true, shopTier: 1 },
+  { id: 11, name: "Células de microfusión", type: "ammo", ammoKey: "Célula de microfusión", qty: 12, weight: 0.2, value: 25, stackable: true, shopTier: 2 },
+  { id: 12, name: "Munición 5.56mm", type: "ammo", ammoKey: "5.56mm", qty: 15, weight: 0.1, value: 18, stackable: true, shopTier: 1 },
+  { id: 301, name: "Munición 10mm", type: "ammo", ammoKey: "10mm", qty: 20, weight: 0.1, value: 12, stackable: true, shopTier: 1 },
+  { id: 302, name: "Munición .44 Magnum", type: "ammo", ammoKey: ".44 Magnum", qty: 12, weight: 0.15, value: 30, stackable: true, shopTier: 3 },
+  { id: 303, name: "Bengala", type: "ammo", ammoKey: "Bengala", qty: 5, weight: 0.3, value: 15, stackable: true, shopTier: 1 },
+  { id: 304, name: "Cartucho de plasma", type: "ammo", ammoKey: "Cartucho de plasma", qty: 15, weight: 0.2, value: 35, stackable: true, shopTier: 4 },
+  { id: 305, name: "Célula de energía", type: "ammo", ammoKey: "Célula de energía", qty: 20, weight: 0.1, value: 20, stackable: true, shopTier: 2 },
+  { id: 306, name: "Onda Gamma", type: "ammo", ammoKey: "Onda Gamma", qty: 10, weight: 0.2, value: 50, stackable: true, shopTier: 6 },
+  { id: 307, name: "Dardo", type: "ammo", ammoKey: "Dardo", qty: 15, weight: 0.05, value: 10, stackable: true, shopTier: 2 },
+  { id: 308, name: "Clavo", type: "ammo", ammoKey: "Clavo", qty: 20, weight: 0.1, value: 12, stackable: true, shopTier: 3 },
+  { id: 309, name: "Munición .45 ACP", type: "ammo", ammoKey: ".45 ACP", qty: 25, weight: 0.1, value: 16, stackable: true, shopTier: 3 },
+  { id: 310, name: "Munición .308", type: "ammo", ammoKey: ".308", qty: 15, weight: 0.15, value: 28, stackable: true, shopTier: 2 },
+  { id: 311, name: "Cartucho de 2mm", type: "ammo", ammoKey: "Cartucho de 2mm", qty: 10, weight: 0.2, value: 75, stackable: true, shopTier: 7 },
+  { id: 312, name: "Munición .45-70", type: "ammo", ammoKey: ".45-70", qty: 12, weight: 0.2, value: 35, stackable: true, shopTier: 4 },
+  { id: 313, name: "Munición 5mm", type: "ammo", ammoKey: "5mm", qty: 50, weight: 0.05, value: 20, stackable: true, shopTier: 5 },
+  { id: 314, name: "Misil", type: "ammo", ammoKey: "Misil", qty: 2, weight: 5.0, value: 150, stackable: true, shopTier: 6 },
+  { id: 315, name: "Combustible de lanzallamas", type: "ammo", ammoKey: "Combustible de lanzallamas", qty: 40, weight: 0.1, value: 30, stackable: true, shopTier: 5 },
+  { id: 316, name: "Mini Nukes", type: "ammo", ammoKey: "Mini Nukes", qty: 1, weight: 6.0, value: 800, stackable: true, shopTier: 10 },
+  { id: 317, name: "Bala de cañón", type: "ammo", ammoKey: "Bala de cañón", qty: 5, weight: 2.0, value: 80, stackable: true, shopTier: 8 },
+  { id: 318, name: "Munición 7.62mm", type: "ammo", ammoKey: "7.62mm", qty: 30, weight: 0.1, value: 22, stackable: true, shopTier: 6 },
+  { id: 319, name: "Núcleo de fusión", type: "ammo", ammoKey: "Núcleo de fusión", qty: 2, weight: 4.0, value: 300, stackable: true, shopTier: 7 },
+  { id: 320, name: "Célula criogénica", type: "ammo", ammoKey: "Célula criogénica", qty: 15, weight: 0.15, value: 60, stackable: true, shopTier: 6 },
+
+  // --- CHATARRA VARIADA ---
+  { id: 13, name: "Chatarra electrónica", type: "junk", weight: 0.5, value: 12, stackable: true, shopTier: 1 },
+  { id: 20, name: "Tornillos y tuercas", type: "junk", weight: 0.2, value: 5, stackable: true, shopTier: 1 },
+  { id: 21, name: "Placas de hierro", type: "junk", weight: 1.2, value: 10, stackable: true, shopTier: 1 },
+  { id: 22, name: "Cables de cobre", type: "junk", weight: 0.3, value: 8, stackable: true, shopTier: 1 },
+  { id: 23, name: "Engranajes de acero", type: "junk", weight: 0.8, value: 15, stackable: true, shopTier: 1 },
+  { id: 24, name: "Retales de cuero", type: "junk", weight: 0.4, value: 6, stackable: true, shopTier: 1 },
+  { id: 25, name: "Fibra de vidrio", type: "junk", weight: 0.3, value: 18, stackable: true, shopTier: 1 },
+  { id: 26, name: "Muelle industrial", type: "junk", weight: 0.6, value: 14, stackable: true, shopTier: 1 },
+  { id: 27, name: "Tubo de aluminio", type: "junk", weight: 0.7, value: 11, stackable: true, shopTier: 1 },
+  { id: 28, name: "Placa de titanio", type: "junk", weight: 1.5, value: 35, stackable: true, shopTier: 1 },
+  { id: 30, name: "Plástico", type: "junk", weight: 0.3, value: 7, stackable: true, shopTier: 1 },
+  { id: 31, name: "Vidrio", type: "junk", weight: 0.4, value: 6, stackable: true, shopTier: 1 },
+  { id: 32, name: "Caucho", type: "junk", weight: 0.3, value: 8, stackable: true, shopTier: 1 },
+  { id: 33, name: "Aceite", type: "junk", weight: 0.5, value: 12, stackable: true, shopTier: 1 },
+  { id: 34, name: "Ácido", type: "junk", weight: 0.4, value: 15, stackable: true, shopTier: 1 },
+  { id: 35, name: "Antiséptico", type: "junk", weight: 0.3, value: 14, stackable: true, shopTier: 1 },
+  { id: 36, name: "Circuito impreso", type: "junk", weight: 0.2, value: 20, stackable: true, shopTier: 1 },
+  { id: 37, name: "Polvo de cerámica", type: "junk", weight: 0.3, value: 9, stackable: true, shopTier: 1 },
+  { id: 38, name: "Fibra óptica", type: "junk", weight: 0.2, value: 22, stackable: true, shopTier: 1 },
+  { id: 39, name: "Adhesivo industrial", type: "junk", weight: 0.3, value: 10, stackable: true, shopTier: 1 },
+
+  // --- INGREDIENTES COCINA ---
+  { id: 40, name: "Carne de rata", type: "ingredient", weight: 0.4, value: 4, stackable: true, shopTier: 1 },
+  { id: 41, name: "Carne de perro", type: "ingredient", weight: 0.5, value: 6, stackable: true, shopTier: 1 },
+  { id: 42, name: "Carne mutada", type: "ingredient", weight: 0.8, value: 10, stackable: true, shopTier: 1 },
+  { id: 43, name: "Carne de brahmán", type: "ingredient", weight: 1.0, value: 12, stackable: true, shopTier: 1 },
+  { id: 44, name: "Maíz", type: "ingredient", weight: 0.2, value: 3, stackable: true, shopTier: 1 },
+  { id: 45, name: "Zanahorias", type: "ingredient", weight: 0.2, value: 3, stackable: true, shopTier: 1 },
+  { id: 46, name: "Patatas", type: "ingredient", weight: 0.3, value: 4, stackable: true, shopTier: 1 },
+  { id: 47, name: "Setas del Yermo", type: "ingredient", weight: 0.2, value: 5, stackable: true, shopTier: 1 },
+  { id: 48, name: "Agua purificada", type: "ingredient", weight: 0.5, value: 8, stackable: true, shopTier: 1 },
+  { id: 49, name: "Harina irradiada", type: "ingredient", weight: 0.3, value: 5, stackable: true, shopTier: 1 },
+
+  // --- BEBIDAS (loot) ---
+  { id: 50, name: "Nuka-Cola", type: "drink", heal: 10, weight: 0.5, value: 20, stackable: true, shopTier: 1, effectId: "nuka", effectName: "Nuka-Cola", effectDesc: "+2 daño, +5% XP", effectActions: 4, effectBonus: { dmg: 2, xpMult: 0.05 } },
+  { id: 51, name: "Nuka-Cola Quantum", type: "drink", heal: 25, weight: 0.5, value: 80, stackable: true, shopTier: 1, effectId: "quantum", effectName: "Nuka Quantum", effectDesc: "+5 daño, +10 defensa, +10% XP", effectActions: 6, effectBonus: { dmg: 5, def: 10, xpMult: 0.10 } },
+  { id: 52, name: "Nuka-Cola Cherry", type: "drink", heal: 15, weight: 0.5, value: 35, stackable: true, shopTier: 1, effectId: "cherry", effectName: "Nuka Cherry", effectDesc: "+3 daño, cura +5 extra al usar stim", effectActions: 5, effectBonus: { dmg: 3, stimBonus: 5 } },
+  { id: 53, name: "Nuka-Cola Dark", type: "drink", heal: 12, weight: 0.5, value: 45, stackable: true, shopTier: 1, effectId: "dark", effectName: "Nuka Dark", effectDesc: "+4 daño cuerpo a cuerpo, +5% crítico", effectActions: 5, effectBonus: { meleeDmg: 4, critChance: 0.05 } },
+  { id: 54, name: "Nuka-Cola Victory", type: "drink", heal: 20, weight: 0.5, value: 60, stackable: true, shopTier: 1, effectId: "victory", effectName: "Nuka Victory", effectDesc: "+8 defensa, +3 daño", effectActions: 5, effectBonus: { def: 8, dmg: 3 } },
+  { id: 55, name: "Cerveza", type: "drink", heal: 5, weight: 0.5, value: 10, stackable: true, shopTier: 1, effectId: "beer", effectName: "Cerveza", effectDesc: "+1 daño, -1 percepción temporal", effectActions: 3, effectBonus: { dmg: 1 } },
+  { id: 56, name: "Whiskey", type: "drink", heal: 8, weight: 0.5, value: 25, stackable: true, shopTier: 1, effectId: "whiskey", effectName: "Whiskey", effectDesc: "+3 daño, +2 defensa", effectActions: 4, effectBonus: { dmg: 3, def: 2 } },
+  { id: 57, name: "Vodka", type: "drink", heal: 6, weight: 0.5, value: 22, stackable: true, shopTier: 1, effectId: "vodka", effectName: "Vodka", effectDesc: "+2 daño, +5% esquiva", effectActions: 4, effectBonus: { dmg: 2, dodge: 0.05 } },
+  { id: 58, name: "Ron del Yermo", type: "drink", heal: 10, weight: 0.5, value: 30, stackable: true, shopTier: 1, effectId: "rum", effectName: "Ron del Yermo", effectDesc: "+4 daño, +3 defensa", effectActions: 5, effectBonus: { dmg: 4, def: 3 } },
+
+  // --- DROGAS / QUÍMICOS ---
+  { id: 70, name: "Mentats", type: "chem", weight: 0.2, value: 40, stackable: true, shopTier: 2, effectId: "mentats", effectName: "Mentats", effectDesc: "+15% XP, +5% loot", effectActions: 6, effectBonus: { xpMult: 0.15, lootBonus: 0.05 } },
+  { id: 71, name: "Buffout", type: "chem", weight: 0.2, value: 50, stackable: true, shopTier: 2, effectId: "buffout", effectName: "Buffout", effectDesc: "+6 daño, +8 defensa", effectActions: 5, effectBonus: { dmg: 6, def: 8 } },
+  { id: 72, name: "Psycho", type: "chem", weight: 0.2, value: 55, stackable: true, shopTier: 3, effectId: "psycho", effectName: "Psycho", effectDesc: "+10 daño, +5% crítico", effectActions: 4, effectBonus: { dmg: 10, critChance: 0.05 } },
+  { id: 73, name: "Jet", type: "chem", weight: 0.15, value: 45, stackable: true, shopTier: 2, effectId: "jet", effectName: "Jet", effectDesc: "+12% esquiva, +3 daño", effectActions: 4, effectBonus: { dodge: 0.12, dmg: 3 } },
+  { id: 74, name: "RadAway", type: "chem", heal: 0, weight: 0.3, value: 35, stackable: true, shopTier: 1, radRemove: 300, effectDesc: "Elimina 300 puntos de radiación" },
+  { id: 75, name: "Rad-X", type: "chem", weight: 0.2, value: 30, stackable: true, shopTier: 1, effectId: "radx", effectName: "Rad-X", effectDesc: "+30% Res. RAD, +5 def", effectActions: 8, effectBonus: { def: 5, radRes: 30 } },
+  { id: 76, name: "Med-X", type: "chem", weight: 0.2, value: 40, stackable: true, shopTier: 2, effectId: "medx", effectName: "Med-X", effectDesc: "+12 defensa", effectActions: 5, effectBonus: { def: 12 } },
+  { id: 77, name: "Overdrive", type: "chem", weight: 0.2, value: 70, stackable: true, shopTier: 4, effectId: "overdrive", effectName: "Overdrive", effectDesc: "+8 daño, +8% crítico", effectActions: 4, effectBonus: { dmg: 8, critChance: 0.08 } },
+
+  // --- COMIDA COCINADA ---
+  { id: 80, name: "Estofado de rata", type: "food", heal: 25, weight: 0.6, value: 15, stackable: true, shopTier: 1, effectId: "stew_rat", effectName: "Estofado de rata", effectDesc: "+2 defensa", effectActions: 5, effectBonus: { def: 2 } },
+  { id: 81, name: "Filete de perro", type: "food", heal: 30, weight: 0.6, value: 18, stackable: true, shopTier: 1, effectId: "dog_steak", effectName: "Filete de perro", effectDesc: "+2 daño", effectActions: 5, effectBonus: { dmg: 2 } },
+  { id: 82, name: "Guiso mutante", type: "food", heal: 40, weight: 0.8, value: 28, stackable: true, shopTier: 1, effectId: "mut_stew", effectName: "Guiso mutante", effectDesc: "+3 daño, +3 defensa", effectActions: 6, effectBonus: { dmg: 3, def: 3 } },
+  { id: 83, name: "Asado de brahmán", type: "food", heal: 50, weight: 1.0, value: 35, stackable: true, shopTier: 1, effectId: "brahmin", effectName: "Asado de brahmán", effectDesc: "+4 daño, +5 defensa", effectActions: 7, effectBonus: { dmg: 4, def: 5 } },
+  { id: 84, name: "Sopa de verduras", type: "food", heal: 20, weight: 0.5, value: 12, stackable: true, shopTier: 1, effectId: "veg_soup", effectName: "Sopa de verduras", effectDesc: "+3 defensa", effectActions: 5, effectBonus: { def: 3 } },
+  { id: 85, name: "Tortilla del Yermo", type: "food", heal: 22, weight: 0.4, value: 14, stackable: true, shopTier: 1, effectId: "tortilla", effectName: "Tortilla del Yermo", effectDesc: "+5% XP", effectActions: 5, effectBonus: { xpMult: 0.05 } },
+  { id: 86, name: "Estofado del superviviente", type: "food", heal: 60, weight: 1.0, value: 50, stackable: true, shopTier: 1, effectId: "surv_stew", effectName: "Estofado del superviviente", effectDesc: "+5 daño, +8 defensa", effectActions: 8, effectBonus: { dmg: 5, def: 8 } },
+
+  // --- OTROS / TARTERAS ---
+  { id: 14, name: "Tartera de Vault-Tec", type: "other", weight: 1, value: 100, stackable: true, shopTier: 1 },
+  { id: 15, name: "Tartera Nuka-Cola", type: "other", weight: 1, value: 150, stackable: true, shopTier: 1 },
+  { id: 29, name: "Tartera Legendaria", type: "other", weight: 1, value: 500, stackable: true, shopTier: 1 }
+];
+
+// ========== HABILIDADES LEGENDARIAS DE ARMAS (20) ==========
+const LEG_WEAPON_ABILITIES = [
+  { id: 'w_vamp', name: "Vampirismo", desc: "Cura un 20% del daño infligido." },
+  { id: 'w_crit', name: "Crítico Asegurado", desc: "+40% probabilidad de impacto crítico." },
+  { id: 'w_pen', name: "Penetración de Blindaje", desc: "Ignora 8 puntos de defensa enemiga." },
+  { id: 'w_poison', name: "Veneno Persistente", desc: "El enemigo sufre 5 de daño extra cada turno." },
+  { id: 'w_burn', name: "Incendiario", desc: "+12 de daño por quemadura." },
+  { id: 'w_freeze', name: "Congelante", desc: "Reduce el daño del enemigo un 25%." },
+  { id: 'w_exec', name: "Ejecutor", desc: "+50% de daño cuando el enemigo tiene menos del 30% HP." },
+  { id: 'w_double', name: "Disparo Doble", desc: "15% de probabilidad de atacar dos veces." },
+  { id: 'w_ammo', name: "Robo de Munición", desc: "Recuperas 1-3 balas al matar." },
+  { id: 'w_xp', name: "Cazador de Experiencia", desc: "+40% de XP al derrotar enemigos." },
+  { id: 'w_caps', name: "Avaricia del Yermo", desc: "+50% de chapas obtenidas en combate." },
+  { id: 'w_rad', name: "Emisor Radiactivo", desc: "+10 de daño radiactivo adicional." },
+  { id: 'w_stun', name: "Aturdidor", desc: "20% de probabilidad de que el enemigo pierda su turno." },
+  { id: 'w_lifesteal', name: "Sed de Sangre", desc: "Cura 8 HP fijos por ataque exitoso." },
+  { id: 'w_chain', name: "Daño en Cadena", desc: "El 30% del daño se aplica de nuevo." },
+  { id: 'w_lucky', name: "Golpe de Suerte", desc: "10% de probabilidad de infligir daño x3." },
+  { id: 'w_armorbreak', name: "Rompeblindajes", desc: "Reduce permanentemente 3 de defensa enemiga." },
+  { id: 'w_fury', name: "Furia Desatada", desc: "+15 de daño cuando tienes menos del 40% HP." },
+  { id: 'w_precision', name: "Precisión Mortal", desc: "Nunca fallas y +8 de daño base." },
+  { id: 'w_legend', name: "Cazador de Leyendas", desc: "+35% de daño contra enemigos legendarios." }
+];
+
+// ========== HABILIDADES LEGENDARIAS DE ARMADURAS (20) ==========
+const LEG_ARMOR_ABILITIES = [
+  { id: 'a_regen', name: "Regeneración", desc: "Recuperas 4 HP al final de cada turno de combate." },
+  { id: 'a_tank', name: "Tanque Viviente", desc: "+15 de defensa y +20 HP máximo." },
+  { id: 'a_dodge', name: "Evasión Perfecta", desc: "+15% de probabilidad de esquivar." },
+  { id: 'a_reflect', name: "Reflejo de Daño", desc: "Devuelves el 20% del daño recibido." },
+  { id: 'a_thorns', name: "Espinas", desc: "El atacante recibe 6 de daño al golpearte." },
+  { id: 'a_absorb', name: "Absorción", desc: "Cura 5 HP cada vez que recibes daño." },
+  { id: 'a_critres', name: "Resistencia Crítica", desc: "Reduce un 50% el daño de golpes críticos enemigos." },
+  { id: 'a_weight', name: "Carga Ligera", desc: "+25kg de capacidad de inventario." },
+  { id: 'a_hp', name: "Vitalidad Legendaria", desc: "+40 HP máximo permanente." },
+  { id: 'a_second', name: "Segunda Oportunidad", desc: "Una vez por combate, sobrevives con 1 HP." },
+  { id: 'a_xp', name: "Sabiduría del Yermo", desc: "+25% de experiencia ganada." },
+  { id: 'a_caps', name: "Imán de Chapas", desc: "+30% de chapas en todos los hallazgos." },
+  { id: 'a_ammo', name: "Munición Infinita", desc: "10% de probabilidad de no consumir munición." },
+  { id: 'a_medic', name: "Campo Médico", desc: "Los estimulantes curan un 40% más." },
+  { id: 'a_radres', name: "Traje Antirradiación", desc: "Inmunidad a eventos de radiación." },
+  { id: 'a_speed', name: "Agilidad Élite", desc: "+20% de probabilidad de huir con éxito." },
+  { id: 'a_power', name: "Potenciador", desc: "+6 de daño con cualquier arma." },
+  { id: 'a_luck', name: "Amuleto de la Suerte", desc: "Mayor probabilidad de encontrar objetos raros." },
+  { id: 'a_barter', name: "Comerciante Nato", desc: "Vendes objetos un 25% más caros." },
+  { id: 'a_immortal', name: "Piel de Acero", desc: "Reduce todo el daño recibido en 4 puntos." }
+];
+
+// RECETAS DE FABRICACIÓN
+// craftLevel requerido: 1-5
+const CRAFT_RECIPES = [
+  { id: 16, reqs: [{ id: 21, qty: 3 }, { id: 23, qty: 2 }, { id: 27, qty: 2 }], craftLvl: 1 },
+  { id: 17, reqs: [{ id: 21, qty: 2 }, { id: 20, qty: 4 }], craftLvl: 1 },
+  { id: 19, reqs: [{ id: 24, qty: 4 }, { id: 20, qty: 2 }], craftLvl: 1 },
+  { id: 18, reqs: [{ id: 21, qty: 4 }, { id: 24, qty: 3 }, { id: 28, qty: 1 }], craftLvl: 1 },
+  { id: 101, reqs: [{ id: 21, qty: 3 }, { id: 20, qty: 5 }, { id: 22, qty: 2 }], craftLvl: 2 },
+  { id: 146, reqs: [{ id: 21, qty: 2 }, { id: 24, qty: 3 }], craftLvl: 2 },
+  { id: 121, reqs: [{ id: 21, qty: 5 }, { id: 23, qty: 3 }, { id: 27, qty: 2 }], craftLvl: 3 },
+  { id: 109, reqs: [{ id: 13, qty: 3 }, { id: 22, qty: 4 }, { id: 23, qty: 2 }], craftLvl: 3 },
+  { id: 111, reqs: [{ id: 21, qty: 6 }, { id: 23, qty: 4 }, { id: 28, qty: 1 }], craftLvl: 4 },
+  { id: 209, reqs: [{ id: 21, qty: 8 }, { id: 24, qty: 5 }, { id: 25, qty: 3 }], craftLvl: 4 },
+  { id: 112, reqs: [{ id: 21, qty: 10 }, { id: 23, qty: 6 }, { id: 13, qty: 4 }, { id: 28, qty: 2 }], craftLvl: 5 },
+  { id: 210, reqs: [{ id: 21, qty: 12 }, { id: 25, qty: 5 }, { id: 28, qty: 3 }], craftLvl: 5 }
+];
+
+// ALQUIMIA - fabricar medicinas y drogas
+const ALCHEMY_RECIPES = [
+  { id: 7, reqs: [{ id: 35, qty: 2 }, { id: 30, qty: 1 }], alchemyLvl: 1 },
+  { id: 8, reqs: [{ id: 35, qty: 3 }, { id: 34, qty: 2 }, { id: 31, qty: 1 }], alchemyLvl: 2 },
+  { id: 74, reqs: [{ id: 35, qty: 2 }, { id: 34, qty: 1 }], alchemyLvl: 1 },
+  { id: 75, reqs: [{ id: 35, qty: 1 }, { id: 37, qty: 2 }], alchemyLvl: 1 },
+  { id: 70, reqs: [{ id: 35, qty: 2 }, { id: 47, qty: 2 }, { id: 31, qty: 1 }], alchemyLvl: 2 },
+  { id: 71, reqs: [{ id: 35, qty: 2 }, { id: 33, qty: 2 }, { id: 34, qty: 1 }], alchemyLvl: 3 },
+  { id: 73, reqs: [{ id: 33, qty: 2 }, { id: 30, qty: 2 }, { id: 34, qty: 1 }], alchemyLvl: 3 },
+  { id: 76, reqs: [{ id: 35, qty: 3 }, { id: 34, qty: 2 }, { id: 32, qty: 1 }], alchemyLvl: 3 },
+  { id: 72, reqs: [{ id: 34, qty: 3 }, { id: 33, qty: 2 }, { id: 36, qty: 1 }], alchemyLvl: 4 },
+  { id: 77, reqs: [{ id: 34, qty: 3 }, { id: 36, qty: 2 }, { id: 38, qty: 1 }], alchemyLvl: 5 }
+];
+
+// COCINA
+const COOK_RECIPES = [
+  { id: 80, reqs: [{ id: 40, qty: 2 }, { id: 48, qty: 1 }], cookLvl: 1 },
+  { id: 81, reqs: [{ id: 41, qty: 1 }, { id: 46, qty: 1 }], cookLvl: 1 },
+  { id: 84, reqs: [{ id: 44, qty: 2 }, { id: 45, qty: 2 }, { id: 48, qty: 1 }], cookLvl: 1 },
+  { id: 85, reqs: [{ id: 49, qty: 1 }, { id: 44, qty: 1 }], cookLvl: 2 },
+  { id: 82, reqs: [{ id: 42, qty: 1 }, { id: 47, qty: 2 }, { id: 48, qty: 1 }], cookLvl: 3 },
+  { id: 83, reqs: [{ id: 43, qty: 1 }, { id: 46, qty: 2 }, { id: 45, qty: 1 }], cookLvl: 4 },
+  { id: 86, reqs: [{ id: 43, qty: 1 }, { id: 42, qty: 1 }, { id: 44, qty: 2 }, { id: 48, qty: 2 }], cookLvl: 5 }
+];
+
+// Costes de mejora del refugio (en chatarra, no chapas)
+const UPGRADE_COSTS = {
+  craft: [
+    [{ id: 21, qty: 5 }, { id: 20, qty: 8 }, { id: 22, qty: 4 }],
+    [{ id: 21, qty: 8 }, { id: 23, qty: 5 }, { id: 27, qty: 4 }],
+    [{ id: 21, qty: 12 }, { id: 28, qty: 2 }, { id: 13, qty: 5 }],
+    [{ id: 28, qty: 4 }, { id: 23, qty: 8 }, { id: 36, qty: 3 }]
+  ],
+  mod: [
+    [{ id: 20, qty: 6 }, { id: 22, qty: 5 }, { id: 27, qty: 3 }],
+    [{ id: 21, qty: 6 }, { id: 13, qty: 4 }, { id: 25, qty: 3 }],
+    [{ id: 28, qty: 2 }, { id: 23, qty: 6 }, { id: 36, qty: 2 }],
+    [{ id: 28, qty: 3 }, { id: 38, qty: 2 }, { id: 13, qty: 6 }]
+  ],
+  lunchbox: [
+    [{ id: 30, qty: 5 }, { id: 31, qty: 5 }, { id: 39, qty: 3 }],
+    [{ id: 13, qty: 4 }, { id: 36, qty: 3 }, { id: 30, qty: 6 }],
+    [{ id: 28, qty: 2 }, { id: 38, qty: 2 }, { id: 36, qty: 4 }],
+    [{ id: 28, qty: 3 }, { id: 38, qty: 3 }, { id: 13, qty: 8 }]
+  ],
+  scrap: [
+    [{ id: 20, qty: 5 }, { id: 21, qty: 4 }, { id: 33, qty: 2 }],
+    [{ id: 23, qty: 4 }, { id: 27, qty: 4 }, { id: 33, qty: 3 }],
+    [{ id: 13, qty: 5 }, { id: 28, qty: 1 }, { id: 36, qty: 2 }],
+    [{ id: 28, qty: 2 }, { id: 23, qty: 6 }, { id: 36, qty: 3 }]
+  ],
+  alchemy: [
+    [{ id: 35, qty: 4 }, { id: 31, qty: 4 }, { id: 30, qty: 3 }],
+    [{ id: 35, qty: 6 }, { id: 34, qty: 3 }, { id: 31, qty: 5 }],
+    [{ id: 34, qty: 5 }, { id: 36, qty: 2 }, { id: 35, qty: 6 }],
+    [{ id: 34, qty: 6 }, { id: 38, qty: 2 }, { id: 36, qty: 3 }]
+  ],
+  cook: [
+    [{ id: 31, qty: 4 }, { id: 30, qty: 4 }, { id: 39, qty: 2 }],
+    [{ id: 31, qty: 6 }, { id: 32, qty: 3 }, { id: 39, qty: 3 }],
+    [{ id: 28, qty: 1 }, { id: 31, qty: 6 }, { id: 33, qty: 3 }],
+    [{ id: 28, qty: 2 }, { id: 36, qty: 2 }, { id: 39, qty: 4 }]
+  ],
+  storage: null // especial: escala dinámicamente
+};
+
+// MODIFICACIONES - meleeOnly / rangedOnly para filtrar
+const MODS_DB = [
+  { id: 'm_scope', name: "Mira Telescópica", target: 'weapon', rangedOnly: true, bonusDmg: 5, reqs: [{ id: 13, qty: 2 }, { id: 27, qty: 1 }], modLvl: 1 },
+  { id: 'm_barrel', name: "Cañón Largo", target: 'weapon', rangedOnly: true, bonusDmg: 7, reqs: [{ id: 27, qty: 2 }, { id: 20, qty: 3 }], modLvl: 1 },
+  { id: 'm_grip', name: "Empuñadura Reforzada", target: 'weapon', meleeOnly: true, bonusDmg: 4, reqs: [{ id: 24, qty: 2 }, { id: 20, qty: 3 }], modLvl: 1 },
+  { id: 'm_spike', name: "Puntas Afiladas", target: 'weapon', meleeOnly: true, bonusDmg: 6, reqs: [{ id: 21, qty: 2 }, { id: 20, qty: 4 }], modLvl: 1 },
+  { id: 'm_plates', name: "Placas Reforzadas", target: 'armor', bonusDef: 4, reqs: [{ id: 21, qty: 3 }, { id: 20, qty: 2 }], modLvl: 1 },
+  { id: 'm_kevlar', name: "Forro de Fibra", target: 'armor', bonusDef: 6, reqs: [{ id: 25, qty: 2 }, { id: 24, qty: 2 }], modLvl: 1 },
+  { id: 'm_suppressor', name: "Silenciador", target: 'weapon', rangedOnly: true, bonusDmg: 3, reqs: [{ id: 13, qty: 3 }, { id: 22, qty: 2 }], modLvl: 2 },
+  { id: 'm_stock', name: "Culata Táctica", target: 'weapon', rangedOnly: true, bonusDmg: 5, reqs: [{ id: 24, qty: 3 }, { id: 27, qty: 2 }], modLvl: 2 },
+  { id: 'm_weight', name: "Contrapeso", target: 'weapon', meleeOnly: true, bonusDmg: 8, reqs: [{ id: 21, qty: 4 }, { id: 26, qty: 2 }], modLvl: 2 },
+  { id: 'm_padding', name: "Acolchado Extra", target: 'armor', bonusDef: 5, reqs: [{ id: 24, qty: 4 }, { id: 25, qty: 1 }], modLvl: 2 },
+  { id: 'm_extended', name: "Cargador Ampliado", target: 'weapon', rangedOnly: true, bonusDmg: 4, reqs: [{ id: 13, qty: 2 }, { id: 22, qty: 3 }], modLvl: 3 },
+  { id: 'm_edge', name: "Filo Dentado", target: 'weapon', meleeOnly: true, bonusDmg: 10, reqs: [{ id: 21, qty: 3 }, { id: 28, qty: 1 }], modLvl: 3 },
+  { id: 'm_ceramic', name: "Placas Cerámicas", target: 'armor', bonusDef: 8, reqs: [{ id: 25, qty: 3 }, { id: 28, qty: 1 }], modLvl: 3 },
+  { id: 'm_laser', name: "Mira Láser", target: 'weapon', rangedOnly: true, bonusDmg: 9, reqs: [{ id: 13, qty: 4 }, { id: 22, qty: 3 }], modLvl: 4 },
+  { id: 'm_shock', name: "Mango Electrificado", target: 'weapon', meleeOnly: true, bonusDmg: 12, reqs: [{ id: 13, qty: 3 }, { id: 22, qty: 4 }], modLvl: 4 },
+  { id: 'm_composite', name: "Blindaje Compuesto", target: 'armor', bonusDef: 10, reqs: [{ id: 28, qty: 2 }, { id: 25, qty: 3 }], modLvl: 4 },
+  { id: 'm_plasma', name: "Acelerador de Plasma", target: 'weapon', rangedOnly: true, bonusDmg: 14, reqs: [{ id: 13, qty: 5 }, { id: 28, qty: 2 }], modLvl: 5 },
+  { id: 'm_vibro', name: "Hoja Vibratoria", target: 'weapon', meleeOnly: true, bonusDmg: 16, reqs: [{ id: 13, qty: 4 }, { id: 28, qty: 2 }], modLvl: 5 },
+  { id: 'm_powered', name: "Servoasistido", target: 'armor', bonusDef: 14, reqs: [{ id: 13, qty: 4 }, { id: 23, qty: 3 }, { id: 28, qty: 2 }], modLvl: 5 }
+];
+
+const QUEST_POOL = [
+  { id: 'q_kill', title: "Limpieza de Amenazas", desc: "Derrota a 3 enemigos en el Yermo.", type: "kill", target: 3, reward: { caps: 50, xp: 40, item: 9, qty: 1 } },
+  { id: 'q_explore', title: "Cartografía del Desastre", desc: "Explora 5 zonas distintas.", type: "explore", target: 5, reward: { caps: 40, xp: 30, item: 7, qty: 2 } },
+  { id: 'q_scavenge', title: "Chatarrero Prolífico", desc: "Consigue 2 piezas de chatarra o suministros.", type: "loot", target: 2, reward: { caps: 60, xp: 50, item: 20, qty: 4 } },
+  { id: 'q_legend', title: "Caza de Leyendas", desc: "Derrota a 2 enemigos Legendarios.", type: "kill_legend", target: 2, reward: { caps: 150, xp: 120, item: 29, qty: 1 } }
+];
+
+const PERKS_DB = [
+  { id: 'p_iron', name: "Mano de Hierro", desc: "+3 al daño extra en combate.", maxRank: 3 },
+  { id: 'p_scav', name: "Chatarrero Astuto", desc: "+25% extra de chapas conseguidas.", maxRank: 2 },
+  { id: 'p_trader', name: "Negociador del Yermo", desc: "10% de descuento en tiendas.", maxRank: 2 },
+  { id: 'p_bloody', name: "Sanguinario", desc: "+5% probabilidad de impacto crítico.", maxRank: 3 },
+  { id: 'p_runner', name: "Trotamundos", desc: "+10% de experiencia ganada explorando.", maxRank: 2 },
+  { id: 'p_medic', name: "Médico de Campo", desc: "Los estimulantes curan +15 de salud extra.", maxRank: 3 },
+  { id: 'p_mule', name: "Mula de Carga", desc: "+10kg a la capacidad máxima de inventario.", maxRank: 3 },
+  { id: 'p_skin', name: "Piel Dura", desc: "+2 a la defensa base del personaje.", maxRank: 3 },
+  { id: 'p_ammo', name: "Aparición de Munición", desc: "Encuentras más balas en la exploración.", maxRank: 2 },
+  { id: 'p_crit', name: "Ojo de Halcón", desc: "+15% de daño con golpes críticos.", maxRank: 2 },
+  { id: 'p_luck', name: "Moneda de la Suerte", desc: "Mayor probabilidad de encontrar alijos.", maxRank: 2 },
+  { id: 'p_reflex', name: "Reflejos Rápidos", desc: "5% de probabilidad de esquivar ataques.", maxRank: 3 },
+  { id: 'p_lead', name: "Estómago de Plomo", desc: "Reduce el daño sufrido por radiación.", maxRank: 2 },
+  { id: 'p_barter', name: "Vendedor de Humo", desc: "Vendes tus objetos un 15% más caros.", maxRank: 2 },
+  { id: 'p_ninja', name: "Sigilo Sombrío", desc: "Facilidad para huir de combates difíciles.", maxRank: 2 },
+  { id: 'p_tough', name: "Inquebrantable", desc: "+20 Salud máxima permanente.", maxRank: 3 },
+  { id: 'p_scrappy', name: "Reciclador Pro", desc: "Probabilidad de obtener chatarra al luchar.", maxRank: 2 },
+  { id: 'p_fury', name: "Furia Mutante", desc: "+5 de daño extra cuando tienes menos del 30% HP.", maxRank: 2 },
+  { id: 'p_guns', name: "Pistolero Experto", desc: "+2 daño con armas que usen munición.", maxRank: 3 },
+  { id: 'p_brawler', name: "Matón Callejero", desc: "+4 daño extra con armas cuerpo a cuerpo.", maxRank: 2 }
+];
+
+let P = {
+  playerName: "Superviviente",
+  x: 0, y: 0,
+  lvl: 1, xp: 0, caps: 75,
+  hp: 100, baseMaxHp: 100,
+  rads: 0,
+  radioSignal: null,
+  location: null,
+  baseMaxWeight: 25, 
+  bagUpgradeCost: 50,
+  shopLevel: 1,
+  craftLevel: 1,
+  modLevel: 1,
+  lunchboxLevel: 1,
+  scrapLevel: 1,
+  alchemyLevel: 1,
+  cookLevel: 1,
+  storageMaxWeight: 100,
+  storageUpgradeRank: 0,
+  specialPts: 0,
+  perkPts: 0,
+  special: { S: 1, P: 1, E: 1, C: 1, I: 1, A: 1, L: 1 },
+  perks: {},
+  ammoBox: { ".38": 24, "Cartucho de escopeta": 6, "Célula de microfusión": 0, "5.56mm": 0, "10mm": 10, ".44 Magnum": 0, "Bengala": 0, "Cartucho de plasma": 0, "Célula de energía": 0, "Onda Gamma": 0, "Dardo": 0, "Clavo": 0, ".45 ACP": 0, ".308": 0, "Cartucho de 2mm": 0, ".45-70": 0, "5mm": 0, "Misil": 0, "Combustible de lanzallamas": 0, "Mini Nukes": 0, "Bala de cañón": 0, "7.62mm": 0, "Núcleo de fusión": 0, "Célula criogénica": 0 },
+  inv: [
+    { uid: 101, id: 1, qty: 1, mods: [] },
+    { uid: 102, id: 5, qty: 1, mods: [] },
+    { uid: 103, id: 7, qty: 2 },
+    { uid: 104, id: 14, qty: 1 },
+    { uid: 105, id: 20, qty: 5 },
+    { uid: 106, id: 21, qty: 4 },
+    { uid: 107, id: 35, qty: 3 },
+    { uid: 108, id: 40, qty: 2 }
+  ],
+  storage: [],
+  activeEffects: [],
+  equippedWeaponUid: 101,
+  equippedArmorUid: 102,
+  subtab: 'weapon',
+  vaultSubtab: 'lunchboxes',
+  fabricSubtab: 'crafting',
+  storageSubtab: 'weapon',
+  invPage: 0,
+  craftPage: 0,
+  storagePage: 0,
+  shopSubtab: 'weapon',
+  activeQuests: []
+};
+
+// Estado del combate por turnos
+let combatState = null;
+
+// Enemigos con nivel. Solo aparecen si nivel <= jugador
+const ENEMIES = [
+  { name: "Rata irradiada", level: 1, hp: 18, dmg: 4, loot: [7, 20, 9], caps: [3, 10] },
+  { name: "Saqueador novato", level: 1, hp: 25, dmg: 6, loot: [1, 7, 9, 20], caps: [5, 15] },
+  { name: "Perro salvaje", level: 2, hp: 28, dmg: 7, loot: [7, 24], caps: [4, 12] },
+  { name: "Saqueador", level: 3, hp: 35, dmg: 8, loot: [1, 7, 9, 20, 21], caps: [8, 22] },
+  { name: "Necrófago débil", level: 3, hp: 32, dmg: 9, loot: [7, 9, 20], caps: [6, 18] },
+  { name: "Bestia mutada pequeña", level: 4, hp: 42, dmg: 10, loot: [7, 24, 26], caps: [8, 20] },
+  { name: "Saqueador armado", level: 5, hp: 50, dmg: 12, loot: [101, 7, 9, 21], caps: [12, 28] },
+  { name: "Necrófago", level: 5, hp: 48, dmg: 11, loot: [7, 9, 13], caps: [10, 25] },
+  { name: "Bestia mutada", level: 6, hp: 55, dmg: 13, loot: [7, 24, 26, 21], caps: [12, 30] },
+  { name: "Robot defectuoso", level: 7, hp: 65, dmg: 14, loot: [3, 11, 13, 22, 23], caps: [15, 35] },
+  { name: "Saqueador veterano", level: 8, hp: 70, dmg: 16, loot: [101, 7, 301, 21], caps: [18, 40] },
+  { name: "Necrófago feroz", level: 9, hp: 75, dmg: 17, loot: [7, 8, 13, 20], caps: [20, 45] },
+  { name: "Robot de seguridad", level: 10, hp: 85, dmg: 18, loot: [105, 11, 13, 22, 28], caps: [22, 50] },
+  { name: "Saqueador de élite", level: 12, hp: 95, dmg: 20, loot: [109, 7, 301, 28], caps: [28, 60] },
+  { name: "Bestia mutada alfa", level: 12, hp: 100, dmg: 21, loot: [7, 24, 26, 28], caps: [25, 55] },
+  { name: "Sintético defectuoso", level: 14, hp: 110, dmg: 22, loot: [105, 13, 22, 28], caps: [30, 65] },
+  { name: "Supermutante", level: 15, hp: 130, dmg: 24, loot: [141, 7, 21, 23], caps: [35, 75] },
+  { name: "Saqueador jefe", level: 16, hp: 120, dmg: 25, loot: [112, 7, 310, 28], caps: [40, 80] },
+  { name: "Robot militar", level: 18, hp: 145, dmg: 27, loot: [117, 11, 13, 28], caps: [45, 90] },
+  { name: "Supermutante brutal", level: 20, hp: 170, dmg: 30, loot: [157, 7, 21, 28], caps: [50, 100] },
+  { name: "Cazador del Yermo", level: 22, hp: 155, dmg: 28, loot: [114, 7, 310, 13], caps: [55, 110] },
+  { name: "Centinela del Enclave", level: 25, hp: 190, dmg: 32, loot: [117, 13, 28, 319], caps: [70, 130] },
+  { name: "Moscas de sangre", level: 2, hp: 20, dmg: 5, loot: [7, 20], caps: [3, 8] },
+  { name: "Topo mutante", level: 4, hp: 38, dmg: 9, loot: [7, 24, 21], caps: [7, 16] },
+  { name: "Mercenario del Yermo", level: 11, hp: 88, dmg: 19, loot: [109, 7, 301, 21], caps: [25, 55] },
+  { name: "Asesino de la Hermandad", level: 17, hp: 125, dmg: 26, loot: [113, 7, 305, 28], caps: [42, 85] },
+  { name: "Devorador de muerte", level: 28, hp: 250, dmg: 38, loot: [163, 7, 28, 316], caps: [90, 160] },
+  { name: "Behemoth mutante", level: 30, hp: 320, dmg: 42, loot: [158, 21, 23, 28], caps: [100, 180] }
+];
+
+const LEGENDARY_ENEMIES = [
+  { name: "Saqueador Legendario", level: 5, hp: 90, dmg: 16, loot: [1, 7, 9], caps: [40, 90] },
+  { name: "Necrófago Irradiado Legendario", level: 8, hp: 115, dmg: 20, loot: [7, 9, 20], caps: [50, 100] },
+  { name: "Bestia Mutada Alfa Legendaria", level: 10, hp: 140, dmg: 24, loot: [7, 24, 26], caps: [55, 120] },
+  { name: "Robot Guardián Antiguo", level: 12, hp: 165, dmg: 28, loot: [3, 11, 13, 28], caps: [70, 140] },
+  { name: "Supermutante Enfurecido", level: 15, hp: 200, dmg: 32, loot: [21, 23, 28], caps: [80, 160] },
+  { name: "Cazador del Yermo Legendario", level: 18, hp: 180, dmg: 30, loot: [101, 7, 13], caps: [75, 150] },
+  { name: "Señor de la Guerra Saqueador", level: 20, hp: 220, dmg: 35, loot: [112, 7, 28], caps: [100, 180] },
+  { name: "Coloso Mutante", level: 25, hp: 280, dmg: 40, loot: [158, 21, 28], caps: [120, 220] }
+];
+
+// Genera un objeto legendario (arma o armadura) con habilidad aleatoria
+function generateLegendaryItem(preferType = null) {
+  let candidates = DB_ITEMS.filter(i => 
+    (i.type === 'weapon' || i.type === 'armor') && 
+    i.shopTier >= 2 && i.shopTier <= 8
+  );
+  if (preferType) candidates = candidates.filter(i => i.type === preferType);
+  if (candidates.length === 0) candidates = DB_ITEMS.filter(i => i.type === 'weapon' || i.type === 'armor');
+
+  let base = candidates[Math.floor(Math.random() * candidates.length)];
+  let abilityPool = base.type === 'weapon' ? LEG_WEAPON_ABILITIES : LEG_ARMOR_ABILITIES;
+  let ability = abilityPool[Math.floor(Math.random() * abilityPool.length)];
+
+  let newUid = Date.now() + Math.floor(Math.random() * 100000);
+  let inst = {
+    uid: newUid,
+    id: base.id,
+    qty: 1,
+    mods: [],
+    legendary: true,
+    abilityId: ability.id,
+    abilityName: ability.name,
+    abilityDesc: ability.desc
+  };
+  return inst;
+}
+
+function addLegendaryToInv(preferType = null) {
+  let inst = generateLegendaryItem(preferType);
+  let base = getItemBase(inst.id);
+
+  let currentWeight = P.inv.reduce((acc, i) => {
+    let b = getItemBase(i.id);
+    return acc + ((b?.weight || 0) * (i.qty || 1));
+  }, 0);
+
+  if (currentWeight + (base.weight || 1) > getMaxWeight()) {
+    logMsg("¡Mochila llena! No puedes cargar el objeto legendario.");
+    return null;
+  }
+
+  P.inv.push(inst);
+  return inst;
+}
+
+function getWeaponAbility() {
+  let inst = P.inv.find(i => i.uid === P.equippedWeaponUid);
+  if (inst && inst.legendary && inst.abilityId) {
+    return LEG_WEAPON_ABILITIES.find(a => a.id === inst.abilityId) || null;
+  }
+  return null;
+}
+
+function getArmorAbility() {
+  let inst = P.inv.find(i => i.uid === P.equippedArmorUid);
+  if (inst && inst.legendary && inst.abilityId) {
+    return LEG_ARMOR_ABILITIES.find(a => a.id === inst.abilityId) || null;
+  }
+  return null;
+}
+
+function getItemBase(id) { return DB_ITEMS.find(i => i.id === id); }
+function getRequiredXP() { return P.lvl * 100; }
+
+function getCumulativeBonus(n) {
+  if (n <= 0) return 0;
+  return (n * (n + 1)) / 2;
+}
+
+function getMaxWeight() {
+  let strBonus = (P.special ? P.special.S : 1) * 10;
+  let bagCapacity = Math.min(500, P.baseMaxWeight);
+  let perkBonus = ((P.perks && P.perks.p_mule) || 0) * 10;
+  let legBonus = 0;
+  let armAb = getArmorAbility();
+  if (armAb && armAb.id === 'a_weight') legBonus = 25;
+  return bagCapacity + strBonus + perkBonus + legBonus;
+}
+
+function getBaseMaxHp() {
+  let perkBonus = ((P.perks && P.perks.p_tough) || 0) * 20;
+  let levelHpBonus = 0;
+  if (P.lvl >= 2) {
+    levelHpBonus = 20 + ((P.lvl - 2) * 10);
+  }
+  let legBonus = 0;
+  let armAb = getArmorAbility();
+  if (armAb) {
+    if (armAb.id === 'a_hp') legBonus = 40;
+    if (armAb.id === 'a_tank') legBonus = 20;
+  }
+  return P.baseMaxHp + levelHpBonus + perkBonus + legBonus;
+}
+
+// La radiación reduce el máximo de vida efectivo
+function getRadHpMult() {
+  let r = P.rads || 0;
+  if (r >= 1000) return 0.20;
+  if (r >= 800) return 0.35;
+  if (r >= 600) return 0.55;
+  if (r >= 400) return 0.75;
+  if (r >= 200) return 0.90;
+  return 1.0;
+}
+
+function getMaxHp() {
+  return Math.max(1, Math.floor(getBaseMaxHp() * getRadHpMult()));
+}
+
+// Resistencia a radiación de la armadura (0-80%)
+function getRadResistance() {
+  let a = getEquippedArmor();
+  let res = 0;
+  // Defensa aporta resistencia (aprox)
+  if (a && a.def) res += Math.min(50, a.def * 0.8);
+  // Servoarmaduras y hazmat
+  if (a && a.name) {
+    let n = a.name.toLowerCase();
+    if (n.includes('hazmat') || n.includes('antirradi')) res += 40;
+    if (n.includes('servoarmadura') || n.includes('t-45') || n.includes('t-51') || n.includes('t-60') || n.includes('x-01')) res += 25;
+  }
+  let armAb = getArmorAbility();
+  if (armAb && armAb.id === 'a_radres') res += 50;
+  // Rad-X efecto activo
+  res += getEffectBonus('radRes') || 0;
+  return Math.min(85, Math.floor(res));
+}
+
+function addRads(amount) {
+  if (amount <= 0) return;
+  let res = getRadResistance();
+  let actual = Math.max(1, Math.floor(amount * (1 - res / 100)));
+  P.rads = Math.min(1000, (P.rads || 0) + actual);
+  logMsg("Radiación +" + actual + " (total: " + P.rads + "/1000)" + (res > 0 ? " [Res " + res + "%]" : ""));
+  // Ajustar HP si supera el nuevo máximo
+  let maxhp = getMaxHp();
+  if (P.hp > maxhp) P.hp = maxhp;
+}
+
+function removeRads(amount) {
+  let before = P.rads || 0;
+  P.rads = Math.max(0, before - amount);
+  let removed = before - P.rads;
+  if (removed > 0) logMsg("Radiación -" + removed + " (total: " + P.rads + "/1000)");
+  return removed;
+}
+
+function getRadStatusText() {
+  let r = P.rads || 0;
+  if (r >= 800) return "CRÍTICA";
+  if (r >= 600) return "Grave";
+  if (r >= 400) return "Alta";
+  if (r >= 200) return "Moderada";
+  if (r > 0) return "Baja";
+  return "Limpia";
+}
+
+function getDefenseBonusFromEndurance() {
+  let endPts = P.special ? P.special.E : 1;
+  return getCumulativeBonus(endPts);
+}
+
+function formatItemGainName(item, count = 1) {
+  if (!item) return "";
+  if (item.type === 'ammo') {
+    let totalBalas = (item.qty || 1) * count;
+    return `${totalBalas} balas de ${item.name}`;
+  }
+  return count > 1 ? `${count}x ${item.name}` : `1x ${item.name}`;
+}
+
+function addItemToInv(baseId, count = 1) {
+  let it = getItemBase(baseId);
+  if (!it) return false;
+
+  if (it.type === 'ammo') {
+    let addQty = (it.qty || 1) * count;
+    P.ammoBox[it.ammoKey] = (P.ammoBox[it.ammoKey] || 0) + addQty;
+    return true;
+  }
+  
+  let currentWeight = P.inv.reduce((acc, inst) => {
+    let base = getItemBase(inst.id);
+    return acc + ((base?.weight || 0) * (inst.qty || 1));
+  }, 0);
+
+  let addedWeight = it.weight * count;
+
+  if (currentWeight + addedWeight > getMaxWeight()) {
+    logMsg("¡Mochila llena! No puedes cargar " + formatItemGainName(it, count) + ".");
+    return false;
+  }
+
+  if (it.stackable) {
+    let existing = P.inv.find(i => i.id === baseId);
+    if (existing) {
+      existing.qty = (existing.qty || 1) + count;
+      return existing.uid;
+    }
+  }
+
+  let newUid = Date.now() + Math.floor(Math.random() * 100000);
+  P.inv.push({ uid: newUid, id: baseId, qty: count, mods: [] });
+  return newUid;
+}
+
+function removeOneItemByBaseId(baseId) {
+  let idx = P.inv.findIndex(i => i.id === baseId);
+  if (idx !== -1) {
+    let inst = P.inv[idx];
+    if (inst.qty && inst.qty > 1) {
+      inst.qty--;
+    } else {
+      P.inv.splice(idx, 1);
+    }
+    return true;
+  }
+  return false;
+}
+
+function countItemsByBaseId(baseId) {
+  let it = getItemBase(baseId);
+  if (it && it.type === 'ammo') {
+    return P.ammoBox[it.ammoKey] || 0;
+  }
+  return P.inv.filter(i => i.id === baseId).reduce((acc, i) => acc + (i.qty || 1), 0);
+}
+
+function getEquippedWeapon() {
+  let inst = P.inv.find(i => i.uid === P.equippedWeaponUid);
+  if (!inst) return { name: "Desarmado", damage: 2, ammoType: "Ninguna (Cuerpo a cuerpo)", mods: [], legendary: false };
+  let base = getItemBase(inst.id);
+  let modDmg = (inst.mods || []).reduce((acc, mId) => {
+    let m = MODS_DB.find(x => x.id === mId);
+    return acc + (m ? m.bonusDmg || 0 : 0);
+  }, 0);
+  return { 
+    ...base, 
+    damage: base.damage + modDmg, 
+    mods: inst.mods || [],
+    legendary: !!inst.legendary,
+    abilityId: inst.abilityId || null,
+    abilityName: inst.abilityName || null
+  };
+}
+
+function getEquippedArmor() {
+  let inst = P.inv.find(i => i.uid === P.equippedArmorUid);
+  if (!inst) return { name: "Sin armadura", def: 0, mods: [], legendary: false };
+  let base = getItemBase(inst.id);
+  let modDef = (inst.mods || []).reduce((acc, mId) => {
+    let m = MODS_DB.find(x => x.id === mId);
+    return acc + (m ? m.bonusDef || 0 : 0);
+  }, 0);
+  return { 
+    ...base, 
+    def: base.def + modDef, 
+    mods: inst.mods || [],
+    legendary: !!inst.legendary,
+    abilityId: inst.abilityId || null,
+    abilityName: inst.abilityName || null
+  };
+}
+
+function logMsg(msg) {
+  const box = document.getElementById('log');
+  if (!box) return;
+  const el = document.createElement('div');
+  el.className = 'log-item';
+  el.textContent = "> " + msg;
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
+
+function updateStats() {
+  let wCap = P.inv.reduce((acc, inst) => {
+    let base = getItemBase(inst.id);
+    return acc + ((base?.weight || 0) * (inst.qty || 1));
+  }, 0);
+  let maxhp = getMaxHp();
+  let maxw = getMaxWeight();
+  let reqXp = getRequiredXP();
+
+  if (P.hp > maxhp) P.hp = maxhp;
+
+  document.getElementById('st-lvl').textContent = P.lvl;
+  document.getElementById('st-xp').textContent = P.xp;
+  document.getElementById('st-maxxp').textContent = reqXp;
+  document.getElementById('st-caps').textContent = P.caps;
+  document.getElementById('st-weight').textContent = wCap.toFixed(1);
+  document.getElementById('st-maxweight').textContent = maxw;
+
+  const w = getEquippedWeapon();
+  const a = getEquippedArmor();
+  let totalDmg = w.damage + (((P.perks && P.perks.p_iron) || 0) * 3) + getEffectBonus('dmg');
+  let totalDef = a.def + (((P.perks && P.perks.p_skin) || 0) * 2) + getDefenseBonusFromEndurance() + getEffectBonus('def');
+
+  let ammoDisplay = w.ammoType.includes("Ninguna") ? "Inf." : (P.ammoBox[w.ammoType] || 0);
+
+  // Penalización de daño por radiación alta
+  if ((P.rads || 0) >= 600) totalDmg = Math.max(1, totalDmg - 3);
+  if ((P.rads || 0) >= 800) totalDmg = Math.max(1, totalDmg - 2);
+
+  let rads = P.rads || 0;
+  let radRes = getRadResistance();
+  let radColor = rads >= 600 ? '#ff003c' : (rads >= 200 ? '#ff6600' : 'var(--accent)');
+
+  let nameEl = document.getElementById('aside-name');
+  if (nameEl) nameEl.textContent = (P.playerName || "SUPERVIVIENTE").toUpperCase();
+  document.getElementById('aside-hp').textContent = P.hp + "/" + maxhp;
+  let asideRad = document.getElementById('aside-rad');
+  if (asideRad) {
+    asideRad.textContent = rads + " / 1000 (" + getRadStatusText() + ")";
+    asideRad.style.color = radColor;
+  }
+  let asideRadRes = document.getElementById('aside-radres');
+  if (asideRadRes) asideRadRes.textContent = radRes + "%";
+  document.getElementById('aside-wpn').textContent = w.name;
+  document.getElementById('aside-arm').textContent = a.name;
+  document.getElementById('aside-dmg').textContent = totalDmg;
+  document.getElementById('aside-def').textContent = totalDef;
+  document.getElementById('aside-ammo').textContent = ammoDisplay;
+
+  document.getElementById('qs-hp').textContent = P.hp + "/" + maxhp;
+  let qsRad = document.getElementById('qs-rad');
+  if (qsRad) {
+    qsRad.textContent = rads;
+    qsRad.style.color = radColor;
+  }
+  document.getElementById('qs-dmg').textContent = totalDmg;
+  document.getElementById('qs-def').textContent = totalDef;
+  document.getElementById('qs-ammo').textContent = ammoDisplay;
+}
+
+function addXP(amount) {
+  let bonusXP = Math.floor(amount * (1 + (P.special.I * 0.05) + getEffectBonus('xpMult')));
+  if (P.perks && P.perks.p_runner) bonusXP = Math.floor(bonusXP * (1 + (P.perks.p_runner * 0.1)));
+  
+  P.xp += bonusXP;
+
+  while (P.xp >= getRequiredXP()) {
+    P.xp -= getRequiredXP();
+    P.lvl++;
+    P.specialPts++;
+    
+    if (P.lvl % 2 === 0) {
+      P.perkPts++;
+      logMsg("¡Subes al nivel " + P.lvl + "! Ganaste 1 Punto S.P.E.C.I.A.L. y 1 Punto de Perk.");
+    } else {
+      logMsg("¡Subes al nivel " + P.lvl + "! Ganaste 1 Punto S.P.E.C.I.A.L.");
+    }
+    
+    P.hp = getMaxHp();
+  }
+}
+
+function openPerkSelection() {
+  if (P.perkPts <= 0) return;
+
+  let availablePerks = PERKS_DB.filter(p => ((P.perks && P.perks[p.id]) || 0) < p.maxRank);
+  if (availablePerks.length === 0) {
+    logMsg("¡Ya has alcanzado el rango máximo en todas las Perks!");
+    return;
+  }
+
+  let shuffled = [...availablePerks].sort(() => 0.5 - Math.random());
+  let options = shuffled.slice(0, 3);
+
+  let m = document.getElementById('modal');
+  let html = `
+    <h2 style="color:var(--accent);">⚡ ELIGE UNA PERK</h2>
+    <p style="font-size:12px; color:#8d9880;">Puntos disponibles: ${P.perkPts}. Selecciona 1 entre estas 3 opciones:</p>
+  `;
+
+  options.forEach(pk => {
+    let curRank = (P.perks && P.perks[pk.id]) || 0;
+    html += `
+      <div class="item" style="border-color:var(--accent);">
+        <b style="color:var(--accent);">${pk.name}</b>
+        <span style="font-size:11px; color:var(--gold);"> (Rango actual: ${curRank}/${pk.maxRank})</span><br>
+        <span style="font-size:12px;">${pk.desc}</span><br>
+        <button style="margin-top:8px; width:100%; background:var(--accent); color:#111; font-weight:bold;" onclick="selectPerk('${pk.id}')">Elegir Perk</button>
+      </div>
+    `;
+  });
+
+  html += `<button style="margin-top:10px; width:100%;" onclick="closeModal()">Cancelar</button>`;
+  document.getElementById('modal-body').innerHTML = html;
+  m.classList.add('show');
+}
+
+function selectPerk(perkId) {
+  let pk = PERKS_DB.find(p => p.id === perkId);
+  if (!P.perks) P.perks = {};
+  if (!P.perks[perkId]) P.perks[perkId] = 0;
+
+  P.perks[perkId]++;
+  P.perkPts--;
+
+  logMsg("¡Has adquirido/subido de rango la Perk: " + pk.name + "!");
+  closeModal();
+  renderCharacter();
+  updateStats();
+}
+
+function addSpecialPoint(stat) {
+  if (P.specialPts > 0 && P.special[stat] < 10) {
+    P.special[stat]++;
+    P.specialPts--;
+    logMsg("Aumentaste tu atributo S.P.E.C.I.A.L: " + stat);
+    renderCharacter();
+    updateStats();
+  }
+}
+
+function renderCharacter() {
+  let maxhp = getMaxHp();
+  let maxw = getMaxWeight();
+  let reqXp = getRequiredXP();
+
+  let html = `
+    <h2>ESTADO DEL JUGADOR</h2>
+    <div class="row"><span>Nivel Actual</span><b>${P.lvl}</b></div>
+    <div class="row"><span>Puntos de Experiencia</span><b>${P.xp} / ${reqXp}</b></div>
+    <div class="row"><span>Salud Actual</span><b>${P.hp} / ${maxhp}</b></div>
+    <div class="row"><span>Radiación</span><b style="color:#ff6600;">${P.rads || 0} / 1000 (${getRadStatusText()})</b></div>
+    <div class="row"><span>Res. Radiación</span><b>${getRadResistance()}%</b></div>
+    <div class="row"><span>Capacidad de Carga Total</span><b>${maxw} kg</b></div>
+    <p style="font-size:11px; color:#8d9880;">La radiación reduce tu vida máxima: Baja 90% · Alta 75% · Grave 55% · Crítica 35%.</p>
+
+    <h3 style="color:var(--accent); margin-top:15px;">ATRIBUTOS S.P.E.C.I.A.L. (Puntos Libres: ${P.specialPts})</h3>
+    <div class="spec-grid">
+      <div class="spec-box"><span>(S) Fuerza: <b>${P.special.S}</b> (+${P.special.S * 10}kg carga)</span><button ${P.specialPts === 0 || P.special.S >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('S')">+</button></div>
+      <div class="spec-box"><span>(P) Percepción: <b>${P.special.P}</b> (+${P.special.P * 2}% loot/misión)</span><button ${P.specialPts === 0 || P.special.P >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('P')">+</button></div>
+      <div class="spec-box"><span>(E) Resistencia: <b>${P.special.E}</b> (+${getDefenseBonusFromEndurance()} defensa acum.)</span><button ${P.specialPts === 0 || P.special.E >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('E')">+</button></div>
+      <div class="spec-box"><span>(C) Carisma: <b>${P.special.C}</b> (-${P.special.C * 2}% precio tienda)</span><button ${P.specialPts === 0 || P.special.C >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('C')">+</button></div>
+      <div class="spec-box"><span>(I) Inteligencia: <b>${P.special.I}</b> (+${P.special.I * 5}% EXP bonus)</span><button ${P.specialPts === 0 || P.special.I >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('I')">+</button></div>
+      <div class="spec-box"><span>(A) Agilidad: <b>${P.special.A}</b> (+${P.special.A * 3}% huida/esquiva)</span><button ${P.specialPts === 0 || P.special.A >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('A')">+</button></div>
+      <div class="spec-box" style="grid-column: span 2;"><span>(L) Suerte: <b>${P.special.L}</b> (+${P.special.L * 2}% prob. crítico)</span><button ${P.specialPts === 0 || P.special.L >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('L')">+</button></div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+      <h3 style="color:var(--accent); margin:0;">PERKS (Puntos Libres: ${P.perkPts})</h3>
+      <button ${P.perkPts === 0 ? 'disabled' : ''} style="background:var(--accent); color:#111; font-weight:bold;" onclick="openPerkSelection()">+ AÑADIR PERK</button>
+    </div>
+  `;
+
+  let acquiredPerkKeys = Object.keys(P.perks || {}).filter(k => P.perks[k] > 0);
+
+  if (acquiredPerkKeys.length === 0) {
+    html += `<p style="font-size:12px; color:#8d9880; margin-top:10px;">No tienes ninguna Perk activa. Pulsa "Añadir Perk" cuando tengas puntos disponibles.</p>`;
+  } else {
+    html += `<div style="margin-top:10px;">`;
+    acquiredPerkKeys.forEach(key => {
+      let pk = PERKS_DB.find(p => p.id === key);
+      let r = P.perks[key];
+      if (pk) {
+        html += `
+          <div class="item">
+            <div class="item-head">
+              <b style="color:var(--accent);">${pk.name}</b>
+              <span style="font-size:11px; color:var(--gold);">Rango: ${r} / ${pk.maxRank}</span>
+            </div>
+            <span style="font-size:12px; color:#8d9880;">${pk.desc}</span>
+          </div>
+        `;
+      }
+    });
+    html += `</div>`;
+  }
+
+  // Efectos activos
+  html += `<h3 style="color:var(--accent); margin-top:20px;">EFECTOS ACTIVOS</h3>`;
+  if (!P.activeEffects || P.activeEffects.length === 0) {
+    html += `<p style="font-size:12px; color:#8d9880;">Ningún efecto activo. Usa comida, bebidas o químicos para obtener bonos temporales. Cada movimiento o exploración consume 1 acción de duración.</p>`;
+  } else {
+    P.activeEffects.forEach(e => {
+      html += `<div class="item" style="border-color:var(--gold);">
+        <div class="item-head">
+          <b style="color:var(--gold);">${e.name}</b>
+          <span style="font-size:11px; color:var(--accent);">${e.remaining} acciones restantes</span>
+        </div>
+        <span style="font-size:12px; color:#8d9880;">${e.desc || ''}</span>
+      </div>`;
+    });
+  }
+
+  document.getElementById('main-view').innerHTML = html;
+}
+
+/* SISTEMA DE REFUGIO CON SUBSECCIONES */
+
+function ensureVaultDefaults() {
+  if (!P.craftLevel) P.craftLevel = 1;
+  if (!P.modLevel) P.modLevel = 1;
+  if (!P.lunchboxLevel) P.lunchboxLevel = 1;
+  if (!P.scrapLevel) P.scrapLevel = 1;
+  if (!P.alchemyLevel) P.alchemyLevel = 1;
+  if (!P.cookLevel) P.cookLevel = 1;
+  if (!P.storage) P.storage = [];
+  if (P.storageMaxWeight === undefined) P.storageMaxWeight = 100;
+  if (P.storageUpgradeRank === undefined) P.storageUpgradeRank = 0;
+  if (!P.activeEffects) P.activeEffects = [];
+  if (!P.fabricSubtab) P.fabricSubtab = 'crafting';
+  if (P.craftPage === undefined) P.craftPage = 0;
+  if (P.storagePage === undefined) P.storagePage = 0;
+}
+
+function getStorageWeight() {
+  return (P.storage || []).reduce((acc, inst) => {
+    let b = getItemBase(inst.id);
+    return acc + ((b?.weight || 0) * (inst.qty || 1));
+  }, 0);
+}
+
+function canPayReqs(reqs) {
+  return reqs.every(r => countItemsByBaseId(r.id) >= r.qty);
+}
+
+function payReqs(reqs) {
+  reqs.forEach(r => {
+    for (let i = 0; i < r.qty; i++) removeOneItemByBaseId(r.id);
+  });
+}
+
+function formatReqs(reqs) {
+  return reqs.map(r => {
+    let it = getItemBase(r.id);
+    let owned = countItemsByBaseId(r.id);
+    let color = owned >= r.qty ? 'var(--accent)' : 'var(--danger)';
+    return `<span style="color:${color}">${it ? it.name : '?'}: ${owned}/${r.qty}</span>`;
+  }).join(" | ");
+}
+
+function tickEffects() {
+  if (!P.activeEffects || P.activeEffects.length === 0) return;
+  P.activeEffects.forEach(e => e.remaining--);
+  let expired = P.activeEffects.filter(e => e.remaining <= 0);
+  expired.forEach(e => logMsg("Efecto terminado: " + e.name));
+  P.activeEffects = P.activeEffects.filter(e => e.remaining > 0);
+}
+
+function applyConsumableEffect(item) {
+  if (!item.effectId) return;
+  if (!P.activeEffects) P.activeEffects = [];
+  // Reemplazar mismo efecto si ya existe
+  P.activeEffects = P.activeEffects.filter(e => e.id !== item.effectId);
+  P.activeEffects.push({
+    id: item.effectId,
+    name: item.effectName || item.name,
+    desc: item.effectDesc || "",
+    remaining: item.effectActions || 3,
+    bonus: item.effectBonus || {}
+  });
+  logMsg("Efecto activo: " + (item.effectName || item.name) + " (" + (item.effectActions || 3) + " acciones)");
+}
+
+function getEffectBonus(key) {
+  if (!P.activeEffects) return 0;
+  return P.activeEffects.reduce((acc, e) => acc + ((e.bonus && e.bonus[key]) || 0), 0);
+}
+
+function renderVault(sub = P.vaultSubtab || 'lunchboxes') {
+  ensureVaultDefaults();
+  P.vaultSubtab = sub;
+
+  let html = `
+    <h2>REFUGIO VAULT-TEC</h2>
+    <div class="subtabs" style="grid-template-columns: repeat(5, 1fr);">
+      <button class="${sub === 'lunchboxes' ? 'active' : ''}" onclick="renderVault('lunchboxes')">Tarteras</button>
+      <button class="${sub === 'fabric' ? 'active' : ''}" onclick="renderVault('fabric')">Fabricación</button>
+      <button class="${sub === 'storage' ? 'active' : ''}" onclick="renderVault('storage')">Almacén</button>
+      <button class="${sub === 'scrap' ? 'active' : ''}" onclick="renderVault('scrap')">Desguace</button>
+      <button class="${sub === 'upgrades' ? 'active' : ''}" onclick="renderVault('upgrades')">Mejoras</button>
+    </div>
+  `;
+
+  if (sub === 'lunchboxes') {
+    let vaultBoxCount = countItemsByBaseId(14);
+    let nukaBoxCount = countItemsByBaseId(15);
+    let legBoxCount = countItemsByBaseId(29);
+    html += `
+      <p style="font-size:12px; color:#8d9880;">Nivel Tarteras Vault-Tec: <b style="color:var(--accent);">${P.lunchboxLevel}/5</b></p>
+      <div class="vault-container" style="grid-template-columns: 1fr 1fr 1fr;">
+        <div class="lunchbox-card">
+          <h3 style="color:var(--accent); margin-top:0;">📦 TARTERA VAULT-TEC</h3>
+          <p style="font-size:11px; color:#8d9880;">Chapas y suministros. Nivel ${P.lunchboxLevel} mejora recompensas.</p>
+          <p style="font-size:16px;"><b>Disponibles: ${vaultBoxCount}</b></p>
+          <button style="width:100%; background:var(--accent); color:#111; font-weight:bold;" ${vaultBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(14)">ABRIR</button>
+        </div>
+        <div class="lunchbox-card">
+          <h3 style="color:var(--gold); margin-top:0;">🥤 TARTERA NUKA-COLA</h3>
+          <p style="font-size:11px; color:#8d9880;">Arma o armadura de calidad.</p>
+          <p style="font-size:16px;"><b>Disponibles: ${nukaBoxCount}</b></p>
+          <button style="width:100%; background:var(--gold); color:#111; font-weight:bold;" ${nukaBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(15)">ABRIR</button>
+        </div>
+        <div class="lunchbox-card" style="border-color:#ff00aa;">
+          <h3 style="color:#ff66cc; margin-top:0;">★ TARTERA LEGENDARIA</h3>
+          <p style="font-size:11px; color:#8d9880;">Objeto legendario garantizado.</p>
+          <p style="font-size:16px;"><b>Disponibles: ${legBoxCount}</b></p>
+          <button style="width:100%; background:#ff00aa; color:#111; font-weight:bold;" ${legBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(29)">ABRIR</button>
+        </div>
+      </div>
+    `;
+  } else if (sub === 'fabric') {
+    html += renderFabricacionUI();
+  } else if (sub === 'storage') {
+    html += renderStorageUI();
+  } else if (sub === 'scrap') {
+    html += renderScrapUI();
+  } else if (sub === 'upgrades') {
+    html += renderVaultUpgradesUI();
+  }
+
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function renderFabricacionUI() {
+  let fab = P.fabricSubtab || 'crafting';
+  let html = `
+    <div class="subtabs" style="grid-template-columns: repeat(4, 1fr);">
+      <button class="${fab === 'crafting' ? 'active' : ''}" onclick="P.fabricSubtab='crafting'; P.craftPage=0; renderVault('fabric')">Taller</button>
+      <button class="${fab === 'mods' ? 'active' : ''}" onclick="P.fabricSubtab='mods'; renderVault('fabric')">Armería</button>
+      <button class="${fab === 'alchemy' ? 'active' : ''}" onclick="P.fabricSubtab='alchemy'; P.craftPage=0; renderVault('fabric')">Alquimia</button>
+      <button class="${fab === 'cook' ? 'active' : ''}" onclick="P.fabricSubtab='cook'; P.craftPage=0; renderVault('fabric')">Cocina</button>
+    </div>
+  `;
+
+  if (fab === 'crafting') {
+    html += renderRecipeList(CRAFT_RECIPES, P.craftLevel, 'craftLvl', 'craftItem', 'Taller', P.craftLevel);
+  } else if (fab === 'mods') {
+    html += renderArmoryUI();
+  } else if (fab === 'alchemy') {
+    html += renderRecipeList(ALCHEMY_RECIPES, P.alchemyLevel, 'alchemyLvl', 'craftAlchemy', 'Alquimia', P.alchemyLevel);
+  } else if (fab === 'cook') {
+    html += renderRecipeList(COOK_RECIPES, P.cookLevel, 'cookLvl', 'craftCook', 'Cocina', P.cookLevel);
+  }
+  return html;
+}
+
+function renderRecipeList(recipes, level, lvlKey, fnName, title, showLvl) {
+  const PER_PAGE = 5;
+  let page = P.craftPage || 0;
+  let available = recipes.filter(r => (r[lvlKey] || 1) <= level);
+  let locked = recipes.filter(r => (r[lvlKey] || 1) > level);
+  let totalPages = Math.max(1, Math.ceil(available.length / PER_PAGE));
+  if (page >= totalPages) page = totalPages - 1;
+  P.craftPage = page;
+  let slice = available.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+
+  let html = `<p style="font-size:12px; color:#8d9880;">Nivel ${title}: <b style="color:var(--accent);">${showLvl}/5</b></p>`;
+  if (available.length === 0) {
+    html += `<p style="font-size:12px; color:#8d9880;">No hay recetas desbloqueadas. Mejora esta estación en Mejoras.</p>`;
+  } else {
+    html += `<p style="font-size:11px; color:#8d9880;">Página ${page + 1}/${totalPages}</p>`;
+    slice.forEach(rec => {
+      let itemObj = getItemBase(rec.id);
+      if (!itemObj) return;
+      let can = canPayReqs(rec.reqs);
+      let stats = '';
+      if (itemObj.damage) stats = 'Daño: ' + itemObj.damage;
+      else if (itemObj.def) stats = 'Defensa: ' + itemObj.def;
+      else if (itemObj.heal) stats = 'Cura: ' + itemObj.heal;
+      else if (itemObj.effectDesc) stats = itemObj.effectDesc;
+      html += `
+        <div class="item">
+          <b style="color:var(--accent);">${itemObj.name}</b> ${stats ? '(' + stats + ')' : ''}<br>
+          <span style="font-size:11px;">Requisitos: ${formatReqs(rec.reqs)}</span><br>
+          <button style="margin-top:6px;" ${!can ? 'disabled' : ''} onclick="${fnName}(${rec.id})">Fabricar</button>
+        </div>
+      `;
+    });
+    if (totalPages > 1) {
+      html += `<div style="display:flex; justify-content:center; gap:10px; margin-top:10px; align-items:center;">
+        <button ${page <= 0 ? 'disabled' : ''} onclick="P.craftPage=${page - 1}; renderVault('fabric')">◀ Anterior</button>
+        <span style="font-size:12px; color:var(--accent);">${page + 1}/${totalPages}</span>
+        <button ${page >= totalPages - 1 ? 'disabled' : ''} onclick="P.craftPage=${page + 1}; renderVault('fabric')">Siguiente ▶</button>
+      </div>`;
+    }
+  }
+  if (locked.length > 0) {
+    html += `<p style="font-size:11px; color:#8d9880; margin-top:10px;">${locked.length} recetas bloqueadas (mejora el nivel).</p>`;
+  }
+  return html;
+}
+
+function renderArmoryUI() {
+  let html = `<p style="font-size:12px; color:#8d9880;">Nivel Armería: <b style="color:var(--accent);">${P.modLevel}/5</b>. Mira/cañón solo a distancia; empuñadura/filo solo melee.</p>`;
+  let eqWpn = P.inv.find(i => i.uid === P.equippedWeaponUid);
+  let eqArm = P.inv.find(i => i.uid === P.equippedArmorUid);
+  [eqWpn, eqArm].forEach(inst => {
+    if (!inst) return;
+    let base = getItemBase(inst.id);
+    let installedMods = inst.mods || [];
+    let isMelee = base.type === 'weapon' && (base.ammoType || '').includes('Ninguna');
+    html += `
+      <div class="item" style="border-color:var(--gold);">
+        <b>${base.name}</b> <span class="equipped-tag">EQUIPADO</span>${isMelee ? ' <span style="font-size:10px;">(Melee)</span>' : ''}<br>
+        <span style="font-size:11px; color:#8d9880;">Mejoras: ${installedMods.length > 0 ? installedMods.map(m => MODS_DB.find(x => x.id === m)?.name).join(", ") : "Ninguna"}</span><hr style="border-color:#222;">
+    `;
+    MODS_DB.filter(m => {
+      if (m.target !== base.type) return false;
+      if ((m.modLvl || 1) > P.modLevel) return false;
+      if (base.type === 'weapon') {
+        if (m.rangedOnly && isMelee) return false;
+        if (m.meleeOnly && !isMelee) return false;
+      }
+      return true;
+    }).forEach(mod => {
+      let hasMod = installedMods.includes(mod.id);
+      let canApply = !hasMod && canPayReqs(mod.reqs);
+      html += `
+        <div style="margin-top:4px; font-size:12px;">
+          <span><b>${mod.name}</b> (${mod.bonusDmg ? '+' + mod.bonusDmg + ' Daño' : '+' + mod.bonusDef + ' Def'}) [Nv.${mod.modLvl||1}] — ${formatReqs(mod.reqs)}</span><br>
+          <button style="margin-top:2px; font-size:10px; padding:3px 6px;" ${hasMod || !canApply ? 'disabled' : ''} onclick="applyMod(${inst.uid}, '${mod.id}')">${hasMod ? 'Instalada' : 'Instalar'}</button>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  });
+  return html;
+}
+
+function renderScrapUI() {
+  let html = `<p style="font-size:12px; color:#8d9880;">Nivel Desguace: <b style="color:var(--accent);">${P.scrapLevel}/5</b>. Desguaza armas y armaduras no equipadas para obtener chatarra. Mejor nivel = más materiales.</p>`;
+  let list = P.inv.filter(inst => {
+    let it = getItemBase(inst.id);
+    if (!it) return false;
+    if (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid) return false;
+    return it.type === 'weapon' || it.type === 'armor';
+  });
+  if (list.length === 0) {
+    html += `<p style="font-size:12px; color:#8d9880;">No tienes armas/armaduras desequipadas para desguazar.</p>`;
+  } else {
+    list.forEach(inst => {
+      let it = getItemBase(inst.id);
+      let name = (inst.legendary ? '★ ' : '') + it.name;
+      html += `<div class="item"><b>${name}</b>
+        <button style="margin-left:8px; font-size:11px;" onclick="scrapItem(${inst.uid})">Desguazar</button>
+      </div>`;
+    });
+  }
+  return html;
+}
+
+function scrapItem(uid) {
+  let idx = P.inv.findIndex(i => i.uid === uid);
+  if (idx === -1) return;
+  let inst = P.inv[idx];
+  if (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid) {
+    logMsg("No puedes desguazar un objeto equipado.");
+    return;
+  }
+  let it = getItemBase(inst.id);
+  let lvl = P.scrapLevel || 1;
+  // Yield escala con nivel y valor del objeto
+  let baseJunk = [
+    { id: 20, min: 1, max: 2 + lvl },
+    { id: 21, min: 1, max: 1 + lvl },
+    { id: 22, min: 0, max: lvl },
+    { id: 23, min: 0, max: Math.floor(lvl / 2) + 1 }
+  ];
+  if (it.type === 'weapon' && !(it.ammoType || '').includes('Ninguna')) {
+    baseJunk.push({ id: 13, min: 0, max: lvl });
+    baseJunk.push({ id: 27, min: 0, max: 1 + Math.floor(lvl / 2) });
+  }
+  if (it.type === 'armor') {
+    baseJunk.push({ id: 24, min: 1, max: 1 + lvl });
+    baseJunk.push({ id: 25, min: 0, max: Math.floor(lvl / 2) + 1 });
+  }
+  if (inst.legendary) {
+    baseJunk.push({ id: 28, min: 1, max: 1 + Math.floor(lvl / 2) });
+    baseJunk.push({ id: 36, min: 0, max: lvl });
+  }
+
+  let gained = [];
+  baseJunk.forEach(j => {
+    let qty = j.min + Math.floor(Math.random() * (j.max - j.min + 1));
+    if (qty > 0) {
+      addItemToInv(j.id, qty);
+      let jb = getItemBase(j.id);
+      gained.push(qty + "x " + jb.name);
+    }
+  });
+
+  P.inv.splice(idx, 1);
+  logMsg("Desguazaste " + it.name + ". Obtuviste: " + (gained.join(", ") || "nada útil"));
+  renderVault('scrap');
+  updateStats();
+}
+
+function getStorageUpgradeCost() {
+  let rank = P.storageUpgradeRank || 0;
+  // Escala: más hierro, tornillos, etc.
+  return [
+    { id: 21, qty: 5 + rank * 3 },
+    { id: 20, qty: 8 + rank * 4 },
+    { id: 27, qty: 3 + rank * 2 },
+    { id: 30, qty: 4 + rank * 2 }
+  ];
+}
+
+function renderVaultUpgradesUI() {
+  ensureVaultDefaults();
+  let facilities = [
+    { key: 'craft', name: '🔧 Taller de Fabricación', level: P.craftLevel, max: 5, desc: 'Desbloquea recetas de armas y armaduras.' },
+    { key: 'mod', name: '⚙️ Armería', level: P.modLevel, max: 5, desc: 'Desbloquea más módulos de mejora.' },
+    { key: 'lunchbox', name: '📦 Tarteras Vault-Tec', level: P.lunchboxLevel, max: 5, desc: 'Mejores recompensas de tarteras.' },
+    { key: 'scrap', name: '🔩 Desguace', level: P.scrapLevel, max: 5, desc: 'Más chatarra al desguazar.' },
+    { key: 'alchemy', name: '⚗️ Alquimia', level: P.alchemyLevel, max: 5, desc: 'Nuevas recetas de químicos y medicinas.' },
+    { key: 'cook', name: '🍳 Cocina', level: P.cookLevel, max: 5, desc: 'Nuevas recetas de comida.' }
+  ];
+
+  let html = `<h3 style="color:var(--accent);">MEJORAS DEL REFUGIO</h3>
+    <p style="font-size:12px; color:#8d9880;">Las mejoras se pagan con chatarra (no chapas).</p>`;
+
+  facilities.forEach(f => {
+    let costs = (UPGRADE_COSTS[f.key] || [])[f.level - 1];
+    let maxed = f.level >= f.max;
+    html += `<div class="item" style="border-color:var(--accent);">
+      <b>${f.name}</b> — Nivel ${f.level}/${f.max}<br>
+      <span style="font-size:12px; color:#8d9880;">${f.desc}</span><br>`;
+    if (maxed) {
+      html += `<button style="margin-top:6px;" disabled>MÁXIMO</button>`;
+    } else {
+      html += `<span style="font-size:11px;">Coste: ${formatReqs(costs)}</span><br>
+        <button style="margin-top:6px;" ${!canPayReqs(costs) ? 'disabled' : ''} onclick="upgradeVaultFacility('${f.key}')">Mejorar</button>`;
+    }
+    html += `</div>`;
+  });
+
+  // Storage capacity upgrade
+  let storCost = getStorageUpgradeCost();
+  html += `<div class="item" style="border-color:var(--gold);">
+    <b>📦 Capacidad de Almacén</b> — ${P.storageMaxWeight} kg (mejoras: ${P.storageUpgradeRank})<br>
+    <span style="font-size:12px; color:#8d9880;">+100 kg por mejora. Coste aumenta cada vez.</span><br>
+    <span style="font-size:11px;">Coste: ${formatReqs(storCost)}</span><br>
+    <button style="margin-top:6px;" ${!canPayReqs(storCost) ? 'disabled' : ''} onclick="upgradeStorageCapacity()">Ampliar Almacén (+100 kg)</button>
+  </div>`;
+
+  return html;
+}
+
+function upgradeVaultFacility(type) {
+  ensureVaultDefaults();
+  let levelKey = { craft: 'craftLevel', mod: 'modLevel', lunchbox: 'lunchboxLevel', scrap: 'scrapLevel', alchemy: 'alchemyLevel', cook: 'cookLevel' }[type];
+  if (!levelKey) return;
+  if (P[levelKey] >= 5) return;
+  let costs = (UPGRADE_COSTS[type] || [])[P[levelKey] - 1];
+  if (!costs || !canPayReqs(costs)) {
+    logMsg("No tienes la chatarra necesaria.");
+    return;
+  }
+  payReqs(costs);
+  P[levelKey]++;
+  logMsg("¡Mejora completada! Nivel " + P[levelKey] + ".");
+  renderVault('upgrades');
+  updateStats();
+}
+
+function upgradeStorageCapacity() {
+  ensureVaultDefaults();
+  let costs = getStorageUpgradeCost();
+  if (!canPayReqs(costs)) {
+    logMsg("No tienes la chatarra necesaria.");
+    return;
+  }
+  payReqs(costs);
+  P.storageMaxWeight += 100;
+  P.storageUpgradeRank = (P.storageUpgradeRank || 0) + 1;
+  logMsg("Almacén ampliado a " + P.storageMaxWeight + " kg.");
+  renderVault('upgrades');
+  updateStats();
+}
+
+function renderStorageUI() {
+  ensureVaultDefaults();
+  let sub = P.storageSubtab || 'weapon';
+  let page = P.storagePage || 0;
+  const PER_PAGE = 10;
+  let sw = getStorageWeight();
+
+  let html = `
+    <p style="font-size:12px; color:#8d9880;">Almacén: <b style="color:var(--accent);">${sw.toFixed(1)} / ${P.storageMaxWeight} kg</b>. Mueve objetos entre inventario y almacén.</p>
+    <div class="subtabs">
+      <button class="${sub === 'weapon' ? 'active' : ''}" onclick="P.storageSubtab='weapon'; P.storagePage=0; renderVault('storage')">Armas</button>
+      <button class="${sub === 'armor' ? 'active' : ''}" onclick="P.storageSubtab='armor'; P.storagePage=0; renderVault('storage')">Armaduras</button>
+      <button class="${sub === 'med' ? 'active' : ''}" onclick="P.storageSubtab='med'; P.storagePage=0; renderVault('storage')">Ayuda</button>
+      <button class="${sub === 'junk' ? 'active' : ''}" onclick="P.storageSubtab='junk'; P.storagePage=0; renderVault('storage')">Chatarra</button>
+      <button class="${sub === 'ingredient' ? 'active' : ''}" onclick="P.storageSubtab='ingredient'; P.storagePage=0; renderVault('storage')">Ingredientes</button>
+      <button class="${sub === 'other' ? 'active' : ''}" onclick="P.storageSubtab='other'; P.storagePage=0; renderVault('storage')">Otros</button>
+    </div>
+    <h3 style="color:var(--accent); font-size:14px;">EN INVENTARIO</h3>
+  `;
+
+  function typeMatch(it, s) {
+    if (s === 'weapon') return it.type === 'weapon';
+    if (s === 'armor') return it.type === 'armor';
+    if (s === 'med') return it.type === 'med' || it.type === 'chem' || it.type === 'drink' || it.type === 'food';
+    if (s === 'junk') return it.type === 'junk';
+    if (s === 'ingredient') return it.type === 'ingredient';
+    if (s === 'other') return it.type === 'other';
+    return false;
+  }
+
+  let invList = P.inv.filter(inst => {
+    let it = getItemBase(inst.id);
+    return it && typeMatch(it, sub);
+  });
+  if (invList.length === 0) html += `<p style="font-size:11px; color:#8d9880;">Nada en inventario.</p>`;
+  invList.forEach(inst => {
+    let it = getItemBase(inst.id);
+    let isEq = inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid;
+    let name = (inst.legendary ? '★ ' : '') + it.name + (inst.qty > 1 ? ' x' + inst.qty : '');
+    html += `<div class="item"><b>${name}</b> ${isEq ? '<span class="equipped-tag">EQUIPADO</span>' : ''}
+      ${!isEq ? `<button style="margin-left:8px; font-size:11px; padding:3px 8px;" onclick="moveToStorage(${inst.uid})">→ Almacén</button>` : '<span style="font-size:11px; color:#8d9880;"> (desequipa primero)</span>'}
+    </div>`;
+  });
+
+  let storList = (P.storage || []).filter(inst => {
+    let it = getItemBase(inst.id);
+    return it && typeMatch(it, sub);
+  });
+  let totalPages = Math.max(1, Math.ceil(storList.length / PER_PAGE));
+  if (page >= totalPages) page = totalPages - 1;
+  P.storagePage = page;
+  let slice = storList.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+
+  html += `<h3 style="color:var(--gold); font-size:14px; margin-top:14px;">EN ALMACÉN (${storList.length} · pág ${page + 1}/${totalPages})</h3>`;
+  if (slice.length === 0) html += `<p style="font-size:11px; color:#8d9880;">Vacío en esta categoría.</p>`;
+  slice.forEach(inst => {
+    let it = getItemBase(inst.id);
+    let name = (inst.legendary ? '★ ' : '') + it.name + (inst.qty > 1 ? ' x' + inst.qty : '');
+    html += `<div class="item"><b>${name}</b>
+      <button style="margin-left:8px; font-size:11px; padding:3px 8px;" onclick="moveFromStorage(${inst.uid})">← Inventario</button>
+    </div>`;
+  });
+  if (totalPages > 1) {
+    html += `<div style="display:flex; justify-content:center; gap:10px; margin-top:10px;">
+      <button ${page <= 0 ? 'disabled' : ''} onclick="P.storagePage=${page - 1}; renderVault('storage')">◀</button>
+      <span style="color:var(--accent);">${page + 1}/${totalPages}</span>
+      <button ${page >= totalPages - 1 ? 'disabled' : ''} onclick="P.storagePage=${page + 1}; renderVault('storage')">▶</button>
+    </div>`;
+  }
+  return html;
+}
+
+function moveToStorage(uid) {
+  ensureVaultDefaults();
+  let idx = P.inv.findIndex(i => i.uid === uid);
+  if (idx === -1) return;
+  let inst = P.inv[idx];
+  if (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid) {
+    logMsg("No puedes guardar un objeto equipado.");
+    return;
+  }
+  let base = getItemBase(inst.id);
+  let addW = (base?.weight || 0) * (inst.qty || 1);
+  if (getStorageWeight() + addW > P.storageMaxWeight) {
+    logMsg("Almacén lleno (" + P.storageMaxWeight + " kg). Mejora la capacidad en Mejoras.");
+    return;
+  }
+  P.inv.splice(idx, 1);
+  P.storage.push(inst);
+  logMsg("Guardado en almacén: " + base.name);
+  renderVault('storage');
+  updateStats();
+}
+
+function moveFromStorage(uid) {
+  ensureVaultDefaults();
+  let idx = P.storage.findIndex(i => i.uid === uid);
+  if (idx === -1) return;
+  let inst = P.storage[idx];
+  let base = getItemBase(inst.id);
+  // Usar addItemToInv logic de peso
+  let currentWeight = P.inv.reduce((acc, i) => {
+    let b = getItemBase(i.id);
+    return acc + ((b?.weight || 0) * (i.qty || 1));
+  }, 0);
+  if (currentWeight + (base?.weight || 0) * (inst.qty || 1) > getMaxWeight()) {
+    logMsg("Inventario lleno. No puedes sacar el objeto.");
+    return;
+  }
+  P.storage.splice(idx, 1);
+  P.inv.push(inst);
+  logMsg("Sacado del almacén: " + base.name);
+  renderVault('storage');
+  updateStats();
+}
+
+function craftItem(recipeId) {
+  let rec = CRAFT_RECIPES.find(r => r.id === recipeId);
+  if (!rec || (rec.craftLvl || 1) > P.craftLevel) return;
+  if (!canPayReqs(rec.reqs)) return;
+  payReqs(rec.reqs);
+  addItemToInv(recipeId, 1);
+  logMsg("¡Has fabricado: 1x " + getItemBase(recipeId).name + "!");
+  renderVault('fabric');
+  updateStats();
+}
+
+function craftAlchemy(recipeId) {
+  let rec = ALCHEMY_RECIPES.find(r => r.id === recipeId);
+  if (!rec || (rec.alchemyLvl || 1) > P.alchemyLevel) return;
+  if (!canPayReqs(rec.reqs)) return;
+  payReqs(rec.reqs);
+  addItemToInv(recipeId, 1);
+  logMsg("¡Alquimia: 1x " + getItemBase(recipeId).name + "!");
+  renderVault('fabric');
+  updateStats();
+}
+
+function craftCook(recipeId) {
+  let rec = COOK_RECIPES.find(r => r.id === recipeId);
+  if (!rec || (rec.cookLvl || 1) > P.cookLevel) return;
+  if (!canPayReqs(rec.reqs)) return;
+  payReqs(rec.reqs);
+  addItemToInv(recipeId, 1);
+  logMsg("¡Cocinaste: 1x " + getItemBase(recipeId).name + "!");
+  renderVault('fabric');
+  updateStats();
+}
+
+function applyMod(itemUid, modId) {
+  let inst = P.inv.find(i => i.uid === itemUid);
+  let mod = MODS_DB.find(m => m.id === modId);
+  if (!inst || !mod) return;
+  if (!inst.mods) inst.mods = [];
+  if (inst.mods.includes(modId)) return;
+  if (!canPayReqs(mod.reqs)) return;
+  payReqs(mod.reqs);
+  inst.mods.push(modId);
+  logMsg("¡Instalaste " + mod.name + " en tu " + getItemBase(inst.id).name + "!");
+  renderVault('fabric');
+  updateStats();
+}
+
+function openLunchbox(boxBaseId) {
+  if (!removeOneItemByBaseId(boxBaseId)) return;
+
+  let rewards = [];
+  let isNuka = (boxBaseId === 15);
+  let isLegendaryBox = (boxBaseId === 29);
+
+  if (isLegendaryBox) {
+    let legInst = addLegendaryToInv();
+    if (legInst) {
+      let legBase = getItemBase(legInst.id);
+      rewards.push("★ " + legBase.name + " LEGENDARIA (" + legInst.abilityName + ")");
+    } else {
+      rewards.push("Chapas de compensación (+200)");
+      P.caps += 200;
+    }
+  } else if (isNuka) {
+    let gearIds = DB_ITEMS.filter(i => (i.type === 'weapon' || i.type === 'armor') && i.shopTier <= (P.shopLevel || 1)).map(i => i.id);
+    let pickedId = gearIds[Math.floor(Math.random() * gearIds.length)] || 1;
+    let itemObj = getItemBase(pickedId);
+    if (addItemToInv(pickedId, 1)) {
+      rewards.push(formatItemGainName(itemObj, 1));
+    } else {
+      rewards.push("Chapas de compensación (+50)");
+      P.caps += 50;
+    }
+  } else {
+    let lvl = P.lunchboxLevel || 1;
+    let gotCaps = (20 + lvl * 15) + Math.floor(Math.random() * (40 + lvl * 20));
+    P.caps += gotCaps;
+    rewards.push(gotCaps + " Chapas");
+
+    let maxTier = Math.min(10, (P.shopLevel || 1) + Math.floor(lvl / 2));
+    let allPossibleIds = DB_ITEMS.filter(i => i.shopTier <= maxTier && i.type !== 'other').map(i => i.id);
+    let numRewards = 1 + (lvl >= 3 ? 1 : 0) + (lvl >= 5 ? 1 : 0);
+    for (let n = 0; n < numRewards; n++) {
+      let pickedId = allPossibleIds[Math.floor(Math.random() * allPossibleIds.length)];
+      let itemObj = getItemBase(pickedId);
+      let cantidadCaida = (itemObj.type === 'junk' || itemObj.type === 'med' || itemObj.type === 'ingredient') ? (1 + Math.floor(Math.random() * (2 + lvl))) : 1;
+      if (addItemToInv(pickedId, cantidadCaida)) {
+        rewards.push(formatItemGainName(itemObj, cantidadCaida));
+      }
+    }
+  }
+
+  logMsg("¡Abriste una " + getItemBase(boxBaseId).name + "! Conseguiste: " + rewards.join(", "));
+  
+  let m = document.getElementById('modal');
+  let titleColor = isLegendaryBox ? "#ff66cc" : (isNuka ? "var(--gold)" : "var(--accent)");
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:${titleColor}; text-align:center;">🎉 ¡TARTERA ABIERTA!</h2>
+    <p style="text-align:center; font-size:13px;">Has obtenido:</p>
+    <div style="background:#10130e; border:1px solid #30362c; padding:12px; margin:12px 0; text-align:center;">
+      ${rewards.map(r => `<div style="font-size:14px; font-weight:bold; color:var(--txt); margin:4px 0;">• ${r}</div>`).join('')}
+    </div>
+    <button style="width:100%;" onclick="closeModal(); renderVault();">ACEPTAR</button>
+  `;
+  m.classList.add('show');
+  updateStats();
+}
+
+function updateQuestProgress(type, amount = 1) {
+  P.activeQuests.forEach(q => {
+    if (q.type === type && !q.completed) {
+      q.current = Math.min(q.target, q.current + amount);
+      if (q.current >= q.target) {
+        q.completed = true;
+        logMsg("¡Misión completada: '" + q.title + "'! Reclama tu recompensa en la pestaña Misiones.");
+      }
+    }
+  });
+}
+
+function offerQuestEvent() {
+  let available = QUEST_POOL.filter(qp => !P.activeQuests.some(aq => aq.id === qp.id));
+  if (available.length === 0) {
+    findLoot();
+    return;
+  }
+
+  let quest = available[Math.floor(Math.random() * available.length)];
+  let itemObj = quest.reward.item ? getItemBase(quest.reward.item) : null;
+  let itemRew = itemObj ? formatItemGainName(itemObj, quest.reward.qty || 1) : "Ninguno";
+
+  let m = document.getElementById('modal');
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:var(--accent);">📜 NUEVA MISIÓN ENCONTRADA</h2>
+    <h3>${quest.title}</h3>
+    <p>${quest.desc}</p>
+    <div style="font-size:12px; background:#10130e; padding:8px; border:1px solid #30362c; margin-bottom:12px;">
+      <b>Recompensas:</b><br>
+      • Chapas: ${quest.reward.caps}<br>
+      • Experiencia: ${quest.reward.xp}<br>
+      • Objeto: ${itemRew}
+    </div>
+    <button onclick="acceptQuest('${quest.id}')">ACEPTAR MISIÓN</button>
+    <button onclick="closeModal()">RECHAZAR</button>
+  `;
+  m.classList.add('show');
+}
+
+function acceptQuest(questId) {
+  let baseQ = QUEST_POOL.find(q => q.id === questId);
+  if (baseQ) {
+    P.activeQuests.push({ ...baseQ, current: 0, completed: false, claimed: false });
+    logMsg("Has aceptado la misión: " + baseQ.title);
+  }
+  closeModal();
+  updateStats();
+}
+
+function claimReward(questId) {
+  let idx = P.activeQuests.findIndex(q => q.id === questId);
+  if (idx === -1) return;
+
+  let q = P.activeQuests[idx];
+  P.caps += q.reward.caps;
+  addXP(q.reward.xp);
+  
+  let itemText = "";
+  if (q.reward.item) {
+    let itemObj = getItemBase(q.reward.item);
+    let qty = q.reward.qty || 1;
+    addItemToInv(q.reward.item, qty);
+    itemText = " y " + formatItemGainName(itemObj, qty);
+  }
+
+  logMsg("Recompensa reclamada por '" + q.title + "': +" + q.reward.caps + " chapas, EXP" + itemText + ".");
+  P.activeQuests.splice(idx, 1);
+  renderQuests();
+  updateStats();
+}
+
+function renderQuests() {
+  let html = `<h2>REGISTRO DE MISIONES</h2>`;
+  if (P.activeQuests.length === 0) {
+    html += `<p style="font-size:12px; color:#8d9880;">No tienes ninguna misión activa en este momento. Explora el mapa para encontrar supervivientes y encargos.</p>`;
+  } else {
+    P.activeQuests.forEach(q => {
+      let pct = Math.floor((q.current / q.target) * 100);
+      let itemObj = q.reward.item ? getItemBase(q.reward.item) : null;
+      let itemRew = itemObj ? formatItemGainName(itemObj, q.reward.qty || 1) : null;
+
+      html += `
+        <div class="item">
+          <div class="item-head">
+            <b>${q.title}</b>
+            <span style="font-size:11px; color:${q.completed ? 'var(--accent)' : 'var(--gold)'};">
+              ${q.completed ? 'COMPLETADA' : 'EN PROGRESO'}
+            </span>
+          </div>
+          <p style="font-size:12px; margin: 4px 0;">${q.desc}</p>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${pct}%; background:var(--accent);"></div>
+          </div>
+          <div style="font-size:11px; color:#8d9880; display:flex; justify-content:space-between;">
+            <span>Progreso: ${q.current} / ${q.target}</span>
+            <span>Recompensa: ${q.reward.caps} chapas, ${q.reward.xp} EXP ${itemRew ? '+ ' + itemRew : ''}</span>
+          </div>
+      `;
+      if (q.completed) {
+        html += `<button style="margin-top:8px; width:100%; background:var(--accent); color:#111; font-weight:bold;" onclick="claimReward('${q.id}')">RECLAMAR RECOMPENSA</button>`;
+      }
+      html += `</div>`;
+    });
+  }
+  document.getElementById('main-view').innerHTML = html;
+}
+
+// ========== MAPA DINÁMICO DEL YERMO ==========
+function hashCoord(x, y) {
+  let h = (x * 374761393 + y * 668265263) | 0;
+  h = (h ^ (h >>> 13)) * 1274126177;
+  return Math.abs(h | 0);
+}
+
+const ZONE_DEFS = {
+  empty:  { icon: '·',  label: 'Yermo vacío',       cls: 'empty',  enterable: false, radChance: 0.15, exploreBias: 'nothing' },
+  road:   { icon: '═',  label: 'Carretera rota',    cls: 'road',   enterable: false, radChance: 0.10, exploreBias: 'loot' },
+  river:  { icon: '≈',  label: 'Río contaminado',   cls: 'river',  enterable: false, radChance: 0.85, exploreBias: 'rad' },
+  ruin:   { icon: '⌂',  label: 'Ruinas',            cls: 'ruin',   enterable: true,  radChance: 0.25, exploreBias: 'combat' },
+  city:   { icon: '▣',  label: 'Ciudad derruida',   cls: 'city',   enterable: true,  radChance: 0.35, exploreBias: 'combat' },
+  poi:    { icon: '★',  label: 'Lugar de interés',  cls: 'poi',    enterable: true,  radChance: 0.20, exploreBias: 'loot' },
+  camp:   { icon: '⛺', label: 'Campamento',        cls: 'camp',   enterable: true,  radChance: 0.15, exploreBias: 'combat' }
+};
+
+const INTERIOR_TEMPLATES = {
+  ruin: [
+    { id: 'entrada', name: 'Entrada derruida', exits: { n: 'pasillo', e: null, s: null, w: null } },
+    { id: 'pasillo', name: 'Pasillo oscuro', exits: { n: 'sala', s: 'entrada', e: 'almacen', w: null } },
+    { id: 'sala', name: 'Sala principal', exits: { s: 'pasillo', e: null, w: null, n: null } },
+    { id: 'almacen', name: 'Almacén saqueado', exits: { w: 'pasillo', n: null, s: null, e: null } }
+  ],
+  city: [
+    { id: 'calle', name: 'Calle devastada', exits: { n: 'tienda', e: 'plaza', s: null, w: 'edificio' } },
+    { id: 'tienda', name: 'Tienda abandonada', exits: { s: 'calle', n: null, e: null, w: null } },
+    { id: 'plaza', name: 'Plaza central', exits: { w: 'calle', n: 'ayuntamiento', e: null, s: null } },
+    { id: 'edificio', name: 'Edificio derruido', exits: { e: 'calle', n: null, s: null, w: null } },
+    { id: 'ayuntamiento', name: 'Ayuntamiento', exits: { s: 'plaza', n: null, e: null, w: null } }
+  ],
+  poi: [
+    { id: 'acceso', name: 'Acceso al búnker', exits: { n: 'control', s: null, e: null, w: null } },
+    { id: 'control', name: 'Sala de control', exits: { s: 'acceso', e: 'lab', w: 'dorm' } },
+    { id: 'lab', name: 'Laboratorio', exits: { w: 'control', n: null, s: null, e: null } },
+    { id: 'dorm', name: 'Dormitorios', exits: { e: 'control', n: null, s: null, w: null } }
+  ],
+  camp: [
+    { id: 'perimetro', name: 'Perímetro del campamento', exits: { n: 'fogata', s: null, e: 'tienda', w: null } },
+    { id: 'fogata', name: 'Fogata central', exits: { s: 'perimetro', e: null, w: 'alijo', n: null } },
+    { id: 'tienda', name: 'Tienda de lona', exits: { w: 'perimetro', n: null, s: null, e: null } },
+    { id: 'alijo', name: 'Alijo de saqueadores', exits: { e: 'fogata', n: null, s: null, w: null } }
+  ]
+};
+
+const POI_NAMES = {
+  ruin: ["Casa derruida", "Gasolinera abandonada", "Fábrica oxidada", "Granja fantasma", "Taller mecánico"],
+  city: ["Ciudad de cenizas", "Distrito comercial", "Barrio residencial", "Puerto industrial", "Casco antiguo"],
+  poi: ["Búnker Vault-Tec", "Clínica abandonada", "Estación de metro", "Torre de radio", "Laboratorio secreto"],
+  camp: ["Campamento de saqueadores", "Puesto de caza", "Caravana varada", "Refugio improvisado"]
+};
+
+function getZoneAt(x, y) {
+  let h = hashCoord(x, y);
+  // Ríos: bandas horizontales/verticales
+  if (Math.abs((y * 3 + x) % 11) === 0 || Math.abs((x * 5 - y) % 13) === 0) {
+    return { type: 'river', ...ZONE_DEFS.river, name: 'Río contaminado' };
+  }
+  // Carreteras
+  if (x % 7 === 0 || y % 9 === 0) {
+    return { type: 'road', ...ZONE_DEFS.road, name: 'Carretera rota' };
+  }
+  let roll = h % 100;
+  let type;
+  if (roll < 35) type = 'empty';
+  else if (roll < 50) type = 'ruin';
+  else if (roll < 62) type = 'camp';
+  else if (roll < 74) type = 'poi';
+  else if (roll < 86) type = 'city';
+  else type = 'empty';
+
+  let def = ZONE_DEFS[type];
+  let name = def.label;
+  if (POI_NAMES[type]) {
+    let names = POI_NAMES[type];
+    name = names[h % names.length];
+  }
+  return { type, ...def, name };
+}
+
+function getZoneName() {
+  if (P.location) {
+    let room = getCurrentRoom();
+    return (P.location.name || 'Interior') + (room ? ' — ' + room.name : '');
+  }
+  return getZoneAt(P.x, P.y).name;
+}
+
+function getCurrentRoom() {
+  if (!P.location || !P.location.rooms) return null;
+  return P.location.rooms.find(r => r.id === P.location.roomId) || P.location.rooms[0];
+}
+
+function countMedsById(baseId) {
+  return countItemsByBaseId(baseId);
+}
+
+function fmtCoord(n) {
+  return n > 0 ? '+' + n : '' + n;
+}
+
+function renderWorldGrid() {
+  let cells = '';
+  for (let dy = 3; dy >= -3; dy--) {
+    for (let dx = -3; dx <= 3; dx++) {
+      let zx = P.x + dx, zy = P.y + dy;
+      let z = getZoneAt(zx, zy);
+      let isPlayer = (dx === 0 && dy === 0);
+      let cls = 'world-cell ' + z.cls + (isPlayer ? ' player' : '') + (z.enterable ? ' enterable' : '');
+      let icon = isPlayer ? '☺' : z.icon;
+      cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
+    }
+  }
+  return `<div class="world-grid">${cells}</div>
+    <p style="font-size:10px; color:#8d9880; text-align:center;">· vacío  ═ carretera  ≈ río  ⌂ ruinas  ▣ ciudad  ★ interés  ⛺ campamento</p>`;
+}
+
+function renderMap() {
+  if (P.location) {
+    renderInteriorMap();
+    return;
+  }
+
+  const zone = getZoneAt(P.x, P.y);
+  const fmtX = fmtCoord(P.x);
+  const fmtY = fmtCoord(P.y);
+  let stims = countMedsById(7);
+  let radaways = countMedsById(74);
+  let signalHint = "";
+  if (P.radioSignal) {
+    let sx = fmtCoord(P.radioSignal.x);
+    let sy = fmtCoord(P.radioSignal.y);
+    let here = (P.x === P.radioSignal.x && P.y === P.radioSignal.y);
+    signalHint = `<p style="font-size:11px; color:${here ? 'var(--gold)' : '#8d9880'};">📡 Señal en [${sx}, ${sy}]${here ? ' — ¡AQUÍ! Usa la Radio.' : ''}</p>`;
+  }
+
+  let actions = `<button onclick="pipClick(); exploreZone()">EXPLORAR ZONA</button>`;
+  if (zone.enterable) {
+    actions += ` <button style="background:var(--accent); color:#111; font-weight:bold;" onclick="pipClick(); enterLocation()">ENTRAR →</button>`;
+  }
+  if (zone.type === 'river') {
+    actions += `<p style="font-size:11px; color:#00aacc; margin-top:6px;">⚠ Zona altamente irradiada</p>`;
+  }
+
+  document.getElementById('main-view').innerHTML = `
+    <div><b>SECTOR [${fmtX}, ${fmtY}]</b> <span class="zone-badge">${zone.icon} ${zone.name}</span></div>
+    <p style="font-size:12px; color:#8d9880;">Muévete por el Yermo. Las casillas con borde se pueden <b>entrar</b>.</p>
+    ${signalHint}
+    ${renderWorldGrid()}
+    <div class="map-box">
+      <div>
+        <b style="color:var(--accent); font-size:16px;">${zone.icon} ${zone.name}</b><br>
+        <span style="font-size:11px; color:#8d9880;">${zone.enterable ? 'Puedes entrar a explorar el interior.' : 'Zona exterior abierta.'}</span><br><br>
+        ${actions}
+      </div>
+    </div>
+    <div class="map-controls">
+      <div class="quick-meds">
+        <button onclick="pipClick(); quickUseStim()" ${stims === 0 ? 'disabled' : ''}>💉 Stim (${stims})</button>
+        <button onclick="pipClick(); quickUseRadAway()" ${radaways === 0 ? 'disabled' : ''}>☢ RadAway (${radaways})</button>
+      </div>
+      <div class="map-arrows">
+        <div></div><button onclick="pipClick(); move(0, 1)">▲</button><div></div>
+        <button onclick="pipClick(); move(-1, 0)">◀</button><button onclick="pipClick(); move(0, -1)">▼</button><button onclick="pipClick(); move(1, 0)">▶</button>
+      </div>
+      <div class="quick-radio">
+        <button onclick="pipClick(); openRadioUI()" style="background:#003300; border-color:var(--accent);">📻 RADIO</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderInteriorMap() {
+  let loc = P.location;
+  let room = getCurrentRoom();
+  let stims = countMedsById(7);
+  let radaways = countMedsById(74);
+  let exits = room ? room.exits : {};
+  let exitBtns = '';
+  const dirLabels = { n: '▲ Norte', s: '▼ Sur', e: '▶ Este', w: '◀ Oeste' };
+  const dirMove = { n: [0, 1], s: [0, -1], e: [1, 0], w: [-1, 0] };
+  ['n', 'w', 'e', 's'].forEach(d => {
+    if (exits[d]) {
+      let target = loc.rooms.find(r => r.id === exits[d]);
+      exitBtns += `<button onclick="pipClick(); interiorMove('${d}')">${dirLabels[d]} → ${target ? target.name : exits[d]}</button>`;
+    }
+  });
+
+  document.getElementById('main-view').innerHTML = `
+    <div><b style="color:var(--gold);">📍 INTERIOR:</b> ${loc.name}</div>
+    <p style="font-size:12px; color:#8d9880;">Explora habitaciones. Usa SALIR para volver al Yermo.</p>
+    <div class="interior-room">
+      <b style="color:var(--accent); font-size:15px;">${room ? room.name : '???'}</b><br>
+      <span style="font-size:11px; color:#8d9880;">Habitación dentro de ${loc.name}</span><br><br>
+      <button onclick="pipClick(); exploreZone()">REGISTRAR HABITACIÓN</button>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:10px;">
+        ${exitBtns || '<span style="font-size:11px; color:#8d9880;">Sin salidas laterales</span>'}
+      </div>
+    </div>
+    <div style="display:flex; gap:8px; margin-top:10px;">
+      <button style="flex:1; border-color:var(--danger); color:var(--danger);" onclick="pipClick(); exitLocation()">← SALIR AL YERMO</button>
+    </div>
+    <div class="map-controls" style="margin-top:12px;">
+      <div class="quick-meds">
+        <button onclick="pipClick(); quickUseStim()" ${stims === 0 ? 'disabled' : ''}>💉 Stim (${stims})</button>
+        <button onclick="pipClick(); quickUseRadAway()" ${radaways === 0 ? 'disabled' : ''}>☢ RadAway (${radaways})</button>
+      </div>
+      <div></div>
+      <div class="quick-radio">
+        <button onclick="pipClick(); openRadioUI()">📻 RADIO</button>
+      </div>
+    </div>
+  `;
+}
+
+function enterLocation() {
+  let zone = getZoneAt(P.x, P.y);
+  if (!zone.enterable) {
+    logMsg("No hay nada a lo que entrar aquí.");
+    return;
+  }
+  let templateKey = zone.type;
+  if (!INTERIOR_TEMPLATES[templateKey]) templateKey = 'ruin';
+  let rooms = INTERIOR_TEMPLATES[templateKey].map(r => ({ ...r, exits: { ...r.exits } }));
+  P.location = {
+    type: zone.type,
+    name: zone.name,
+    worldX: P.x,
+    worldY: P.y,
+    roomId: rooms[0].id,
+    rooms: rooms,
+    searched: {}
+  };
+  logMsg("Entras en: " + zone.name + ".");
+  renderMap();
+  updateStats();
+}
+
+function exitLocation() {
+  if (!P.location) return;
+  logMsg("Sales de " + P.location.name + " al Yermo.");
+  P.location = null;
+  renderMap();
+  updateStats();
+}
+
+function interiorMove(dir) {
+  let room = getCurrentRoom();
+  if (!room || !room.exits[dir]) {
+    logMsg("No puedes ir en esa dirección.");
+    return;
+  }
+  P.location.roomId = room.exits[dir];
+  let next = getCurrentRoom();
+  logMsg("Te mueves a: " + (next ? next.name : '...') + ".");
+  tickEffects();
+  // Pequeña chance de encuentro al moverse dentro
+  if (Math.random() < 0.18) {
+    startCombat(false);
+    return;
+  }
+  renderMap();
+  updateStats();
+}
+
+function quickUseStim() {
+  let inst = P.inv.find(x => x.id === 7) || P.inv.find(x => {
+    let b = getItemBase(x.id);
+    return b && b.type === 'med' && b.heal;
+  });
+  if (!inst) {
+    logMsg("No tienes estimulantes.");
+    renderMap();
+    return;
+  }
+  useMedItem(inst.uid);
+  renderMap();
+}
+
+function quickUseRadAway() {
+  let inst = P.inv.find(x => x.id === 74);
+  if (!inst) {
+    logMsg("No tienes RadAway.");
+    renderMap();
+    return;
+  }
+  useMedItem(inst.uid);
+  renderMap();
+}
+
+function openRadioUI() {
+  let signalInfo = "Sin señal marcada.";
+  if (P.radioSignal) {
+    let sx = P.radioSignal.x > 0 ? "+" + P.radioSignal.x : P.radioSignal.x;
+    let sy = P.radioSignal.y > 0 ? "+" + P.radioSignal.y : P.radioSignal.y;
+    let here = (P.x === P.radioSignal.x && P.y === P.radioSignal.y);
+    signalInfo = here
+      ? `¡Estás en la ubicación de la señal! [${sx}, ${sy}] — pulsa CAPTAR SEÑAL.`
+      : `Señal pendiente en coordenadas [${sx}, ${sy}]. Desplázate hasta allí.`;
+  }
+
+  document.getElementById('main-view').innerHTML = `
+    <div class="radio-panel">
+      <h3>📻 RADIO DEL YERMO</h3>
+      <p style="font-size:12px; color:#8d9880;">Captura señales misteriosas o sintoniza Radio Wasteland.</p>
+
+      <div class="item" style="border-color:var(--gold);">
+        <b style="color:var(--gold);">📡 CAPTAR SEÑAL</b><br>
+        <span style="font-size:11px; color:#8d9880;">Obtén coordenadas cercanas. Al llegar y captar de nuevo, recibirás recompensas jugosas.</span><br>
+        <p class="radio-status" id="signal-status">${signalInfo}</p>
+        <button style="margin-top:6px; width:100%;" onclick="pipClick(); captureSignal()">CAPTAR SEÑAL</button>
+      </div>
+
+      <div class="item" style="border-color:var(--accent);">
+        <b style="color:var(--accent);">🎵 RADIO WASTELAND</b><br>
+        <span style="font-size:12px;">Emisión: <i>I Don't Want to Set the World on Fire</i> — The Ink Spots</span><br>
+        <p class="radio-status" id="music-status">Radio apagada.</p>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button style="flex:1; background:var(--accent); color:#111; font-weight:bold;" onclick="pipClick(); startRadioMusic()">▶ ENCENDER</button>
+          <button style="flex:1;" onclick="pipClick(); stopRadioMusic()">■ APAGAR</button>
+        </div>
+      </div>
+
+      <button style="width:100%; margin-top:10px;" onclick="pipClick(); renderMap()">← VOLVER AL MAPA</button>
+    </div>
+  `;
+}
+
+function captureSignal() {
+  // Si hay señal y estamos en la ubicación → recompensa
+  if (P.radioSignal && P.x === P.radioSignal.x && P.y === P.radioSignal.y) {
+    let rewards = [];
+    let capsGain = 40 + Math.floor(Math.random() * 80) + P.lvl * 5;
+    P.caps += capsGain;
+    rewards.push(capsGain + " chapas");
+
+    // Loot jugoso
+    let roll = Math.random();
+    if (roll < 0.15) {
+      if (addItemToInv(29, 1)) rewards.push("★ Tartera Legendaria");
+    } else if (roll < 0.35) {
+      if (addItemToInv(15, 1)) rewards.push("Tartera Nuka-Cola");
+    } else if (roll < 0.55) {
+      if (addItemToInv(14, 1)) rewards.push("Tartera Vault-Tec");
+    } else if (roll < 0.75) {
+      let drinks = [50, 51, 52, 53, 54];
+      let d = drinks[Math.floor(Math.random() * drinks.length)];
+      if (addItemToInv(d, 1)) rewards.push(getItemBase(d).name);
+    } else {
+      let goodJunk = [28, 36, 38, 13];
+      let j = goodJunk[Math.floor(Math.random() * goodJunk.length)];
+      let qty = 2 + Math.floor(Math.random() * 3);
+      if (addItemToInv(j, qty)) rewards.push(qty + "x " + getItemBase(j).name);
+    }
+    // Extra ammo or stim
+    if (Math.random() < 0.5) {
+      if (addItemToInv(7, 1 + Math.floor(Math.random() * 2))) rewards.push("Estimulante");
+    }
+    addXP(20 + P.lvl * 3);
+    logMsg("¡Señal capturada! Recompensas: " + rewards.join(", "));
+    P.radioSignal = null;
+    updateStats();
+    openRadioUI();
+    return;
+  }
+
+  // Nueva señal cercana (±1 a ±4)
+  let dx = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 1 : -1);
+  let dy = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 1 : -1);
+  // Evitar (0,0) relativo
+  if (dx === 0 && dy === 0) dx = 1;
+  P.radioSignal = { x: P.x + dx, y: P.y + dy };
+  let sx = P.radioSignal.x > 0 ? "+" + P.radioSignal.x : P.radioSignal.x;
+  let sy = P.radioSignal.y > 0 ? "+" + P.radioSignal.y : P.radioSignal.y;
+  logMsg("Señal detectada en coordenadas [" + sx + ", " + sy + "]. Desplázate hasta allí y vuelve a captar.");
+  openRadioUI();
+  updateStats();
+}
+
+function startRadioMusic() {
+  let audio = document.getElementById('radio-audio');
+  if (!audio) return;
+  audio.play().then(() => {
+    let st = document.getElementById('music-status');
+    if (st) st.textContent = "♪ Reproduciendo Radio Wasteland...";
+    logMsg("Radio Wasteland sintonizada.");
+  }).catch(() => {
+    let st = document.getElementById('music-status');
+    if (st) st.textContent = "No se pudo reproducir (permiso del navegador o red).";
+    logMsg("No se pudo iniciar la radio. Prueba a interactuar de nuevo.");
+  });
+}
+
+function stopRadioMusic() {
+  let audio = document.getElementById('radio-audio');
+  if (audio) {
+    audio.pause();
+    audio.currentTime = 0;
+  }
+  let st = document.getElementById('music-status');
+  if (st) st.textContent = "Radio apagada.";
+  logMsg("Radio apagada.");
+}
+
+function move(dx, dy) {
+  if (P.location) {
+    logMsg("Estás en un interior. Usa las salidas de la habitación o SALIR.");
+    return;
+  }
+  P.x += dx;
+  P.y += dy;
+  let zone = getZoneAt(P.x, P.y);
+  logMsg("Te desplazas a [" + fmtCoord(P.x) + ", " + fmtCoord(P.y) + "] — " + zone.icon + " " + zone.name + ".");
+  updateQuestProgress('explore', 1);
+  tickEffects();
+  // Radiación al cruzar ríos
+  if (zone.type === 'river') {
+    addRads(15 + Math.floor(Math.random() * 25));
+  } else if (Math.random() < zone.radChance * 0.3) {
+    addRads(3 + Math.floor(Math.random() * 8));
+  }
+  if (Math.random() < 0.12) radioEvent();
+  renderMap();
+  updateStats();
+}
+
+function exploreZone() {
+  tickEffects();
+  let zone = P.location ? { type: P.location.type, radChance: 0.2, exploreBias: 'loot', name: getCurrentRoom()?.name } : getZoneAt(P.x, P.y);
+
+  // Interior: evitar doble registro de misma habitación reduce loot
+  if (P.location) {
+    let rid = P.location.roomId;
+    if (P.location.searched[rid]) {
+      logMsg("Ya registraste esta habitación. Queda poco de interés.");
+      if (Math.random() < 0.35) startCombat(false);
+      else if (Math.random() < 0.5) {
+        logMsg("No encuentras nada útil.");
+        updateStats();
+      } else findLoot();
+      return;
+    }
+    P.location.searched[rid] = true;
+  }
+
+  // Radiación según zona
+  if (Math.random() < (zone.radChance || 0.2)) {
+    let radAmt = zone.type === 'river' ? (25 + Math.floor(Math.random() * 40)) : (5 + Math.floor(Math.random() * 20));
+    addRads(radAmt);
+  }
+
+  let percBonus = (P.special.P * 0.02) + getEffectBonus('lootBonus');
+  let r = Math.random();
+  let bias = zone.exploreBias || 'combat';
+
+  // Ajustar probabilidades según tipo de zona
+  let combatChance = 0.35;
+  let lootChance = 0.25;
+  let nothingChance = 0.15;
+  if (bias === 'nothing') { combatChance = 0.15; lootChance = 0.15; nothingChance = 0.45; }
+  if (bias === 'loot') { combatChance = 0.25; lootChance = 0.40; }
+  if (bias === 'rad') { combatChance = 0.20; lootChance = 0.20; }
+  if (bias === 'combat') { combatChance = 0.45; lootChance = 0.20; }
+  if (P.location) { combatChance += 0.05; lootChance += 0.10; }
+
+  let legChance = 0.08 + (P.special.P * 0.005);
+  if (r < legChance) {
+    startCombat(true);
+  } else if (r < legChance + combatChance - percBonus / 2) {
+    startCombat(false);
+  } else if (r < legChance + combatChance + lootChance + percBonus) {
+    findLoot();
+  } else if (r < legChance + combatChance + lootChance + nothingChance + 0.15) {
+    if (bias === 'nothing') logMsg("El Yermo está desolado. Solo polvo y silencio.");
+    else logMsg("No encuentras nada de valor esta vez.");
+    addXP(5);
+    updateStats();
+  } else if (r < 0.92) {
+    offerQuestEvent();
+  } else {
+    radioEvent();
+  }
+}
+
+/* ========== NUEVO SISTEMA DE COMBATE POR TURNOS (ESTILO IMAGEN) ========== */
+function startCombat(isLegendary = false) {
+  let pool = isLegendary ? LEGENDARY_ENEMIES : ENEMIES;
+  let available = pool.filter(e => e.level <= P.lvl);
+  if (available.length === 0) {
+    // Si no hay del nivel, coger los de menor nivel
+    available = pool.filter(e => e.level <= Math.max(1, P.lvl));
+    if (available.length === 0) available = [pool[0]];
+  }
+  let e = available[Math.floor(Math.random() * available.length)];
+
+  // Escalar un poco HP/DMG según diferencia de nivel (opcional, suave)
+  let lvlDiff = Math.max(0, P.lvl - e.level);
+  let hpScale = 1 + (lvlDiff * 0.03);
+  let dmgScale = 1 + (lvlDiff * 0.02);
+
+  combatState = {
+    enemyName: e.name + " (Nv." + e.level + ")",
+    enemyMaxHp: Math.floor(e.hp * hpScale),
+    enemyHp: Math.floor(e.hp * hpScale),
+    enemyDmg: Math.floor(e.dmg * dmgScale),
+    enemyLoot: e.loot,
+    enemyCaps: e.caps,
+    enemyLevel: e.level,
+    isLegendary: !!isLegendary,
+    hasHealed: false,
+    poisonTurns: 0,
+    armorBroken: 0,
+    playerSecondChanceUsed: false,
+    log: []
+  };
+  if (isLegendary) {
+    combatLog("¡Un enemigo LEGENDARIO aparece!");
+  }
+  // Enemigos irradiados contaminan
+  let ename = (e.name || '').toLowerCase();
+  if (ename.includes('necrófago') || ename.includes('irradiad') || ename.includes('radiact')) {
+    combatState.causesRads = true;
+    combatLog("¡Emite radiación!");
+  }
+  renderCombatUI();
+}
+
+function renderCombatUI() {
+  if (!combatState) return;
+  let w = getEquippedWeapon();
+  let maxhp = getMaxHp();
+  let enemyPct = Math.max(0, Math.floor((combatState.enemyHp / combatState.enemyMaxHp) * 100));
+  let playerPct = Math.max(0, Math.floor((P.hp / maxhp) * 100));
+
+  let logHtml = combatState.log.map(msg => `<div>> ${msg}</div>`).join('') || '<div style="color:#556;">Esperando acción...</div>';
+
+  let m = document.getElementById('modal');
+  let titleText = combatState.isLegendary ? "★ COMBATE LEGENDARIO ★" : "COMBATE DETECTADO";
+  document.getElementById('modal-body').innerHTML = `
+    <div class="combat-title">${titleText}</div>
+
+    <div class="combat-entity">
+      <div class="combat-entity-name enemy">
+        <span>${combatState.isLegendary ? '★ ' : ''}${combatState.enemyName}</span>
+        <span>${combatState.enemyHp} / ${combatState.enemyMaxHp}</span>
+      </div>
+      <div class="combat-hp-bar">
+        <div class="combat-hp-fill enemy" style="width:${enemyPct}%;"></div>
+      </div>
+    </div>
+
+    <div class="combat-entity">
+      <div class="combat-entity-name player">
+        <span>Tú</span>
+        <span>${P.hp} / ${maxhp}</span>
+      </div>
+      <div class="combat-hp-bar">
+        <div class="combat-hp-fill player" style="width:${playerPct}%;"></div>
+      </div>
+    </div>
+
+    <div class="combat-log" id="combat-log-box">
+      ${logHtml}
+    </div>
+
+    <div class="combat-buttons">
+      <button class="combat-btn-attack" onclick="combatAttack()">Atacar (${w.name})</button>
+      <button class="combat-btn-flee" onclick="combatFlee()">Huir</button>
+    </div>
+  `;
+  m.classList.add('show');
+
+  // Auto-scroll del log
+  setTimeout(() => {
+    let box = document.getElementById('combat-log-box');
+    if (box) box.scrollTop = box.scrollHeight;
+  }, 30);
+}
+
+function combatLog(msg) {
+  if (combatState) {
+    combatState.log.push(msg);
+    if (combatState.log.length > 12) combatState.log.shift();
+  }
+}
+
+function combatAttack() {
+  if (!combatState) return;
+
+  let w = getEquippedWeapon();
+  let a = getEquippedArmor();
+  let ammoKey = w.ammoType;
+  let isMelee = ammoKey.includes("Ninguna");
+  let wAb = getWeaponAbility();
+  let aAb = getArmorAbility();
+
+  let ironBonus = ((P.perks && P.perks.p_iron) || 0) * 3;
+  let gunsBonus = (!isMelee && P.perks && P.perks.p_guns) ? (P.perks.p_guns * 2) : 0;
+  let brawlerBonus = (isMelee && P.perks && P.perks.p_brawler) ? (P.perks.p_brawler * 4) : 0;
+  let furyBonus = (P.hp / getMaxHp() < 0.3 && P.perks && P.perks.p_fury) ? (P.perks.p_fury * 5) : 0;
+
+  // Bonos de habilidades legendarias de arma
+  let legDmgBonus = 0;
+  if (wAb) {
+    if (wAb.id === 'w_precision') legDmgBonus += 8;
+    if (wAb.id === 'w_fury' && P.hp / getMaxHp() < 0.4) legDmgBonus += 15;
+    if (wAb.id === 'w_exec' && combatState.enemyHp / combatState.enemyMaxHp < 0.3) legDmgBonus = Math.floor((w.damage + legDmgBonus) * 0.5);
+    if (wAb.id === 'w_rad') legDmgBonus += 10;
+    if (wAb.id === 'w_burn') legDmgBonus += 12;
+    if (wAb.id === 'w_legend' && combatState.isLegendary) legDmgBonus = Math.floor((w.damage) * 0.35);
+  }
+  if (aAb && aAb.id === 'a_power') legDmgBonus += 6;
+
+  // Bonos de efectos activos (Nuka, drogas, comida...)
+  legDmgBonus += getEffectBonus('dmg');
+  if (isMelee) legDmgBonus += getEffectBonus('meleeDmg');
+
+  let baseDmg = w.damage + ironBonus + gunsBonus + brawlerBonus + furyBonus + legDmgBonus;
+
+  // Ataque del jugador
+  let hasAmmo = isMelee || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] > 0);
+  // Munición Infinita (armadura)
+  if (!isMelee && aAb && aAb.id === 'a_ammo' && Math.random() < 0.10) {
+    hasAmmo = true; // no consume
+  }
+  let hit = 0;
+  let attacks = 1;
+
+  // Disparo Doble
+  if (wAb && wAb.id === 'w_double' && Math.random() < 0.15) {
+    attacks = 2;
+    combatLog("¡Disparo Doble!");
+  }
+
+  for (let atk = 0; atk < attacks; atk++) {
+    if (hasAmmo || isMelee) {
+      hit = Math.max(1, baseDmg + Math.floor(Math.random() * 4));
+
+      // Penetración de Blindaje
+      if (wAb && wAb.id === 'w_pen') {
+        // se aplica después restando defensa enemiga
+      }
+
+      let critChance = (((P.perks && P.perks.p_bloody) || 0) * 0.05) + (P.special.L * 0.02) + getEffectBonus('critChance');
+      if (wAb && wAb.id === 'w_crit') critChance += 0.40;
+      if (Math.random() < critChance) {
+        let critMult = 1.5 + (((P.perks && P.perks.p_crit) || 0) * 0.15);
+        hit = Math.floor(hit * critMult);
+        combatLog("¡Golpe crítico mortífero!");
+      }
+
+      // Golpe de Suerte (x3)
+      if (wAb && wAb.id === 'w_lucky' && Math.random() < 0.10) {
+        hit = Math.floor(hit * 3);
+        combatLog("¡Golpe de Suerte! ¡Daño x3!");
+      }
+
+      // Daño en Cadena
+      if (wAb && wAb.id === 'w_chain') {
+        let chain = Math.floor(hit * 0.30);
+        hit += chain;
+        combatLog("Daño en Cadena: +" + chain);
+      }
+
+      if (!isMelee && !(aAb && aAb.id === 'a_ammo' && Math.random() < 0.10)) {
+        if (P.ammoBox[ammoKey] > 0) P.ammoBox[ammoKey]--;
+      }
+
+      // Rompeblindajes: daño extra acumulativo
+      if (wAb && wAb.id === 'w_armorbreak') {
+        combatState.armorBroken = (combatState.armorBroken || 0) + 3;
+        hit += 3;
+      }
+
+      combatLog(`Atacas con ${w.name}${w.legendary ? ' ★' : ''} e infliges ${hit} de daño.`);
+    } else {
+      hit = 2 + Math.floor(Math.random() * 3);
+      combatLog("¡Sin munición! Atacas con los puños e infliges " + hit + " de daño.");
+    }
+
+    // Aplicar veneno
+    if (wAb && wAb.id === 'w_poison') {
+      combatState.poisonTurns = 3;
+    }
+
+    // Vampirismo / Sed de Sangre
+    if (wAb && wAb.id === 'w_vamp') {
+      let heal = Math.floor(hit * 0.20);
+      P.hp = Math.min(getMaxHp(), P.hp + heal);
+      if (heal > 0) combatLog("Vampirismo: +" + heal + " HP.");
+    }
+    if (wAb && wAb.id === 'w_lifesteal') {
+      P.hp = Math.min(getMaxHp(), P.hp + 8);
+      combatLog("Sed de Sangre: +8 HP.");
+    }
+
+    combatState.enemyHp -= hit;
+  }
+
+  // Daño de veneno al final del turno del jugador
+  if (combatState.poisonTurns > 0) {
+    combatState.enemyHp -= 5;
+    combatState.poisonTurns--;
+    combatLog("Veneno Persistente: 5 de daño.");
+  }
+
+  // Curación legendaria del enemigo al 25%
+  if (combatState.isLegendary && !combatState.hasHealed && combatState.enemyHp > 0 &&
+      combatState.enemyHp <= combatState.enemyMaxHp * 0.25) {
+    combatState.enemyHp = combatState.enemyMaxHp;
+    combatState.hasHealed = true;
+    combatLog("¡El enemigo LEGENDARIO se regenera completamente!");
+  }
+
+  if (combatState.enemyHp <= 0) {
+    combatState.enemyHp = 0;
+    endCombat(true);
+    return;
+  }
+
+  // ¿El enemigo está aturdido?
+  let enemyStunned = false;
+  if (wAb && wAb.id === 'w_stun' && Math.random() < 0.20) {
+    enemyStunned = true;
+    combatLog("¡El enemigo está aturdido y pierde su turno!");
+  }
+
+  // Congelante: reduce daño enemigo
+  let enemyDmgMult = 1;
+  if (wAb && wAb.id === 'w_freeze') enemyDmgMult = 0.75;
+
+  if (!enemyStunned) {
+    // Ataque del enemigo
+    let dodgeChance = (P.special.A * 0.03) + (((P.perks && P.perks.p_reflex) || 0) * 0.05) + getEffectBonus('dodge');
+    if (aAb && aAb.id === 'a_dodge') dodgeChance += 0.15;
+
+    if (Math.random() < dodgeChance) {
+      combatLog("¡Esquivaste el ataque del enemigo!");
+    } else {
+      let totalDef = a.def + (((P.perks && P.perks.p_skin) || 0) * 2) + getDefenseBonusFromEndurance() + getEffectBonus('def');
+      if (aAb && aAb.id === 'a_tank') totalDef += 15;
+      if (aAb && aAb.id === 'a_immortal') totalDef += 4;
+
+      let rawDmg = Math.floor(combatState.enemyDmg * enemyDmgMult);
+      let dmgTaken = Math.max(1, rawDmg - totalDef);
+
+      // Espinas / Reflejo
+      if (aAb && aAb.id === 'a_thorns') {
+        combatState.enemyHp -= 6;
+        combatLog("Espinas: el enemigo recibe 6 de daño.");
+      }
+      if (aAb && aAb.id === 'a_reflect') {
+        let reflected = Math.floor(dmgTaken * 0.20);
+        combatState.enemyHp -= reflected;
+        combatLog("Reflejo de Daño: " + reflected + " devueltos.");
+      }
+
+      P.hp -= dmgTaken;
+      combatLog(`${combatState.enemyName} te golpea por ${dmgTaken} de daño.`);
+
+      // Absorción
+      if (aAb && aAb.id === 'a_absorb') {
+        P.hp = Math.min(getMaxHp(), P.hp + 5);
+        combatLog("Absorción: +5 HP.");
+      }
+    }
+  }
+
+  // Regeneración de armadura
+  if (aAb && aAb.id === 'a_regen') {
+    P.hp = Math.min(getMaxHp(), P.hp + 4);
+    combatLog("Regeneración: +4 HP.");
+  }
+
+  // Radiación de enemigos contaminados
+  if (combatState.causesRads) {
+    let radHit = 8 + Math.floor(Math.random() * 12);
+    let res = getRadResistance();
+    let actual = Math.max(1, Math.floor(radHit * (1 - res / 100)));
+    P.rads = Math.min(1000, (P.rads || 0) + actual);
+    combatLog("Radiación +" + actual + " (total " + P.rads + ")");
+    let maxhp = getMaxHp();
+    if (P.hp > maxhp) P.hp = maxhp;
+  }
+
+  // Segunda Oportunidad
+  if (P.hp <= 0 && aAb && aAb.id === 'a_second' && !combatState.playerSecondChanceUsed) {
+    P.hp = 1;
+    combatState.playerSecondChanceUsed = true;
+    combatLog("¡Segunda Oportunidad! Sobrevives con 1 HP.");
+  }
+
+  if (P.hp <= 0) {
+    P.hp = 0;
+    endCombat(false);
+    return;
+  }
+
+  // Si el enemigo murió por espinas/reflejo
+  if (combatState.enemyHp <= 0) {
+    combatState.enemyHp = 0;
+    endCombat(true);
+    return;
+  }
+
+  updateStats();
+  renderCombatUI();
+}
+
+function combatFlee() {
+  if (!combatState) return;
+
+  let fleeChance = 0.5 + (P.special.A * 0.03);
+  if (P.perks && P.perks.p_ninja) fleeChance += 0.2;
+  let aAb = getArmorAbility();
+  if (aAb && aAb.id === 'a_speed') fleeChance += 0.20;
+
+  if (Math.random() < fleeChance) {
+    logMsg("¡Lograste huir con éxito del combate!");
+    combatState = null;
+    closeModal();
+    updateStats();
+  } else {
+    combatLog("¡No pudiste huir! El enemigo te alcanza.");
+    // Recibe un golpe al fallar la huida
+    let a = getEquippedArmor();
+    let totalDef = a.def + (((P.perks && P.perks.p_skin) || 0) * 2) + getDefenseBonusFromEndurance();
+    let dmgTaken = Math.max(1, combatState.enemyDmg - totalDef);
+    P.hp -= dmgTaken;
+    combatLog(`${combatState.enemyName} te golpea por ${dmgTaken} de daño.`);
+
+    if (P.hp <= 0) {
+      P.hp = 0;
+      endCombat(false);
+      return;
+    }
+    updateStats();
+    renderCombatUI();
+  }
+}
+
+function endCombat(victory) {
+  if (!combatState) return;
+
+  let wAb = getWeaponAbility();
+  let aAb = getArmorAbility();
+
+  if (victory) {
+    let baseReward = combatState.enemyCaps[0] + Math.floor(Math.random() * (combatState.enemyCaps[1] - combatState.enemyCaps[0]));
+    let bonusMult = 1 + (((P.perks && P.perks.p_scav) || 0) * 0.25);
+    if (wAb && wAb.id === 'w_caps') bonusMult += 0.50;
+    if (aAb && aAb.id === 'a_caps') bonusMult += 0.30;
+    let reward = Math.floor(baseReward * bonusMult);
+
+    P.caps += reward;
+
+    // Drop normal
+    let itemDrop = combatState.enemyLoot[Math.floor(Math.random() * combatState.enemyLoot.length)];
+    let itemObj = getItemBase(itemDrop);
+    let itemQty = (itemObj && (itemObj.type === 'junk' || itemObj.type === 'med')) ? (1 + Math.floor(Math.random() * 2)) : 1;
+    let added = addItemToInv(itemDrop, itemQty);
+
+    // XP
+    let xpGain = combatState.isLegendary ? 90 : 35;
+    if (wAb && wAb.id === 'w_xp') xpGain = Math.floor(xpGain * 1.40);
+    if (aAb && aAb.id === 'a_xp') xpGain = Math.floor(xpGain * 1.25);
+    addXP(xpGain);
+    updateQuestProgress('kill', 1);
+    if (combatState.isLegendary) updateQuestProgress('kill_legend', 1);
+
+    let lootTxt = added ? " y " + formatItemGainName(itemObj, itemQty) : " (mochila llena para el objeto)";
+
+    // Drop legendario garantizado
+    if (combatState.isLegendary) {
+      let legInst = addLegendaryToInv();
+      if (legInst) {
+        let legBase = getItemBase(legInst.id);
+        lootTxt += " ¡y un objeto LEGENDARIO: " + legBase.name + " ★ (" + legInst.abilityName + ")!";
+      } else {
+        lootTxt += " (mochila llena, no pudiste recoger el legendario).";
+      }
+    }
+
+    // Robo de Munición
+    if (wAb && wAb.id === 'w_ammo') {
+      let ammoGain = 1 + Math.floor(Math.random() * 3);
+      let w = getEquippedWeapon();
+      if (w.ammoType && !w.ammoType.includes("Ninguna")) {
+        P.ammoBox[w.ammoType] = (P.ammoBox[w.ammoType] || 0) + ammoGain;
+        lootTxt += " +" + ammoGain + " balas.";
+      }
+    }
+
+    logMsg("Derrotaste a " + combatState.enemyName + ". Obtienes " + reward + " chapas" + lootTxt);
+  } else {
+    P.hp = 25;
+    P.caps = Math.max(0, P.caps - 15);
+    logMsg("Has caído derrotado. Pierdes 15 chapas.");
+  }
+
+  combatState = null;
+  closeModal();
+  renderMap();
+  updateStats();
+}
+
+function findLoot() {
+  // 4% Tartera Legendaria
+  if (Math.random() < 0.04) {
+    if (addItemToInv(29, 1)) {
+      logMsg("¡Explorando encontraste una ★ TARTERA LEGENDARIA!");
+      updateQuestProgress('loot', 1);
+      addXP(25);
+      updateStats();
+      return;
+    }
+  }
+  // 12% bebida (Nuka / alcohol)
+  if (Math.random() < 0.12) {
+    let drinks = DB_ITEMS.filter(i => i.type === 'drink').map(i => i.id);
+    let did = drinks[Math.floor(Math.random() * drinks.length)];
+    if (addItemToInv(did, 1)) {
+      logMsg("Explorando encontraste: " + getItemBase(did).name + ".");
+      updateQuestProgress('loot', 1);
+      addXP(15);
+      updateStats();
+      return;
+    }
+  }
+  // 15% ingrediente de cocina
+  if (Math.random() < 0.15) {
+    let ings = DB_ITEMS.filter(i => i.type === 'ingredient').map(i => i.id);
+    let iid = ings[Math.floor(Math.random() * ings.length)];
+    let qty = 1 + Math.floor(Math.random() * 2);
+    if (addItemToInv(iid, qty)) {
+      logMsg("Explorando encontraste: " + formatItemGainName(getItemBase(iid), qty) + ".");
+      updateQuestProgress('loot', 1);
+      addXP(12);
+      updateStats();
+      return;
+    }
+  }
+
+  let tierFilteredIds = DB_ITEMS.filter(i => i.shopTier <= (P.shopLevel || 1) && i.type !== 'other').map(i => i.id);
+  let picked = tierFilteredIds[Math.floor(Math.random() * tierFilteredIds.length)];
+  let itemObj = getItemBase(picked);
+  let count = (itemObj.type === 'junk' || itemObj.type === 'med' || itemObj.type === 'ingredient') ? (1 + Math.floor(Math.random() * 3)) : 1;
+
+  if (addItemToInv(picked, count)) {
+    logMsg("Explorando encontraste: " + formatItemGainName(itemObj, count) + ".");
+    updateQuestProgress('loot', 1);
+  }
+  addXP(15);
+  updateStats();
+}
+
+function radioEvent() {
+  let events = [
+    "Captas una señal de radio antigua.",
+    "Encuentras un alijo con 15 chapas.",
+    "Una tormenta de radiación te envuelve.",
+    "Un viajero misterioso te regala 1x Tartera Vault-Tec.",
+    "Detectas una señal encriptada... ¡encontraste una ★ Tartera Legendaria!"
+  ];
+  let idx = Math.floor(Math.random() * events.length);
+  if (idx === 1) P.caps += 15;
+  if (idx === 2) addRads(40 + Math.floor(Math.random() * 60));
+  if (idx === 3) addItemToInv(14, 1);
+  if (idx === 4) addItemToInv(29, 1);
+  logMsg(events[idx]);
+  updateStats();
+}
+
+function renderInv(sub = P.subtab, page) {
+  // Al cambiar de subcategoría, volver a página 0
+  if (P.subtab !== sub) P.invPage = 0;
+  P.subtab = sub;
+  if (page !== undefined) P.invPage = page;
+  if (P.invPage === undefined || P.invPage < 0) P.invPage = 0;
+
+  const ITEMS_PER_PAGE = 5;
+
+  let html = `
+    <h2>INVENTARIO</h2>
+    <div class="subtabs" style="grid-template-columns: repeat(4, 1fr);">
+      <button class="${sub === 'weapon' ? 'active' : ''}" onclick="renderInv('weapon')">Armas</button>
+      <button class="${sub === 'armor' ? 'active' : ''}" onclick="renderInv('armor')">Armaduras</button>
+      <button class="${sub === 'med' ? 'active' : ''}" onclick="renderInv('med')">Ayuda</button>
+      <button class="${sub === 'ammo' ? 'active' : ''}" onclick="renderInv('ammo')">Munición</button>
+      <button class="${sub === 'junk' ? 'active' : ''}" onclick="renderInv('junk')">Chatarra</button>
+      <button class="${sub === 'food' ? 'active' : ''}" onclick="renderInv('food')">Comida/Bebida</button>
+      <button class="${sub === 'ingredient' ? 'active' : ''}" onclick="renderInv('ingredient')">Ingredientes</button>
+      <button class="${sub === 'other' ? 'active' : ''}" onclick="renderInv('other')">Otros</button>
+    </div>
+  `;
+
+  if (sub === 'ammo') {
+    html += `<div class="item">`;
+    for (let [type, qty] of Object.entries(P.ammoBox)) {
+      html += `<div class="row"><span>${type}</span><b>${qty} balas</b></div>`;
+    }
+    html += `</div>`;
+    document.getElementById('main-view').innerHTML = html;
+    return;
+  }
+
+  let list = P.inv.filter(inst => {
+    let it = getItemBase(inst.id);
+    if (!it) return false;
+    if (sub === 'weapon') return it.type === 'weapon';
+    if (sub === 'armor') return it.type === 'armor';
+    if (sub === 'med') return it.type === 'med' || it.type === 'chem';
+    if (sub === 'junk') return it.type === 'junk';
+    if (sub === 'food') return it.type === 'food' || it.type === 'drink';
+    if (sub === 'ingredient') return it.type === 'ingredient';
+    if (sub === 'other') return it.type === 'other';
+    return false;
+  });
+
+  if (list.length === 0) {
+    html += `<p style="font-size:12px; color:#8d9880;">No hay elementos en esta categoría.</p>`;
+  } else {
+    let totalPages = Math.max(1, Math.ceil(list.length / ITEMS_PER_PAGE));
+    if (P.invPage >= totalPages) P.invPage = totalPages - 1;
+    let start = P.invPage * ITEMS_PER_PAGE;
+    let pageItems = list.slice(start, start + ITEMS_PER_PAGE);
+
+    html += `<p style="font-size:11px; color:#8d9880; margin:4px 0 8px 0;">Mostrando ${start + 1}–${Math.min(start + ITEMS_PER_PAGE, list.length)} de ${list.length} · Página ${P.invPage + 1}/${totalPages}</p>`;
+
+    pageItems.forEach(inst => {
+      let it = getItemBase(inst.id);
+      let isEquipped = (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid);
+      let itemQty = inst.qty || 1;
+      let isLeg = !!inst.legendary;
+      let displayName = it.stackable && itemQty > 1 ? `${it.name} (x${itemQty})` : it.name;
+      if (isLeg) displayName = "★ " + displayName;
+
+      let modDmg = (inst.mods || []).reduce((acc, mId) => acc + (MODS_DB.find(x => x.id === mId)?.bonusDmg || 0), 0);
+      let modDef = (inst.mods || []).reduce((acc, mId) => acc + (MODS_DB.find(x => x.id === mId)?.bonusDef || 0), 0);
+
+      html += `
+        <div class="item" style="${isLeg ? 'border-color:#ff00aa;' : ''}">
+          <div class="item-head">
+            <b style="${isLeg ? 'color:#ff66cc;' : ''}">${displayName}</b>
+            <span>
+              ${isLeg ? `<span class="equipped-tag" style="border-color:#ff00aa; color:#ff66cc;">LEGENDARIA</span> ` : ''}
+              ${isEquipped ? `<span class="equipped-tag">EQUIPADO</span>` : ''}
+            </span>
+          </div>
+      `;
+
+      if (sub === 'weapon') {
+        html += `<span style="font-size:12px; color:var(--accent);">Daño: +${it.damage + modDmg} | Munición: ${it.ammoType}</span><br>`;
+      } else if (sub === 'armor') {
+        html += `<span style="font-size:12px; color:var(--accent);">Defensa: +${it.def + modDef}</span><br>`;
+      } else if (sub === 'med') {
+        if (it.heal) html += `<span style="font-size:12px; color:var(--accent);">Curación: +${it.heal} Salud</span><br>`;
+        if (it.effectDesc) html += `<span style="font-size:11px; color:var(--gold);">${it.effectDesc} (${it.effectActions || 0} acciones)</span><br>`;
+      } else if (sub === 'food') {
+        if (it.heal) html += `<span style="font-size:12px; color:var(--accent);">Curación: +${it.heal}</span><br>`;
+        if (it.effectDesc) html += `<span style="font-size:11px; color:var(--gold);">${it.effectDesc} (${it.effectActions || 0} acciones)</span><br>`;
+      } else if (sub === 'other') {
+        html += `<span style="font-size:12px; color:var(--gold);">Abre este contenedor desde la pestaña REFUGIO.</span><br>`;
+      }
+
+      if ((sub === 'weapon' || sub === 'armor') && inst.mods && inst.mods.length > 0) {
+        let modNames = inst.mods.map(mId => MODS_DB.find(x => x.id === mId)?.name || mId).join(", ");
+        html += `<span style="font-size:11px; color:var(--gold);">Módulos: ${modNames}</span><br>`;
+      }
+
+      if (isLeg && inst.abilityName) {
+        html += `<span style="font-size:12px; color:#ff66cc;">★ ${inst.abilityName}: ${inst.abilityDesc}</span><br>`;
+      }
+
+      let unitWeight = (it.weight * itemQty).toFixed(1);
+      let sellVal = isLeg ? Math.floor(it.value * 3) : it.value;
+      html += `<span style="font-size:11px; color:#8d9880;">Peso Total: ${unitWeight}kg | Valor Unitario: ${sellVal} chapas</span><br>`;
+
+      if (sub === 'weapon' || sub === 'armor') {
+        if (!isEquipped) {
+          html += `<div style="display:flex; gap:6px; margin-top:6px;">`;
+          html += `<button onclick="equipItem(${inst.uid})">Equipar</button>`;
+          html += `<button onclick="sellItem(${inst.uid})">Vender</button>`;
+          html += `</div>`;
+        }
+      } else if (sub === 'med' || sub === 'food') {
+        html += `<button style="margin-top:6px;" onclick="useMedItem(${inst.uid})">Usar 1</button>`;
+      } else if (sub === 'junk' || sub === 'other' || sub === 'ingredient') {
+        html += `<button style="margin-top:6px;" onclick="sellItem(${inst.uid})">Vender 1</button>`;
+      }
+
+      html += `</div>`;
+    });
+
+    // Controles de paginación
+    if (totalPages > 1) {
+      html += `<div style="display:flex; justify-content:center; gap:10px; margin-top:12px; align-items:center;">`;
+      html += `<button ${P.invPage <= 0 ? 'disabled' : ''} onclick="renderInv('${sub}', ${P.invPage - 1})">◀ Anterior</button>`;
+      html += `<span style="font-size:12px; color:var(--accent);">Pág. ${P.invPage + 1} / ${totalPages}</span>`;
+      html += `<button ${P.invPage >= totalPages - 1 ? 'disabled' : ''} onclick="renderInv('${sub}', ${P.invPage + 1})">Siguiente ▶</button>`;
+      html += `</div>`;
+    }
+  }
+
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function equipItem(uid) {
+  let inst = P.inv.find(i => i.uid === uid);
+  if (!inst) return;
+  let it = getItemBase(inst.id);
+  
+  if (it.type === 'weapon') P.equippedWeaponUid = uid;
+  if (it.type === 'armor') P.equippedArmorUid = uid;
+  
+  logMsg("Equipaste " + it.name + ".");
+  renderInv();
+  updateStats();
+}
+
+function sellItem(uid) {
+  let inst = P.inv.find(i => i.uid === uid);
+  if (!inst) return;
+  let it = getItemBase(inst.id);
+  
+  let sellBonus = 1 + (((P.perks && P.perks.p_barter) || 0) * 0.15);
+  let aAb = getArmorAbility();
+  if (aAb && aAb.id === 'a_barter') sellBonus += 0.25;
+  let baseVal = inst.legendary ? it.value * 3 : it.value;
+  let finalValue = Math.floor(baseVal * sellBonus);
+
+  P.caps += finalValue;
+  
+  if (inst.qty && inst.qty > 1) {
+    inst.qty--;
+  } else {
+    P.inv = P.inv.filter(i => i.uid !== uid);
+  }
+  
+  logMsg("Vendiste 1x " + (inst.legendary ? "★ " : "") + it.name + " por " + finalValue + " chapas.");
+  renderInv(P.subtab);
+  updateStats();
+}
+
+function useMedItem(uid) {
+  let inst = P.inv.find(i => i.uid === uid);
+  if (!inst) return;
+  let it = getItemBase(inst.id);
+  if (!it) return;
+
+  let bonusHeal = ((P.perks && P.perks.p_medic) || 0) * 15;
+  if (it.type === 'med') {
+    bonusHeal += getEffectBonus('stimBonus');
+    let aAb = getArmorAbility();
+    if (aAb && aAb.id === 'a_medic') bonusHeal = Math.floor(((it.heal || 0) + bonusHeal) * 0.4);
+  }
+  let totalHeal = (it.heal || 0) + (it.type === 'med' ? bonusHeal : 0);
+
+  if (totalHeal > 0) {
+    P.hp = Math.min(getMaxHp(), P.hp + totalHeal);
+    logMsg("Usaste 1x " + it.name + " y recuperaste " + totalHeal + " de salud.");
+  } else if (it.radRemove) {
+    removeRads(it.radRemove);
+  } else {
+    logMsg("Usaste 1x " + it.name + ".");
+  }
+
+  // Aplicar efecto temporal si existe
+  if (it.effectId) applyConsumableEffect(it);
+
+  if (inst.qty && inst.qty > 1) {
+    inst.qty--;
+  } else {
+    P.inv = P.inv.filter(i => i.uid !== uid);
+  }
+
+  renderInv(P.subtab === 'med' || P.subtab === 'food' || P.subtab === 'drink' ? P.subtab : 'med');
+  updateStats();
+}
+
+function quickHeal() {
+  let inst = P.inv.find(x => getItemBase(x.id)?.type === 'med');
+  if (inst) useMedItem(inst.uid);
+  else logMsg("No dispones de estimulantes en el inventario.");
+}
+
+function renderShop(sub = P.shopSubtab || 'weapon', page) {
+  if (P.shopSubtab !== sub) P.shopPage = 0;
+  P.shopSubtab = sub;
+  if (page !== undefined) P.shopPage = page;
+  if (P.shopPage === undefined || P.shopPage < 0) P.shopPage = 0;
+  if (!P.shopLevel) P.shopLevel = 1;
+
+  const ITEMS_PER_PAGE = 5;
+  let discountPct = (P.special.C * 0.02) + (((P.perks && P.perks.p_trader) || 0) * 0.10);
+  let isMaxShop = P.shopLevel >= 10;
+  let nextShopCost = P.shopLevel === 1 ? 1000 : P.shopLevel === 2 ? 2000 : P.shopLevel * 2000;
+
+  let html = `
+    <h2>COMERCIANTE</h2>
+    <div class="subtabs">
+      <button class="${sub === 'weapon' ? 'active' : ''}" onclick="renderShop('weapon')">Armas</button>
+      <button class="${sub === 'armor' ? 'active' : ''}" onclick="renderShop('armor')">Armaduras</button>
+      <button class="${sub === 'med' ? 'active' : ''}" onclick="renderShop('med')">Ayuda</button>
+      <button class="${sub === 'ammo' ? 'active' : ''}" onclick="renderShop('ammo')">Munición</button>
+      <button class="${sub === 'junk' ? 'active' : ''}" onclick="renderShop('junk')">Chatarra</button>
+      <button class="${sub === 'other' ? 'active' : ''}" onclick="renderShop('other')">Otros</button>
+    </div>
+
+    <div class="item" style="border-color: var(--gold); background: #151a12; margin-bottom: 12px;">
+      <b>⭐ MEJORA DE NIVEL DE TIENDA</b><br>
+      <span style="font-size:12px; color:var(--gold);">Nivel de Tienda actual: ${P.shopLevel} / 10</span><br>
+      <span style="font-size:11px; color:#8d9880;">${isMaxShop ? 'NIVEL MÁXIMO DE TIENDA ALCANZADO (Desbloquea Servoarmaduras y Mini Nukes)' : 'Desbloquea más equipo avanzado | Precio mejora: ' + nextShopCost + ' chapas'}</span><br>
+      <button style="margin-top:6px;" ${isMaxShop ? 'disabled' : ''} onclick="upgradeShop()">${isMaxShop ? 'Tienda al Máximo' : 'Mejorar Tienda (Nivel Siguiente)'}</button>
+    </div>
+
+    <div class="item" style="border-color: var(--accent); background: #151a12; margin-bottom: 12px;">
+      <b>🎒 MEJORA DE MOCHILA BASE</b><br>
+      <span style="font-size:12px; color:#a8c47a;">Capacidad de mochila actual: ${P.baseMaxWeight} / 500 kg</span><br>
+      <span style="font-size:11px; color:#8d9880;">${P.baseMaxWeight >= 500 ? 'MÁXIMA CAPACIDAD ALCANZADA' : '+25 kg mochila | Precio: ' + P.bagUpgradeCost + ' chapas'}</span><br>
+      <button style="margin-top:6px;" ${P.baseMaxWeight >= 500 ? 'disabled' : ''} onclick="upgradeBag()">${P.baseMaxWeight >= 500 ? 'Capacidad Máxima' : 'Aumentar Capacidad'}</button>
+    </div>
+    
+    <h3 style="color:var(--accent); margin-top:10px;">OBJETOS EN VENTA (${Math.floor(discountPct * 100)}% Descuento)</h3>
+  `;
+
+  let list = DB_ITEMS.filter(it => {
+    if (!it) return false;
+    if (it.shopTier > P.shopLevel) return false;
+    if (sub === 'weapon') return it.type === 'weapon';
+    if (sub === 'armor') return it.type === 'armor';
+    if (sub === 'med') return it.type === 'med' || it.type === 'chem';
+    if (sub === 'ammo') return it.type === 'ammo';
+    if (sub === 'junk') return it.type === 'junk';
+    if (sub === 'other') return it.type === 'other';
+    return false;
+  });
+
+  if (list.length === 0) {
+    html += `<p style="font-size:12px; color:#8d9880;">El comerciante no tiene artículos de esta categoría a la venta en este nivel de tienda.</p>`;
+  } else {
+    let totalPages = Math.max(1, Math.ceil(list.length / ITEMS_PER_PAGE));
+    if (P.shopPage >= totalPages) P.shopPage = totalPages - 1;
+    let start = P.shopPage * ITEMS_PER_PAGE;
+    let pageItems = list.slice(start, start + ITEMS_PER_PAGE);
+
+    html += `<p style="font-size:11px; color:#8d9880;">Mostrando ${start + 1}–${Math.min(start + ITEMS_PER_PAGE, list.length)} de ${list.length} · Pág. ${P.shopPage + 1}/${totalPages}</p>`;
+
+    pageItems.forEach(it => {
+      let basePrice = it.value * 2;
+      let price = Math.max(1, Math.floor(basePrice * (1 - discountPct)));
+
+      html += `
+        <div class="item">
+          <b>${it.name}</b> — ${price} chapas<br>
+          <span style="font-size:11px; color:#8d9880;">
+            ${it.damage ? 'Daño: ' + it.damage : ''}
+            ${it.def ? 'Defensa: ' + it.def : ''}
+            ${it.heal ? 'Cura: ' + it.heal : ''}
+            ${it.radRemove ? 'Quita ' + it.radRemove + ' RAD' : ''}
+            ${it.qty ? 'Cantidad: ' + it.qty + ' balas' : ''}
+            ${it.type === 'junk' ? 'Componente para el Taller' : ''}
+            ${it.type === 'other' ? 'Contenedor especial de botín' : ''}
+            ${it.effectDesc ? it.effectDesc : ''}
+          </span><br>
+          <button style="margin-top:6px;" onclick="buyItem(${it.id}, ${price})">Comprar 1</button>
+        </div>
+      `;
+    });
+
+    if (totalPages > 1) {
+      html += `<div style="display:flex; justify-content:center; gap:10px; margin-top:12px; align-items:center;">
+        <button ${P.shopPage <= 0 ? 'disabled' : ''} onclick="renderShop('${sub}', ${P.shopPage - 1})">◀ Anterior</button>
+        <span style="font-size:12px; color:var(--accent);">Pág. ${P.shopPage + 1} / ${totalPages}</span>
+        <button ${P.shopPage >= totalPages - 1 ? 'disabled' : ''} onclick="renderShop('${sub}', ${P.shopPage + 1})">Siguiente ▶</button>
+      </div>`;
+    }
+  }
+
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function upgradeShop() {
+  if (P.shopLevel >= 10) {
+    logMsg("La tienda ya ha alcanzado el nivel máximo (10).");
+    return;
+  }
+  let cost = P.shopLevel === 1 ? 1000 : P.shopLevel === 2 ? 2000 : P.shopLevel * 2000;
+  if (P.caps < cost) {
+    logMsg("No tienes suficientes chapas para mejorar la tienda al siguiente nivel.");
+    return;
+  }
+
+  P.caps -= cost;
+  P.shopLevel++;
+  logMsg("¡Tienda mejorada al Nivel " + P.shopLevel + "! Nuevos objetos y servoarmaduras disponibles.");
+
+  renderShop(P.shopSubtab);
+  updateStats();
+}
+
+function upgradeBag() {
+  if (P.baseMaxWeight >= 500) {
+    logMsg("Has alcanzado la capacidad máxima de mochila (500kg).");
+    return;
+  }
+  if (P.caps < P.bagUpgradeCost) {
+    logMsg("No tienes suficientes chapas para mejorar la mochila.");
+    return;
+  }
+
+  P.caps -= P.bagUpgradeCost;
+  P.baseMaxWeight += 25;
+  logMsg("Mochila mejorada (+25kg).");
+  P.bagUpgradeCost = Math.floor(P.bagUpgradeCost * 1.5);
+
+  renderShop(P.shopSubtab);
+  updateStats();
+}
+
+function buyItem(id, price) {
+  if (P.caps < price) {
+    logMsg("No tienes suficientes chapas.");
+    return;
+  }
+  
+  let success = addItemToInv(id, 1);
+  if (success) {
+    P.caps -= price;
+    logMsg("Compraste 1x " + getItemBase(id)?.name + ".");
+  }
+  renderShop(P.shopSubtab);
+  updateStats();
+}
+
+function switchTab(type, btn) {
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  if (type === 'map') renderMap();
+  if (type === 'char') renderCharacter();
+  if (type === 'inv') renderInv('weapon');
+  if (type === 'vault') renderVault(P.vaultSubtab || 'lunchboxes');
+  if (type === 'quests') renderQuests();
+  if (type === 'shop') renderShop('weapon');
+}
+
+function closeModal() { 
+  document.getElementById('modal').classList.remove('show'); 
+  if (combatState) combatState = null;
+}
+
+// Sonido estilo Pip-Boy (clic UI)
+let _pipCtx = null;
+function pipClick() {
+  try {
+    if (!_pipCtx) _pipCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (_pipCtx.state === 'suspended') _pipCtx.resume();
+    let t = _pipCtx.currentTime;
+    let osc = _pipCtx.createOscillator();
+    let gain = _pipCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(880, t);
+    osc.frequency.exponentialRampToValueAtTime(440, t + 0.04);
+    gain.gain.setValueAtTime(0.08, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+    osc.connect(gain);
+    gain.connect(_pipCtx.destination);
+    osc.start(t);
+    osc.stop(t + 0.06);
+  } catch (e) {}
+}
+
+function renameSurvivor() {
+  let current = P.playerName || "Superviviente";
+  let name = prompt("Nombre del superviviente:", current);
+  if (name === null) return;
+  name = name.trim().slice(0, 24);
+  if (!name) {
+    logMsg("Nombre no válido.");
+    return;
+  }
+  P.playerName = name;
+  logMsg("Ahora te llamas " + name + ".");
+  updateStats();
+}
+
+function saveGame() {
+  localStorage.setItem("wl_save_v16", JSON.stringify(P));
+  logMsg("Partida guardada.");
+}
+
+function loadGame() {
+  let raw = localStorage.getItem("wl_save_v16");
+  if (!raw) {
+    logMsg("No hay partida guardada.");
+    return;
+  }
+  try {
+    let parsed = JSON.parse(raw);
+    // Aplicar defaults como en init
+    if (!parsed.special) parsed.special = { S: 1, P: 1, E: 1, C: 1, I: 1, A: 1, L: 1 };
+    if (!parsed.perks) parsed.perks = {};
+    if (!parsed.playerName) parsed.playerName = "Superviviente";
+    if (parsed.rads === undefined) parsed.rads = 0;
+    if (!parsed.storage) parsed.storage = [];
+    if (!parsed.activeEffects) parsed.activeEffects = [];
+    if (parsed.storageMaxWeight === undefined) parsed.storageMaxWeight = 100;
+    P = parsed;
+    stopRadioMusic();
+    logMsg("Partida cargada. Bienvenido, " + (P.playerName || "Superviviente") + ".");
+    renderMap();
+    updateStats();
+  } catch (e) {
+    logMsg("Error al cargar la partida.");
+  }
+}
+
+function resetGame() {
+  if (!confirm("¿Reiniciar partida? Se borrará el guardado actual.")) return;
+  stopRadioMusic();
+  localStorage.removeItem("wl_save_v16");
+  location.reload();
+}
+
+// INICIALIZACIÓN
+let savedData = localStorage.getItem ? localStorage.getItem("wl_save_v16") : null;
+if (savedData) {
+  try {
+    let parsed = JSON.parse(savedData);
+    if (!parsed.special) parsed.special = { S: 1, P: 1, E: 1, C: 1, I: 1, A: 1, L: 1 };
+    if (!parsed.perks) parsed.perks = {};
+    if (parsed.specialPts === undefined) parsed.specialPts = 0;
+    if (parsed.perkPts === undefined) parsed.perkPts = 0;
+    if (parsed.shopLevel === undefined) parsed.shopLevel = 1;
+    if (parsed.craftLevel === undefined) parsed.craftLevel = 1;
+    if (parsed.modLevel === undefined) parsed.modLevel = 1;
+    if (parsed.lunchboxLevel === undefined) parsed.lunchboxLevel = 1;
+    if (parsed.scrapLevel === undefined) parsed.scrapLevel = 1;
+    if (parsed.alchemyLevel === undefined) parsed.alchemyLevel = 1;
+    if (parsed.cookLevel === undefined) parsed.cookLevel = 1;
+    if (parsed.storageMaxWeight === undefined) parsed.storageMaxWeight = 100;
+    if (parsed.storageUpgradeRank === undefined) parsed.storageUpgradeRank = 0;
+    if (!parsed.storage) parsed.storage = [];
+    if (!parsed.activeEffects) parsed.activeEffects = [];
+    if (parsed.invPage === undefined) parsed.invPage = 0;
+    if (parsed.craftPage === undefined) parsed.craftPage = 0;
+    if (parsed.storagePage === undefined) parsed.storagePage = 0;
+    if (parsed.shopPage === undefined) parsed.shopPage = 0;
+    if (parsed.rads === undefined) parsed.rads = 0;
+    if (!parsed.playerName) parsed.playerName = "Superviviente";
+    if (parsed.radioSignal === undefined) parsed.radioSignal = null;
+    if (parsed.location === undefined) parsed.location = null;
+    if (parsed.ammoBox) {
+      for (let k in P.ammoBox) {
+        if (parsed.ammoBox[k] === undefined) parsed.ammoBox[k] = P.ammoBox[k];
+      }
+    }
+    P = parsed;
+  } catch (e) {}
+}
+
+logMsg("Bienvenido al Yermo. Fabrica, modifica tus objetos y sobrevive.");
+renderMap();
+updateStats();
+
+// Clic Pip-Boy en todos los botones
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.closest && e.target.closest('button')) {
+    pipClick();
+  }
+}, true);
+
+// PWA: registrar Service Worker (offline)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js').then(function(reg) {
+      console.log('SW registrado', reg.scope);
+    }).catch(function(err) {
+      console.log('SW no disponible (abre desde servidor local/HTTPS):', err.message);
+    });
+  });
+}
+</script>
+</body>
+</html>
