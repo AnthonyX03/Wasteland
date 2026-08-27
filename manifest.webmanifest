@@ -1,7 +1,7 @@
 {
   "name": "Wasteland",
   "short_name": "Wasteland",
-  "description": "RPG de supervivencia en el Yermo. Offline y con guardado local.",
+  "description": "Supervivencia en el Yermo. Offline.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

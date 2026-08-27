@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v3';
+const CACHE = 'wasteland-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -10,7 +10,11 @@ const ASSETS = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE).then(async (cache) => {
+      for (const url of ASSETS) {
+        try { await cache.add(url); } catch (e) { /* audio puede faltar aún */ }
+      }
+    }).then(() => self.skipWaiting())
   );
 });
 
