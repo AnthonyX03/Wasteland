@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v4';
+const CACHE = 'wasteland-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -31,6 +31,21 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  // HTML siempre intenta red primero para no quedar con versión vieja de colores/UI
+  const isHTML = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/');
+  if (isHTML) {
+    event.respondWith(
+      fetch(req).then((res) => {
+        if (res && res.ok) {
+          const clone = res.clone();
+          caches.open(CACHE).then((cache) => cache.put(req, clone));
+        }
+        return res;
+      }).catch(() => caches.match(req).then((c) => c || caches.match('./index.html')))
+    );
+    return;
+  }
   event.respondWith(
     caches.match(req).then((cached) => {
       const fetched = fetch(req).then((res) => {

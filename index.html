@@ -300,6 +300,9 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 }
 
 .item { padding: 10px; border: 1px solid #00aa2a; background: #000a00; margin-bottom: 8px; }
+.item.fcol { border-width: 1px; border-style: solid; }
+.item.medic-box { border: 1px solid #66b3ff !important; background: #0a1520 !important; }
+.item.medic-box b { color: #66b3ff !important; }
 .item-head { display: flex; justify-content: space-between; align-items: center; }
 .equipped-tag { color: var(--accent); border: 1px solid var(--line); font-size: 10px; padding: 2px 4px; }
 .row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #003300; font-size: 13px; }
@@ -2816,12 +2819,12 @@ function renderQuests() {
     P.activeFactionQuests.forEach(q => {
       let fac = FACTIONS[q.faction];
       let pct = Math.floor((q.current / q.target) * 100);
-      let fcol = fac ? fac.color : 'var(--line)';
-      html += `<div class="item" style="border-color:${fcol};">
-        <b style="color:${fcol};">${q.title}</b> <span style="font-size:10px;color:${fcol};">PRINCIPAL · ${fac ? fac.name : q.faction}</span><br>
-        <span style="font-size:11px;">${q.desc}</span><br>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${fcol};"></div></div>
-        <span style="font-size:11px;">${q.current}/${q.target} ${q.completed ? '— Completada (reclama en el asentamiento)' : ''}</span>
+      let fcol = (fac && fac.color) ? fac.color : '#00aa2a';
+      html += `<div class="item fcol" style="border-color:${fcol} !important;">
+        <b style="color:${fcol} !important;">${q.title}</b> <span style="font-size:10px;color:${fcol} !important;">PRINCIPAL · ${fac ? fac.name : q.faction}</span><br>
+        <span style="font-size:11px;">${q.desc || ''}</span><br>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${fcol} !important;"></div></div>
+        <span style="font-size:11px;">${q.current || 0}/${q.target || 1} ${q.completed ? '— Completada (reclama en el asentamiento)' : ''}</span>
       </div>`;
     });
   }
@@ -3565,11 +3568,30 @@ function setVolSfx(v) {
 }
 
 function ensureFactionDefaults() {
-  if (!P.reputation) P.reputation = { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0 };
+  if (!P.reputation) P.reputation = {};
+  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute'].forEach(k => {
+    if (P.reputation[k] === undefined || P.reputation[k] === null) P.reputation[k] = 0;
+  });
   if (!P.activeFactionQuests) P.activeFactionQuests = [];
+  if (!Array.isArray(P.activeFactionQuests)) P.activeFactionQuests = [];
   if (!P.factionQuestPool) P.factionQuestPool = {};
   if (P.volMusic === undefined) P.volMusic = 0.6;
   if (P.volSfx === undefined) P.volSfx = 0.7;
+  if (P.factionShopPage === undefined) P.factionShopPage = {};
+}
+
+
+function factionColor(fid) {
+  try {
+    let f = FACTIONS && FACTIONS[fid];
+    return (f && f.color) ? f.color : '#00aa2a';
+  } catch (e) { return '#00aa2a'; }
+}
+function factionName(fid) {
+  try {
+    let f = FACTIONS && FACTIONS[fid];
+    return (f && f.name) ? f.name : (fid || 'Facción');
+  } catch (e) { return fid || 'Facción'; }
 }
 
 function getFactionRep(fid) {
@@ -3637,14 +3659,19 @@ function renderSettlementUI(settlementId, tab) {
   ensureFactionDefaults();
   let sett = SETTLEMENTS.find(s => s.id === settlementId);
   if (!sett) { renderMap(); return; }
-  let fac = FACTIONS[sett.faction];
+  if (sett.playerOwned || sett.id === 'player_home') {
+    enterPlayerSettlement();
+    return;
+  }
+  let fac = FACTIONS[sett.faction] || { name: sett.faction, color: '#00aa2a', shopLevels: [100,250,500,750,1000] };
+  let fcol = fac.color || '#00aa2a';
   let rep = getFactionRep(sett.faction);
   tab = tab || 'missions';
 
   let html = `
     <div style="text-align:center;">
-      <h2 style="color:${fac.color}; margin:4px 0;">⚑ ${sett.name}</h2>
-      <div style="font-size:12px; color:#8d9880;">${fac.name} · Reputación: <b style="color:${fac.color};">${rep}/1000</b></div>
+      <h2 style="color:${fcol}; margin:4px 0;">⚑ ${sett.name}</h2>
+      <div style="font-size:12px; color:#8d9880;"><span style="color:${fcol};">${fac.name}</span> · Reputación: <b style="color:${fcol};">${rep}/1000</b></div>
     </div>
     <div class="subtabs" style="margin-top:8px;">
       <button class="${tab === 'missions' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','missions')">Misiones</button>
@@ -3654,15 +3681,14 @@ function renderSettlementUI(settlementId, tab) {
   `;
 
   if (tab === 'missions') {
-    html += `<h3 style="color:${fac.color}; font-size:13px;">Misiones principales (reclamar aquí)</h3>`;
-    // Activas de esta facción
-    let mine = (P.activeFactionQuests || []).filter(q => q.faction === sett.faction);
+    html += `<h3 style="color:${fcol}; font-size:13px;">Misiones principales (reclamar aquí)</h3>`;
+    let mine = (P.activeFactionQuests || []).filter(q => q && q.faction === sett.faction);
     if (mine.length > 0) {
       mine.forEach(q => {
-        html += `<div class="item" style="border-color:${fac.color};">
-          <b style="color:${fac.color};">${q.title}</b> <span style="font-size:10px;color:${fac.color};">PRINCIPAL</span><br>
-          <span style="font-size:11px;color:#8d9880;">${q.desc}</span><br>
-          <span style="font-size:11px;">Progreso: ${q.current}/${q.target}</span><br>`;
+        html += `<div class="item fcol" style="border-color:${fcol} !important;">
+          <b style="color:${fcol} !important;">${q.title}</b> <span style="font-size:10px;color:${fcol} !important;">PRINCIPAL</span><br>
+          <span style="font-size:11px;color:#8d9880;">${q.desc || ''}</span><br>
+          <span style="font-size:11px;">Progreso: ${q.current || 0}/${q.target || 1}</span><br>`;
         if (q.completed) {
           html += `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="claimFactionQuest('${q.id}')">RECLAMAR RECOMPENSA</button>`;
         } else {
@@ -3671,10 +3697,9 @@ function renderSettlementUI(settlementId, tab) {
         html += `</div>`;
       });
     }
-    // Disponibles
-    let avail = getAvailableFactionQuests(sett.faction).filter(q => !(P.activeFactionQuests || []).some(a => a.id === q.id));
-    let activeCount = (P.activeFactionQuests || []).filter(q => q.faction === sett.faction).length;
-    html += `<h3 style="color:var(--gold); font-size:13px;">Disponibles (${avail.length}) · Activas ${activeCount}/3</h3>`;
+    let avail = getAvailableFactionQuests(sett.faction).filter(q => q && !(P.activeFactionQuests || []).some(a => a.id === q.id));
+    let activeCount = (P.activeFactionQuests || []).filter(q => q && q.faction === sett.faction).length;
+    html += `<h3 style="color:${fcol}; font-size:13px;">Disponibles (${avail.length}) · Activas ${activeCount}/3</h3>`;
     if (activeCount >= 3) {
       html += `<p style="font-size:11px;color:var(--danger);">Máximo de 3 misiones activas con esta facción. Completa alguna para aceptar más.</p>`;
     }
@@ -3682,10 +3707,11 @@ function renderSettlementUI(settlementId, tab) {
       html += `<p style="font-size:12px;color:#8d9880;">No hay misiones nuevas. Completa las activas o sube reputación.</p>`;
     } else {
       avail.forEach(q => {
-        html += `<div class="item" style="border-color:${fac.color};">
-          <b style="color:${fac.color};">${q.title}</b><br>
-          <span style="font-size:11px;color:#8d9880;">${q.desc}</span><br>
-          <span style="font-size:11px;">Recompensa: ${q.reward.caps} chapas · ${q.reward.xp} XP · +${q.reward.rep} rep</span><br>
+        let rw = q.reward || {};
+        html += `<div class="item fcol" style="border-color:${fcol} !important;">
+          <b style="color:${fcol} !important;">${q.title}</b><br>
+          <span style="font-size:11px;color:#8d9880;">${q.desc || ''}</span><br>
+          <span style="font-size:11px;">Recompensa: ${rw.caps || 0} chapas · ${rw.xp || 0} XP · +${rw.rep || 0} rep</span><br>
           <button style="margin-top:6px;" onclick="acceptFactionQuest('${sett.faction}','${q.id}')">ACEPTAR</button>
         </div>`;
       });
@@ -3696,60 +3722,73 @@ function renderSettlementUI(settlementId, tab) {
     if (shopLvl < 1) {
       html += `<p style="font-size:13px;color:var(--danger);">Tienda bloqueada. Necesitas reputación ${thresholds[0]} (tienes ${rep}).</p>`;
     } else {
-      html += `<p style="font-size:12px;color:#8d9880;">Tienda nivel ${shopLvl}/5 · Rep ${rep}/1000 · Umbrales: ${thresholds.join('/')}</p>`;
+      html += `<p style="font-size:12px;color:#8d9880;">Tienda nivel <b style="color:${fcol};">${shopLvl}/5</b> · Rep <b style="color:${fcol};">${rep}/1000</b> · Umbrales: ${thresholds.join('/')}</p>`;
       let baseItems = (FACTION_SHOP_ITEMS[sett.faction] || []).filter(it => shopLvl >= (it.shopLevel || 1));
       let uniqueItems = (FACTION_UNIQUE_SHOP[sett.faction] || []).filter(it => shopLvl >= (it.shopLevel || 1));
-      // Uniques first for faction-only gear
       let items = [...uniqueItems, ...baseItems];
-      // Deduplicate by id
       let seen = {};
-      items = items.filter(e => { if (seen[e.id]) return false; seen[e.id] = true; return true; });
+      items = items.filter(e => { if (!e || seen[e.id]) return false; seen[e.id] = true; return true; });
       if (items.length === 0) {
         html += `<p style="font-size:12px;color:#8d9880;">Sin mercancía.</p>`;
       } else {
-        items.forEach(entry => {
+        if (!P.factionShopPage) P.factionShopPage = {};
+        if (P.factionShopPage[sett.id] === undefined) P.factionShopPage[sett.id] = 0;
+        let page = P.factionShopPage[sett.id] || 0;
+        const PER = 5;
+        let totalPages = Math.max(1, Math.ceil(items.length / PER));
+        if (page >= totalPages) page = totalPages - 1;
+        if (page < 0) page = 0;
+        P.factionShopPage[sett.id] = page;
+        let slice = items.slice(page * PER, page * PER + PER);
+        slice.forEach(entry => {
           let it = getItemBase(entry.id);
           if (!it) return;
-          let price = Math.max(1, Math.floor(it.value * 1.8));
+          let price = Math.max(1, Math.floor((it.value || 10) * 1.8));
           let uniqueTag = it.factionOnly ? ' <span style="color:var(--gold);font-size:10px;">★ FACCIÓN</span>' : '';
-          html += `<div class="item">
-            <b>${it.name}</b>${uniqueTag} — ${price} chapas
-            <span style="font-size:10px;color:#8d9880;"> (Tienda Nv.${entry.shopLevel || 1} · Equipo Nv.${P.lvl})</span><br>
+          html += `<div class="item fcol" style="border-color:${fcol} !important;">
+            <b style="color:${fcol} !important;">${it.name}</b>${uniqueTag} — ${price} chapas
+            <span style="font-size:10px;color:#8d9880;"> (Tienda Nv.${entry.shopLevel || 1} · Equipo Nv.${P.lvl || 1})</span><br>
             <button style="margin-top:4px;" onclick="buyFactionItem('${sett.faction}',${entry.id},${price})">Comprar</button>
           </div>`;
         });
+        if (totalPages > 1) {
+          html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+            <button ${page <= 0 ? 'disabled' : ''} onclick="P.factionShopPage['${sett.id}']=${page - 1};renderSettlementUI('${sett.id}','shop')">◀ Anterior</button>
+            <span style="font-size:11px;color:${fcol};">Pág. ${page + 1}/${totalPages}</span>
+            <button ${page >= totalPages - 1 ? 'disabled' : ''} onclick="P.factionShopPage['${sett.id}']=${page + 1};renderSettlementUI('${sett.id}','shop')">Siguiente ▶</button>
+          </div>`;
+        }
       }
     }
   } else {
-    // BASE: médico, casa, vale de ruta
+    // BASE
     let hasVoucher = P.fastTravelUnlocked && P.fastTravelUnlocked.includes(sett.id);
     let hasHouse = P.ownedHouses && P.ownedHouses.includes(sett.id);
     let maxhp = getMaxHp();
     let needHp = Math.max(0, maxhp - P.hp);
     let needRad = P.rads || 0;
-    // Curar HP: 2 chapas por punto; radiación: 5 chapas por punto (más caro)
     let costHp = Math.ceil(needHp / 2);
     let costRad = needRad * 1;
-    html += `<div class="item">
-      <b>${fac.name}</b> · Rep ${rep}/1000<br>
-      <span style="font-size:11px;color:#8d9880;">Tienda: Nv1@100 · Nv2@250 · Nv3@500 · Nv4@750 · Nv5@1000</span>
+    html += `<div class="item fcol" style="border-color:${fcol} !important;">
+      <b style="color:${fcol} !important;">${fac.name}</b> · Rep <b style="color:${fcol} !important;">${rep}/1000</b><br>
+      <span style="font-size:11px;color:#8d9880;">Tienda: <span style="color:${fcol};">Nv1@100 · Nv2@250 · Nv3@500 · Nv4@750 · Nv5@1000</span></span>
     </div>
-    <div class="item" style="border-color:#66b3ff; background:#0a1520;">
-      <b style="color:#66b3ff;">🩺 Médico del asentamiento</b><br>
+    <div class="item medic-box">
+      <b>🩺 Médico del asentamiento</b><br>
       <span style="font-size:12px;color:#8d9880;">Cura total de salud y/o radiación. La radiación cuesta más.</span><br>
       <span style="font-size:11px;">HP: ${P.hp}/${maxhp} → coste ${costHp} chapas · RAD: ${needRad} → coste ${costRad} chapas</span><br>
       <button style="margin-top:6px;" ${needHp === 0 || P.caps < costHp ? 'disabled' : ''} onclick="settlementHealHp('${sett.id}')">Curar salud (${costHp})</button>
       <button style="margin-top:6px;" ${needRad === 0 || P.caps < costRad ? 'disabled' : ''} onclick="settlementHealRad('${sett.id}')">Curar radiación (${costRad})</button>
       <button style="margin-top:6px;" ${(needHp === 0 && needRad === 0) || P.caps < (costHp + costRad) ? 'disabled' : ''} onclick="settlementHealFull('${sett.id}')">Curar todo (${costHp + costRad})</button>
     </div>
-    <div class="item" style="border-color:var(--gold);">
+    <div class="item" style="border-color:var(--gold) !important;">
       <b>🏠 Casa en ${sett.name}</b> — 2000 chapas<br>
       <span style="font-size:12px;color:#8d9880;">Descansa 1–24 h. Recuperas salud según tu nivel. El compañero NO se cura aquí.</span><br>
       ${hasHouse
         ? `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHouseRestUI('${sett.id}')">Entrar y descansar</button>`
         : `<button style="margin-top:6px;" ${P.caps < 2000 ? 'disabled' : ''} onclick="buySettlementHouse('${sett.id}')">Comprar casa (2000)</button>`}
     </div>
-    <div class="item" style="border-color:#aa55ff;">
+    <div class="item" style="border-color:#aa55ff !important;">
       <b>⚡ Vale de Ruta</b> — 1000 chapas<br>
       <span style="font-size:12px;color:#8d9880;">Desbloquea viaje rápido a este asentamiento.</span><br>
       ${hasVoucher
@@ -3757,29 +3796,25 @@ function renderSettlementUI(settlementId, tab) {
         : `<button style="margin-top:6px;" ${P.caps < 1000 ? 'disabled' : ''} onclick="buyRouteVoucher('${sett.id}')">Comprar vale (1000 chapas)</button>`}
     </div>`;
     if (sett.faction === 'railroad') {
-      html += `<div class="item" style="border-color:#cccc66;">
-        <b>🕊 Liberación de Synth</b><br>
+      html += `<div class="item" style="border-color:#cccc66 !important;">
+        <b style="color:#cccc66 !important;">🕊 Liberación de Synth</b><br>
         <span style="font-size:12px;color:#8d9880;">Vende compañeros sintéticos a cambio de chapas (más nivel = más pago; legendarios pagan extra).</span><br>
         <button style="margin-top:6px;" onclick="openSynthLiberationUI('${sett.id}')">Ver Synths en prisión</button>
       </div>`;
     }
     if (sett.faction === 'institute') {
-      html += `<div class="item" style="border-color:#66ccff;">
-        <b>🤖 Contratación de Synth</b><br>
+      let canGen1 = getFactionRep('institute') >= 500;
+      html += `<div class="item" style="border-color:#66ccff !important;">
+        <b style="color:#66ccff !important;">🤖 Contratación de Synth</b><br>
         <span style="font-size:12px;color:#8d9880;">Contrata compañeros Synth según tu nivel. Puedes rerolear la oferta.</span><br>
         <button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openSynthHireUI('${sett.id}')">Ver oferta de Synths</button>
+        <button style="margin-top:6px;" ${canGen1 ? '' : 'disabled'} onclick="openSynthHireGen1UI('${sett.id}')">${canGen1 ? 'Oferta Gen-1 (Nv.1)' : 'Gen-1 🔒 (rep 500)'}</button>
+        <p style="font-size:11px;color:#8d9880;margin:6px 0 0 0;">Gen-1: solo nivel 1, más baratos. Desbloqueo a <b style="color:#66ccff;">500 reputación</b> (tienes ${rep}).</p>
       </div>`;
-      if (getFactionRep('institute') >= 500) {
-        html += `<div class="item" style="border-color:#88ddff;">
-          <b>🤖 Contratación Gen-1 (rep 500+)</b><br>
-          <span style="font-size:12px;color:#8d9880;">Solo Synths de nivel 1. Más baratos. Reroleo infinito.</span><br>
-          <button style="margin-top:6px;" onclick="openSynthHireGen1UI('${sett.id}')">Oferta Gen-1</button>
-        </div>`;
-      }
     }
     if (sett.faction === 'strip') {
-      html += `<div class="item" style="border-color:#ff88cc;">
-        <b>🎰 Casino The Tops</b><br>
+      html += `<div class="item" style="border-color:#ff88cc !important;">
+        <b style="color:#ff88cc !important;">🎰 Casino The Tops</b><br>
         <span style="font-size:12px;color:#8d9880;">Intercambia chapas por fichas, juega y compra exclusivos.</span><br>
         <button style="margin-top:6px;background:#aa2266;color:#fff;" onclick="openCasinoUI('${sett.id}')">Entrar al Casino</button>
       </div>`;
@@ -4142,8 +4177,9 @@ function generateSynthGen1Offer() {
 let _synthGen1Offers = null;
 
 function openSynthHireGen1UI(settlementId) {
+  ensureFactionDefaults();
   if (getFactionRep('institute') < 500) {
-    logMsg("Necesitas 500 de reputación con el Instituto.");
+    logMsg("Necesitas 500 de reputación con el Instituto (tienes " + getFactionRep('institute') + ").");
     return;
   }
   if (!_synthGen1Offers) _synthGen1Offers = generateSynthGen1Offer();
