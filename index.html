@@ -148,44 +148,89 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   min-height: 0;
   padding: 6px;
 }
+.map-compact .map-top {
+  flex-shrink: 0;
+  min-height: 18px;
+  text-align: center;
+  font-size: 11px;
+}
+.map-compact .map-signal-hint {
+  height: 18px;
+  min-height: 18px;
+  max-height: 18px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+.map-compact {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+}
 .map-compact .map-actions {
-  min-height: 72px;
-  max-height: 72px;
+  height: 62px;
+  min-height: 62px;
+  max-height: 62px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  margin: 4px 0 2px 0;
+  justify-content: center;
+  margin: 2px 0 0 0;
   overflow: hidden;
+  box-sizing: border-box;
 }
 .map-compact .map-actions .map-act-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
+  align-items: center;
   gap: 6px;
-  min-height: 40px;
+  height: 36px;
+  min-height: 36px;
+  max-height: 36px;
+  overflow: hidden;
 }
 .map-compact .map-actions .map-act-hint {
   font-size: 11px;
+  height: 18px;
   min-height: 18px;
+  max-height: 18px;
   line-height: 18px;
-  margin-top: 2px;
+  margin: 2px 0 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  text-align: center;
+  padding: 0 4px;
+  box-sizing: border-box;
 }
 .map-compact .map-actions button {
   font-size: 12px;
-  padding: 8px 12px;
-  min-height: 36px;
+  padding: 6px 12px;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
   font-weight: bold;
+  box-sizing: border-box;
 }
 .map-compact .map-controls {
-  margin-top: 6px;
+  margin-top: auto; /* siempre abajo, no se mueve con el texto */
   max-width: 100%;
   width: 100%;
   gap: 6px;
-  padding: 0 2px;
+  padding: 4px 2px 2px 2px;
   align-items: center;
-  /* altura fija para que no salte al cambiar zona */
-  min-height: 112px;
+  height: 110px;
+  min-height: 110px;
+  max-height: 110px;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 .map-compact .map-arrows {
   gap: 5px;
@@ -3468,7 +3513,7 @@ function renderMap() {
     let sx = fmtCoord(P.radioSignal.x);
     let sy = fmtCoord(P.radioSignal.y);
     let here = (P.x === P.radioSignal.x && P.y === P.radioSignal.y);
-    signalHint = `<p style="font-size:11px; color:${here ? 'var(--gold)' : '#8d9880'};">📡 Señal en [${sx}, ${sy}]${here ? ' — ¡AQUÍ! Usa la Radio.' : ''}</p>`;
+    signalHint = `<div class="map-signal-hint" style="color:${here ? 'var(--gold)' : '#8d9880'};">📡 Señal en [${sx}, ${sy}]${here ? ' — ¡AQUÍ! Usa la Radio.' : ''}</div>`;
   }
 
   let actBtns = `<button onclick="exploreZone()">EXPLORAR</button>`;
@@ -3496,10 +3541,10 @@ function renderMap() {
 
   document.getElementById('main-view').innerHTML = `
     <div class="map-compact">
-    <div style="text-align:center;font-size:11px;"><b>[${fmtX},${fmtY}]</b> ${zone.icon} <b style="color:var(--accent);">${zone.name}</b>
+    <div class="map-top"><b>[${fmtX},${fmtY}]</b> ${zone.icon} <b style="color:var(--accent);">${zone.name}</b>
     ${zone.enterable ? ' <span style="color:var(--gold);font-size:11px;">(entrable)</span>' : ''}
     </div>
-    ${signalHint}
+    ${signalHint || '<div class="map-signal-hint">&nbsp;</div>'}
     ${renderWorldGrid()}
     <div class="map-actions">
       <div class="map-act-row">${actBtns}</div>
