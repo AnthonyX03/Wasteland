@@ -456,6 +456,7 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 
   <audio id="radio-audio" loop preload="auto" src="./audio/RadioWasteland1.mp3"></audio>
   <audio id="ambient-audio" loop preload="auto" src="./audio/AmbientMap.mp3"></audio>
+  <audio id="casino-audio" loop preload="auto" src="./audio/CasinoStrip.mp3"></audio>
 </div>
 
 <div class="modal" id="modal">
@@ -3935,19 +3936,64 @@ function hireSynthOffer(idx, settlementId) {
 
 let casinoActive = false;
 
-function startCasinoMusic() {
-  pauseAmbientMusic();
+function getCasinoAudio() {
   let audio = document.getElementById('casino-audio');
-  if (!audio) return;
-  if (!audio.src || audio.src.indexOf('CasinoStrip') === -1) audio.src = './audio/CasinoStrip.mp3';
-  audio.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
+  if (!audio) {
+    audio = document.createElement('audio');
+    audio.id = 'casino-audio';
+    audio.loop = true;
+    audio.preload = 'auto';
+    document.body.appendChild(audio);
+  }
+  return audio;
+}
+
+function startCasinoMusic() {
+  casinoActive = true;
+  // Pausar ambiente y radio
+  pauseAmbientMusic();
+  let radio = document.getElementById('radio-audio');
+  if (radio && !radio.paused) {
+    radio.pause();
+  }
+  let audio = getCasinoAudio();
+  // Ruta relativa offline (PWA/GitHub Pages)
+  let src = './audio/CasinoStrip.mp3';
+  try {
+    // Fuerza recarga del path correcto si hace falta
+    let abs = new URL(src, window.location.href).href;
+    if (!audio.src || audio.src.indexOf('CasinoStrip') === -1) {
+      audio.src = abs;
+    }
+  } catch (e) {
+    audio.src = src;
+  }
   audio.loop = true;
-  audio.play().catch(() => {});
+  audio.volume = (P.volMusic !== undefined) ? P.volMusic : 0.6;
+  const tryPlay = () => {
+    audio.play().then(() => {
+      // ok
+    }).catch((err) => {
+      logMsg("Casino: no se pudo reproducir CasinoStrip.mp3 (¿está en audio/?).");
+      console.warn('casino audio', err);
+    });
+  };
+  if (audio.readyState >= 2) {
+    tryPlay();
+  } else {
+    audio.oncanplay = () => { audio.oncanplay = null; tryPlay(); };
+    audio.load();
+    // Fallback por si oncanplay no dispara en cache
+    setTimeout(tryPlay, 300);
+  }
 }
 
 function stopCasinoMusic() {
+  casinoActive = false;
   let audio = document.getElementById('casino-audio');
-  if (audio) { audio.pause(); audio.currentTime = 0; }
+  if (audio) {
+    try { audio.pause(); audio.currentTime = 0; } catch (e) {}
+  }
   if (!radioPlaying) startAmbientMusic();
 }
 
@@ -4874,11 +4920,12 @@ function pauseAmbientMusic() {
 }
 
 function startAmbientMusic() {
-  if (radioPlaying) return;
+  if (radioPlaying || casinoActive) return;
   let amb = document.getElementById('ambient-audio');
   if (!amb) return;
   if (!amb.src || amb.src.indexOf('AmbientMap') === -1) {
-    amb.src = './audio/AmbientMap.mp3';
+    try { amb.src = new URL('./audio/AmbientMap.mp3', window.location.href).href; }
+    catch (e) { amb.src = './audio/AmbientMap.mp3'; }
   }
   amb.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
   amb.loop = true;
