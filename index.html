@@ -134,6 +134,8 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   color: var(--gold);
   white-space: nowrap;
 }
+.map-compact .map-top { margin: 0 0 2px 0; font-size: 13px; }
+.map-compact .map-signal-hint { min-height: 12px; font-size: 10px; margin: 0; }
 .map-compact .world-grid {
   max-width: 280px;
   gap: 2px;
@@ -2082,20 +2084,23 @@ function renderCharacter() {
     ${(() => {
       let html = '';
       let ps = P.playerSettlement;
+      let sc = P.sierraCasino;
+      let rf = P.robcoFactory;
+      let hasAny = (ps && ps.claimed && ps.name) || (sc && sc.claimed) || (rf && rf.claimed);
+      if (!hasAny) return '';
+      html += '<h3 style="color:var(--accent); font-size:13px; margin:10px 0 6px 0;">Asentamientos Propios</h3>';
       if (ps && ps.claimed && ps.name) {
-        html += '<div class="item" style="border-color:#44ddaa; margin:10px 0 6px 0; padding:8px;">' +
+        html += '<div class="item" style="border-color:#44ddaa; margin:0 0 6px 0; padding:8px;">' +
           '<div class="row" style="margin:0;"><span style="color:#44ddaa;font-weight:bold;">🏕 ' + ps.name + '</span>' +
           '<b style="color:#44ddaa;">Colonos: ' + (ps.settlers||0) + '/10 · Nv.' + (ps.level||1) + '/10</b></div></div>';
       }
-      let sc = P.sierraCasino;
       if (sc && sc.claimed) {
-        html += '<div class="item" style="border-color:#e8d48b; margin:6px 0; padding:8px;">' +
+        html += '<div class="item" style="border-color:#e8d48b; margin:0 0 6px 0; padding:8px;">' +
           '<div class="row" style="margin:0;"><span style="color:#e8d48b;font-weight:bold;">🎰 Casino Sierra Madre</span>' +
           '<b style="color:#e8d48b;">Empleados: ' + (sc.employees||0) + '/10 · Nv.' + (sc.level||1) + '/10</b></div></div>';
       }
-      let rf = P.robcoFactory;
       if (rf && rf.claimed) {
-        html += '<div class="item" style="border-color:#a0a0a0; margin:6px 0; padding:8px;">' +
+        html += '<div class="item" style="border-color:#a0a0a0; margin:0 0 6px 0; padding:8px;">' +
           '<div class="row" style="margin:0;"><span style="color:#a0a0a0;font-weight:bold;">⚙ Fábrica RobCo</span>' +
           '<b style="color:#a0a0a0;">Robots: ' + (rf.robots||0) + '/10 · Nv.' + (rf.level||1) + '/10</b></div></div>';
       }
@@ -3788,8 +3793,7 @@ function renderWorldGrid() {
       cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
     }
   }
-  return `<div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:280px;">${cells}</div>
-    <p style="font-size:9px;color:#8d9880;text-align:center;margin:2px 0;">· vacío · ═ carretera · ≈ río · ⌂ ruinas · ▣ ciudad · ★ interés · ⛺ camp · ⚑ asentamiento</p>`;
+  return `<div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:280px;">${cells}</div>`;
 }
 
 function renderMap() {
