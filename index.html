@@ -187,13 +187,14 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   border-radius: 4px;
   padding: 8px;
 }
-.panel-log { flex-shrink: 0; margin-bottom: 6px; }
+.panel-log { flex-shrink: 0; margin-bottom: 4px; }
 .panel-main {
   flex: 1 1 auto;
   min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin-bottom: 6px;
+  overflow: hidden;
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
   -webkit-overflow-scrolling: touch;
 }
 .bottom-bar {
@@ -476,7 +477,20 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 .subtabs { grid-template-columns: repeat(3, 1fr); margin-bottom: 8px; }
 .tabs button { font-size: 11px; padding: 8px 4px; }
 .tabs button.active, .subtabs button.active { color: #000; background: var(--accent); font-weight: bold; }
-#main-view { width: 100%; overflow-x: hidden; word-break: break-word; }
+#main-view {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  word-break: break-word;
+  display: flex;
+  flex-direction: column;
+}
+#main-view > .map-compact {
+  flex: 1 1 auto;
+  min-height: 0;
+}
 #main-view img, #main-view table { max-width: 100%; }
 
 .map-box {
@@ -712,6 +726,155 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   .tabs { grid-template-columns: repeat(6, 1fr); }
   .log { height: 64px; }
 }
+
+/* ===== MAP LAYOUT OVERRIDE (Poco F6 / tall Android) ===== */
+#main-view > .map-compact {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  justify-content: space-between !important;
+  gap: 4px !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+.map-compact .map-top {
+  flex-shrink: 0 !important;
+  text-align: center !important;
+  font-size: 12px !important;
+  min-height: 18px !important;
+  margin: 0 !important;
+}
+.map-compact .map-signal-hint {
+  flex-shrink: 0 !important;
+  height: 14px !important;
+  min-height: 14px !important;
+  max-height: 14px !important;
+  font-size: 10px !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+.map-compact .world-grid {
+  flex: 1 1 auto !important;
+  width: min(92vw, 340px) !important;
+  max-width: 340px !important;
+  margin: 2px auto !important;
+  gap: 2px !important;
+  padding: 3px !important;
+  align-content: center !important;
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  box-sizing: border-box !important;
+}
+.map-compact .world-cell {
+  aspect-ratio: 1 !important;
+  min-height: 0 !important;
+  font-size: clamp(11px, 3.2vw, 16px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.map-compact .map-actions {
+  flex-shrink: 0 !important;
+  height: auto !important;
+  min-height: 44px !important;
+  max-height: none !important;
+  margin: 2px 0 !important;
+  overflow: visible !important;
+}
+.map-compact .map-actions .map-act-row {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+.map-compact .map-actions button {
+  font-size: 13px !important;
+  padding: 8px 16px !important;
+  height: auto !important;
+  min-height: 36px !important;
+  max-height: none !important;
+}
+.map-compact .map-actions .map-act-hint {
+  height: auto !important;
+  min-height: 14px !important;
+  max-height: 28px !important;
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+}
+.map-compact .map-controls {
+  flex-shrink: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(90px, 1fr) auto minmax(90px, 1fr) !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 4px 2px 2px 2px !important;
+  height: auto !important;
+  min-height: 108px !important;
+  max-height: none !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+.map-compact .map-arrows {
+  display: grid !important;
+  grid-template-columns: repeat(3, 48px) !important;
+  gap: 5px !important;
+  width: 154px !important;
+  max-width: 154px !important;
+  margin: 0 auto !important;
+  justify-items: center !important;
+  align-content: center !important;
+}
+.map-compact .map-arrows button {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  max-width: 48px !important;
+  max-height: 48px !important;
+  font-size: 20px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+.map-compact .map-arrows > div {
+  width: 48px !important;
+  height: 48px !important;
+}
+.map-compact .quick-meds,
+.map-compact .quick-radio {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+}
+.map-compact .quick-meds button,
+.map-compact .quick-radio button {
+  width: 100% !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  padding: 10px 6px !important;
+  min-height: 48px !important;
+  height: 48px !important;
+  max-height: 52px !important;
+  line-height: 1.15 !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
 </style>
 </head>
 <body>
@@ -4016,7 +4179,7 @@ function renderWorldGrid() {
       cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
     }
   }
-  return `<div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:300px;width:min(100%,300px);">${cells}</div>`;
+  return `<div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:340px;width:min(92vw,340px);">${cells}</div>`;
 }
 
 function renderMap() {
