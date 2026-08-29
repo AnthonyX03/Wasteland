@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v36';
+const CACHE = 'wasteland-v35';
 const ASSETS = [
   './',
   './index.html',
@@ -11,20 +11,19 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE).then(async (cache) => {
       for (const url of ASSETS) {
-        try { await cache.add(url); } catch (e) {}
+        try { await cache.add(url); } catch (e) { /* audio puede faltar aún */ }
       }
-    })
+    }).then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => k !== CACHE ? caches.delete(k) : null))
+      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
 });
@@ -33,11 +32,11 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  const isHTML = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
-  // Network-first for HTML so UI updates apply
+  // HTML siempre intenta red primero para no quedar con versión vieja de colores/UI
+  const isHTML = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/');
   if (isHTML) {
     event.respondWith(
-      fetch(req, { cache: 'no-store' }).then((res) => {
+      fetch(req).then((res) => {
         if (res && res.ok) {
           const clone = res.clone();
           caches.open(CACHE).then((cache) => cache.put(req, clone));
@@ -56,7 +55,7 @@ self.addEventListener('fetch', (event) => {
         }
         return res;
       }).catch(() => cached);
-      return fetched.catch ? fetched : (cached || fetched);
+      return cached || fetched;
     })
   );
 });
