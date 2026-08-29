@@ -79,21 +79,18 @@ header {
   border-bottom: 1px solid var(--line);
   padding: 4px 2px 6px;
   flex-shrink: 0;
-  gap: 4px;
+  gap: 3px;
 }
 header .header-top {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 6px;
 }
-h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; flex-shrink: 0; }
+h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 .stats {
   display: flex;
   gap: 4px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   font-size: 11px;
-  justify-content: flex-end;
   align-items: center;
   font-variant-numeric: tabular-nums;
 }
@@ -103,18 +100,59 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; flex
   padding: 2px 5px;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
 }
-.stats .time-weather { flex: 1 1 auto; min-width: 0; }
-.stats #st-lvl,
-.stats #st-xp,
-.stats #st-maxxp,
-.stats #st-caps,
-.stats #st-chips,
-.stats #st-weight,
+.stats-row-info {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.stats-row-currency {
+  justify-content: flex-start;
+  gap: 4px;
+}
+.stats-row-currency .stat-caps,
+.stats-row-currency .stat-chips,
+.stats-row-currency .stat-weight {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.stats #st-caps {
+  color: #e05050;
+  display: inline-block;
+  min-width: 3.2ch;
+  text-align: right;
+}
+.stats #st-chips {
+  display: inline-block;
+  min-width: 2.8ch;
+  text-align: right;
+  color: #e8d48b;
+}
+.stats #st-weight {
+  display: inline-block;
+  min-width: 3.5ch;
+  text-align: right;
+}
 .stats #st-maxweight {
   display: inline-block;
+  min-width: 2.5ch;
+  text-align: left;
+}
+.stats #st-lvl {
+  display: inline-block;
+  min-width: 1.5ch;
   text-align: right;
-  font-variant-numeric: tabular-nums;
+}
+.stats #st-xp {
+  display: inline-block;
+  min-width: 2.8ch;
+  text-align: right;
+}
+.stats #st-maxxp {
+  display: inline-block;
+  min-width: 3ch;
+  text-align: left;
 }
 .stats #st-caps { color: #e05050; min-width: 2.5ch; }
 .stats #st-chips { min-width: 2ch; }
@@ -630,16 +668,16 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; flex
   <header>
     <div class="header-top">
       <h1>☢ WASTELAND</h1>
-      <div class="stats stats-row1">
-        <span class="time-weather"><b id="st-datetime">01/01/2290 09:00</b> · <b id="st-weather">☀ Día</b></span>
-        <span>NV <b id="st-lvl">1</b></span>
-        <span>XP <b id="st-xp">0</b>/<b id="st-maxxp">100</b></span>
-      </div>
     </div>
-    <div class="stats stats-row2">
-      <span><img class="cap-icon" src="data:image/png;base64,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" alt="caps"><b id="st-caps">75</b></span>
-      <span><img class="cap-icon chip-icon" src="data:image/webp;base64,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" alt="fichas"><b id="st-chips" style="color:#ffffff;">0</b></span>
-      <span>Peso <b id="st-weight">0</b>/<b id="st-maxweight">35</b></span>
+    <div class="stats stats-row-info">
+      <span class="time-weather"><b id="st-datetime">01/01/2290 09:00</b> · <b id="st-weather">☀ Día</b></span>
+      <span>NV <b id="st-lvl">1</b></span>
+      <span>XP <b id="st-xp">0</b>/<b id="st-maxxp">100</b></span>
+    </div>
+    <div class="stats stats-row-currency">
+      <span class="stat-caps"><img class="cap-icon" src="data:image/png;base64,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" alt="caps"><b id="st-caps">0</b></span>
+      <span class="stat-chips"><img class="cap-icon chip-icon" src="data:image/webp;base64,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" alt="fichas"><b id="st-chips" style="color:#e8d48b;">0</b></span>
+      <span class="stat-weight">Peso <b id="st-weight">0</b>/<b id="st-maxweight">35</b></span>
     </div>
   </header>
 
@@ -792,56 +830,56 @@ const DB_ITEMS = [
   { id: 199, name: "Lanzanukes Experimental (Fat Man MKII)", type: "weapon", damage: 700, ammoType: "Mini Nukes", weight: 32, value: 6000, stackable: false, shopTier: 10 },
   { id: 200, name: "El Destructor del Yermo (Arma Legendaria)", type: "weapon", damage: 250, ammoType: "Cartucho de 2mm", weight: 10, value: 10000, stackable: false, shopTier: 10 },
   // --- 50 ARMADURAS (Incluyendo Servoarmaduras) ---
-  { id: 5, name: "Ropa de superviviente", type: "armor", def: 2, weight: 2, value: 15, stackable: false, shopTier: 1 },
-  { id: 6, name: "Chaqueta blindada", type: "armor", def: 7, weight: 6, value: 90, stackable: false, shopTier: 2 },
-  { id: 18, name: "Chaleco Táctico", type: "armor", def: 12, weight: 8, value: 160, stackable: false, shopTier: 3 },
-  { id: 19, name: "Cuero Reforzado", type: "armor", def: 5, weight: 3.5, value: 50, stackable: false, shopTier: 1 },
-  { id: 201, name: "Armadura de cuero completa", type: "armor", def: 9, weight: 5, value: 110, stackable: false, shopTier: 2 },
-  { id: 202, name: "Armadura de cuero robusta", type: "armor", def: 14, weight: 7, value: 200, stackable: false, shopTier: 3 },
-  { id: 203, name: "Armadura de cuero pesada", type: "armor", def: 20, weight: 11, value: 350, stackable: false, shopTier: 4 },
-  { id: 204, name: "Armadura de saqueador", type: "armor", def: 8, weight: 6, value: 80, stackable: false, shopTier: 1 },
-  { id: 205, name: "Armadura de saqueador destrozada", type: "armor", def: 11, weight: 7.5, value: 130, stackable: false, shopTier: 2 },
-  { id: 206, name: "Armadura metálica ligera", type: "armor", def: 15, weight: 9, value: 220, stackable: false, shopTier: 3 },
-  { id: 207, name: "Armadura metálica robusta", type: "armor", def: 22, weight: 13, value: 390, stackable: false, shopTier: 4 },
-  { id: 208, name: "Armadura metálica pesada", type: "armor", def: 30, weight: 18, value: 650, stackable: false, shopTier: 5 },
-  { id: 209, name: "Armadura de combate ligera", type: "armor", def: 25, weight: 10, value: 500, stackable: false, shopTier: 5 },
-  { id: 210, name: "Armadura de combate robusta", type: "armor", def: 35, weight: 14, value: 850, stackable: false, shopTier: 6 },
-  { id: 211, name: "Armadura de combate pesada", type: "armor", def: 45, weight: 20, value: 1200, stackable: false, shopTier: 7 },
-  { id: 212, name: "Armadura de sintetizador ligera", type: "armor", def: 22, weight: 8, value: 450, stackable: false, shopTier: 4 },
-  { id: 213, name: "Armadura de sintetizador robusta", type: "armor", def: 32, weight: 12, value: 780, stackable: false, shopTier: 5 },
-  { id: 214, name: "Armadura de sintetizador pesada", type: "armor", def: 42, weight: 17, value: 1100, stackable: false, shopTier: 6 },
-  { id: 215, name: "Mono del Refugio 111", type: "armor", def: 4, weight: 3, value: 40, stackable: false, shopTier: 1 },
-  { id: 216, name: "Mono del Refugio blindado", type: "armor", def: 10, weight: 4, value: 150, stackable: false, shopTier: 2 },
-  { id: 217, name: "Uniforme militar de fatiga", type: "armor", def: 6, weight: 3, value: 70, stackable: false, shopTier: 1 },
-  { id: 218, name: "Traje de la Hermandad del Acero", type: "armor", def: 12, weight: 4, value: 300, stackable: false, shopTier: 4 },
-  { id: 219, name: "Traje de hazmat (Antirradiación)", type: "armor", def: 5, weight: 5, value: 400, stackable: false, shopTier: 3 },
-  { id: 220, name: "Traje espacial de la Vault-Tec", type: "armor", def: 18, weight: 12, value: 550, stackable: false, shopTier: 4 },
-  { id: 221, name: "Abrigo de cuero de vagabundo", type: "armor", def: 8, weight: 5, value: 95, stackable: false, shopTier: 2 },
-  { id: 222, name: "Gabardina de detective", type: "armor", def: 10, weight: 6, value: 180, stackable: false, shopTier: 3 },
-  { id: 223, name: "Chaqueta de motorista del Yermo", type: "armor", def: 9, weight: 5, value: 110, stackable: false, shopTier: 2 },
-  { id: 224, name: "Traje de cientifico loco", type: "armor", def: 4, weight: 3, value: 60, stackable: false, shopTier: 2 },
-  { id: 225, name: "Uniforme de artillero", type: "armor", def: 14, weight: 7, value: 210, stackable: false, shopTier: 3 },
-  { id: 226, name: "Armadura de artillero pesada", type: "armor", def: 28, weight: 15, value: 580, stackable: false, shopTier: 5 },
-  { id: 227, name: "Camisa a cuadros y tirantes", type: "armor", def: 3, weight: 2, value: 25, stackable: false, shopTier: 1 },
-  { id: 228, name: "Ropa de granjero", type: "armor", def: 3, weight: 2, value: 20, stackable: false, shopTier: 1 },
-  { id: 229, name: "Vestido elegante", type: "armor", def: 1, weight: 1.5, value: 50, stackable: false, shopTier: 2 },
-  { id: 230, name: "Esmoquin", type: "armor", def: 2, weight: 2, value: 70, stackable: false, shopTier: 2 },
-  { id: 231, name: "Armadura de merodeador", type: "armor", def: 13, weight: 8, value: 175, stackable: false, shopTier: 3 },
-  { id: 232, name: "Armadura de explorador", type: "armor", def: 16, weight: 7, value: 260, stackable: false, shopTier: 3 },
-  { id: 233, name: "Armadura antidisturbios", type: "armor", def: 38, weight: 16, value: 950, stackable: false, shopTier: 6 },
-  { id: 234, name: "Armadura de explorador de élite", type: "armor", def: 48, weight: 18, value: 1400, stackable: false, shopTier: 7 },
-  { id: 235, name: "Servoarmadura T-45 (Completa)", type: "armor", def: 75, weight: 45, value: 3500, stackable: false, shopTier: 7 },
-  { id: 236, name: "Servoarmadura T-51 (Completa)", type: "armor", def: 95, weight: 48, value: 5000, stackable: false, shopTier: 8 },
-  { id: 237, name: "Servoarmadura T-60 (Completa)", type: "armor", def: 120, weight: 52, value: 7500, stackable: false, shopTier: 9 },
-  { id: 238, name: "Servoarmadura X-01 (Avanzada del Enclave)", type: "armor", def: 150, weight: 55, value: 12000, stackable: false, shopTier: 10 },
-  { id: 239, name: "Servoarmadura de Incursor (Chatarra)", type: "armor", def: 60, weight: 40, value: 2400, stackable: false, shopTier: 6 },
-  { id: 240, name: "Servoarmadura de la Hermandad del Acero", type: "armor", def: 130, weight: 53, value: 9000, stackable: false, shopTier: 9 },
-  { id: 241, name: "Armadura de cuero tachonado", type: "armor", def: 12, weight: 6, value: 140, stackable: false, shopTier: 2 },
-  { id: 242, name: "Armadura metálica pintada", type: "armor", def: 18, weight: 10, value: 280, stackable: false, shopTier: 3 },
-  { id: 243, name: "Armadura de combate sombría", type: "armor", def: 40, weight: 15, value: 980, stackable: false, shopTier: 6 },
-  { id: 244, name: "Traje de aislamiento avanzado", type: "armor", def: 15, weight: 6, value: 480, stackable: false, shopTier: 4 },
-  { id: 245, name: "Armadura pesada de Operador", type: "armor", def: 50, weight: 22, value: 1500, stackable: false, shopTier: 7 },
-  { id: 246, name: "Servoarmadura Nuka-Cola Quantum (Única)", type: "armor", def: 180, weight: 58, value: 18000, stackable: false, shopTier: 10 },
+  { id: 5, name: "Ropa de superviviente", type: "armor", def: 2, weight: 2, value: 15, stackable: false, shopTier: 1, radRes: 0 },
+  { id: 6, name: "Chaqueta blindada", type: "armor", def: 7, weight: 6, value: 90, stackable: false, shopTier: 2, radRes: 0 },
+  { id: 18, name: "Chaleco Táctico", type: "armor", def: 12, weight: 8, value: 160, stackable: false, shopTier: 3, radRes: 5 },
+  { id: 19, name: "Cuero Reforzado", type: "armor", def: 5, weight: 3.5, value: 50, stackable: false, shopTier: 1, radRes: 5 },
+  { id: 201, name: "Armadura de cuero completa", type: "armor", def: 9, weight: 5, value: 110, stackable: false, shopTier: 2, radRes: 5 },
+  { id: 202, name: "Armadura de cuero robusta", type: "armor", def: 14, weight: 7, value: 200, stackable: false, shopTier: 3, radRes: 5 },
+  { id: 203, name: "Armadura de cuero pesada", type: "armor", def: 20, weight: 11, value: 350, stackable: false, shopTier: 4, radRes: 5 },
+  { id: 204, name: "Armadura de saqueador", type: "armor", def: 8, weight: 6, value: 80, stackable: false, shopTier: 1, radRes: 0 },
+  { id: 205, name: "Armadura de saqueador destrozada", type: "armor", def: 11, weight: 7.5, value: 130, stackable: false, shopTier: 2, radRes: 0 },
+  { id: 206, name: "Armadura metálica ligera", type: "armor", def: 15, weight: 9, value: 220, stackable: false, shopTier: 3, radRes: 12 },
+  { id: 207, name: "Armadura metálica robusta", type: "armor", def: 22, weight: 13, value: 390, stackable: false, shopTier: 4, radRes: 12 },
+  { id: 208, name: "Armadura metálica pesada", type: "armor", def: 30, weight: 18, value: 650, stackable: false, shopTier: 5, radRes: 12 },
+  { id: 209, name: "Armadura de combate ligera", type: "armor", def: 25, weight: 10, value: 500, stackable: false, shopTier: 5, radRes: 12 },
+  { id: 210, name: "Armadura de combate robusta", type: "armor", def: 35, weight: 14, value: 850, stackable: false, shopTier: 6, radRes: 12 },
+  { id: 211, name: "Armadura de combate pesada", type: "armor", def: 45, weight: 20, value: 1200, stackable: false, shopTier: 7, radRes: 12 },
+  { id: 212, name: "Armadura de sintetizador ligera", type: "armor", def: 22, weight: 8, value: 450, stackable: false, shopTier: 4, radRes: 0 },
+  { id: 213, name: "Armadura de sintetizador robusta", type: "armor", def: 32, weight: 12, value: 780, stackable: false, shopTier: 5, radRes: 0 },
+  { id: 214, name: "Armadura de sintetizador pesada", type: "armor", def: 42, weight: 17, value: 1100, stackable: false, shopTier: 6, radRes: 0 },
+  { id: 215, name: "Mono del Refugio 111", type: "armor", def: 4, weight: 3, value: 40, stackable: false, shopTier: 1, radRes: 0 },
+  { id: 216, name: "Mono del Refugio blindado", type: "armor", def: 10, weight: 4, value: 150, stackable: false, shopTier: 2, radRes: 0 },
+  { id: 217, name: "Uniforme militar de fatiga", type: "armor", def: 6, weight: 3, value: 70, stackable: false, shopTier: 1, radRes: 0 },
+  { id: 218, name: "Traje de la Hermandad del Acero", type: "armor", def: 12, weight: 4, value: 300, stackable: false, shopTier: 4, radRes: 0 },
+  { id: 219, name: "Traje de hazmat (Antirradiación)", type: "armor", def: 5, weight: 5, value: 400, stackable: false, shopTier: 3, radRes: 50 },
+  { id: 220, name: "Traje espacial de la Vault-Tec", type: "armor", def: 18, weight: 12, value: 550, stackable: false, shopTier: 4, radRes: 0 },
+  { id: 221, name: "Abrigo de cuero de vagabundo", type: "armor", def: 8, weight: 5, value: 95, stackable: false, shopTier: 2, radRes: 5 },
+  { id: 222, name: "Gabardina de detective", type: "armor", def: 10, weight: 6, value: 180, stackable: false, shopTier: 3, radRes: 0 },
+  { id: 223, name: "Chaqueta de motorista del Yermo", type: "armor", def: 9, weight: 5, value: 110, stackable: false, shopTier: 2, radRes: 0 },
+  { id: 224, name: "Traje de cientifico loco", type: "armor", def: 4, weight: 3, value: 60, stackable: false, shopTier: 2, radRes: 0 },
+  { id: 225, name: "Uniforme de artillero", type: "armor", def: 14, weight: 7, value: 210, stackable: false, shopTier: 3, radRes: 0 },
+  { id: 226, name: "Armadura de artillero pesada", type: "armor", def: 28, weight: 15, value: 580, stackable: false, shopTier: 5, radRes: 0 },
+  { id: 227, name: "Camisa a cuadros y tirantes", type: "armor", def: 3, weight: 2, value: 25, stackable: false, shopTier: 1, radRes: 0 },
+  { id: 228, name: "Ropa de granjero", type: "armor", def: 3, weight: 2, value: 20, stackable: false, shopTier: 1, radRes: 0 },
+  { id: 229, name: "Vestido elegante", type: "armor", def: 1, weight: 1.5, value: 50, stackable: false, shopTier: 2, radRes: 0 },
+  { id: 230, name: "Esmoquin", type: "armor", def: 2, weight: 2, value: 70, stackable: false, shopTier: 2, radRes: 0 },
+  { id: 231, name: "Armadura de merodeador", type: "armor", def: 13, weight: 8, value: 175, stackable: false, shopTier: 3, radRes: 5 },
+  { id: 232, name: "Armadura de explorador", type: "armor", def: 16, weight: 7, value: 260, stackable: false, shopTier: 3, radRes: 5 },
+  { id: 233, name: "Armadura antidisturbios", type: "armor", def: 38, weight: 16, value: 950, stackable: false, shopTier: 6, radRes: 12 },
+  { id: 234, name: "Armadura de explorador de élite", type: "armor", def: 48, weight: 18, value: 1400, stackable: false, shopTier: 7, radRes: 5 },
+  { id: 235, name: "Servoarmadura T-45 (Completa)", type: "armor", def: 75, weight: 45, value: 3500, stackable: false, shopTier: 7, radRes: 50 },
+  { id: 236, name: "Servoarmadura T-51 (Completa)", type: "armor", def: 95, weight: 48, value: 5000, stackable: false, shopTier: 8, radRes: 55 },
+  { id: 237, name: "Servoarmadura T-60 (Completa)", type: "armor", def: 120, weight: 52, value: 7500, stackable: false, shopTier: 9, radRes: 60 },
+  { id: 238, name: "Servoarmadura X-01 (Avanzada del Enclave)", type: "armor", def: 150, weight: 55, value: 12000, stackable: false, shopTier: 10, radRes: 70 },
+  { id: 239, name: "Servoarmadura de Incursor (Chatarra)", type: "armor", def: 60, weight: 40, value: 2400, stackable: false, shopTier: 6, radRes: 40 },
+  { id: 240, name: "Servoarmadura de la Hermandad del Acero", type: "armor", def: 130, weight: 53, value: 9000, stackable: false, shopTier: 9, radRes: 60 },
+  { id: 241, name: "Armadura de cuero tachonado", type: "armor", def: 12, weight: 6, value: 140, stackable: false, shopTier: 2, radRes: 5 },
+  { id: 242, name: "Armadura metálica pintada", type: "armor", def: 18, weight: 10, value: 280, stackable: false, shopTier: 3, radRes: 12 },
+  { id: 243, name: "Armadura de combate sombría", type: "armor", def: 40, weight: 15, value: 980, stackable: false, shopTier: 6, radRes: 12 },
+  { id: 244, name: "Traje de aislamiento avanzado", type: "armor", def: 15, weight: 6, value: 480, stackable: false, shopTier: 4, radRes: 50 },
+  { id: 245, name: "Armadura pesada de Operador", type: "armor", def: 50, weight: 22, value: 1500, stackable: false, shopTier: 7, radRes: 12 },
+  { id: 246, name: "Servoarmadura Nuka-Cola Quantum (Única)", type: "armor", def: 180, weight: 58, value: 18000, stackable: false, shopTier: 10, radRes: 50 },
   // --- MEDICINAS ---
   { id: 7, name: "Estimulante", type: "med", heal: 30, weight: 0.5, value: 25, stackable: true, shopTier: 1 },
   { id: 8, name: "Superestimulante", type: "med", heal: 65, weight: 0.5, value: 60, stackable: true, shopTier: 3 },
@@ -935,35 +973,35 @@ const DB_ITEMS = [
   { id: 29, name: "Tartera Legendaria", type: "other", weight: 1, value: 500, stackable: true, shopTier: 1 },
   // --- EQUIPAMIENTO ÚNICO DE FACCIÓN (no aparece en Comercio) ---
   { id: 2001, name: "Laserista de la Hermandad", type: "weapon", damage: 42, ammoType: "Célula de microfusión", weight: 6, value: 450, stackable: false, factionOnly: true, faction: "bos" },
-  { id: 2002, name: "Servoarmadura T-45 (BoS)", type: "armor", def: 55, weight: 35, value: 1200, stackable: false, factionOnly: true, faction: "bos" },
+  { id: 2002, name: "Servoarmadura T-45 (BoS)", type: "armor", def: 55, weight: 35, value: 1200, stackable: false, factionOnly: true, faction: "bos", radRes: 50 },
   { id: 2003, name: "Rifle Gauss de la Hermandad", type: "weapon", damage: 95, ammoType: "Cartucho de 2mm", weight: 12, value: 1800, stackable: false, factionOnly: true, faction: "bos" },
   { id: 2011, name: "Pistola de plasma del Enclave", type: "weapon", damage: 48, ammoType: "Cartucho de plasma", weight: 4, value: 600, stackable: false, factionOnly: true, faction: "enclave" },
-  { id: 2012, name: "Armadura avanzada del Enclave", type: "armor", def: 48, weight: 18, value: 900, stackable: false, factionOnly: true, faction: "enclave" },
+  { id: 2012, name: "Armadura avanzada del Enclave", type: "armor", def: 48, weight: 18, value: 900, stackable: false, factionOnly: true, faction: "enclave", radRes: 0 },
   { id: 2013, name: "Rifle Tesla del Enclave", type: "weapon", damage: 70, ammoType: "Célula de energía", weight: 9, value: 1400, stackable: false, factionOnly: true, faction: "enclave" },
   { id: 2021, name: "Rifle de los Proscritos", type: "weapon", damage: 38, ammoType: "5.56mm", weight: 7, value: 380, stackable: false, factionOnly: true, faction: "outcasts" },
-  { id: 2022, name: "Armadura de combate proscrita", type: "armor", def: 32, weight: 14, value: 420, stackable: false, factionOnly: true, faction: "outcasts" },
+  { id: 2022, name: "Armadura de combate proscrita", type: "armor", def: 32, weight: 14, value: 420, stackable: false, factionOnly: true, faction: "outcasts", radRes: 12 },
   { id: 2031, name: "Rifle de milicia colona", type: "weapon", damage: 28, ammoType: ".308", weight: 6, value: 220, stackable: false, factionOnly: true, faction: "settlers" },
-  { id: 2032, name: "Chaleco de colonos reforzado", type: "armor", def: 22, weight: 8, value: 180, stackable: false, factionOnly: true, faction: "settlers" },
+  { id: 2032, name: "Chaleco de colonos reforzado", type: "armor", def: 22, weight: 8, value: 180, stackable: false, factionOnly: true, faction: "settlers", radRes: 0 },
   { id: 2041, name: "Pistola del Ferrocarril", type: "weapon", damage: 30, ammoType: "10mm", weight: 3, value: 280, stackable: false, factionOnly: true, faction: "railroad" },
-  { id: 2042, name: "Abrigo de agente del Ferrocarril", type: "armor", def: 18, weight: 5, value: 250, stackable: false, factionOnly: true, faction: "railroad" },
+  { id: 2042, name: "Abrigo de agente del Ferrocarril", type: "armor", def: 18, weight: 5, value: 250, stackable: false, factionOnly: true, faction: "railroad", radRes: 0 },
   { id: 2051, name: "Servicio Rifle RNC", type: "weapon", damage: 40, ammoType: "5.56mm", weight: 7, value: 400, stackable: false, factionOnly: true, faction: "rnc" },
-  { id: 2052, name: "Armadura de patrulla RNC", type: "armor", def: 30, weight: 12, value: 350, stackable: false, factionOnly: true, faction: "rnc" },
+  { id: 2052, name: "Armadura de patrulla RNC", type: "armor", def: 30, weight: 12, value: 350, stackable: false, factionOnly: true, faction: "rnc", radRes: 0 },
   { id: 2053, name: "Carabina de élite RNC", type: "weapon", damage: 55, ammoType: ".308", weight: 8, value: 700, stackable: false, factionOnly: true, faction: "rnc" },
   { id: 2061, name: "Pistola de la casa (Strip)", type: "weapon", damage: 36, ammoType: ".45 ACP", weight: 3, value: 500, stackable: false, factionOnly: true, faction: "strip" },
-  { id: 2062, name: "Traje de casino blindado", type: "armor", def: 20, weight: 6, value: 400, stackable: false, factionOnly: true, faction: "strip" },
+  { id: 2062, name: "Traje de casino blindado", type: "armor", def: 20, weight: 6, value: 400, stackable: false, factionOnly: true, faction: "strip", radRes: 0 },
   { id: 2063, name: "Escopeta de seguridad del Strip", type: "weapon", damage: 50, ammoType: "Cartucho de escopeta", weight: 6, value: 550, stackable: false, factionOnly: true, faction: "strip" },
   { id: 2071, name: "Rifle de pulsos del Instituto", type: "weapon", damage: 45, ammoType: "Célula de energía", weight: 5, value: 650, stackable: false, factionOnly: true, faction: "institute" },
-  { id: 2072, name: "Traje de científico reforzado", type: "armor", def: 25, weight: 7, value: 480, stackable: false, factionOnly: true, faction: "institute" },
+  { id: 2072, name: "Traje de científico reforzado", type: "armor", def: 25, weight: 7, value: 480, stackable: false, factionOnly: true, faction: "institute", radRes: 0 },
   { id: 2073, name: "Pistola sintética experimental", type: "weapon", damage: 58, ammoType: "Célula de energía", weight: 3.5, value: 900, stackable: false, factionOnly: true, faction: "institute" },
 
   { id: 2081, name: "Lanzallamas de Átomo", type: "weapon", damage: 55, ammoType: "Combustible", weight: 8, value: 650, stackable: false, factionOnly: true, faction: "atom" },
-  { id: 2082, name: "Túnica irradiada de Átomo", type: "armor", def: 28, weight: 6, value: 400, stackable: false, factionOnly: true, faction: "atom" },
+  { id: 2082, name: "Túnica irradiada de Átomo", type: "armor", def: 28, weight: 6, value: 400, stackable: false, factionOnly: true, faction: "atom", radRes: 45 },
   { id: 2083, name: "Pistola Gamma de Átomo", type: "weapon", damage: 48, ammoType: "Célula de energía", weight: 3.5, value: 720, stackable: false, factionOnly: true, faction: "atom" },
-  { id: 2084, name: "Casco de culto de Átomo", type: "armor", def: 16, weight: 3, value: 280, stackable: false, factionOnly: true, faction: "atom" },
+  { id: 2084, name: "Casco de culto de Átomo", type: "armor", def: 16, weight: 3, value: 280, stackable: false, factionOnly: true, faction: "atom", radRes: 45 },
   { id: 2091, name: "Mosquete láser de Minuteman", type: "weapon", damage: 45, ammoType: "Célula de energía", weight: 7, value: 520, stackable: false, factionOnly: true, faction: "minutemen" },
-  { id: 2092, name: "Uniforme de Minuteman", type: "armor", def: 26, weight: 9, value: 320, stackable: false, factionOnly: true, faction: "minutemen" },
+  { id: 2092, name: "Uniforme de Minuteman", type: "armor", def: 26, weight: 9, value: 320, stackable: false, factionOnly: true, faction: "minutemen", radRes: 0 },
   { id: 2093, name: "Rifle de artillería Minuteman", type: "weapon", damage: 58, ammoType: ".308", weight: 9, value: 680, stackable: false, factionOnly: true, faction: "minutemen" },
-  { id: 2094, name: "Chaleco de milicia Minuteman", type: "armor", def: 22, weight: 7, value: 250, stackable: false, factionOnly: true, faction: "minutemen" },
+  { id: 2094, name: "Chaleco de milicia Minuteman", type: "armor", def: 22, weight: 7, value: 250, stackable: false, factionOnly: true, faction: "minutemen", radRes: 0 },
 
   // --- Casino exclusivos (solo fichas) ---
                     
@@ -991,35 +1029,35 @@ const DB_ITEMS = [
   { id: 3500, name: "★ Módulo Legendario RobCo", type: "other", weight: 1, value: 0, stackable: true, legendary: true, robcoModule: true, useDesc: "En Fábrica RobCo: convierte un robot no legendario en legendario." },
   // Vikki & Vance exclusivos
   { id: 3110, name: "Pistola gemela Vikki", type: "weapon", damage: 28, ammoType: "10mm", weight: 2.5, value: 0, stackable: false, casino: "vikki", chipCost: 240 },
-  { id: 3111, name: "Chaqueta de crupier Vance", type: "armor", def: 14, weight: 3, value: 0, stackable: false, casino: "vikki", chipCost: 220 },
+  { id: 3111, name: "Chaqueta de crupier Vance", type: "armor", def: 14, weight: 3, value: 0, stackable: false, casino: "vikki", chipCost: 220, radRes: 0 },
   { id: 3112, name: "Ficha de la suerte (V&V)", type: "other", weight: 0.1, value: 0, stackable: true, casino: "vikki", chipCost: 180, useEffect: "luck", useDesc: "Al usar: +2 Suerte durante 10 acciones." },
   { id: 3113, name: "Escopeta de mesa barata", type: "weapon", damage: 38, ammoType: "Cartucho de escopeta", weight: 5, value: 0, stackable: false, casino: "vikki", chipCost: 360 },
   // Atomic Wrangler
   { id: 3120, name: "Láser de bar Atomic", type: "weapon", damage: 42, ammoType: "Célula de energía", weight: 4, value: 0, stackable: false, casino: "atomic", chipCost: 450 },
-  { id: 3121, name: "Armadura de camarero blindada", type: "armor", def: 22, weight: 6, value: 0, stackable: false, casino: "atomic", chipCost: 420 },
+  { id: 3121, name: "Armadura de camarero blindada", type: "armor", def: 22, weight: 6, value: 0, stackable: false, casino: "atomic", chipCost: 420, radRes: 0 },
   { id: 3122, name: "Cóctel radiactivo", type: "drink", weight: 0.4, value: 0, stackable: true, casino: "atomic", chipCost: 185, heal: 25, useDesc: "Cura 25 HP al beberlo." },
   { id: 3123, name: "Revólver de neón", type: "weapon", damage: 48, ammoType: ".44 Magnum", weight: 3.5, value: 0, stackable: false, casino: "atomic", chipCost: 600 },
   // Gomorrah
   { id: 3140, name: "Cuchillo de Omerta", type: "weapon", damage: 35, ammoType: null, weight: 1.5, value: 0, stackable: false, casino: "gomorrah", chipCost: 540 },
-  { id: 3141, name: "Traje de familia Omerta", type: "armor", def: 30, weight: 7, value: 0, stackable: false, casino: "gomorrah", chipCost: 600 },
+  { id: 3141, name: "Traje de familia Omerta", type: "armor", def: 30, weight: 7, value: 0, stackable: false, casino: "gomorrah", chipCost: 600, radRes: 0 },
   { id: 3142, name: "Subfusil de casino", type: "weapon", damage: 55, ammoType: "10mm", weight: 5, value: 0, stackable: false, casino: "gomorrah", chipCost: 840 },
   { id: 3143, name: "Veneno de mesa", type: "aid", weight: 0.2, value: 0, stackable: true, casino: "gomorrah", chipCost: 210, useDesc: "En combate: el siguiente ataque enemigo hace -30% daño (1 uso)." },
   // Ultra-Luxe
   { id: 3150, name: "Rifle de caza Ultra-Luxe", type: "weapon", damage: 62, ammoType: ".308", weight: 7, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1050 },
-  { id: 3151, name: "Esmoquin reforzado White Glove", type: "armor", def: 36, weight: 6, value: 0, stackable: false, casino: "ultraluxe", chipCost: 960 },
+  { id: 3151, name: "Esmoquin reforzado White Glove", type: "armor", def: 36, weight: 6, value: 0, stackable: false, casino: "ultraluxe", chipCost: 960, radRes: 0 },
   { id: 3152, name: "Cuchillo de carnicero fino", type: "weapon", damage: 45, ammoType: null, weight: 2, value: 0, stackable: false, casino: "ultraluxe", chipCost: 780 },
   { id: 3153, name: "Filete de Ultra-Luxe", type: "food", weight: 0.5, value: 0, stackable: true, casino: "ultraluxe", chipCost: 240, heal: 40, useDesc: "Banquete: cura 40 HP y quita 10 RAD." },
   { id: 3114, name: "Amuleto de la casa V&V", type: "other", weight: 0.2, value: 0, stackable: true, casino: "vikki", chipCost: 205, useEffect: "caps", useDesc: "Al usar: +40 chapas." },
   { id: 3115, name: "Bebida del crupier", type: "drink", weight: 0.3, value: 0, stackable: true, casino: "vikki", chipCost: 175, heal: 20, useDesc: "Cura 20 HP." },
   { id: 3124, name: "Ficha atómica cargada", type: "other", weight: 0.1, value: 0, stackable: true, casino: "atomic", chipCost: 195, useEffect: "luck", useDesc: "+2 Suerte 10 acciones." },
-  { id: 3125, name: "Chaleco anti-rad de bar", type: "armor", def: 18, weight: 4, value: 0, stackable: false, casino: "atomic", chipCost: 390 },
+  { id: 3125, name: "Chaleco anti-rad de bar", type: "armor", def: 18, weight: 4, value: 0, stackable: false, casino: "atomic", chipCost: 390, radRes: 50 },
       { id: 3144, name: "Cóctel Omerta", type: "drink", weight: 0.4, value: 0, stackable: true, casino: "gomorrah", chipCost: 200, heal: 30, useDesc: "Cura 30 HP." },
-  { id: 3145, name: "Guantes de matón", type: "armor", def: 12, weight: 2, value: 0, stackable: false, casino: "gomorrah", chipCost: 270 },
+  { id: 3145, name: "Guantes de matón", type: "armor", def: 12, weight: 2, value: 0, stackable: false, casino: "gomorrah", chipCost: 270, radRes: 0 },
   { id: 3154, name: "Champán Ultra-Luxe", type: "drink", weight: 0.5, value: 0, stackable: true, casino: "ultraluxe", chipCost: 220, heal: 25, useEffect: "charisma", useDesc: "Cura 25 HP y +1 Carisma 8 acciones." },
   { id: 3155, name: "Reloj de bolsillo White Glove", type: "other", weight: 0.2, value: 0, stackable: true, casino: "ultraluxe", chipCost: 360, useEffect: "ultraluxe_chips", useDesc: "Al usar: +30 fichas Ultra-Luxe." },
   // --- Exclusivos casinos extra (páginas adicionales, altos precios, con utilidad) ---
   { id: 3201, name: "Pistola V&V reforzada", type: "weapon", damage: 38, ammoType: "10mm", weight: 2.5, value: 0, stackable: false, casino: "vikki", chipCost: 850 },
-  { id: 3202, name: "Chaleco de crupier V&V", type: "armor", def: 22, weight: 4, value: 0, stackable: false, casino: "vikki", chipCost: 720 },
+  { id: 3202, name: "Chaleco de crupier V&V", type: "armor", def: 22, weight: 4, value: 0, stackable: false, casino: "vikki", chipCost: 720, radRes: 0 },
   { id: 3203, name: "Estimulante de la casa V&V", type: "med", heal: 90, weight: 0.3, value: 0, stackable: true, casino: "vikki", chipCost: 280, useDesc: "Cura 90 HP." },
   { id: 3204, name: "RadAway de mostrador", type: "med", weight: 0.3, value: 0, stackable: true, casino: "vikki", chipCost: 320, radRemove: 200, useDesc: "Quita 200 RAD." },
   { id: 3205, name: "Sobre de suerte V&V", type: "other", weight: 0.2, value: 0, stackable: true, casino: "vikki", chipCost: 400, useEffect: "luck", useDesc: "+2 Suerte 12 acciones." },
@@ -1027,15 +1065,15 @@ const DB_ITEMS = [
   { id: 3207, name: "Botiquín de mesa", type: "med", heal: 50, weight: 0.5, value: 0, stackable: true, casino: "vikki", chipCost: 180, useDesc: "Cura 50 HP." },
   { id: 3208, name: "Ficha de prestigio V&V", type: "other", weight: 0.1, value: 0, stackable: true, casino: "vikki", chipCost: 500, useEffect: "vikki_chips", useDesc: "Al usar: +40 fichas Vikki & Vance." },
   { id: 3211, name: "Rifle de plasma de bar", type: "weapon", damage: 58, ammoType: "Cartucho de plasma", weight: 8, value: 0, stackable: false, casino: "atomic", chipCost: 1400 },
-  { id: 3212, name: "Armadura anti-rad Atomic", type: "armor", def: 26, weight: 9, value: 0, stackable: false, casino: "atomic", chipCost: 980 },
+  { id: 3212, name: "Armadura anti-rad Atomic", type: "armor", def: 26, weight: 9, value: 0, stackable: false, casino: "atomic", chipCost: 980, radRes: 50 },
   { id: 3213, name: "Cóctel atómico puro", type: "drink", weight: 0.4, value: 0, stackable: true, casino: "atomic", chipCost: 350, heal: 35, useEffect: "dmg", useDesc: "Cura 35 HP y +5 daño 10 acciones." },
   { id: 3214, name: "Inyección de adrenalina Atomic", type: "chem", weight: 0.2, value: 0, stackable: true, casino: "atomic", chipCost: 420, useEffect: "agility", useDesc: "+2 Agilidad 12 acciones." },
   { id: 3215, name: "Pistola láser de mostrador", type: "weapon", damage: 44, ammoType: "Célula de energía", weight: 3, value: 0, stackable: false, casino: "atomic", chipCost: 1100 },
-  { id: 3216, name: "Casco de jugador Atomic", type: "armor", def: 14, weight: 2, value: 0, stackable: false, casino: "atomic", chipCost: 480 },
+  { id: 3216, name: "Casco de jugador Atomic", type: "armor", def: 14, weight: 2, value: 0, stackable: false, casino: "atomic", chipCost: 480, radRes: 0 },
   { id: 3217, name: "Superestimulante Atomic", type: "med", heal: 120, weight: 0.4, value: 0, stackable: true, casino: "atomic", chipCost: 550, useDesc: "Cura 120 HP." },
   { id: 3218, name: "Token de energía", type: "other", weight: 0.1, value: 0, stackable: true, casino: "atomic", chipCost: 450, useEffect: "atomic_chips", useDesc: "Al usar: +40 fichas Atomic Wrangler." },
   { id: 3221, name: "Subfusil Omerta silenciado", type: "weapon", damage: 50, ammoType: "10mm", weight: 4.5, value: 0, stackable: false, casino: "gomorrah", chipCost: 1300 },
-  { id: 3222, name: "Traje de matón reforzado", type: "armor", def: 34, weight: 8, value: 0, stackable: false, casino: "gomorrah", chipCost: 1050 },
+  { id: 3222, name: "Traje de matón reforzado", type: "armor", def: 34, weight: 8, value: 0, stackable: false, casino: "gomorrah", chipCost: 1050, radRes: 0 },
   { id: 3223, name: "Veneno de mesa refinado", type: "other", weight: 0.2, value: 0, stackable: true, casino: "gomorrah", chipCost: 380, useEffect: "def", useDesc: "+8 defensa 10 acciones." },
   { id: 3224, name: "Cuchillo ceremonial Omerta", type: "weapon", damage: 40, ammoType: null, weight: 1.2, value: 0, stackable: false, casino: "gomorrah", chipCost: 700 },
   { id: 3225, name: "Inyección de fuerza Omerta", type: "chem", weight: 0.2, value: 0, stackable: true, casino: "gomorrah", chipCost: 400, useEffect: "strength", useDesc: "+2 Fuerza 12 acciones." },
@@ -1043,11 +1081,11 @@ const DB_ITEMS = [
   { id: 3227, name: "Escopeta de escolta", type: "weapon", damage: 68, ammoType: "Cartucho de escopeta", weight: 6, value: 0, stackable: false, casino: "gomorrah", chipCost: 1600 },
   { id: 3228, name: "Ficha de la familia", type: "other", weight: 0.1, value: 0, stackable: true, casino: "gomorrah", chipCost: 480, useEffect: "gomorrah_chips", useDesc: "Al usar: +40 fichas Gomorrah." },
   { id: 3241, name: "Rifle de caza White Glove", type: "weapon", damage: 72, ammoType: ".308", weight: 7.5, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1800 },
-  { id: 3242, name: "Esmoquin blindado Ultra-Luxe", type: "armor", def: 40, weight: 7, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1500 },
+  { id: 3242, name: "Esmoquin blindado Ultra-Luxe", type: "armor", def: 40, weight: 7, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1500, radRes: 0 },
   { id: 3243, name: "Banquete White Glove", type: "food", weight: 0.8, value: 0, stackable: true, casino: "ultraluxe", chipCost: 450, heal: 60, useDesc: "Cura 60 HP y quita 15 RAD.", radRemove: 15 },
   { id: 3244, name: "Champán de reserva", type: "drink", weight: 0.5, value: 0, stackable: true, casino: "ultraluxe", chipCost: 380, heal: 30, useEffect: "charisma", useDesc: "Cura 30 HP y +2 Carisma 10 acciones." },
   { id: 3245, name: "Pistola de elegancia", type: "weapon", damage: 48, ammoType: "10mm", weight: 2.8, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1200 },
-  { id: 3246, name: "Guantes de seda reforzados", type: "armor", def: 16, weight: 1.5, value: 0, stackable: false, casino: "ultraluxe", chipCost: 600 },
+  { id: 3246, name: "Guantes de seda reforzados", type: "armor", def: 16, weight: 1.5, value: 0, stackable: false, casino: "ultraluxe", chipCost: 600, radRes: 0 },
   { id: 3247, name: "Inyección de fortuna Ultra", type: "chem", weight: 0.2, value: 0, stackable: true, casino: "ultraluxe", chipCost: 500, useEffect: "luck", useDesc: "+2 Suerte 14 acciones." },
   { id: 3248, name: "Ficha de platino Ultra-Luxe", type: "other", weight: 0.15, value: 0, stackable: true, casino: "ultraluxe", chipCost: 700, useEffect: "ultraluxe_chips", useDesc: "Al usar: +50 fichas Ultra-Luxe." },
   // === 5 armas + 5 atuendos únicos + extras por casino (5 páginas) ===
@@ -1057,11 +1095,11 @@ const DB_ITEMS = [
   { id: 3303, name: "Escopeta de salón V&V", type: "weapon", damage: 58, ammoType: "Cartucho de escopeta", weight: 5, value: 0, stackable: false, casino: "vikki", chipCost: 1400 },
   { id: 3304, name: "Rifle de carretera V&V", type: "weapon", damage: 52, ammoType: "5.56mm", weight: 6, value: 0, stackable: false, casino: "vikki", chipCost: 1350 },
   { id: 3305, name: "Navaja de la casa V&V", type: "weapon", damage: 30, ammoType: null, weight: 0.9, value: 0, stackable: false, casino: "vikki", chipCost: 650 },
-  { id: 3311, name: "Chaqueta de crupier V&V", type: "armor", def: 18, weight: 3, value: 0, stackable: false, casino: "vikki", chipCost: 700 },
-  { id: 3312, name: "Chaleco acolchado V&V", type: "armor", def: 24, weight: 5, value: 0, stackable: false, casino: "vikki", chipCost: 850 },
-  { id: 3313, name: "Traje de carretera V&V", type: "armor", def: 28, weight: 6, value: 0, stackable: false, casino: "vikki", chipCost: 980 },
-  { id: 3314, name: "Botas reforzadas V&V", type: "armor", def: 12, weight: 2, value: 0, stackable: false, casino: "vikki", chipCost: 480 },
-  { id: 3315, name: "Gorra de seguridad V&V", type: "armor", def: 10, weight: 1, value: 0, stackable: false, casino: "vikki", chipCost: 400 },
+  { id: 3311, name: "Chaqueta de crupier V&V", type: "armor", def: 18, weight: 3, value: 0, stackable: false, casino: "vikki", chipCost: 700, radRes: 0 },
+  { id: 3312, name: "Chaleco acolchado V&V", type: "armor", def: 24, weight: 5, value: 0, stackable: false, casino: "vikki", chipCost: 850, radRes: 0 },
+  { id: 3313, name: "Traje de carretera V&V", type: "armor", def: 28, weight: 6, value: 0, stackable: false, casino: "vikki", chipCost: 980, radRes: 0 },
+  { id: 3314, name: "Botas reforzadas V&V", type: "armor", def: 12, weight: 2, value: 0, stackable: false, casino: "vikki", chipCost: 480, radRes: 0 },
+  { id: 3315, name: "Gorra de seguridad V&V", type: "armor", def: 10, weight: 1, value: 0, stackable: false, casino: "vikki", chipCost: 400, radRes: 0 },
   { id: 3321, name: "Superestimulante V&V", type: "med", heal: 110, weight: 0.4, value: 0, stackable: true, casino: "vikki", chipCost: 480, useDesc: "Cura 110 HP." },
   { id: 3322, name: "RadAway premium V&V", type: "med", weight: 0.3, value: 0, stackable: true, casino: "vikki", chipCost: 420, radRemove: 250, useDesc: "Quita 250 RAD." },
   { id: 3323, name: "Nuka-Cola V&V", type: "drink", weight: 0.5, value: 0, stackable: true, casino: "vikki", chipCost: 220, heal: 25, useDesc: "Cura 25 HP." },
@@ -1073,11 +1111,11 @@ const DB_ITEMS = [
   { id: 3333, name: "Subfusil de bar Atomic", type: "weapon", damage: 46, ammoType: "10mm", weight: 4, value: 0, stackable: false, casino: "atomic", chipCost: 1200 },
   { id: 3334, name: "Escopeta irradiada Atomic", type: "weapon", damage: 64, ammoType: "Cartucho de escopeta", weight: 5.5, value: 0, stackable: false, casino: "atomic", chipCost: 1550 },
   { id: 3335, name: "Porra electrificada Atomic", type: "weapon", damage: 34, ammoType: null, weight: 2, value: 0, stackable: false, casino: "atomic", chipCost: 720 },
-  { id: 3341, name: "Chaleco anti-rad Atomic", type: "armor", def: 20, weight: 5, value: 0, stackable: false, casino: "atomic", chipCost: 800 },
-  { id: 3342, name: "Traje de bar Atomic", type: "armor", def: 26, weight: 4, value: 0, stackable: false, casino: "atomic", chipCost: 920 },
-  { id: 3343, name: "Armadura ligera Atomic", type: "armor", def: 32, weight: 10, value: 0, stackable: false, casino: "atomic", chipCost: 1150 },
-  { id: 3344, name: "Casco de jugador Atomic", type: "armor", def: 14, weight: 2, value: 0, stackable: false, casino: "atomic", chipCost: 520 },
-  { id: 3345, name: "Botas aislantes Atomic", type: "armor", def: 11, weight: 2.5, value: 0, stackable: false, casino: "atomic", chipCost: 450 },
+  { id: 3341, name: "Chaleco anti-rad Atomic", type: "armor", def: 20, weight: 5, value: 0, stackable: false, casino: "atomic", chipCost: 800, radRes: 50 },
+  { id: 3342, name: "Traje de bar Atomic", type: "armor", def: 26, weight: 4, value: 0, stackable: false, casino: "atomic", chipCost: 920, radRes: 0 },
+  { id: 3343, name: "Armadura ligera Atomic", type: "armor", def: 32, weight: 10, value: 0, stackable: false, casino: "atomic", chipCost: 1150, radRes: 0 },
+  { id: 3344, name: "Casco de jugador Atomic", type: "armor", def: 14, weight: 2, value: 0, stackable: false, casino: "atomic", chipCost: 520, radRes: 0 },
+  { id: 3345, name: "Botas aislantes Atomic", type: "armor", def: 11, weight: 2.5, value: 0, stackable: false, casino: "atomic", chipCost: 450, radRes: 0 },
   { id: 3351, name: "Superestimulante Atomic", type: "med", heal: 120, weight: 0.4, value: 0, stackable: true, casino: "atomic", chipCost: 520, useDesc: "Cura 120 HP." },
   { id: 3352, name: "RadAway Atomic", type: "med", weight: 0.3, value: 0, stackable: true, casino: "atomic", chipCost: 450, radRemove: 280, useDesc: "Quita 280 RAD." },
   { id: 3353, name: "Cóctel atómico doble", type: "drink", weight: 0.4, value: 0, stackable: true, casino: "atomic", chipCost: 380, heal: 40, useEffect: "dmg", useDesc: "Cura 40 HP y +5 daño 10 acciones." },
@@ -1089,11 +1127,11 @@ const DB_ITEMS = [
   { id: 3363, name: "Cuchillo ceremonial Omerta+", type: "weapon", damage: 42, ammoType: null, weight: 1.2, value: 0, stackable: false, casino: "gomorrah", chipCost: 780 },
   { id: 3364, name: "Rifle de francotirador Omerta", type: "weapon", damage: 68, ammoType: ".308", weight: 8, value: 0, stackable: false, casino: "gomorrah", chipCost: 1800 },
   { id: 3365, name: "Pistola silenciada Omerta", type: "weapon", damage: 40, ammoType: "10mm", weight: 2.5, value: 0, stackable: false, casino: "gomorrah", chipCost: 1050 },
-  { id: 3371, name: "Traje de familia Omerta+", type: "armor", def: 30, weight: 7, value: 0, stackable: false, casino: "gomorrah", chipCost: 1100 },
-  { id: 3372, name: "Chaleco de matón Omerta", type: "armor", def: 26, weight: 6, value: 0, stackable: false, casino: "gomorrah", chipCost: 950 },
-  { id: 3373, name: "Abrigo de escolta Omerta", type: "armor", def: 34, weight: 8, value: 0, stackable: false, casino: "gomorrah", chipCost: 1250 },
-  { id: 3374, name: "Guantes de matón Omerta", type: "armor", def: 12, weight: 1.5, value: 0, stackable: false, casino: "gomorrah", chipCost: 420 },
-  { id: 3375, name: "Máscara de familia Omerta", type: "armor", def: 10, weight: 1, value: 0, stackable: false, casino: "gomorrah", chipCost: 380 },
+  { id: 3371, name: "Traje de familia Omerta+", type: "armor", def: 30, weight: 7, value: 0, stackable: false, casino: "gomorrah", chipCost: 1100, radRes: 0 },
+  { id: 3372, name: "Chaleco de matón Omerta", type: "armor", def: 26, weight: 6, value: 0, stackable: false, casino: "gomorrah", chipCost: 950, radRes: 0 },
+  { id: 3373, name: "Abrigo de escolta Omerta", type: "armor", def: 34, weight: 8, value: 0, stackable: false, casino: "gomorrah", chipCost: 1250, radRes: 0 },
+  { id: 3374, name: "Guantes de matón Omerta", type: "armor", def: 12, weight: 1.5, value: 0, stackable: false, casino: "gomorrah", chipCost: 420, radRes: 0 },
+  { id: 3375, name: "Máscara de familia Omerta", type: "armor", def: 10, weight: 1, value: 0, stackable: false, casino: "gomorrah", chipCost: 380, radRes: 0 },
   { id: 3381, name: "Botiquín de familia Omerta", type: "med", heal: 95, weight: 0.5, value: 0, stackable: true, casino: "gomorrah", chipCost: 360, useDesc: "Cura 95 HP." },
   { id: 3382, name: "Inyección de fuerza Omerta+", type: "chem", weight: 0.2, value: 0, stackable: true, casino: "gomorrah", chipCost: 480, useEffect: "strength", useDesc: "+2 Fuerza 12 acciones." },
   { id: 3383, name: "Cóctel Omerta premium", type: "drink", weight: 0.4, value: 0, stackable: true, casino: "gomorrah", chipCost: 320, heal: 35, useDesc: "Cura 35 HP." },
@@ -1105,11 +1143,11 @@ const DB_ITEMS = [
   { id: 3393, name: "Pistola de la suerte Tops", type: "weapon", damage: 38, ammoType: "10mm", weight: 2.8, value: 0, stackable: false, casino: "tops", chipCost: 950 },
   { id: 3394, name: "Rifle de escenario Tops", type: "weapon", damage: 54, ammoType: "5.56mm", weight: 6.5, value: 0, stackable: false, casino: "tops", chipCost: 1400 },
   { id: 3395, name: "Navaja de farándula Tops", type: "weapon", damage: 32, ammoType: null, weight: 1, value: 0, stackable: false, casino: "tops", chipCost: 680 },
-  { id: 3401, name: "Traje de show Tops+", type: "armor", def: 26, weight: 3.5, value: 0, stackable: false, casino: "tops", chipCost: 1000 },
-  { id: 3402, name: "Chaqueta Lucky 38", type: "armor", def: 22, weight: 3, value: 0, stackable: false, casino: "tops", chipCost: 850 },
-  { id: 3403, name: "Armadura de seguridad Tops", type: "armor", def: 30, weight: 7, value: 0, stackable: false, casino: "tops", chipCost: 1200 },
-  { id: 3404, name: "Chaleco de crupier Tops", type: "armor", def: 16, weight: 2.5, value: 0, stackable: false, casino: "tops", chipCost: 600 },
-  { id: 3405, name: "Sombrero de presentador Tops", type: "armor", def: 9, weight: 0.8, value: 0, stackable: false, casino: "tops", chipCost: 350 },
+  { id: 3401, name: "Traje de show Tops+", type: "armor", def: 26, weight: 3.5, value: 0, stackable: false, casino: "tops", chipCost: 1000, radRes: 0 },
+  { id: 3402, name: "Chaqueta Lucky 38", type: "armor", def: 22, weight: 3, value: 0, stackable: false, casino: "tops", chipCost: 850, radRes: 0 },
+  { id: 3403, name: "Armadura de seguridad Tops", type: "armor", def: 30, weight: 7, value: 0, stackable: false, casino: "tops", chipCost: 1200, radRes: 0 },
+  { id: 3404, name: "Chaleco de crupier Tops", type: "armor", def: 16, weight: 2.5, value: 0, stackable: false, casino: "tops", chipCost: 600, radRes: 0 },
+  { id: 3405, name: "Sombrero de presentador Tops", type: "armor", def: 9, weight: 0.8, value: 0, stackable: false, casino: "tops", chipCost: 350, radRes: 0 },
   { id: 3411, name: "Estimulante de escenario+", type: "med", heal: 110, weight: 0.3, value: 0, stackable: true, casino: "tops", chipCost: 450, useDesc: "Cura 110 HP." },
   { id: 3412, name: "Nuka-Cola Victory Tops+", type: "drink", weight: 0.5, value: 0, stackable: true, casino: "tops", chipCost: 350, heal: 45, useDesc: "Cura 45 HP." },
   { id: 3413, name: "Gafas de farándula+", type: "other", weight: 0.2, value: 0, stackable: true, casino: "tops", chipCost: 580, useEffect: "perception", useDesc: "+2 Percepción 14 acciones." },
@@ -1121,11 +1159,11 @@ const DB_ITEMS = [
   { id: 3423, name: "Escopeta de banquete Ultra", type: "weapon", damage: 72, ammoType: "Cartucho de escopeta", weight: 6, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1850 },
   { id: 3424, name: "Sable ceremonial Ultra", type: "weapon", damage: 45, ammoType: null, weight: 2, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1100 },
   { id: 3425, name: "Rifle láser Ultra-Luxe", type: "weapon", damage: 60, ammoType: "Célula de energía", weight: 7, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1750 },
-  { id: 3431, name: "Esmoquin blindado Ultra+", type: "armor", def: 42, weight: 7, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1600 },
-  { id: 3432, name: "Traje White Glove", type: "armor", def: 28, weight: 4, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1100 },
-  { id: 3433, name: "Armadura de gala Ultra", type: "armor", def: 36, weight: 9, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1450 },
-  { id: 3434, name: "Guantes de seda Ultra+", type: "armor", def: 14, weight: 1.2, value: 0, stackable: false, casino: "ultraluxe", chipCost: 550 },
-  { id: 3435, name: "Máscara de gala Ultra", type: "armor", def: 11, weight: 0.9, value: 0, stackable: false, casino: "ultraluxe", chipCost: 480 },
+  { id: 3431, name: "Esmoquin blindado Ultra+", type: "armor", def: 42, weight: 7, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1600, radRes: 0 },
+  { id: 3432, name: "Traje White Glove", type: "armor", def: 28, weight: 4, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1100, radRes: 0 },
+  { id: 3433, name: "Armadura de gala Ultra", type: "armor", def: 36, weight: 9, value: 0, stackable: false, casino: "ultraluxe", chipCost: 1450, radRes: 0 },
+  { id: 3434, name: "Guantes de seda Ultra+", type: "armor", def: 14, weight: 1.2, value: 0, stackable: false, casino: "ultraluxe", chipCost: 550, radRes: 0 },
+  { id: 3435, name: "Máscara de gala Ultra", type: "armor", def: 11, weight: 0.9, value: 0, stackable: false, casino: "ultraluxe", chipCost: 480, radRes: 0 },
   { id: 3441, name: "Banquete White Glove+", type: "food", weight: 0.8, value: 0, stackable: true, casino: "ultraluxe", chipCost: 520, heal: 70, radRemove: 20, useDesc: "Cura 70 HP y -20 RAD." },
   { id: 3442, name: "Champán de reserva+", type: "drink", weight: 0.5, value: 0, stackable: true, casino: "ultraluxe", chipCost: 450, heal: 35, useEffect: "charisma", useDesc: "Cura 35 HP y +2 Carisma 10 acciones." },
   { id: 3443, name: "Inyección de fortuna Ultra+", type: "chem", weight: 0.2, value: 0, stackable: true, casino: "ultraluxe", chipCost: 580, useEffect: "luck", useDesc: "+2 Suerte 14 acciones." },
@@ -1136,11 +1174,11 @@ const DB_ITEMS = [
   { id: 3453, name: "Maza de seguridad Tops", type: "weapon", damage: 36, ammoType: null, weight: 3, value: 0, stackable: false, casino: "tops", chipCost: 750 },
   { id: 3454, name: "Rifle de precisión Tops", type: "weapon", damage: 62, ammoType: ".308", weight: 8, value: 0, stackable: false, casino: "tops", chipCost: 1700 },
   { id: 3455, name: "Escopeta de sala VIP Tops", type: "weapon", damage: 68, ammoType: "Cartucho de escopeta", weight: 5.8, value: 0, stackable: false, casino: "tops", chipCost: 1650 },
-  { id: 3461, name: "Traje de presentador Tops", type: "armor", def: 24, weight: 3.2, value: 0, stackable: false, casino: "tops", chipCost: 900 },
-  { id: 3462, name: "Chaleco antibalas Tops", type: "armor", def: 28, weight: 6, value: 0, stackable: false, casino: "tops", chipCost: 1100 },
-  { id: 3463, name: "Botas de escenario Tops", type: "armor", def: 11, weight: 2, value: 0, stackable: false, casino: "tops", chipCost: 420 },
-  { id: 3464, name: "Guantes de crupier Tops", type: "armor", def: 10, weight: 1, value: 0, stackable: false, casino: "tops", chipCost: 380 },
-  { id: 3465, name: "Abrigo de la suerte Tops", type: "armor", def: 20, weight: 4, value: 0, stackable: false, casino: "tops", chipCost: 780 },
+  { id: 3461, name: "Traje de presentador Tops", type: "armor", def: 24, weight: 3.2, value: 0, stackable: false, casino: "tops", chipCost: 900, radRes: 0 },
+  { id: 3462, name: "Chaleco antibalas Tops", type: "armor", def: 28, weight: 6, value: 0, stackable: false, casino: "tops", chipCost: 1100, radRes: 0 },
+  { id: 3463, name: "Botas de escenario Tops", type: "armor", def: 11, weight: 2, value: 0, stackable: false, casino: "tops", chipCost: 420, radRes: 0 },
+  { id: 3464, name: "Guantes de crupier Tops", type: "armor", def: 10, weight: 1, value: 0, stackable: false, casino: "tops", chipCost: 380, radRes: 0 },
+  { id: 3465, name: "Abrigo de la suerte Tops", type: "armor", def: 20, weight: 4, value: 0, stackable: false, casino: "tops", chipCost: 780, radRes: 0 },
   { id: 3471, name: "Superestimulante Tops", type: "med", heal: 125, weight: 0.4, value: 0, stackable: true, casino: "tops", chipCost: 520, useDesc: "Cura 125 HP." },
   { id: 3472, name: "RadAway de camerino Tops", type: "med", weight: 0.3, value: 0, stackable: true, casino: "tops", chipCost: 440, radRemove: 260, useDesc: "Quita 260 RAD." },
   { id: 3473, name: "Cóctel de la casa Tops", type: "drink", weight: 0.4, value: 0, stackable: true, casino: "tops", chipCost: 300, heal: 30, useEffect: "charisma", useDesc: "Cura 30 HP y +1 Carisma 8 acciones." },
@@ -1749,19 +1787,15 @@ function getMaxHp() {
 function getRadResistance() {
   let a = getEquippedArmor();
   let res = 0;
-  // Defensa aporta resistencia (aprox)
-  if (a && a.def) res += Math.min(50, a.def * 0.8);
-  // Servoarmaduras y hazmat
-  if (a && a.name) {
-    let n = a.name.toLowerCase();
-    if (n.includes('hazmat') || n.includes('antirradi')) res += 40;
-    if (n.includes('servoarmadura') || n.includes('t-45') || n.includes('t-51') || n.includes('t-60') || n.includes('x-01')) res += 25;
-  }
+  // Resistencia base de la armadura (ya escalada por nivel)
+  if (a && a.radRes) res += a.radRes;
+  // Pequeño aporte de defensa física (cap bajo)
+  if (a && a.def) res += Math.min(15, Math.floor(a.def * 0.15));
   let armAb = getArmorAbility();
   if (armAb && armAb.id === 'a_radres') res += 50;
-  // Rad-X efecto activo
+  // Rad-X y efectos activos
   res += getEffectBonus('radRes') || 0;
-  return Math.min(85, Math.floor(res));
+  return Math.min(90, Math.floor(res));
 }
 
 function addRads(amount) {
@@ -1913,8 +1947,8 @@ function removeAllItemsByBaseId(baseId) {
 
 function getItemLevelBonus(itemLevel) {
   let lvl = Math.max(1, itemLevel || 1);
-  // +8% stats por nivel por encima de 1, suave
-  return 1 + (lvl - 1) * 0.08;
+  // +10% stats por cada nivel por encima de 1
+  return 1 + (lvl - 1) * 0.10;
 }
 
 function getModLevelScale(itemLevel) {
@@ -1945,9 +1979,21 @@ function getEquippedWeapon() {
   };
 }
 
+function getBaseRadRes(armorBase) {
+  if (!armorBase) return 0;
+  if (armorBase.radRes !== undefined && armorBase.radRes !== null) return armorBase.radRes;
+  let n = (armorBase.name || '').toLowerCase();
+  if (n.includes('servoarmadura') || n.includes('t-45') || n.includes('t-51') || n.includes('t-60') || n.includes('x-01')) return 55;
+  if (n.includes('hazmat') || n.includes('antirradi') || n.includes('anti-rad')) return 45;
+  if (n.includes('átomo') || n.includes('atomo') || n.includes('gamma') || n.includes('irradiad')) return 40;
+  if (n.includes('combate') || n.includes('metálica') || n.includes('metalica') || n.includes('antidisturbios')) return 10;
+  if (n.includes('cuero') || n.includes('táctico') || n.includes('tactico')) return 5;
+  return 0;
+}
+
 function getEquippedArmor() {
   let inst = P.inv.find(i => i.uid === P.equippedArmorUid);
-  if (!inst) return { name: "Sin armadura", def: 0, mods: [], legendary: false, itemLevel: 1 };
+  if (!inst) return { name: "Sin armadura", def: 0, radRes: 0, mods: [], legendary: false, itemLevel: 1 };
   let base = getItemBase(inst.id);
   let ilvl = inst.itemLevel || 1;
   let scale = getItemLevelBonus(ilvl);
@@ -1957,9 +2003,13 @@ function getEquippedArmor() {
     return acc + (m ? Math.floor((m.bonusDef || 0) * modScale) : 0);
   }, 0);
   let def = Math.max(0, Math.floor(base.def * scale) + modDef);
+  let baseRad = getBaseRadRes(base);
+  // Si base radRes es 0, permanece 0 aunque suba el nivel
+  let radRes = baseRad > 0 ? Math.floor(baseRad * scale) : 0;
   return { 
     ...base, 
     def: def,
+    radRes: radRes,
     itemLevel: ilvl,
     mods: inst.mods || [],
     legendary: !!inst.legendary,
@@ -2143,6 +2193,7 @@ function renderCharacter() {
     <div class="row"><span>Salud</span><b>${P.hp} / ${maxhp}</b></div>
     <div class="row"><span>Radiación</span><b style="color:#ff6600;">${P.rads || 0} / 1000 (${getRadStatusText()})</b></div>
     <div class="row"><span>Res. Radiación</span><b>${getRadResistance()}%</b></div>
+    <div class="row"><span>Armadura Res.RAD</span><b>${(a.radRes||0)}%</b></div>
     <div class="row"><span>Arma equipada</span><b style="${w.legendary?'color:var(--gold);':''}">${w.legendary?'★ ':''}${w.name} <span style="font-size:10px;color:#8d9880;">Lv:${w.itemLevel||1}</span></b></div>
     <div class="row"><span>Armadura</span><b style="${a.legendary?'color:var(--gold);':''}">${a.legendary?'★ ':''}${a.name} <span style="font-size:10px;color:#8d9880;">Lv:${a.itemLevel||1}</span></b></div>
     <div class="row"><span>Carga máxima</span><b>${maxw} kg</b></div>
@@ -7388,10 +7439,18 @@ function renderInv(sub = P.subtab, page) {
           </div>
       `;
 
+      let scale = getItemLevelBonus(ilvl);
+      let modScale = getModLevelScale(ilvl);
+      let scaledModDmg = Math.floor(modDmg * modScale);
+      let scaledModDef = Math.floor(modDef * modScale);
       if (sub === 'weapon') {
-        html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Daño: +${it.damage + modDmg} | Munición: ${it.ammoType}</span><br>`;
+        let scaledDmg = Math.max(1, Math.floor(it.damage * scale) + scaledModDmg);
+        html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Daño: +${scaledDmg} | Munición: ${it.ammoType || 'Cuerpo a cuerpo'}</span><br>`;
       } else if (sub === 'armor') {
-        html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Defensa: +${it.def + modDef}</span><br>`;
+        let scaledDef = Math.max(0, Math.floor(it.def * scale) + scaledModDef);
+        let baseRad = getBaseRadRes(it);
+        let scaledRad = baseRad > 0 ? Math.floor(baseRad * scale) : 0;
+        html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Defensa: +${scaledDef} · Res.RAD: ${scaledRad}%</span><br>`;
       } else if (sub === 'med') {
         if (it.heal) html += `<span style="font-size:12px; color:var(--accent);">Curación: +${it.heal} Salud</span><br>`;
         if (it.effectDesc) html += `<span style="font-size:11px; color:var(--gold);">${it.effectDesc} (${it.effectActions || 0} acciones)</span><br>`;
