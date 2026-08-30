@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v35';
+const CACHE = 'wasteland-v44';
 const ASSETS = [
   './',
   './index.html',
@@ -7,23 +7,32 @@ const ASSETS = [
   './icon-512.png',
   './audio/RadioWasteland1.mp3',
   './audio/AmbientMap.mp3',
-  './audio/CasinoStrip.mp3'
+  './audio/CasinoStrip.mp3',
+  './audio/EnclaveRadio1.mp3',
+  './audio/EnclaveRadio2.mp3',
+  './audio/EnclaveRadio3.mp3',
+  './audio/EnclaveRadio4.mp3',
+  './audio/EnclaveRadio5.mp3',
+  './audio/EnclaveRadio6.mp3',
+  './audio/EnclaveRadio7.mp3',
+  './audio/EnclaveRadio8.mp3'
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE).then(async (cache) => {
       for (const url of ASSETS) {
-        try { await cache.add(url); } catch (e) { /* audio puede faltar aún */ }
+        try { await cache.add(url); } catch (e) {}
       }
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+      Promise.all(keys.map((k) => k !== CACHE ? caches.delete(k) : null))
     ).then(() => self.clients.claim())
   );
 });
@@ -32,11 +41,10 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  // HTML siempre intenta red primero para no quedar con versión vieja de colores/UI
-  const isHTML = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/');
+  const isHTML = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
   if (isHTML) {
     event.respondWith(
-      fetch(req).then((res) => {
+      fetch(req, { cache: 'no-store' }).then((res) => {
         if (res && res.ok) {
           const clone = res.clone();
           caches.open(CACHE).then((cache) => cache.put(req, clone));

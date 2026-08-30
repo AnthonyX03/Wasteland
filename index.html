@@ -469,7 +469,7 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 .quick-status { display: flex; gap: 4px; font-size: 10px; flex-wrap: wrap; }
 .quick-status span { background: #000800; border: 1px solid #00aa2a; padding: 1px 4px; }
 
-.log { height: 64px; overflow-y: auto; background: #000800; border: 1px solid #00aa2a; padding: 6px; font-size: 11px; }
+.log { height: 56px; overflow-y: auto; background: #000800; border: 1px solid #00aa2a; padding: 6px; font-size: 11px; }
 .log-item { margin-bottom: 3px; border-bottom: 1px dotted #003300; padding-bottom: 2px; }
 
 .tabs, .subtabs { display: grid; gap: 4px; }
@@ -728,7 +728,8 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 }
 
 
-/* ===== MAP LAYOUT OVERRIDE (balanced, no scroll, full controls) ===== */
+
+/* ===== MAP LAYOUT v36 (compact balanced) ===== */
 #main-view > .map-compact {
   display: flex !important;
   flex-direction: column !important;
@@ -738,79 +739,61 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   overflow: hidden !important;
   justify-content: flex-start !important;
   gap: 2px !important;
-  padding: 0 !important;
   box-sizing: border-box !important;
 }
 .map-compact .map-top {
   flex-shrink: 0 !important;
   text-align: center !important;
-  font-size: 12px !important;
-  min-height: 16px !important;
-  margin: 0 !important;
+  font-size: 11px !important;
   line-height: 1.2 !important;
+  margin: 0 !important;
 }
 .map-compact .map-signal-hint {
   flex-shrink: 0 !important;
   height: 12px !important;
-  min-height: 12px !important;
   max-height: 12px !important;
   font-size: 10px !important;
   margin: 0 !important;
   overflow: hidden !important;
 }
-/* Grid tamaño fijo moderado — no crece ni empuja controles */
 .map-compact .world-grid {
   flex: 0 0 auto !important;
-  width: 252px !important;
-  max-width: 252px !important;
-  height: 252px !important;
-  margin: 4px auto !important;
-  gap: 2px !important;
-  padding: 3px !important;
+  width: 220px !important;
+  max-width: 220px !important;
+  height: 220px !important;
+  margin: 2px auto !important;
+  gap: 1px !important;
+  padding: 2px !important;
   display: grid !important;
   grid-template-columns: repeat(7, 1fr) !important;
   grid-template-rows: repeat(7, 1fr) !important;
   box-sizing: border-box !important;
 }
 .map-compact .world-cell {
-  aspect-ratio: auto !important;
   min-height: 0 !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
 }
 .map-compact .map-actions {
   flex-shrink: 0 !important;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
   margin: 2px 0 !important;
-  overflow: visible !important;
-}
-.map-compact .map-actions .map-act-row {
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
 }
 .map-compact .map-actions button {
   font-size: 12px !important;
-  padding: 6px 14px !important;
-  height: 34px !important;
-  min-height: 34px !important;
-  max-height: 34px !important;
+  padding: 6px 12px !important;
+  height: 32px !important;
+  min-height: 32px !important;
 }
 .map-compact .map-actions .map-act-hint {
-  height: 14px !important;
-  min-height: 14px !important;
-  max-height: 16px !important;
   font-size: 10px !important;
+  height: 14px !important;
   line-height: 14px !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
-/* Controles siempre visibles abajo */
 .map-compact .map-controls {
   flex-shrink: 0 !important;
   margin-top: auto !important;
@@ -818,69 +801,61 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   grid-template-columns: 1fr auto 1fr !important;
   gap: 6px !important;
   width: 100% !important;
-  max-width: 100% !important;
-  padding: 2px 2px 0 2px !important;
-  height: 100px !important;
-  min-height: 100px !important;
-  max-height: 100px !important;
+  padding: 2px 0 0 0 !important;
+  height: 96px !important;
+  min-height: 96px !important;
+  max-height: 96px !important;
   align-items: center !important;
   box-sizing: border-box !important;
 }
 .map-compact .map-arrows {
   display: grid !important;
-  grid-template-columns: repeat(3, 42px) !important;
+  grid-template-columns: repeat(3, 40px) !important;
   gap: 4px !important;
-  width: 138px !important;
-  max-width: 138px !important;
+  width: 132px !important;
   margin: 0 auto !important;
   justify-items: center !important;
-  align-content: center !important;
 }
 .map-compact .map-arrows button {
-  width: 42px !important;
-  height: 42px !important;
-  min-width: 42px !important;
-  min-height: 42px !important;
-  max-width: 42px !important;
-  max-height: 42px !important;
-  font-size: 18px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  font-size: 17px !important;
   padding: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  box-sizing: border-box !important;
 }
 .map-compact .map-arrows > div {
-  width: 42px !important;
-  height: 42px !important;
+  width: 40px !important;
+  height: 40px !important;
 }
 .map-compact .quick-meds,
 .map-compact .quick-radio {
   display: flex !important;
   flex-direction: column !important;
-  gap: 5px !important;
+  gap: 4px !important;
   width: 100% !important;
-  max-width: 110px !important;
-  min-width: 0 !important;
-  justify-content: center !important;
-  align-items: stretch !important;
+  max-width: 100px !important;
   margin: 0 auto !important;
+  justify-content: center !important;
 }
 .map-compact .quick-meds button,
 .map-compact .quick-radio button {
   width: 100% !important;
   font-size: 11px !important;
   font-weight: bold !important;
-  padding: 6px 4px !important;
-  min-height: 40px !important;
-  height: 40px !important;
-  max-height: 42px !important;
+  padding: 5px 3px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
   line-height: 1.1 !important;
   box-sizing: border-box !important;
   white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
 }
+
+
 
 </style>
 </head>
@@ -934,7 +909,7 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
     <button class="btn-settings panel" title="Ajustes" onclick="openSettings()">⚙</button>
   </div>
 
-  <audio id="radio-audio" loop preload="auto" src="./audio/RadioWasteland1.mp3"></audio>
+  <audio id="radio-audio" preload="auto" src="./audio/RadioWasteland1.mp3"></audio>
   <audio id="ambient-audio" loop preload="auto" src="./audio/AmbientMap.mp3"></audio>
   <audio id="casino-audio" loop preload="auto" src="./audio/CasinoStrip.mp3"></audio>
 </div>
@@ -1523,6 +1498,38 @@ const COOK_RECIPES = [
 ];
 
 // Costes de mejora del refugio (en chatarra, no chapas)
+
+const AMMO_CRAFT_RECIPES = [
+  // Nivel 1 — básicas
+  { id: 9,   ammoLvl: 1, qty: 20, reqs: [{ id: 21, qty: 1 }, { id: 20, qty: 2 }] },
+  { id: 301, ammoLvl: 1, qty: 20, reqs: [{ id: 21, qty: 1 }, { id: 20, qty: 2 }] },
+  { id: 10,  ammoLvl: 1, qty: 8,  reqs: [{ id: 21, qty: 2 }, { id: 20, qty: 2 }, { id: 32, qty: 1 }] },
+  { id: 12,  ammoLvl: 1, qty: 15, reqs: [{ id: 21, qty: 2 }, { id: 20, qty: 3 }] },
+  { id: 303, ammoLvl: 1, qty: 5,  reqs: [{ id: 30, qty: 2 }, { id: 33, qty: 1 }] },
+  // Nivel 2
+  { id: 305, ammoLvl: 2, qty: 20, reqs: [{ id: 13, qty: 2 }, { id: 22, qty: 2 }] },
+  { id: 310, ammoLvl: 2, qty: 15, reqs: [{ id: 21, qty: 3 }, { id: 20, qty: 3 }] },
+  { id: 307, ammoLvl: 2, qty: 15, reqs: [{ id: 30, qty: 2 }, { id: 24, qty: 1 }] },
+  { id: 11,  ammoLvl: 2, qty: 12, reqs: [{ id: 13, qty: 2 }, { id: 36, qty: 1 }] },
+  // Nivel 3
+  { id: 302, ammoLvl: 3, qty: 12, reqs: [{ id: 21, qty: 3 }, { id: 23, qty: 2 }] },
+  { id: 309, ammoLvl: 3, qty: 25, reqs: [{ id: 21, qty: 2 }, { id: 20, qty: 4 }] },
+  { id: 308, ammoLvl: 3, qty: 20, reqs: [{ id: 21, qty: 2 }, { id: 27, qty: 1 }] },
+  { id: 318, ammoLvl: 3, qty: 30, reqs: [{ id: 21, qty: 3 }, { id: 20, qty: 4 }] },
+  // Nivel 4
+  { id: 304, ammoLvl: 4, qty: 15, reqs: [{ id: 13, qty: 3 }, { id: 34, qty: 2 }, { id: 36, qty: 1 }] },
+  { id: 312, ammoLvl: 4, qty: 12, reqs: [{ id: 21, qty: 4 }, { id: 23, qty: 2 }] },
+  { id: 315, ammoLvl: 4, qty: 40, reqs: [{ id: 33, qty: 3 }, { id: 32, qty: 2 }] },
+  { id: 313, ammoLvl: 4, qty: 50, reqs: [{ id: 21, qty: 2 }, { id: 20, qty: 5 }] },
+  // Nivel 5
+  { id: 306, ammoLvl: 5, qty: 10, reqs: [{ id: 13, qty: 4 }, { id: 34, qty: 3 }, { id: 38, qty: 1 }] },
+  { id: 311, ammoLvl: 5, qty: 10, reqs: [{ id: 28, qty: 1 }, { id: 13, qty: 3 }, { id: 36, qty: 2 }] },
+  { id: 314, ammoLvl: 5, qty: 2,  reqs: [{ id: 21, qty: 6 }, { id: 23, qty: 3 }, { id: 33, qty: 2 }] },
+  { id: 319, ammoLvl: 5, qty: 2,  reqs: [{ id: 13, qty: 5 }, { id: 36, qty: 3 }, { id: 28, qty: 1 }] },
+  { id: 317, ammoLvl: 5, qty: 5,  reqs: [{ id: 21, qty: 5 }, { id: 28, qty: 1 }] },
+  { id: 316, ammoLvl: 5, qty: 1,  reqs: [{ id: 28, qty: 2 }, { id: 13, qty: 6 }, { id: 34, qty: 4 }, { id: 36, qty: 2 }] }
+];
+
 const UPGRADE_COSTS = {
   craft: [
     [{ id: 21, qty: 5 }, { id: 20, qty: 8 }, { id: 22, qty: 4 }],
@@ -1535,6 +1542,12 @@ const UPGRADE_COSTS = {
     [{ id: 21, qty: 6 }, { id: 13, qty: 4 }, { id: 25, qty: 3 }],
     [{ id: 28, qty: 2 }, { id: 23, qty: 6 }, { id: 36, qty: 2 }],
     [{ id: 28, qty: 3 }, { id: 38, qty: 2 }, { id: 13, qty: 6 }]
+  ],
+  ammo: [
+    [{ id: 21, qty: 5 }, { id: 20, qty: 6 }, { id: 33, qty: 2 }],
+    [{ id: 21, qty: 8 }, { id: 23, qty: 4 }, { id: 27, qty: 3 }],
+    [{ id: 13, qty: 5 }, { id: 21, qty: 8 }, { id: 36, qty: 2 }],
+    [{ id: 28, qty: 2 }, { id: 13, qty: 6 }, { id: 23, qty: 6 }]
   ],
   lunchbox: [
     [{ id: 30, qty: 5 }, { id: 31, qty: 5 }, { id: 39, qty: 3 }],
@@ -1661,6 +1674,7 @@ let P = {
   scrapLevel: 1,
   alchemyLevel: 1,
   cookLevel: 1,
+  ammoLevel: 1,
   storageMaxWeight: 100,
   storageUpgradeRank: 0,
   specialPts: 0,
@@ -2412,7 +2426,7 @@ function selectPerk(perkId) {
 
   logMsg("¡Has adquirido/subido de rango la Perk: " + pk.name + "!");
   closeModal();
-  renderCharacter();
+  renderCharacter(P.charSubtab || 'perks');
   updateStats();
 }
 
@@ -2421,12 +2435,14 @@ function addSpecialPoint(stat) {
     P.special[stat]++;
     P.specialPts--;
     logMsg("Aumentaste tu atributo S.P.E.C.I.A.L: " + stat);
-    renderCharacter();
+    renderCharacter('special');
     updateStats();
   }
 }
 
-function renderCharacter() {
+function renderCharacter(sub) {
+  if (!sub) sub = P.charSubtab || 'stats';
+  P.charSubtab = sub;
   let maxhp = getMaxHp();
   let maxw = getMaxWeight();
   let reqXp = getRequiredXP();
@@ -2434,26 +2450,105 @@ function renderCharacter() {
   let a = getEquippedArmor();
   let wInfo = getWeatherInfo();
 
+  let tabs = [
+    { id: 'stats', label: 'Estadísticas' },
+    { id: 'special', label: 'S.P.E.C.I.A.L.' },
+    { id: 'perks', label: 'Perks' },
+    { id: 'effects', label: 'Efectos' },
+    { id: 'rep', label: 'Reputación' },
+    { id: 'settlements', label: 'Asentamientos' },
+    { id: 'wallet', label: 'Monedero' }
+  ];
   let html = `
     <h2 style="text-align:center; color:var(--accent); margin:4px 0;">${P.playerName || 'Superviviente'}</h2>
-    <div class="row"><span>Nivel</span><b>${P.lvl}</b></div>
-    <div class="row"><span>Experiencia</span><b>${P.xp} / ${reqXp}</b></div>
-    <div class="row"><span>Salud</span><b>${P.hp} / ${maxhp}</b></div>
-    <div class="row"><span>Radiación</span><b style="color:#ff6600;">${P.rads || 0} / 1000 (${getRadStatusText()})</b></div>
-    <div class="row"><span>Res. Radiación</span><b>${getRadResistance()}%</b></div>
-    <div class="row"><span>Armadura Res.RAD</span><b>${(a.radRes||0)}%</b></div>
-    <div class="row"><span>Arma equipada</span><b style="${w.legendary?'color:var(--gold);':''}">${w.legendary?'★ ':''}${w.name} <span style="font-size:10px;color:#8d9880;">Lv:${w.itemLevel||1}</span></b></div>
-    <div class="row"><span>Armadura</span><b style="${a.legendary?'color:var(--gold);':''}">${a.legendary?'★ ':''}${a.name} <span style="font-size:10px;color:#8d9880;">Lv:${a.itemLevel||1}</span></b></div>
-    <div class="row"><span>Carga máxima</span><b>${maxw} kg</b></div>
-    <div class="row"><span>Fecha / clima</span><b>${formatGameDateTime()} · ${wInfo.label}</b></div>
-    ${(() => {
-      let html = '';
-      let ps = P.playerSettlement;
-      let sc = P.sierraCasino;
-      let rf = P.robcoFactory;
-      let hasAny = (ps && ps.claimed && ps.name) || (sc && sc.claimed) || (rf && rf.claimed);
-      if (!hasAny) return '';
-      html += '<h3 style="color:var(--accent); font-size:13px; margin:10px 0 6px 0;">Asentamientos Propios</h3>';
+    <div class="subtabs" style="grid-template-columns:repeat(3,1fr);">
+      ${tabs.map(t => `<button class="${sub===t.id?'active':''}" onclick="renderCharacter('${t.id}')">${t.label}</button>`).join('')}
+    </div>
+  `;
+
+  if (sub === 'stats') {
+    html += `
+      <div class="row"><span>Nivel</span><b>${P.lvl}</b></div>
+      <div class="row"><span>Experiencia</span><b>${P.xp} / ${reqXp}</b></div>
+      <div class="row"><span>Salud</span><b>${P.hp} / ${maxhp}</b></div>
+      <div class="row"><span>Radiación</span><b style="color:#ff6600;">${P.rads || 0} / 1000 (${getRadStatusText()})</b></div>
+      <div class="row"><span>Res. Radiación</span><b>${getRadResistance()}%</b></div>
+      <div class="row"><span>Armadura Res.RAD</span><b>${(a.radRes||0)}%</b></div>
+      <div class="row"><span>Arma equipada</span><b style="${w.legendary?'color:var(--gold);':''}">${w.legendary?'★ ':''}${w.name} <span style="font-size:10px;color:#8d9880;">Lv:${w.itemLevel||1}</span></b></div>
+      <div class="row"><span>Armadura</span><b style="${a.legendary?'color:var(--gold);':''}">${a.legendary?'★ ':''}${a.name} <span style="font-size:10px;color:#8d9880;">Lv:${a.itemLevel||1}</span></b></div>
+      <div class="row"><span>Carga máxima</span><b>${maxw} kg</b></div>
+      <div class="row"><span>Fecha / clima</span><b>${formatGameDateTime()} · ${wInfo.label}</b></div>
+      <p style="font-size:10px; color:#8d9880;margin-top:8px;">Radiación limita HP. Clima afecta combate.</p>
+`;
+  } else if (sub === 'special') {
+    html += `
+      <h3 style="color:var(--accent); margin:4px 0;">S.P.E.C.I.A.L. (Puntos libres: ${P.specialPts})</h3>
+      <div class="spec-grid">
+        <div class="spec-box"><span>(S) Fuerza: <b>${P.special.S}</b> (+${P.special.S * 10}kg carga)</span><button ${P.specialPts === 0 || P.special.S >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('S')">+</button></div>
+        <div class="spec-box"><span>(P) Percepción: <b>${P.special.P}</b> (+${P.special.P * 2}% loot/misión)</span><button ${P.specialPts === 0 || P.special.P >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('P')">+</button></div>
+        <div class="spec-box"><span>(E) Resistencia: <b>${P.special.E}</b> (+${getDefenseBonusFromEndurance()} defensa)</span><button ${P.specialPts === 0 || P.special.E >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('E')">+</button></div>
+        <div class="spec-box"><span>(C) Carisma: <b>${P.special.C}</b> (-${P.special.C * 2}% precio tienda)</span><button ${P.specialPts === 0 || P.special.C >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('C')">+</button></div>
+        <div class="spec-box"><span>(I) Inteligencia: <b>${P.special.I}</b> (+${P.special.I * 5}% EXP)</span><button ${P.specialPts === 0 || P.special.I >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('I')">+</button></div>
+        <div class="spec-box"><span>(A) Agilidad: <b>${P.special.A}</b> (+${P.special.A * 3}% huida)</span><button ${P.specialPts === 0 || P.special.A >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('A')">+</button></div>
+        <div class="spec-box" style="grid-column: span 2;"><span>(L) Suerte: <b>${P.special.L}</b> (+${P.special.L * 2}% crítico)</span><button ${P.specialPts === 0 || P.special.L >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('L')">+</button></div>
+      </div>
+    `;
+  } else if (sub === 'perks') {
+    html += `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin:6px 0;">
+        <h3 style="color:var(--accent); margin:0;">PERKS (Puntos: ${P.perkPts})</h3>
+        <button ${P.perkPts === 0 ? 'disabled' : ''} style="background:var(--accent); color:#111; font-weight:bold;" onclick="openPerkSelection()">+ AÑADIR</button>
+      </div>
+    `;
+    let acquiredPerkKeys = Object.keys(P.perks || {}).filter(k => P.perks[k] > 0);
+    if (acquiredPerkKeys.length === 0) {
+      html += `<p style="font-size:12px; color:#8d9880;">No tienes Perks. Consigue puntos al subir de nivel.</p>`;
+    } else {
+      acquiredPerkKeys.forEach(key => {
+        let pk = PERKS_DB.find(p => p.id === key);
+        let r = P.perks[key];
+        if (pk) {
+          html += `<div class="item">
+            <div class="item-head">
+              <b style="color:var(--accent);">${pk.name}</b>
+              <span style="font-size:11px; color:var(--gold);">Rango: ${r} / ${pk.maxRank}</span>
+            </div>
+            <span style="font-size:12px; color:#8d9880;">${pk.desc}</span>
+          </div>`;
+        }
+      });
+    }
+  } else if (sub === 'effects') {
+    html += `<h3 style="color:var(--accent); margin:6px 0;">EFECTOS ACTIVOS</h3>`;
+    if (!P.activeEffects || P.activeEffects.length === 0) {
+      html += `<p style="font-size:12px; color:#8d9880;">Ningún efecto activo. Usa comida, bebidas o químicos. Cada movimiento/exploración consume 1 acción.</p>`;
+    } else {
+      P.activeEffects.forEach(e => {
+        html += `<div class="item" style="border-color:var(--gold);">
+          <div class="item-head">
+            <b style="color:var(--gold);">${e.name}</b>
+            <span style="font-size:11px; color:var(--accent);">${e.remaining} acciones</span>
+          </div>
+          <span style="font-size:12px; color:#8d9880;">${e.desc || ''}</span>
+        </div>`;
+      });
+    }
+  } else if (sub === 'rep') {
+    html += `<h3 style="color:var(--accent); font-size:13px; margin:6px 0;">Reputación de facciones</h3>`;
+    html += Object.keys(FACTIONS).filter(fid => fid !== 'player' && fid !== 'sierra' && fid !== 'robco').map(fid => {
+      let f = FACTIONS[fid];
+      let r = (P.reputation && P.reputation[fid]) || 0;
+      return '<div class="row"><span style="color:' + f.color + '">' + f.name + '</span><b>' + r + '/1000</b></div>';
+    }).join('');
+  } else if (sub === 'settlements') {
+    let ps = P.playerSettlement;
+    let sc = P.sierraCasino;
+    let rf = P.robcoFactory;
+    let hasAny = (ps && ps.claimed && ps.name) || (sc && sc.claimed) || (rf && rf.claimed);
+    if (!hasAny) {
+      html += `<p style="font-size:12px;color:#8d9880;">Aún no has reclamado ningún asentamiento propio.</p>`;
+    } else {
+      html += `<h3 style="color:var(--accent); font-size:13px; margin:6px 0;">Asentamientos Propios</h3>`;
       if (ps && ps.claimed && ps.name) {
         html += '<div class="item" style="border-color:#44ddaa; margin:0 0 6px 0; padding:8px;">' +
           '<div class="row" style="margin:0;"><span style="color:#44ddaa;font-weight:bold;">🏕 ' + ps.name + '</span>' +
@@ -2469,86 +2564,25 @@ function renderCharacter() {
           '<div class="row" style="margin:0;"><span style="color:#a0a0a0;font-weight:bold;">⚙ Fábrica RobCo</span>' +
           '<b style="color:#a0a0a0;">Robots: ' + (rf.robots||0) + '/10 · Nv.' + (rf.level||1) + '/10</b></div></div>';
       }
-      return html;
-    })()}
-    
-    <h3 style="color:var(--gold); font-size:13px; margin-top:10px;">Monedero</h3>
-    <div class="item" style="border-color:var(--gold);">
-      <div class="row"><span style="color:#e05050;"><img class="cap-icon chip-icon-caps" src="${(document.querySelector('header .cap-icon:not(.chip-icon)')||{}).src||''}" alt="chapas" style="width:18px;height:18px;vertical-align:middle;filter:sepia(1) saturate(8) hue-rotate(-50deg) brightness(0.95);"> Chapas</span><b style="color:#e05050;">${P.caps}</b></div>
-      <div class="row"><span style="color:#6eb5ff;display:inline-flex;align-items:center;gap:4px;"><img class="ticket-icon" src="${typeof TICKET_ICON_SRC!=='undefined'?TICKET_ICON_SRC:((document.querySelector('header .ticket-icon')||{}).src||'')}" alt="tickets" style="width:18px;height:18px;vertical-align:middle;filter:none;"> Tickets Combat Zone</span><b style="color:#6eb5ff;">${P.tickets||0}</b></div>
-      <div class="row"><span style="color:#e8d48b;">${chipIconHtml('sierra')} Sierra Madre</span><b style="color:#e8d48b;">${getCasinoChips('sierra')}</b></div>
-      ${STRIP_CASINOS.map(c => {
-        let col = c.color;
-        return '<div class="row"><span style="color:' + col + ';">' + chipIconHtml(c.id) + ' ' + c.name + '</span><b style="color:' + col + ';">' + getCasinoChips(c.id) + '</b></div>';
-      }).join('')}
-    </div>
-<h3 style="color:var(--accent); font-size:13px; margin-top:10px;">Reputación de facciones</h3>
-    ${Object.keys(FACTIONS).filter(fid => fid !== 'player' && fid !== 'sierra' && fid !== 'robco').map(fid => {
-      let f = FACTIONS[fid];
-      let r = (P.reputation && P.reputation[fid]) || 0;
-      return '<div class="row"><span style="color:' + f.color + '">' + f.name + '</span><b>' + r + '/1000</b></div>';
-    }).join('')}
-    <p style="font-size:10px; color:#8d9880;">Radiación limita HP. Clima afecta combate. Asentamientos ⚑ en el mapa.</p>
-
-    <h3 style="color:var(--accent); margin-top:15px;">ATRIBUTOS S.P.E.C.I.A.L. (Puntos Libres: ${P.specialPts})</h3>
-    <div class="spec-grid">
-      <div class="spec-box"><span>(S) Fuerza: <b>${P.special.S}</b> (+${P.special.S * 10}kg carga)</span><button ${P.specialPts === 0 || P.special.S >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('S')">+</button></div>
-      <div class="spec-box"><span>(P) Percepción: <b>${P.special.P}</b> (+${P.special.P * 2}% loot/misión)</span><button ${P.specialPts === 0 || P.special.P >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('P')">+</button></div>
-      <div class="spec-box"><span>(E) Resistencia: <b>${P.special.E}</b> (+${getDefenseBonusFromEndurance()} defensa acum.)</span><button ${P.specialPts === 0 || P.special.E >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('E')">+</button></div>
-      <div class="spec-box"><span>(C) Carisma: <b>${P.special.C}</b> (-${P.special.C * 2}% precio tienda)</span><button ${P.specialPts === 0 || P.special.C >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('C')">+</button></div>
-      <div class="spec-box"><span>(I) Inteligencia: <b>${P.special.I}</b> (+${P.special.I * 5}% EXP bonus)</span><button ${P.specialPts === 0 || P.special.I >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('I')">+</button></div>
-      <div class="spec-box"><span>(A) Agilidad: <b>${P.special.A}</b> (+${P.special.A * 3}% huida/esquiva)</span><button ${P.specialPts === 0 || P.special.A >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('A')">+</button></div>
-      <div class="spec-box" style="grid-column: span 2;"><span>(L) Suerte: <b>${P.special.L}</b> (+${P.special.L * 2}% prob. crítico)</span><button ${P.specialPts === 0 || P.special.L >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('L')">+</button></div>
-    </div>
-
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
-      <h3 style="color:var(--accent); margin:0;">PERKS (Puntos Libres: ${P.perkPts})</h3>
-      <button ${P.perkPts === 0 ? 'disabled' : ''} style="background:var(--accent); color:#111; font-weight:bold;" onclick="openPerkSelection()">+ AÑADIR PERK</button>
-    </div>
-  `;
-
-  let acquiredPerkKeys = Object.keys(P.perks || {}).filter(k => P.perks[k] > 0);
-
-  if (acquiredPerkKeys.length === 0) {
-    html += `<p style="font-size:12px; color:#8d9880; margin-top:10px;">No tienes ninguna Perk activa. Pulsa "Añadir Perk" cuando tengas puntos disponibles.</p>`;
-  } else {
-    html += `<div style="margin-top:10px;">`;
-    acquiredPerkKeys.forEach(key => {
-      let pk = PERKS_DB.find(p => p.id === key);
-      let r = P.perks[key];
-      if (pk) {
-        html += `
-          <div class="item">
-            <div class="item-head">
-              <b style="color:var(--accent);">${pk.name}</b>
-              <span style="font-size:11px; color:var(--gold);">Rango: ${r} / ${pk.maxRank}</span>
-            </div>
-            <span style="font-size:12px; color:#8d9880;">${pk.desc}</span>
-          </div>
-        `;
-      }
-    });
-    html += `</div>`;
-  }
-
-  // Efectos activos
-  html += `<h3 style="color:var(--accent); margin-top:20px;">EFECTOS ACTIVOS</h3>`;
-  if (!P.activeEffects || P.activeEffects.length === 0) {
-    html += `<p style="font-size:12px; color:#8d9880;">Ningún efecto activo. Usa comida, bebidas o químicos para obtener bonos temporales. Cada movimiento o exploración consume 1 acción de duración.</p>`;
-  } else {
-    P.activeEffects.forEach(e => {
-      html += `<div class="item" style="border-color:var(--gold);">
-        <div class="item-head">
-          <b style="color:var(--gold);">${e.name}</b>
-          <span style="font-size:11px; color:var(--accent);">${e.remaining} acciones restantes</span>
-        </div>
-        <span style="font-size:12px; color:#8d9880;">${e.desc || ''}</span>
-      </div>`;
-    });
+    }
+  } else if (sub === 'wallet') {
+    html += `
+      <h3 style="color:var(--gold); font-size:13px; margin:6px 0;">Monedero</h3>
+      <div class="item" style="border-color:var(--gold);">
+        <div class="row"><span style="color:#e05050;"><img class="cap-icon chip-icon-caps" src="${(document.querySelector('header .cap-icon:not(.chip-icon)')||{}).src||''}" alt="chapas" style="width:18px;height:18px;vertical-align:middle;filter:sepia(1) saturate(8) hue-rotate(-50deg) brightness(0.95);"> Chapas</span><b style="color:#e05050;">${P.caps}</b></div>
+        <div class="row"><span style="color:#6eb5ff;display:inline-flex;align-items:center;gap:4px;"><img class="ticket-icon" src="${typeof TICKET_ICON_SRC!=='undefined'?TICKET_ICON_SRC:((document.querySelector('header .ticket-icon')||{}).src||'')}" alt="tickets" style="width:18px;height:18px;vertical-align:middle;filter:none;"> Tickets Combat Zone</span><b style="color:#6eb5ff;">${P.tickets||0}</b></div>
+        <div class="row"><span style="color:#e8d48b;">${chipIconHtml('sierra')} Sierra Madre</span><b style="color:#e8d48b;">${getCasinoChips('sierra')}</b></div>
+        ${STRIP_CASINOS.map(c => {
+          let col = c.color;
+          return '<div class="row"><span style="color:' + col + ';">' + chipIconHtml(c.id) + ' ' + c.name + '</span><b style="color:' + col + ';">' + getCasinoChips(c.id) + '</b></div>';
+        }).join('')}
+      </div>
+    `;
   }
 
   document.getElementById('main-view').innerHTML = html;
 }
+
 
 /* SISTEMA DE REFUGIO CON SUBSECCIONES */
 
@@ -2559,6 +2593,7 @@ function ensureVaultDefaults() {
   if (!P.scrapLevel) P.scrapLevel = 1;
   if (!P.alchemyLevel) P.alchemyLevel = 1;
   if (!P.cookLevel) P.cookLevel = 1;
+  if (!P.ammoLevel) P.ammoLevel = 1;
   if (!P.storage) P.storage = [];
   if (P.storageMaxWeight === undefined) P.storageMaxWeight = 100;
   if (P.prisonLevel === undefined) P.prisonLevel = 1;
@@ -2692,6 +2727,7 @@ function renderFabricacionUI() {
     <div class="subtabs" >
       <button class="${fab === 'crafting' ? 'active' : ''}" onclick="P.fabricSubtab='crafting'; P.craftPage=0; renderVault('fabric')">Taller</button>
       <button class="${fab === 'mods' ? 'active' : ''}" onclick="P.fabricSubtab='mods'; renderVault('fabric')">Armería</button>
+      <button class="${fab === 'ammo' ? 'active' : ''}" onclick="P.fabricSubtab='ammo'; P.craftPage=0; renderVault('fabric')">Munición</button>
       <button class="${fab === 'alchemy' ? 'active' : ''}" onclick="P.fabricSubtab='alchemy'; P.craftPage=0; renderVault('fabric')">Alquimia</button>
       <button class="${fab === 'cook' ? 'active' : ''}" onclick="P.fabricSubtab='cook'; P.craftPage=0; renderVault('fabric')">Cocina</button>
     </div>
@@ -2701,6 +2737,8 @@ function renderFabricacionUI() {
     html += renderRecipeList(CRAFT_RECIPES, P.craftLevel, 'craftLvl', 'craftItem', 'Taller', P.craftLevel);
   } else if (fab === 'mods') {
     html += renderArmoryUI();
+  } else if (fab === 'ammo') {
+    html += renderAmmoCraftUI();
   } else if (fab === 'alchemy') {
     html += renderRecipeList(ALCHEMY_RECIPES, P.alchemyLevel, 'alchemyLvl', 'craftAlchemy', 'Alquimia', P.alchemyLevel);
   } else if (fab === 'cook') {
@@ -2966,6 +3004,7 @@ function renderVaultUpgradesUI() {
   let facilities = [
     { key: 'craft', name: '🔧 Taller de Fabricación', level: P.craftLevel, max: 5, desc: 'Desbloquea recetas de armas y armaduras.' },
     { key: 'mod', name: '⚙️ Armería', level: P.modLevel, max: 5, desc: 'Desbloquea más módulos de mejora.' },
+    { key: 'ammo', name: '🔫 Mesa de Munición', level: P.ammoLevel || 1, max: 5, desc: 'Desbloquea más tipos de munición fabricable.' },
     { key: 'lunchbox', name: '📦 Tarteras Vault-Tec', level: P.lunchboxLevel, max: 5, desc: 'Mejores recompensas de tarteras.' },
     { key: 'scrap', name: '🔩 Desguace', level: P.scrapLevel, max: 5, desc: 'Más chatarra al desguazar.' },
     { key: 'alchemy', name: '⚗️ Alquimia', level: P.alchemyLevel, max: 5, desc: 'Nuevas recetas de químicos y medicinas.' },
@@ -3005,7 +3044,7 @@ function renderVaultUpgradesUI() {
 
 function upgradeVaultFacility(type) {
   ensureVaultDefaults();
-  let levelKey = { craft: 'craftLevel', mod: 'modLevel', lunchbox: 'lunchboxLevel', scrap: 'scrapLevel', alchemy: 'alchemyLevel', cook: 'cookLevel', prison: 'prisonLevel' }[type];
+  let levelKey = { craft: 'craftLevel', mod: 'modLevel', ammo: 'ammoLevel', lunchbox: 'lunchboxLevel', scrap: 'scrapLevel', alchemy: 'alchemyLevel', cook: 'cookLevel', prison: 'prisonLevel' }[type];
   if (!levelKey) return;
   if (P[levelKey] >= 5) return;
   let costs = (UPGRADE_COSTS[type] || [])[P[levelKey] - 1];
@@ -3349,6 +3388,78 @@ function craftAlchemy(recipeId) {
   renderVault('fabric');
   updateStats();
 }
+
+
+function renderAmmoCraftUI() {
+  ensureVaultDefaults();
+  const PER_PAGE = 5;
+  let page = P.craftPage || 0;
+  let level = P.ammoLevel || 1;
+  let available = AMMO_CRAFT_RECIPES.filter(r => (r.ammoLvl || 1) <= level);
+  let locked = AMMO_CRAFT_RECIPES.filter(r => (r.ammoLvl || 1) > level);
+  let totalPages = Math.max(1, Math.ceil(available.length / PER_PAGE));
+  if (page >= totalPages) page = totalPages - 1;
+  P.craftPage = page;
+  let slice = available.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+
+  let html = `<p style="font-size:12px; color:#8d9880;">Nivel Mesa de Munición: <b style="color:var(--accent);">${level}/5</b></p>`;
+  if (available.length === 0) {
+    html += `<p style="font-size:12px; color:#8d9880;">Mejora la mesa de Munición en Mejoras para desbloquear recetas.</p>`;
+  } else {
+    html += `<p style="font-size:11px; color:#8d9880;">Página ${page + 1}/${totalPages}</p>`;
+    slice.forEach(rec => {
+      let itemObj = getItemBase(rec.id);
+      if (!itemObj) return;
+      let can = canPayReqs(rec.reqs);
+      let qty = rec.qty || itemObj.qty || 1;
+      html += `
+        <div class="item">
+          <b style="color:var(--accent);">${itemObj.name}</b> <span style="font-size:11px;color:#8d9880;">×${qty} · ${itemObj.ammoKey || ''}</span><br>
+          <span style="font-size:11px;">Coste: ${formatReqs(rec.reqs)}</span><br>
+          <span style="font-size:10px;color:#8d9880;">Requiere mesa Nv.${rec.ammoLvl || 1}</span><br>
+          <button style="margin-top:4px;" ${can ? '' : 'disabled'} onclick="craftAmmo(${rec.id})">Fabricar</button>
+        </div>`;
+    });
+    if (totalPages > 1) {
+      html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <button ${page <= 0 ? 'disabled' : ''} onclick="P.craftPage=${page - 1};renderVault('fabric')">◀ Anterior</button>
+        <span style="font-size:11px;">${page + 1}/${totalPages}</span>
+        <button ${page >= totalPages - 1 ? 'disabled' : ''} onclick="P.craftPage=${page + 1};renderVault('fabric')">Siguiente ▶</button>
+      </div>`;
+    }
+  }
+  if (locked.length > 0) {
+    html += `<p style="font-size:11px;color:#8d9880;margin-top:10px;">Bloqueadas (sube el nivel de la mesa): ${locked.map(r => { let it=getItemBase(r.id); return it ? it.name + ' (Nv.' + r.ammoLvl + ')' : ''; }).filter(Boolean).join(', ')}</p>`;
+  }
+  return html;
+}
+
+function craftAmmo(recipeId) {
+  ensureVaultDefaults();
+  let rec = AMMO_CRAFT_RECIPES.find(r => r.id === recipeId);
+  if (!rec || (rec.ammoLvl || 1) > (P.ammoLevel || 1)) {
+    logMsg("Necesitas mejorar la mesa de munición.");
+    return;
+  }
+  if (!canPayReqs(rec.reqs)) {
+    logMsg("Te faltan materiales.");
+    return;
+  }
+  payReqs(rec.reqs);
+  let it = getItemBase(rec.id);
+  let qty = rec.qty || (it && it.qty) || 1;
+  if (it && it.ammoKey) {
+    if (!P.ammoBox) P.ammoBox = {};
+    P.ammoBox[it.ammoKey] = (P.ammoBox[it.ammoKey] || 0) + qty;
+    logMsg("¡Fabricaste " + qty + "× " + (it.ammoKey || it.name) + "!");
+  } else {
+    addItemToInv(rec.id, 1);
+    logMsg("¡Fabricaste munición!");
+  }
+  renderVault('fabric');
+  updateStats();
+}
+
 
 function craftCook(recipeId) {
   let rec = COOK_RECIPES.find(r => r.id === recipeId);
@@ -4186,7 +4297,7 @@ function renderWorldGrid() {
       cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
     }
   }
-  return `<div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:252px;width:252px;height:252px;">${cells}</div>`;
+  return `<div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:220px;width:220px;height:220px;">${cells}</div>`;
 }
 
 function renderMap() {
@@ -4426,7 +4537,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0;" onclick="renameSurvivor(); closeModal();">✏ Renombrar</button>
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.3.0</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.3.1</div>
   `;
   m.classList.add('show');
 }
@@ -4645,7 +4756,7 @@ function renderSettlementUI(settlementId, tab) {
           let price = Math.max(1, Math.floor((it.value || 10) * 1.8));
           let uniqueTag = it.factionOnly ? ' <span style="color:var(--gold);font-size:10px;">★ FACCIÓN</span>' : '';
           html += `<div class="item fcol" style="border-color:${fcol} !important;">
-            <b style="color:${fcol} !important;">${it.name}</b>${uniqueTag} — ${price} chapas
+            <b style="color:${fcol} !important;">${it.name}</b>${uniqueTag} — ${capsPriceHtml(price)}
             <span style="font-size:10px;color:#8d9880;"> (Tienda Nv.${entry.shopLevel || 1} · Equipo Nv.${P.lvl || 1})</span><br>
             <button style="margin-top:4px;" onclick="buyFactionItem('${sett.faction}',${entry.id},${price})">Comprar</button>
           </div>`;
@@ -4853,19 +4964,22 @@ function getCasinoAudio() {
 }
 
 function startCasinoMusic() {
+  // Prioridad radio: si hay radio sonando, no poner música del Strip
+  let radio = document.getElementById('radio-audio');
+  if (radioPlaying && radio && !radio.paused) {
+    casinoActive = true; // estamos en zona Strip, pero sin música de casino
+    radioPausedByCasino = false;
+    pauseAmbientMusic();
+    return;
+  }
   if (casinoActive) {
-    // Ya sonando (reentrada UI)
     let a = getCasinoAudio();
-    if (a && a.paused) a.play().catch(()=>{});
+    if (a && a.paused && !(radioPlaying && radio && !radio.paused)) a.play().catch(()=>{});
     return;
   }
   casinoActive = true;
   pauseAmbientMusic();
-  let radio = document.getElementById('radio-audio');
-  radioPausedByCasino = !!(radioPlaying && radio && !radio.paused);
-  if (radio && !radio.paused) {
-    radio.pause();
-  }
+  radioPausedByCasino = false;
   let audio = getCasinoAudio();
   // Ruta relativa offline (PWA/GitHub Pages)
   let src = './audio/CasinoStrip.mp3';
@@ -6728,6 +6842,20 @@ function doHouseRest(settlementId) {
 
 
 function openRadioUI() {
+  document.getElementById('main-view').innerHTML = `
+    <div class="radio-panel">
+      <h3>📻 RADIO DEL YERMO</h3>
+      <p style="font-size:12px; color:#8d9880;">Elige una función de la radio.</p>
+      <button style="width:100%; margin:8px 0; padding:14px; background:#001a00; border-color:var(--gold); color:var(--gold); font-weight:bold;" onclick="pipClick(); openRadioCaptureUI()">📡 CAPTAR</button>
+      <p style="font-size:11px; color:#8d9880; margin-top:-4px;">Busca señales misteriosas y reclama recompensas.</p>
+      <button style="width:100%; margin:8px 0; padding:14px; background:#001a00; border-color:var(--accent); color:var(--accent); font-weight:bold;" onclick="pipClick(); openRadioTuneUI()">🎛 SINTONIZAR</button>
+      <p style="font-size:11px; color:#8d9880; margin-top:-4px;">Estaciones de radio: Wasteland y Enclave.</p>
+      <button style="width:100%; margin-top:12px;" onclick="renderMap()">← VOLVER AL MAPA</button>
+    </div>
+  `;
+}
+
+function openRadioCaptureUI() {
   let signalInfo = "Sin señal marcada.";
   if (P.radioSignal) {
     let sx = P.radioSignal.x > 0 ? "+" + P.radioSignal.x : P.radioSignal.x;
@@ -6737,90 +6865,261 @@ function openRadioUI() {
       ? `¡Estás en la ubicación de la señal! [${sx}, ${sy}] — pulsa CAPTAR SEÑAL.`
       : `Señal pendiente en coordenadas [${sx}, ${sy}]. Desplázate hasta allí.`;
   }
-
   document.getElementById('main-view').innerHTML = `
     <div class="radio-panel">
-      <h3>📻 RADIO DEL YERMO</h3>
-      <p style="font-size:12px; color:#8d9880;">Captura señales misteriosas o sintoniza Radio Wasteland.</p>
-
+      <h3>📡 CAPTAR SEÑAL</h3>
       <div class="item" style="border-color:var(--gold);">
-        <b style="color:var(--gold);">📡 CAPTAR SEÑAL</b><br>
-        <span style="font-size:11px; color:#8d9880;">Obtén coordenadas cercanas. Al llegar y captar de nuevo, recibirás recompensas jugosas.</span><br>
+        <span style="font-size:11px; color:#8d9880;">Obtén coordenadas cercanas. Al llegar y captar de nuevo, recibirás recompensas jugosas.</span>
         <p class="radio-status" id="signal-status">${signalInfo}</p>
         <button style="margin-top:6px; width:100%;" onclick="pipClick(); captureSignal()">CAPTAR SEÑAL</button>
       </div>
-
-      <div class="item" style="border-color:var(--accent);">
-        <b style="color:var(--accent);">🎵 RADIO WASTELAND</b><br>
-                <p class="radio-status" id="music-status">${isRadioPlaying() ? '♪ Reproduciendo Radio Wasteland...' : 'Radio apagada.'}</p>
-        <div style="display:flex; gap:8px; margin-top:8px;">
-          <button style="flex:1; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioMusic()">▶ ENCENDER</button>
-          <button style="flex:1;" onclick="stopRadioMusic()">■ APAGAR</button>
-        </div>
-      </div>
-
-      <button style="width:100%; margin-top:10px;" onclick="renderMap()">← VOLVER AL MAPA</button>
+      <button style="width:100%; margin-top:10px;" onclick="openRadioUI()">← VOLVER</button>
     </div>
   `;
 }
 
-function captureSignal() {
-  // Si hay señal y estamos en la ubicación → recompensa
-  if (P.radioSignal && P.x === P.radioSignal.x && P.y === P.radioSignal.y) {
-    let rewards = [];
-    let capsGain = 40 + Math.floor(Math.random() * 80) + P.lvl * 5;
-    P.caps += capsGain;
-    rewards.push(capsGain + " chapas");
-
-    // Loot jugoso
-    let roll = Math.random();
-    if (roll < 0.15) {
-      if (addItemToInv(29, 1)) rewards.push("★ Tartera Legendaria");
-    } else if (roll < 0.35) {
-      if (addItemToInv(15, 1)) rewards.push("Tartera Nuka-Cola");
-    } else if (roll < 0.55) {
-      if (addItemToInv(14, 1)) rewards.push("Tartera Vault-Tec");
-    } else if (roll < 0.75) {
-      let drinks = [50, 51, 52, 53, 54];
-      let d = drinks[Math.floor(Math.random() * drinks.length)];
-      if (addItemToInv(d, 1)) rewards.push(getItemBase(d).name);
-    } else {
-      let goodJunk = [28, 36, 38, 13];
-      let j = goodJunk[Math.floor(Math.random() * goodJunk.length)];
-      let qty = 2 + Math.floor(Math.random() * 3);
-      if (addItemToInv(j, qty)) rewards.push(qty + "x " + getItemBase(j).name);
-    }
-    // Extra ammo or stim
-    if (Math.random() < 0.5) {
-      if (addItemToInv(7, 1 + Math.floor(Math.random() * 2))) rewards.push("Estimulante");
-    }
-    addXP(20 + P.lvl * 3);
-    logMsg("¡Señal capturada! Recompensas: " + rewards.join(", "));
-    P.radioSignal = null;
-    updateStats();
-    openRadioUI();
-    return;
+const RADIO_STATIONS = {
+  wasteland: {
+    id: 'wasteland',
+    name: 'Radio Wasteland',
+    tracks: ['./audio/RadioWasteland1.mp3'],
+    loopTrack: true
+  },
+  enclave: {
+    id: 'enclave',
+    name: 'Radio Enclave',
+    tracks: [
+      './audio/EnclaveRadio1.mp3',
+      './audio/EnclaveRadio2.mp3',
+      './audio/EnclaveRadio3.mp3',
+      './audio/EnclaveRadio4.mp3',
+      './audio/EnclaveRadio5.mp3',
+      './audio/EnclaveRadio6.mp3',
+      './audio/EnclaveRadio7.mp3',
+      './audio/EnclaveRadio8.mp3'
+    ],
+    loopTrack: false
   }
-
-  // Nueva señal cercana (±1 a ±4)
-  let dx = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 1 : -1);
-  let dy = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 1 : -1);
-  // Evitar (0,0) relativo
-  if (dx === 0 && dy === 0) dx = 1;
-  P.radioSignal = { x: P.x + dx, y: P.y + dy };
-  let sx = P.radioSignal.x > 0 ? "+" + P.radioSignal.x : P.radioSignal.x;
-  let sy = P.radioSignal.y > 0 ? "+" + P.radioSignal.y : P.radioSignal.y;
-  logMsg("Señal detectada en coordenadas [" + sx + ", " + sy + "]. Desplázate hasta allí y vuelve a captar.");
-  openRadioUI();
-  updateStats();
-}
+};
 
 let radioPlaying = false;
+let radioStationId = null;
+let radioTrackIndex = 0;
+
+function openRadioTuneUI() {
+  let playing = isRadioPlaying();
+  let stName = radioStationId && RADIO_STATIONS[radioStationId] ? RADIO_STATIONS[radioStationId].name : null;
+  let trackLabel = '';
+  if (playing && radioStationId === 'enclave') {
+    trackLabel = ' · Transmisión ' + (radioTrackIndex + 1) + '/8';
+  } else if (playing && radioStationId === 'wasteland') {
+    trackLabel = '';
+  }
+  let status = playing && stName
+    ? ('♪ En antena: ' + stName + trackLabel)
+    : 'Radio apagada.';
+
+  let wastelandActive = playing && radioStationId === 'wasteland';
+  let enclaveActive = playing && radioStationId === 'enclave';
+
+  let wastelandBtn = wastelandActive
+    ? `<button style="width:100%; margin-top:8px; background:#224422; color:var(--accent); font-weight:bold;" disabled>● EN ANTENA</button>`
+    : `<button style="width:100%; margin-top:8px; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioStation('wasteland')">▶ Sintonizar</button>`;
+
+  let enclaveBtn = enclaveActive
+    ? `<button style="width:100%; margin-top:8px; background:#223344; color:#88aacc; font-weight:bold;" disabled>● EN ANTENA</button>`
+    : `<button style="width:100%; margin-top:8px; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioStation('enclave')">▶ Sintonizar</button>`;
+
+  let controls = '';
+  if (playing) {
+    controls = `
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button style="flex:1;" onclick="radioPrevTrack()">◀ Anterior</button>
+        <button style="flex:1; border-color:var(--danger); color:var(--danger);" onclick="stopRadioMusic()">■ Apagar</button>
+        <button style="flex:1;" onclick="radioNextTrack()">Siguiente ▶</button>
+      </div>`;
+  }
+
+  document.getElementById('main-view').innerHTML = `
+    <div class="radio-panel">
+      <h3>🎛 SINTONIZAR</h3>
+      <p class="radio-status" id="music-status">${status}</p>
+
+      <div class="item" style="border-color:var(--accent);">
+        <b style="color:var(--accent);">🎵 Radio Wasteland</b><br>
+        <span style="font-size:11px;color:#8d9880;">Frecuencias olvidadas del Viejo Mundo. Jazz, promesas y polvo radioactivo.</span>
+        ${wastelandBtn}
+      </div>
+
+      <div class="item" style="border-color:#88aacc;">
+        <b style="color:#88aacc;">📡 Radio Enclave</b><br>
+        <span style="font-size:11px;color:#8d9880;">Propaganda, himnos y órdenes cifradas. La América que aún cree en el mañana.</span>
+        ${enclaveBtn}
+      </div>
+
+      ${controls}
+
+      <button style="width:100%; margin-top:10px;" onclick="openRadioUI()">← VOLVER</button>
+    </div>
+  `;
+}
 
 function isRadioPlaying() {
   let audio = document.getElementById('radio-audio');
   if (!audio) return radioPlaying;
   return radioPlaying && !audio.paused;
+}
+
+function getRadioAudio() {
+  let audio = document.getElementById('radio-audio');
+  if (!audio) {
+    audio = document.createElement('audio');
+    audio.id = 'radio-audio';
+    audio.preload = 'auto';
+    document.body.appendChild(audio);
+  }
+  return audio;
+}
+
+function bindRadioEnded() {
+  let audio = getRadioAudio();
+  audio.onended = function() {
+    if (!radioPlaying || !radioStationId) return;
+    let st = RADIO_STATIONS[radioStationId];
+    if (!st) return;
+    if (st.loopTrack) {
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+      return;
+    }
+    // Siguiente pista y ciclo 1→8→1
+    radioTrackIndex = (radioTrackIndex + 1) % st.tracks.length;
+    playCurrentRadioTrack(false);
+  };
+}
+
+function playCurrentRadioTrack(userGesture) {
+  let st = RADIO_STATIONS[radioStationId];
+  if (!st) return;
+  let audio = getRadioAudio();
+  bindRadioEnded();
+  let src = st.tracks[radioTrackIndex % st.tracks.length];
+  try {
+    let abs = new URL(src, window.location.href).href;
+    if (!audio.src || audio.src.indexOf(src.replace('./', '')) === -1) {
+      audio.src = abs;
+    } else if (audio.src.indexOf(src.split('/').pop()) === -1) {
+      audio.src = abs;
+    }
+  } catch (e) {
+    audio.src = src;
+  }
+  // Forzar recarga si cambió de pista
+  try {
+    let file = src.split('/').pop();
+    if (audio.src.indexOf(file) === -1) {
+      audio.src = src;
+      audio.load();
+    }
+  } catch (e2) {}
+
+  audio.loop = !!st.loopTrack;
+  audio.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
+  pauseAmbientMusic();
+  // Pausar casino si la radio tiene prioridad
+  let cas = document.getElementById('casino-audio');
+  if (cas && !cas.paused) {
+    try { cas.pause(); } catch (e) {}
+  }
+
+  const tryPlay = () => {
+    audio.play().then(() => {
+      radioPlaying = true;
+      let stEl = document.getElementById('music-status');
+      if (stEl) {
+        let extra = (radioStationId === 'enclave') ? (' · Pista ' + (radioTrackIndex + 1) + '/8') : '';
+        stEl.textContent = '♪ Sintonizado: ' + st.name + extra;
+      }
+      if (userGesture) logMsg(st.name + ' sintonizada' + (radioStationId === 'enclave' ? ' (pista ' + (radioTrackIndex + 1) + ')' : '') + '.');
+    }).catch((err) => {
+      radioPlaying = false;
+      startAmbientMusic();
+      let stEl = document.getElementById('music-status');
+      if (stEl) stEl.textContent = 'No se pudo reproducir. ¿Están los MP3 en audio/?';
+      logMsg('No se pudo iniciar la radio. Comprueba los archivos en audio/.');
+      console.warn('radio', err);
+    });
+  };
+
+  if (audio.readyState >= 2) tryPlay();
+  else {
+    audio.oncanplay = () => { audio.oncanplay = null; tryPlay(); };
+    audio.load();
+    setTimeout(tryPlay, 250);
+  }
+}
+
+function startRadioStation(stationId) {
+  let st = RADIO_STATIONS[stationId];
+  if (!st) return;
+  // Cambiar de emisora: detener la anterior por completo
+  let prev = radioStationId;
+  let audio = getRadioAudio();
+  try { audio.pause(); audio.currentTime = 0; } catch (e) {}
+  radioStationId = stationId;
+  // Si cambias de emisora, empieza desde la primera pista
+  if (prev !== stationId) radioTrackIndex = 0;
+  else if (radioTrackIndex < 0 || radioTrackIndex >= st.tracks.length) radioTrackIndex = 0;
+  let src = st.tracks[radioTrackIndex % st.tracks.length];
+  try { audio.src = new URL(src, window.location.href).href; } catch (e) { audio.src = src; }
+  audio.load();
+  playCurrentRadioTrack(true);
+  if (document.getElementById('music-status')) openRadioTuneUI();
+}
+
+function radioNextTrack() {
+  if (!radioStationId || !RADIO_STATIONS[radioStationId]) {
+    logMsg("Sintoniza una emisora primero.");
+    return;
+  }
+  let st = RADIO_STATIONS[radioStationId];
+  if (st.tracks.length <= 1) {
+    // Reinicia la única pista
+    let audio = getRadioAudio();
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+    logMsg(st.name + ": reiniciando emisión.");
+    return;
+  }
+  radioTrackIndex = (radioTrackIndex + 1) % st.tracks.length;
+  let audio = getRadioAudio();
+  let src = st.tracks[radioTrackIndex];
+  try { audio.src = new URL(src, window.location.href).href; } catch (e) { audio.src = src; }
+  audio.load();
+  playCurrentRadioTrack(true);
+  if (document.getElementById('music-status')) openRadioTuneUI();
+}
+
+function radioPrevTrack() {
+  if (!radioStationId || !RADIO_STATIONS[radioStationId]) {
+    logMsg("Sintoniza una emisora primero.");
+    return;
+  }
+  let st = RADIO_STATIONS[radioStationId];
+  if (st.tracks.length <= 1) {
+    let audio = getRadioAudio();
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+    logMsg(st.name + ": reiniciando emisión.");
+    return;
+  }
+  radioTrackIndex = (radioTrackIndex - 1 + st.tracks.length) % st.tracks.length;
+  let audio = getRadioAudio();
+  let src = st.tracks[radioTrackIndex];
+  try { audio.src = new URL(src, window.location.href).href; } catch (e) { audio.src = src; }
+  audio.load();
+  playCurrentRadioTrack(true);
+  if (document.getElementById('music-status')) openRadioTuneUI();
 }
 
 function pauseAmbientMusic() {
@@ -6838,45 +7137,80 @@ function startAmbientMusic() {
   }
   amb.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
   amb.loop = true;
-  amb.play().catch(() => {
-    // Autoplay bloqueado hasta interacción del usuario
-  });
+  amb.play().catch(() => {});
 }
 
 function startRadioMusic() {
-  let audio = document.getElementById('radio-audio');
-  if (!audio) return;
-  // Preferir archivo local offline
-  if (!audio.src || audio.src.indexOf('RadioWasteland1') === -1) {
-    audio.src = './audio/RadioWasteland1.mp3';
-  }
-  audio.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
-  pauseAmbientMusic();
-  audio.play().then(() => {
-    radioPlaying = true;
-    let st = document.getElementById('music-status');
-    if (st) st.textContent = "♪ Reproduciendo Radio Wasteland...";
-    logMsg("Radio Wasteland sintonizada.");
-  }).catch((err) => {
-    radioPlaying = false;
-    startAmbientMusic();
-    let st = document.getElementById('music-status');
-    if (st) st.textContent = "No se pudo reproducir. ¿Está audio/RadioWasteland1.mp3?";
-    logMsg("No se pudo iniciar la radio. Comprueba el archivo de audio.");
-  });
+  // compat: arranca Wasteland
+  startRadioStation('wasteland');
 }
 
 function stopRadioMusic() {
   let audio = document.getElementById('radio-audio');
   if (audio) {
-    audio.pause();
-    audio.currentTime = 0;
+    try { audio.pause(); audio.currentTime = 0; } catch (e) {}
+    audio.onended = null;
   }
   radioPlaying = false;
+  radioStationId = null;
   let st = document.getElementById('music-status');
   if (st) st.textContent = "Radio apagada.";
   logMsg("Radio apagada.");
-  startAmbientMusic();
+  // Si estamos en el Strip sin radio, casino; si no, ambiente
+  if (casinoActive) {
+    // reanudar casino solo si no hay radio
+    let cas = document.getElementById('casino-audio');
+    if (cas) cas.play().catch(() => {});
+  } else {
+    startAmbientMusic();
+  }
+  if (document.getElementById('music-status') && document.querySelector('.radio-panel')) {
+    try { openRadioTuneUI(); } catch (e) {}
+  }
+}
+
+function captureSignal() {
+  if (P.radioSignal && P.x === P.radioSignal.x && P.y === P.radioSignal.y) {
+    let rewards = [];
+    let capsGain = 40 + Math.floor(Math.random() * 80) + P.lvl * 5;
+    P.caps += capsGain;
+    rewards.push(capsGain + " chapas");
+    let roll = Math.random();
+    if (roll < 0.15) {
+      if (addItemToInv(29, 1)) rewards.push("★ Tartera Legendaria");
+    } else if (roll < 0.35) {
+      if (addItemToInv(15, 1)) rewards.push("Tartera Nuka-Cola");
+    } else if (roll < 0.55) {
+      if (addItemToInv(14, 1)) rewards.push("Tartera Vault-Tec");
+    } else if (roll < 0.75) {
+      let drinks = [50, 51, 52, 53, 54];
+      let d = drinks[Math.floor(Math.random() * drinks.length)];
+      if (addItemToInv(d, 1)) rewards.push(getItemBase(d).name);
+    } else {
+      let goodJunk = [28, 36, 38, 13];
+      let j = goodJunk[Math.floor(Math.random() * goodJunk.length)];
+      let qty = 2 + Math.floor(Math.random() * 3);
+      if (addItemToInv(j, qty)) rewards.push(qty + "x " + getItemBase(j).name);
+    }
+    if (Math.random() < 0.5) {
+      if (addItemToInv(7, 1 + Math.floor(Math.random() * 2))) rewards.push("Estimulante");
+    }
+    addXP(20 + P.lvl * 3);
+    logMsg("¡Señal capturada! Recompensas: " + rewards.join(", "));
+    P.radioSignal = null;
+    updateStats();
+    openRadioCaptureUI();
+    return;
+  }
+  let dx = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 1 : -1);
+  let dy = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 1 : -1);
+  if (dx === 0 && dy === 0) dx = 1;
+  P.radioSignal = { x: P.x + dx, y: P.y + dy };
+  let sx = P.radioSignal.x > 0 ? "+" + P.radioSignal.x : P.radioSignal.x;
+  let sy = P.radioSignal.y > 0 ? "+" + P.radioSignal.y : P.radioSignal.y;
+  logMsg("Señal detectada en coordenadas [" + sx + ", " + sy + "]. Desplázate hasta allí y vuelve a captar.");
+  openRadioCaptureUI();
+  updateStats();
 }
 
 function move(dx, dy) {
@@ -8084,9 +8418,9 @@ function capsPriceHtml(amount) {
     if (el) src = el.src || '';
   } catch (e) {}
   let img = src
-    ? '<img class="cap-icon chip-icon-caps" src="' + src + '" alt="" style="width:18px;height:18px;vertical-align:middle;filter:sepia(1) saturate(8) hue-rotate(-50deg) brightness(0.95);">'
-    : '🧢';
-  return amount + ' ' + img + ' <span style="color:#e05050;">Chapas</span>';
+    ? '<img class="cap-icon chip-icon-caps" src="' + src + '" alt="" style="width:16px;height:16px;vertical-align:middle;filter:sepia(1) saturate(8) hue-rotate(-50deg) brightness(0.95);">'
+    : '◎';
+  return '<span style="color:#e05050;white-space:nowrap;">' + amount + ' ' + img + ' Chapas</span>';
 }
 
 function renderShop(sub = P.shopSubtab || 'weapon', page) {
@@ -8444,6 +8778,7 @@ if (savedData) {
     if (parsed.lunchboxLevel === undefined) parsed.lunchboxLevel = 1;
     if (parsed.scrapLevel === undefined) parsed.scrapLevel = 1;
     if (parsed.alchemyLevel === undefined) parsed.alchemyLevel = 1;
+    if (parsed.ammoLevel === undefined) parsed.ammoLevel = 1;
     if (parsed.cookLevel === undefined) parsed.cookLevel = 1;
     if (parsed.storageMaxWeight === undefined) parsed.storageMaxWeight = 100;
     if (parsed.storageUpgradeRank === undefined) parsed.storageUpgradeRank = 0;
