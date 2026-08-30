@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v46';
+const CACHE = 'wasteland-v47';
 const ASSETS = [
   './',
   './index.html',
@@ -6,8 +6,11 @@ const ASSETS = [
   './icon-192.png',
   './icon-512.png',
   './audio/RadioWasteland1.mp3',
-  './audio/AmbientMap.mp3',
-  './audio/CasinoStrip.mp3',
+  './audio/RadioWasteland2.mp3',
+  './audio/RadioWasteland3.mp3',
+  './audio/RadioNewVegas1.mp3',
+  './audio/RadioNewVegas2.mp3',
+  './audio/RadioNewVegas3.mp3',
   './audio/EnclaveRadio1.mp3',
   './audio/EnclaveRadio2.mp3',
   './audio/EnclaveRadio3.mp3',
@@ -15,7 +18,9 @@ const ASSETS = [
   './audio/EnclaveRadio5.mp3',
   './audio/EnclaveRadio6.mp3',
   './audio/EnclaveRadio7.mp3',
-  './audio/EnclaveRadio8.mp3'
+  './audio/EnclaveRadio8.mp3',
+  './audio/AmbientMap.mp3',
+  './audio/CasinoStrip.mp3'
 ];
 
 self.addEventListener('install', (event) => {

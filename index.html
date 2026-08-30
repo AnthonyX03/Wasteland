@@ -6882,12 +6882,32 @@ const RADIO_STATIONS = {
   wasteland: {
     id: 'wasteland',
     name: 'Radio Wasteland',
-    tracks: ['./audio/RadioWasteland1.mp3'],
-    loopTrack: true
+    color: 'var(--accent)',
+    lore: 'Frecuencias olvidadas del Viejo Mundo. Jazz, promesas y polvo radioactivo.',
+    tracks: [
+      './audio/RadioWasteland1.mp3',
+      './audio/RadioWasteland2.mp3',
+      './audio/RadioWasteland3.mp3'
+    ],
+    loopTrack: false
+  },
+  newvegas: {
+    id: 'newvegas',
+    name: 'Radio New Vegas',
+    color: '#e8c86a',
+    lore: 'Desde el Strip, Mr. New Vegas presenta éxitos de antaño bajo neones y chapas.',
+    tracks: [
+      './audio/RadioNewVegas1.mp3',
+      './audio/RadioNewVegas2.mp3',
+      './audio/RadioNewVegas3.mp3'
+    ],
+    loopTrack: false
   },
   enclave: {
     id: 'enclave',
     name: 'Radio Enclave',
+    color: '#88aacc',
+    lore: 'Propaganda, himnos y órdenes cifradas. La América que aún cree en el mañana.',
     tracks: [
       './audio/EnclaveRadio1.mp3',
       './audio/EnclaveRadio2.mp3',
@@ -6907,50 +6927,44 @@ let radioStationId = null;
 let radioTrackIndex = 0;
 
 function openRadioTuneUI() {
-  // Estado por flags de estación, no por audio.paused (evita parpadeo al cargar pistas)
   let active = !!(radioPlaying && radioStationId && RADIO_STATIONS[radioStationId]);
   let stName = active ? RADIO_STATIONS[radioStationId].name : null;
   let trackLabel = '';
-  if (active && radioStationId === 'enclave') {
-    trackLabel = ' · Transmisión ' + (radioTrackIndex + 1) + '/8';
+  if (active) {
+    let st = RADIO_STATIONS[radioStationId];
+    let n = st.tracks.length;
+    if (n > 1) trackLabel = ' · Transmisión ' + (radioTrackIndex + 1) + '/' + n;
   }
   let status = active
     ? ('♪ En antena: ' + stName + trackLabel)
     : 'Radio apagada.';
 
-  let wastelandActive = active && radioStationId === 'wasteland';
-  let enclaveActive = active && radioStationId === 'enclave';
-
-  let wastelandBtn = wastelandActive
-    ? `<button style="width:100%; margin-top:8px; border-color:var(--danger); color:var(--danger); font-weight:bold;" onclick="stopRadioMusic()">■ Apagar</button>`
-    : `<button style="width:100%; margin-top:8px; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioStation('wasteland')">▶ Sintonizar</button>`;
-
-  let enclaveBtn = enclaveActive
-    ? `<button style="width:100%; margin-top:8px; border-color:var(--danger); color:var(--danger); font-weight:bold;" onclick="stopRadioMusic()">■ Apagar</button>`
-    : `<button style="width:100%; margin-top:8px; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioStation('enclave')">▶ Sintonizar</button>`;
+  let order = ['wasteland', 'newvegas', 'enclave'];
+  let stationsHtml = order.map(id => {
+    let st = RADIO_STATIONS[id];
+    if (!st) return '';
+    let isOn = active && radioStationId === id;
+    let col = st.color || 'var(--accent)';
+    let btn = isOn
+      ? `<button style="width:100%; margin-top:8px; border-color:var(--danger); color:var(--danger); font-weight:bold;" onclick="stopRadioMusic()">■ Apagar</button>`
+      : `<button style="width:100%; margin-top:8px; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioStation('${id}')">▶ Sintonizar</button>`;
+    return `
+      <div class="item" style="border-color:${col};">
+        <b style="color:${col};">${id === 'wasteland' ? '🎵' : id === 'newvegas' ? '🎰' : '📡'} ${st.name}</b><br>
+        <span style="font-size:11px;color:#8d9880;">${st.lore || ''}</span>
+        ${btn}
+      </div>`;
+  }).join('');
 
   document.getElementById('main-view').innerHTML = `
     <div class="radio-panel">
       <h3>🎛 SINTONIZAR</h3>
       <p class="radio-status" id="music-status">${status}</p>
-
-      <div class="item" style="border-color:var(--accent);">
-        <b style="color:var(--accent);">🎵 Radio Wasteland</b><br>
-        <span style="font-size:11px;color:#8d9880;">Frecuencias olvidadas del Viejo Mundo. Jazz, promesas y polvo radioactivo.</span>
-        ${wastelandBtn}
-      </div>
-
-      <div class="item" style="border-color:#88aacc;">
-        <b style="color:#88aacc;">📡 Radio Enclave</b><br>
-        <span style="font-size:11px;color:#8d9880;">Propaganda, himnos y órdenes cifradas. La América que aún cree en el mañana.</span>
-        ${enclaveBtn}
-      </div>
-
+      ${stationsHtml}
       <div style="display:flex; gap:8px; margin-top:12px;">
         <button style="flex:1;" onclick="radioPrevTrack()">◀ Anterior</button>
         <button style="flex:1;" onclick="radioNextTrack()">Siguiente ▶</button>
       </div>
-
       <button style="width:100%; margin-top:10px;" onclick="openRadioUI()">← VOLVER</button>
     </div>
   `;
@@ -7016,10 +7030,10 @@ function playCurrentRadioTrack(userGesture) {
       radioPlaying = true;
       let stEl = document.getElementById('music-status');
       if (stEl) {
-        let extra = (radioStationId === 'enclave') ? (' · Transmisión ' + (radioTrackIndex + 1) + '/8') : '';
+        let extra = (RADIO_STATIONS[radioStationId] && RADIO_STATIONS[radioStationId].tracks.length > 1) ? (' · Transmisión ' + (radioTrackIndex + 1) + '/' + RADIO_STATIONS[radioStationId].tracks.length) : '';
         stEl.textContent = '♪ En antena: ' + st.name + extra;
       }
-      if (userGesture) logMsg(st.name + ' sintonizada' + (radioStationId === 'enclave' ? ' (pista ' + (radioTrackIndex + 1) + ')' : '') + '.');
+      if (userGesture) logMsg(st.name + ' sintonizada' + (RADIO_STATIONS[radioStationId] && RADIO_STATIONS[radioStationId].tracks.length > 1 ? ' (pista ' + (radioTrackIndex + 1) + ')' : '') + '.');
       // Actualizar botones por si el panel sigue abierto
       if (document.querySelector('.radio-panel')) openRadioTuneUI();
     }).catch((err) => {
