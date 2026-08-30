@@ -1219,6 +1219,20 @@ const DB_ITEMS = [
   // --- Casino exclusivos (solo fichas) ---
                     
   
+  
+  // --- Los Negreros / Hipnotron ---
+  { id: 2301, name: "Hipnotron MK1", type: "weapon", damage: 1, ammoType: "Célula de Hipnotron", weight: 4, value: 1000, stackable: false, factionOnly: true, faction: "slavers", hypnoChance: 0.20, hypno: true, effectDesc: "20% de acabar el combate hipnotizando a un humano. Sin XP, loot ni chapas; otorga 1× Esclavo. Falla al 100% en no humanos." },
+  { id: 2302, name: "Hipnotron MK2", type: "weapon", damage: 1, ammoType: "Célula de Hipnotron", weight: 4.5, value: 5000, stackable: false, factionOnly: true, faction: "slavers", hypnoChance: 0.40, hypno: true, effectDesc: "40% de acabar el combate hipnotizando a un humano. Sin XP, loot ni chapas; otorga 1× Esclavo. Falla al 100% en no humanos." },
+  { id: 2303, name: "Hipnotron MK3", type: "weapon", damage: 1, ammoType: "Célula de Hipnotron", weight: 5, value: 10000, stackable: false, factionOnly: true, faction: "slavers", hypnoChance: 0.60, hypno: true, effectDesc: "60% de acabar el combate hipnotizando a un humano. Sin XP, loot ni chapas; otorga 1× Esclavo. Falla al 100% en no humanos." },
+  { id: 2304, name: "Célula de Hipnotron", type: "ammo", ammoKey: "Célula de Hipnotron", qty: 5, weight: 0.1, value: 100, stackable: true, factionOnly: true, faction: "slavers" },
+  { id: 2305, name: "Esclavo", type: "other", weight: 0, value: 500, stackable: true, slave: true, noCommerceSell: true, effectDesc: "Mercancía viva. Véndela en Paradise Falls (Base → Vender Esclavos) por 500 chapas y reputación. No se vende en Comercio." },
+  { id: 2311, name: "Látigo de negrero", type: "weapon", damage: 22, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 180, stackable: false, factionOnly: true, faction: "slavers" },
+  { id: 2312, name: "Chaleco de negrero", type: "armor", def: 20, weight: 7, value: 220, stackable: false, factionOnly: true, faction: "slavers", radRes: 0 },
+  { id: 2313, name: "Escopeta de Paradise Falls", type: "weapon", damage: 40, ammoType: "Cartucho de escopeta", weight: 5.5, value: 320, stackable: false, factionOnly: true, faction: "slavers" },
+  { id: 2314, name: "Armadura de capturador", type: "armor", def: 28, weight: 11, value: 380, stackable: false, factionOnly: true, faction: "slavers", radRes: 0 },
+  { id: 2315, name: "Rifle de caza de esclavos", type: "weapon", damage: 48, ammoType: ".308", weight: 8, value: 520, stackable: false, factionOnly: true, faction: "slavers" },
+  { id: 914, name: "Collar de negrero marcado", type: "other", weight: 0.3, value: 40, stackable: true, questItem: true },
+
   // --- Más exclusivos de facción ---
   { id: 2101, name: "Espada láser de la Hermandad", type: "weapon", damage: 52, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 5, value: 800, stackable: false, factionOnly: true, faction: "bos" },
   { id: 2102, name: "Casco T-45 BoS", type: "armor", def: 18, weight: 8, value: 400, stackable: false, factionOnly: true, faction: "bos", radRes: 15 },
@@ -1698,7 +1712,7 @@ let P = {
   weather: 'day',
   volMusic: 0.6,
   volSfx: 0.7,
-  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0 },
+  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0, slavers: 0 },
   chips: 0,
   playerSettlement: {
     claimed: false,
@@ -1728,7 +1742,7 @@ let P = {
   perkPts: 0,
   special: { S: 1, P: 1, E: 1, C: 1, I: 1, A: 1, L: 1 },
   perks: {},
-  ammoBox: { ".38": 24, "Cartucho de escopeta": 6, "Célula de microfusión": 0, "5.56mm": 0, "10mm": 10, ".44 Magnum": 0, "Bengala": 0, "Cartucho de plasma": 0, "Célula de energía": 0, "Onda Gamma": 0, "Dardo": 0, "Clavo": 0, ".45 ACP": 0, ".308": 0, "Cartucho de 2mm": 0, ".45-70": 0, "5mm": 0, "Misil": 0, "Combustible de lanzallamas": 0, "Mini Nukes": 0, "Bala de cañón": 0, "7.62mm": 0, "Núcleo de fusión": 0, "Célula criogénica": 0 },
+  ammoBox: { "Célula de Hipnotron": 0, ".38": 24, "Cartucho de escopeta": 6, "Célula de microfusión": 0, "5.56mm": 0, "10mm": 10, ".44 Magnum": 0, "Bengala": 0, "Cartucho de plasma": 0, "Célula de energía": 0, "Onda Gamma": 0, "Dardo": 0, "Clavo": 0, ".45 ACP": 0, ".308": 0, "Cartucho de 2mm": 0, ".45-70": 0, "5mm": 0, "Misil": 0, "Combustible de lanzallamas": 0, "Mini Nukes": 0, "Bala de cañón": 0, "7.62mm": 0, "Núcleo de fusión": 0, "Célula criogénica": 0 },
   inv: [
     { uid: 101, id: 1, qty: 1, mods: [], itemLevel: 1 },
     { uid: 102, id: 5, qty: 1, mods: [], itemLevel: 1 },
@@ -1770,48 +1784,48 @@ let combatState = null;
 // Enemigos con nivel. Solo aparecen si nivel <= jugador
 const ENEMIES = [
   { name: "Rata irradiada", level: 1, hp: 18, dmg: 4, loot: [7, 20], caps: [3, 10] },
-  { name: "Saqueador novato", level: 1, hp: 25, dmg: 6, loot: [1, 7, 9, 20], caps: [5, 15] },
+  { name: "Saqueador novato", human: true, level: 1, hp: 25, dmg: 6, loot: [1, 7, 9, 20], caps: [5, 15] },
   { name: "Perro salvaje", level: 2, hp: 28, dmg: 7, loot: [7, 24], caps: [4, 12] },
   { name: "Moscas de sangre", level: 2, hp: 20, dmg: 5, loot: [7, 20], caps: [3, 8] },
-  { name: "Saqueador", level: 3, hp: 35, dmg: 8, loot: [1, 7, 9, 20, 21], caps: [8, 22] },
+  { name: "Saqueador", human: true, level: 3, hp: 35, dmg: 8, loot: [1, 7, 9, 20, 21], caps: [8, 22] },
   { name: "Necrófago débil", level: 3, hp: 32, dmg: 9, loot: [7, 9, 20], caps: [6, 18] },
-  { name: "Saqueador con tubería", level: 3, hp: 33, dmg: 8, loot: [4, 7, 20], caps: [7, 18] },
+  { name: "Saqueador con tubería", human: true, level: 3, hp: 33, dmg: 8, loot: [4, 7, 20], caps: [7, 18] },
   { name: "Topo mutante", level: 4, hp: 38, dmg: 9, loot: [7, 24, 21], caps: [7, 16] },
   { name: "Bestia mutada pequeña", level: 4, hp: 42, dmg: 10, loot: [7, 24, 26], caps: [8, 20] },
-  { name: "Saqueador armado", level: 5, hp: 50, dmg: 12, loot: [101, 7, 9, 21], caps: [12, 28] },
+  { name: "Saqueador armado", human: true, level: 5, hp: 50, dmg: 12, loot: [101, 7, 9, 21], caps: [12, 28] },
   { name: "Necrófago", level: 5, hp: 48, dmg: 11, loot: [7, 9, 13], caps: [10, 25] },
-  { name: "Saqueador con escopeta", level: 5, hp: 52, dmg: 13, loot: [2, 7, 9], caps: [12, 30] },
+  { name: "Saqueador con escopeta", human: true, level: 5, hp: 52, dmg: 13, loot: [2, 7, 9], caps: [12, 30] },
   { name: "Bestia mutada", level: 6, hp: 55, dmg: 13, loot: [7, 24, 26, 21], caps: [12, 30] },
   { name: "Protectron oxidado", level: 6, hp: 58, dmg: 12, loot: [13, 22, 20], caps: [14, 32] },
   { name: "Robot defectuoso", level: 7, hp: 65, dmg: 14, loot: [3, 11, 13, 22, 23], caps: [15, 35] },
-  { name: "Saqueador psicópata", level: 7, hp: 60, dmg: 15, loot: [101, 7, 21], caps: [16, 36] },
-  { name: "Saqueador veterano", level: 8, hp: 70, dmg: 16, loot: [101, 7, 301, 21], caps: [18, 40] },
+  { name: "Saqueador psicópata", human: true, level: 7, hp: 60, dmg: 15, loot: [101, 7, 21], caps: [16, 36] },
+  { name: "Saqueador veterano", human: true, level: 8, hp: 70, dmg: 16, loot: [101, 7, 301, 21], caps: [18, 40] },
   { name: "Necrófago feroz", level: 9, hp: 75, dmg: 17, loot: [7, 8, 13, 20], caps: [20, 45] },
   { name: "Mr. Handy hostil", level: 9, hp: 72, dmg: 16, loot: [13, 22, 30], caps: [20, 42] },
   { name: "Robot de seguridad", level: 10, hp: 85, dmg: 18, loot: [105, 11, 13, 22, 28], caps: [22, 50] },
   { name: "Supermutante novato", level: 10, hp: 90, dmg: 18, loot: [21, 7, 23], caps: [22, 48] },
-  { name: "Mercenario del Yermo", level: 11, hp: 88, dmg: 19, loot: [109, 7, 301, 21], caps: [25, 55] },
-  { name: "Saqueador de élite", level: 12, hp: 95, dmg: 20, loot: [109, 7, 301, 28], caps: [28, 60] },
+  { name: "Mercenario del Yermo", human: true, level: 11, hp: 88, dmg: 19, loot: [109, 7, 301, 21], caps: [25, 55] },
+  { name: "Saqueador de élite", human: true, level: 12, hp: 95, dmg: 20, loot: [109, 7, 301, 28], caps: [28, 60] },
   { name: "Bestia mutada alfa", level: 12, hp: 100, dmg: 21, loot: [7, 24, 26, 28], caps: [25, 55] },
   { name: "Sanguinario joven", level: 13, hp: 105, dmg: 22, loot: [7, 24, 28], caps: [28, 58] },
   { name: "Sintético defectuoso", level: 14, hp: 110, dmg: 22, loot: [105, 13, 22, 28], caps: [30, 65] },
   { name: "Supermutante", level: 15, hp: 130, dmg: 24, loot: [141, 7, 21, 23], caps: [35, 75] },
-  { name: "Saqueador jefe", level: 16, hp: 120, dmg: 25, loot: [112, 7, 310, 28], caps: [40, 80] },
-  { name: "Asesino de la Hermandad", level: 17, hp: 125, dmg: 26, loot: [113, 7, 305, 28], caps: [42, 85] },
+  { name: "Saqueador jefe", human: true, level: 16, hp: 120, dmg: 25, loot: [112, 7, 310, 28], caps: [40, 80] },
+  { name: "Asesino de la Hermandad", human: true, level: 17, hp: 125, dmg: 26, loot: [113, 7, 305, 28], caps: [42, 85] },
   { name: "Centinela robótico", level: 17, hp: 135, dmg: 26, loot: [117, 13, 28], caps: [44, 88] },
   { name: "Robot militar", level: 18, hp: 145, dmg: 27, loot: [117, 11, 13, 28], caps: [45, 90] },
   { name: "Supermutante con tablón", level: 18, hp: 150, dmg: 28, loot: [141, 21, 23], caps: [46, 92] },
   { name: "Sanguinario", level: 19, hp: 160, dmg: 29, loot: [7, 24, 28], caps: [48, 95] },
   { name: "Supermutante brutal", level: 20, hp: 170, dmg: 30, loot: [157, 7, 21, 28], caps: [50, 100] },
-  { name: "Cazador del Yermo", level: 22, hp: 155, dmg: 28, loot: [114, 7, 310, 13], caps: [55, 110] },
+  { name: "Cazador del Yermo", human: true, level: 22, hp: 155, dmg: 28, loot: [114, 7, 310, 13], caps: [55, 110] },
   { name: "Supermutante francotirador", level: 22, hp: 165, dmg: 31, loot: [114, 21, 28], caps: [55, 112] },
   { name: "Sanguinario alfa", level: 24, hp: 185, dmg: 33, loot: [7, 24, 28, 13], caps: [65, 125] },
-  { name: "Centinela del Enclave", level: 25, hp: 190, dmg: 32, loot: [117, 13, 28, 319], caps: [70, 130] },
+  { name: "Centinela del Enclave", human: true, level: 25, hp: 190, dmg: 32, loot: [117, 13, 28, 319], caps: [70, 130] },
   { name: "Sentry Bot dañado", level: 26, hp: 210, dmg: 34, loot: [117, 13, 28, 22], caps: [75, 140] },
   { name: "Devorador de muerte", level: 28, hp: 250, dmg: 38, loot: [163, 7, 28, 316], caps: [90, 160] },
   { name: "Behemoth mutante", level: 30, hp: 320, dmg: 42, loot: [158, 21, 23, 28], caps: [100, 180] },
   { name: "Supermutante señor de la guerra", level: 28, hp: 240, dmg: 36, loot: [157, 21, 28], caps: [85, 155] },
-  { name: "Saqueador nuclear", level: 14, hp: 100, dmg: 23, loot: [109, 7, 301], caps: [32, 70] },
+  { name: "Saqueador nuclear", human: true, level: 14, hp: 100, dmg: 23, loot: [109, 7, 301], caps: [32, 70] },
   { name: "Necrófago brillante", level: 11, hp: 80, dmg: 18, loot: [7, 8, 13], caps: [24, 52] },
   { name: "Assaultron defectuosa", level: 20, hp: 175, dmg: 31, loot: [105, 13, 28], caps: [52, 105] },
   { name: "Synth Gen-1", level: 8, hp: 70, dmg: 15, loot: [13, 22, 7], caps: [18, 40] },
@@ -1826,13 +1840,13 @@ const ENEMIES = [
 ];
 
 const LEGENDARY_ENEMIES = [
-  { name: "Saqueador Legendario", level: 5, hp: 90, dmg: 16, loot: [1, 7, 9], caps: [40, 90] },
+  { name: "Saqueador Legendario", human: true, level: 5, hp: 90, dmg: 16, loot: [1, 7, 9], caps: [40, 90] },
   { name: "Necrófago Irradiado Legendario", level: 8, hp: 115, dmg: 20, loot: [7, 9, 20], caps: [50, 100] },
   { name: "Bestia Mutada Alfa Legendaria", level: 10, hp: 140, dmg: 24, loot: [7, 24, 26], caps: [55, 120] },
   { name: "Robot Guardián Antiguo", level: 12, hp: 165, dmg: 28, loot: [3, 11, 13, 28], caps: [70, 140] },
   { name: "Supermutante Enfurecido", level: 15, hp: 200, dmg: 32, loot: [21, 23, 28], caps: [80, 160] },
-  { name: "Cazador del Yermo Legendario", level: 18, hp: 180, dmg: 30, loot: [101, 7, 13], caps: [75, 150] },
-  { name: "Señor de la Guerra Saqueador", level: 20, hp: 220, dmg: 35, loot: [112, 7, 28], caps: [100, 180] },
+  { name: "Cazador del Yermo Legendario", human: true, level: 18, hp: 180, dmg: 30, loot: [101, 7, 13], caps: [75, 150] },
+  { name: "Señor de la Guerra Saqueador", human: true, level: 20, hp: 220, dmg: 35, loot: [112, 7, 28], caps: [100, 180] },
   { name: "Sanguinario Legendario", level: 22, hp: 240, dmg: 36, loot: [7, 24, 28], caps: [110, 200] },
   { name: "Assaultron Legendaria", level: 24, hp: 260, dmg: 38, loot: [105, 13, 28], caps: [115, 210] },
   { name: "Coloso Mutante", level: 25, hp: 280, dmg: 40, loot: [158, 21, 28], caps: [120, 220] },
@@ -3765,6 +3779,7 @@ const FACTIONS = {
   atom: { id: 'atom', name: 'Los Hijos del Átomo', color: '#88ff66', shopLevels: [100, 250, 500, 750, 1000] },
   minutemen: { id: 'minutemen', name: 'Los Minutemen', color: '#44aaff', shopLevels: [100, 250, 500, 750, 1000] },
   legion: { id: 'legion', name: 'La Legión de César', color: '#cc4422', shopLevels: [100, 250, 500, 750, 1000] },
+  slavers: { id: 'slavers', name: 'Los Negreros', color: '#aa6644', shopLevels: [100, 250, 500, 750, 1000] },
   player: { id: 'player', name: 'Tu Asentamiento', color: '#44ddaa', shopLevels: [0, 0, 0, 0, 0] },
   sierra: { id: 'sierra', name: 'Sierra Madre', color: '#e8d48b', shopLevels: [0,0,0,0,0] },
   robco: { id: 'robco', name: 'RobCo Industries', color: '#a0a0a0', shopLevels: [0,0,0,0,0] }
@@ -3862,6 +3877,7 @@ const SETTLEMENTS = [
   { id: 'atom_crater', name: 'Cráter del Átomo', faction: 'atom', x: -16, y: -5 },
   { id: 'minutemen_fort', name: 'Fuerte Independencia', faction: 'minutemen', x: 6, y: -14 },
   { id: 'legion_camp', name: 'Campamento de la Legión', faction: 'legion', x: -7, y: 12 },
+  { id: 'paradise_falls', name: 'Paradise Falls', faction: 'slavers', x: 11, y: -3 },
   { id: 'player_home', name: 'Tu Asentamiento', faction: 'player', x: -10, y: -12, playerOwned: true },
   { id: 'sierra_madre', name: 'Casino Sierra Madre', faction: 'sierra', x: -14, y: 8, sierraCasino: true },
   { id: 'robco_factory', name: 'Fábrica RobCo Industries', faction: 'robco', x: 8, y: -10, robcoFactory: true }
@@ -3966,6 +3982,14 @@ const FACTION_QUEST_POOL = {
     { id: 'leg_q4', title: 'Águila de César', desc: 'Recupera 1 Águila de bronce de César.', type: 'collect', itemId: 913, target: 1, reward: { caps: 190, xp: 130, rep: 18 }, minRep: 200 },
     { id: 'leg_q5', title: 'Disciplina de hierro', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 400 },
     { id: 'leg_q6', title: 'Gloria legendaria', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 360, xp: 220, rep: 20 }, minRep: 700 }
+  ],
+  slavers: [
+    { id: 'sla_q1', title: 'Caza de mercancía', desc: 'Derrota 5 humanos del Yermo.', type: 'kill', target: 5, reward: { caps: 110, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'sla_q2', title: 'Rutas de captura', desc: 'Explora 8 zonas del mapa.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'sla_q3', title: 'Botín de negreros', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'sla_q4', title: 'Collar marcado', desc: 'Recupera 1 Collar de negrero marcado.', type: 'collect', itemId: 914, target: 1, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
+    { id: 'sla_q5', title: 'Expansión del mercado', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 220, xp: 145, rep: 18 }, minRep: 400 },
+    { id: 'sla_q6', title: 'Trofeo legendario', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 370, xp: 230, rep: 20 }, minRep: 700 }
   ]
 
 };
@@ -4080,6 +4104,13 @@ const FACTION_SHOP_ITEMS = {
     { id: 28, shopLevel: 3 }, { id: 141, shopLevel: 3 },
     { id: 29, shopLevel: 4 }, { id: 112, shopLevel: 4 },
     { id: 15, shopLevel: 5 }, { id: 51, shopLevel: 5 }
+  ],
+  slavers: [
+    { id: 7, shopLevel: 1 }, { id: 17, shopLevel: 1 }, { id: 20, shopLevel: 1 },
+    { id: 101, shopLevel: 2 }, { id: 13, shopLevel: 2 },
+    { id: 28, shopLevel: 3 }, { id: 14, shopLevel: 3 },
+    { id: 29, shopLevel: 4 }, { id: 112, shopLevel: 4 },
+    { id: 15, shopLevel: 5 }, { id: 51, shopLevel: 5 }
   ]
 };
 
@@ -4128,6 +4159,11 @@ const FACTION_UNIQUE_SHOP = {
   legion: [
     { id: 2201, shopLevel: 1 }, { id: 2202, shopLevel: 1 }, { id: 2206, shopLevel: 2 },
     { id: 2203, shopLevel: 3 }, { id: 2204, shopLevel: 4 }, { id: 2205, shopLevel: 5 }
+  ],
+  slavers: [
+    { id: 2311, shopLevel: 1 }, { id: 2312, shopLevel: 1 },
+    { id: 2313, shopLevel: 2 }, { id: 2314, shopLevel: 3 },
+    { id: 2315, shopLevel: 4 }
   ]
 };
 
@@ -4656,7 +4692,7 @@ function setVolSfx(v) {
 
 function ensureFactionDefaults() {
   if (!P.reputation) P.reputation = {};
-  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute','atom','minutemen','legion'].forEach(k => {
+  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute','atom','minutemen','legion','slavers'].forEach(k => {
     if (P.reputation[k] === undefined || P.reputation[k] === null) P.reputation[k] = 0;
   });
   if (!P.activeFactionQuests) P.activeFactionQuests = [];
@@ -4783,7 +4819,7 @@ function renderSettlementUI(settlementId, tab) {
     </div>
     <div class="subtabs" style="margin-top:8px;">
       <button class="${tab === 'missions' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','missions')">Misiones</button>
-      <button class="${tab === 'shop' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','shop')">Tienda</button>
+      <button class="${(tab === 'shop' || tab === 'arsenal') ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','${sett.faction === 'slavers' ? 'arsenal' : 'shop'}')">Tienda</button>
       <button class="${tab === 'base' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','base')">Base</button>
     </div>
   `;
@@ -4824,11 +4860,42 @@ function renderSettlementUI(settlementId, tab) {
         </div>`;
       });
     }
+  } else if (tab === 'arsenal' && sett.faction === 'slavers') {
+    html += `<div class="subtabs" style="margin-bottom:8px;">
+      <button class="active" style="background:#aa6644;color:#111;border-color:#aa6644;" onclick="renderSettlementUI('${sett.id}','arsenal')">⚡ Arsenal Hipnotron</button>
+      <button onclick="renderSettlementUI('${sett.id}','shop')">Tienda</button>
+    </div>
+    <h3 style="color:#aa6644;font-size:13px;">⚡ Arsenal del Hipnotron</h3>
+      <p style="font-size:11px;color:#8d9880;">Solo funciona contra humanos. MK1 y munición requieren 100 de reputación.</p>`;
+    let hypnoGoods = [
+      { id: 2301, cost: 1000, needRep: 100, label: 'Hipnotron MK1 (20% captura)' },
+      { id: 2304, cost: 100, needRep: 100, label: 'Célula de Hipnotron ×5' },
+      { id: 2302, cost: 5000, needRep: 500, label: 'Hipnotron MK2 (40% captura)' },
+      { id: 2303, cost: 10000, needRep: 1000, label: 'Hipnotron MK3 (60% captura)' }
+    ];
+    hypnoGoods.forEach(g => {
+      let locked = rep < g.needRep;
+      let canBuy = !locked && P.caps >= g.cost;
+      let baseH = getItemBase(g.id);
+      let fx = baseH && baseH.effectDesc ? baseH.effectDesc : (g.id === 2304 ? 'Munición del Hipnotron (5 células).' : '');
+      html += `<div class="item" style="border-color:#aa6644;">
+        <b style="color:#aa6644;">${g.label}</b> — ${capsPriceHtml(g.cost)}
+        ${locked ? ' <span style="color:var(--danger);font-size:11px;">(Req. rep ' + g.needRep + ' · tienes ' + rep + ')</span>' : ''}<br>
+        ${fx ? '<span style="font-size:10px;color:#8d9880;">' + fx + '</span><br>' : ''}
+        <button style="margin-top:4px;" ${canBuy ? '' : 'disabled'} onclick="buySlaverHypno(${g.id},${g.cost})">${locked ? 'Bloqueado' : 'Comprar'}</button>
+      </div>`;
+    });
   } else if (tab === 'shop') {
+    if (sett.faction === 'slavers') {
+      html += `<div class="subtabs" style="margin-bottom:8px;">
+        <button onclick="renderSettlementUI('${sett.id}','arsenal')">⚡ Arsenal Hipnotron</button>
+        <button class="active" style="background:#aa6644;color:#111;border-color:#aa6644;" onclick="renderSettlementUI('${sett.id}','shop')">Tienda</button>
+      </div>`;
+    }
     let shopLvl = getFactionShopLevel(sett.faction);
     let thresholds = fac.shopLevels || [100, 250, 500, 750, 1000];
     if (shopLvl < 1) {
-      html += `<p style="font-size:13px;color:var(--danger);">Tienda bloqueada. Necesitas reputación ${thresholds[0]} (tienes ${rep}).</p>`;
+      html += `<p style="font-size:13px;color:var(--danger);">Tienda general bloqueada. Necesitas reputación ${thresholds[0]} (tienes ${rep}).</p>`;
     } else {
       html += `<p style="font-size:12px;color:#8d9880;">Tienda nivel <b style="color:${fcol};">${shopLvl}/5</b> · Rep <b style="color:${fcol};">${rep}/1000</b> · Umbrales: ${thresholds.join('/')}</p>`;
       let baseItems = (FACTION_SHOP_ITEMS[sett.faction] || []).filter(it => shopLvl >= (it.shopLevel || 1));
@@ -4889,6 +4956,12 @@ function renderSettlementUI(settlementId, tab) {
       <button style="margin-top:6px;" ${needRad === 0 || P.caps < costRad ? 'disabled' : ''} onclick="settlementHealRad('${sett.id}')">Curar radiación (${costRad})</button>
       <button style="margin-top:6px;" ${(needHp === 0 && needRad === 0) || P.caps < (costHp + costRad) ? 'disabled' : ''} onclick="settlementHealFull('${sett.id}')">Curar todo (${costHp + costRad})</button>
     </div>
+    ${sett.faction === 'slavers' ? `
+    <div class="item" style="border-color:#aa6644 !important;">
+      <b style="color:#aa6644;">⛓ Vender Esclavos</b><br>
+      <span style="font-size:12px;color:#8d9880;">Cada Esclavo: 500 chapas + 10–20 reputación. Tienes: <b>${countItemsByBaseId(2305)}</b></span><br>
+      <button style="margin-top:6px;background:#aa6644;color:#111;font-weight:bold;" ${countItemsByBaseId(2305) < 1 ? 'disabled' : ''} onclick="sellSlavesUI()">Vender esclavos</button>
+    </div>` : ''}
     <div class="item" style="border-color:var(--gold) !important;">
       <b>🏠 Casa en ${sett.name}</b> — 2000 chapas<br>
       <span style="font-size:12px;color:#8d9880;">Descansa 1–24 h. Recuperas salud según tu nivel. El compañero NO se cura aquí.</span><br>
@@ -5248,6 +5321,69 @@ function exitCasino() {
   let sett = SETTLEMENTS.find(s => s.faction === 'strip');
   if (sett) renderSettlementUI(sett.id, 'base');
   else renderMap();
+}
+
+function sellSlavesUI() {
+  let n = countItemsByBaseId(2305);
+  if (n < 1) { logMsg('No tienes esclavos.'); return; }
+  openQtyPad(n, '⛓ Vender Esclavos', function(qty) {
+    confirmSellSlaves(qty);
+  });
+  // Ajuste visual del pad: precio y color negrero
+  setTimeout(() => {
+    let h2 = document.querySelector('#modal-body h2');
+    if (h2) h2.style.color = '#aa6644';
+    let p = document.querySelector('#modal-body p');
+    if (p) p.innerHTML = 'Tienes <b>' + n + '</b>. Cada uno: <span style="color:#e05050;">500 chapas</span> + 10–20 rep.';
+    let btn = document.getElementById('qty-confirm-btn');
+    if (btn) {
+      btn.textContent = 'Vender';
+      btn.style.background = '#aa6644';
+    }
+  }, 0);
+}
+function confirmSellSlaves(qty) {
+  let n = countItemsByBaseId(2305);
+  qty = parseInt(qty, 10) || 0;
+  if (qty < 1) return;
+  if (qty > n) qty = n;
+  let left = qty;
+  for (let i = P.inv.length - 1; i >= 0 && left > 0; i--) {
+    if (P.inv[i].id === 2305) {
+      let q = P.inv[i].qty || 1;
+      if (q <= left) { left -= q; P.inv.splice(i, 1); }
+      else { P.inv[i].qty = q - left; left = 0; }
+    }
+  }
+  let caps = qty * 500;
+  P.caps += caps;
+  let repGain = 0;
+  for (let i = 0; i < qty; i++) repGain += 10 + Math.floor(Math.random() * 11);
+  addFactionRep('slavers', repGain);
+  logMsg('Vendidos ' + qty + ' esclavo(s): +' + caps + ' chapas, +' + repGain + ' rep. con Los Negreros.');
+  updateStats();
+  let sett = SETTLEMENTS.find(s => s.faction === 'slavers');
+  if (sett) renderSettlementUI(sett.id, 'base');
+}
+function buySlaverHypno(itemId, cost) {
+  if (P.caps < cost) { logMsg('Chapas insuficientes.'); return; }
+  let it = getItemBase(itemId);
+  if (!it) return;
+  let rep = getFactionRep('slavers');
+  if ((itemId === 2301 || itemId === 2304) && rep < 100) { logMsg('Necesitas 100 de reputación con Los Negreros.'); return; }
+  if (itemId === 2302 && rep < 500) { logMsg('Necesitas 500 de reputación con Los Negreros.'); return; }
+  if (itemId === 2303 && rep < 1000) { logMsg('Necesitas 1000 de reputación con Los Negreros.'); return; }
+  P.caps -= cost;
+  if (it.type === 'ammo') {
+    P.ammoBox[it.ammoKey] = (P.ammoBox[it.ammoKey] || 0) + (it.qty || 5);
+    logMsg('Compras ' + it.name + ' (+' + (it.qty || 5) + ' células) por ' + cost + ' chapas.');
+  } else {
+    if (!addItemToInv(itemId, 1)) { P.caps += cost; logMsg('Inventario lleno.'); return; }
+    logMsg('Compras ' + it.name + ' por ' + cost + ' chapas.');
+  }
+  updateStats();
+  let sett = SETTLEMENTS.find(s => s.faction === 'slavers');
+  if (sett) renderSettlementUI(sett.id, 'arsenal');
 }
 
 function exchangeCapsToChips(casinoId, caps, chips) {
@@ -7751,6 +7887,19 @@ function exploreZone() {
 }
 
 /* ========== NUEVO SISTEMA DE COMBATE POR TURNOS (ESTILO IMAGEN) ========== */
+function isHumanEnemy(nameOrEnemy) {
+  if (!nameOrEnemy) return false;
+  if (typeof nameOrEnemy === 'object') {
+    if (nameOrEnemy.human === true) return true;
+    nameOrEnemy = nameOrEnemy.name || nameOrEnemy.enemyName || '';
+  }
+  let n = String(nameOrEnemy).toLowerCase();
+  // No humanos: robots, mutantes, animales, necrófagos, synths...
+  if (/robot|protectron|handy|sentry|assaultron|synth|supermutante|sanguinario|bestia|rata|perro|mosca|topo|necr[oó]fago|behemoth|devorador|coloso|courser/.test(n)) return false;
+  if (/saqueador|mercenario|cazador|asesino|centinela del enclave|negrero|colono|patrulla|minuteman|hermandad|oficial|agente|francotirador humano/.test(n)) return true;
+  return false;
+}
+
 function startCombat(isLegendary = false) {
   let pool = isLegendary ? LEGENDARY_ENEMIES : ENEMIES;
   let available = pool.filter(e => e.level <= P.lvl);
@@ -7768,6 +7917,7 @@ function startCombat(isLegendary = false) {
 
   combatState = {
     enemyName: e.name + " (Nv." + e.level + ")",
+    enemyHuman: !!(e.human || isHumanEnemy(e)),
     enemyMaxHp: Math.floor(e.hp * hpScale),
     enemyHp: Math.floor(e.hp * hpScale),
     enemyDmg: Math.floor(e.dmg * dmgScale),
@@ -8132,6 +8282,50 @@ function combatAttack() {
 
   let baseDmg = w.damage + ironBonus + gunsBonus + brawlerBonus + furyBonus + legDmgBonus;
 
+
+  // --- HIPNOTRON: captura de esclavos ---
+  if (w.hypno || (w.hypnoChance !== undefined)) {
+    let ammoKeyH = w.ammoType;
+    let isMeleeH = !ammoKeyH || String(ammoKeyH).includes("Ninguna");
+    if (!isMeleeH && !(P.ammoBox[ammoKeyH] && P.ammoBox[ammoKeyH] > 0)) {
+      combatLog("¡Sin Células de Hipnotron!");
+      // puñetazo mínimo
+      combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
+      renderCombatUI();
+      if (combatState.enemyHp <= 0) endCombat(true);
+      else setTimeout(() => { if (combatState) enemyTurn(); }, 400);
+      return;
+    }
+    if (!isMeleeH) P.ammoBox[ammoKeyH] = (P.ammoBox[ammoKeyH] || 1) - 1;
+    playWeaponSound(w);
+    let chance = w.hypnoChance || 0.2;
+    let human = combatState.enemyHuman || isHumanEnemy(combatState.enemyName);
+    if (!human) {
+      combatLog("El Hipnotron falla: el objetivo no es humano (0% efectividad).");
+      combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
+      renderCombatUI();
+      updateStats();
+      if (combatState.enemyHp <= 0) endCombat(true);
+      else setTimeout(() => { if (combatState) enemyTurn(); }, 450);
+      return;
+    }
+    if (Math.random() < chance) {
+      combatLog("¡Hipnosis exitosa! El sujeto queda sometido.");
+      // Fin especial: sin loot/xp/caps
+      combatState.hypnoCapture = true;
+      endCombat(true);
+      return;
+    } else {
+      combatLog("El Hipnotron no hace efecto esta vez (prob. " + Math.round(chance * 100) + "% en humanos).");
+      combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
+      renderCombatUI();
+      updateStats();
+      if (combatState.enemyHp <= 0) endCombat(true);
+      else setTimeout(() => { if (combatState) enemyTurn(); }, 450);
+      return;
+    }
+  }
+
   // Ataque del jugador
   let hasAmmo = isMelee || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] > 0);
   // Munición Infinita (armadura)
@@ -8365,6 +8559,16 @@ function endCombat(victory) {
   let aAb = getArmorAbility();
 
   if (victory) {
+    if (combatState.hypnoCapture) {
+      addItemToInv(2305, 1);
+      logMsg("El esclavo se dirige a Paradise Falls. Obtienes 1× Esclavo (Otros). Sin chapas, XP ni botín de combate.");
+      combatLog("Esclavo capturado → Paradise Falls.");
+      combatState = null;
+      closeModal();
+      updateStats();
+      renderMap();
+      return;
+    }
     if (combatState.combatZone) {
       // Solo tickets — sin chapas, loot, legendarios ni captura
       let tix = 3 + Math.floor(Math.random() * 5) + Math.floor((combatState.enemyLevel || 1) / 3);
@@ -8634,6 +8838,13 @@ function renderInv(sub = P.subtab, page) {
       if (sub === 'weapon') {
         let scaledDmg = Math.max(1, Math.floor(it.damage * scale) + scaledModDmg);
         html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Daño: +${scaledDmg} | Munición: ${it.ammoType || 'Cuerpo a cuerpo'}</span><br>`;
+        if (it.hypno || it.hypnoChance !== undefined) {
+          let pct = Math.round((it.hypnoChance || 0.2) * 100);
+          html += `<span style="font-size:11px; color:#aa6644;">⚡ Hipnosis ${pct}% en humanos → captura Esclavo (sin XP/loot/chapas). Ineficaz vs no humanos.</span><br>`;
+          if (it.effectDesc) html += `<span style="font-size:10px; color:#8d9880;">${it.effectDesc}</span><br>`;
+        } else if (it.effectDesc) {
+          html += `<span style="font-size:11px; color:var(--gold);">${it.effectDesc}</span><br>`;
+        }
       } else if (sub === 'armor') {
         let scaledDef = Math.max(0, Math.floor(it.def * scale) + scaledModDef);
         let baseRad = getBaseRadRes(it);
@@ -8650,6 +8861,8 @@ function renderInv(sub = P.subtab, page) {
         else if (it.id === 15) html += `<span style="font-size:12px; color:#e05050;">Tartera Nuka-Cola — abre en REFUGIO.</span><br>`;
         else if (it.id === 29) html += `<span style="font-size:12px; color:var(--gold);">Tartera Legendaria — abre en REFUGIO.</span><br>`;
         else if (it.robcoModule || it.id === 3500) html += `<span style="font-size:12px; color:var(--gold);">★ Módulo Legendario — úsalo en Fábrica RobCo para mejorar un robot.</span><br>`;
+        else if (it.slave || it.id === 2305) html += `<span style="font-size:12px; color:#aa6644;">⛓ ${it.effectDesc || 'Véndelo en Paradise Falls por 500 chapas + reputación.'}</span><br>`;
+        else if (it.effectDesc) html += `<span style="font-size:12px; color:var(--gold);">${it.effectDesc}</span><br>`;
         else html += `<span style="font-size:12px; color:var(--gold);">Objeto especial.</span><br>`;
       }
 
@@ -8729,6 +8942,10 @@ function sellItem(uid) {
   if (!it) return;
   if (it.robcoModule || it.id === 3500) {
     logMsg("El Módulo Legendario RobCo no se puede vender.");
+    return;
+  }
+  if (it.slave || it.noCommerceSell || it.id === 2305) {
+    logMsg("Los esclavos solo se venden en Paradise Falls (Negreros).");
     return;
   }
 
@@ -9267,6 +9484,7 @@ if (savedData) {
       for (let k in P.ammoBox) {
         if (parsed.ammoBox[k] === undefined) parsed.ammoBox[k] = P.ammoBox[k];
       }
+      if (parsed.ammoBox["Célula de Hipnotron"] === undefined) parsed.ammoBox["Célula de Hipnotron"] = 0;
     }
     P = parsed;
   } catch (e) {}
