@@ -758,9 +758,9 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 }
 .map-compact .world-grid {
   flex: 0 0 auto !important;
-  width: 220px !important;
-  max-width: 220px !important;
-  height: 220px !important;
+  width: 260px !important;
+  max-width: 260px !important;
+  height: 260px !important;
   margin: 2px auto !important;
   gap: 1px !important;
   padding: 2px !important;
@@ -4297,7 +4297,7 @@ function renderWorldGrid() {
       cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
     }
   }
-  return `<div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:220px;width:220px;height:220px;">${cells}</div>`;
+  return `<div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:260px;width:260px;height:260px;">${cells}</div>`;
 }
 
 function renderMap() {
@@ -6912,8 +6912,6 @@ function openRadioTuneUI() {
   let trackLabel = '';
   if (playing && radioStationId === 'enclave') {
     trackLabel = ' · Transmisión ' + (radioTrackIndex + 1) + '/8';
-  } else if (playing && radioStationId === 'wasteland') {
-    trackLabel = '';
   }
   let status = playing && stName
     ? ('♪ En antena: ' + stName + trackLabel)
@@ -6922,23 +6920,14 @@ function openRadioTuneUI() {
   let wastelandActive = playing && radioStationId === 'wasteland';
   let enclaveActive = playing && radioStationId === 'enclave';
 
+  // Mismo hueco: Sintonizar <-> Apagar
   let wastelandBtn = wastelandActive
-    ? `<button style="width:100%; margin-top:8px; background:#224422; color:var(--accent); font-weight:bold;" disabled>● EN ANTENA</button>`
+    ? `<button style="width:100%; margin-top:8px; border-color:var(--danger); color:var(--danger); font-weight:bold;" onclick="stopRadioMusic()">■ Apagar</button>`
     : `<button style="width:100%; margin-top:8px; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioStation('wasteland')">▶ Sintonizar</button>`;
 
   let enclaveBtn = enclaveActive
-    ? `<button style="width:100%; margin-top:8px; background:#223344; color:#88aacc; font-weight:bold;" disabled>● EN ANTENA</button>`
+    ? `<button style="width:100%; margin-top:8px; border-color:var(--danger); color:var(--danger); font-weight:bold;" onclick="stopRadioMusic()">■ Apagar</button>`
     : `<button style="width:100%; margin-top:8px; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioStation('enclave')">▶ Sintonizar</button>`;
-
-  let controls = '';
-  if (playing) {
-    controls = `
-      <div style="display:flex; gap:8px; margin-top:12px;">
-        <button style="flex:1;" onclick="radioPrevTrack()">◀ Anterior</button>
-        <button style="flex:1; border-color:var(--danger); color:var(--danger);" onclick="stopRadioMusic()">■ Apagar</button>
-        <button style="flex:1;" onclick="radioNextTrack()">Siguiente ▶</button>
-      </div>`;
-  }
 
   document.getElementById('main-view').innerHTML = `
     <div class="radio-panel">
@@ -6957,7 +6946,10 @@ function openRadioTuneUI() {
         ${enclaveBtn}
       </div>
 
-      ${controls}
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button style="flex:1;" onclick="radioPrevTrack()">◀ Anterior</button>
+        <button style="flex:1;" onclick="radioNextTrack()">Siguiente ▶</button>
+      </div>
 
       <button style="width:100%; margin-top:10px;" onclick="openRadioUI()">← VOLVER</button>
     </div>
