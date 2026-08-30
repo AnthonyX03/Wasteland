@@ -279,9 +279,9 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   justify-content: flex-start;
 }
 .map-compact .map-actions {
-  height: 52px;
+  height: auto;
   min-height: 52px;
-  max-height: 52px;
+  max-height: 78px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -293,21 +293,23 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 }
 .map-compact .map-actions .map-act-row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  height: 34px;
-  min-height: 34px;
-  max-height: 34px;
+  gap: 4px;
+  min-height: 30px;
+  max-height: 60px;
   overflow: hidden;
+  width: 100%;
+  padding: 0 2px;
+  box-sizing: border-box;
 }
 .map-compact .map-actions .map-act-hint {
-  font-size: 11px;
-  height: 16px;
-  min-height: 16px;
-  max-height: 16px;
-  line-height: 16px;
+  font-size: 10px;
+  height: 14px;
+  min-height: 14px;
+  max-height: 14px;
+  line-height: 14px;
   margin: 2px 0 0 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -318,13 +320,15 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   box-sizing: border-box;
 }
 .map-compact .map-actions button {
-  font-size: 12px;
-  padding: 6px 14px;
-  height: 32px;
-  min-height: 32px;
-  max-height: 32px;
+  font-size: 11px;
+  padding: 4px 8px;
+  height: 28px;
+  min-height: 28px;
+  max-height: 28px;
   font-weight: bold;
   box-sizing: border-box;
+  flex: 0 1 auto;
+  white-space: nowrap;
 }
 .map-compact .map-controls {
   margin-top: auto;
@@ -779,12 +783,23 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 .map-compact .map-actions {
   flex-shrink: 0 !important;
   margin: 2px 0 !important;
+  height: auto !important;
+  max-height: 78px !important;
+  overflow: hidden !important;
+}
+.map-compact .map-actions .map-act-row {
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  max-height: 60px !important;
+  overflow: hidden !important;
 }
 .map-compact .map-actions button {
-  font-size: 12px !important;
-  padding: 6px 12px !important;
-  height: 32px !important;
-  min-height: 32px !important;
+  font-size: 11px !important;
+  padding: 4px 8px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  white-space: nowrap !important;
 }
 .map-compact .map-actions .map-act-hint {
   font-size: 10px !important;
@@ -4443,7 +4458,7 @@ function renderMap() {
   }
   if (P.lootTip && P.x === P.lootTip.x && P.y === P.lootTip.y) {
     actBtns += ` <button style="background:var(--gold);color:#111;font-weight:bold;" onclick="claimLootTip()">💰 BOTÍN</button>`;
-    actBtns += ` <button style="border-color:#8d9880;color:#8d9880;font-size:11px;" onclick="ignoreLootTip()">Ignorar chivatazo</button>`;
+    actBtns += ` <button style="border-color:#8d9880;color:#8d9880;" onclick="ignoreLootTip()">✕</button>`;
   }
   if (zone.type === 'river') {
     actHint = `<span style="color:#00aacc;">⚠ Zona altamente irradiada</span>`;
@@ -5130,8 +5145,10 @@ function openCasinoUI(casinoId, tab) {
   }
   tab = tab || 'main';
   let chipsHtml = chipIconHtml(casinoId, 16);
-  let capIcon = (document.querySelector('.cap-icon:not(.chip-icon)') || document.querySelector('.cap-icon') || {}).src || '';
-  let capsHtml = capIcon ? `<img class="cap-icon" src="${capIcon}" alt="chapas">` : '◎';
+  let capIcon = (document.querySelector('header .cap-icon:not(.chip-icon)') || document.querySelector('.cap-icon:not(.chip-icon)') || {}).src || '';
+  let capsHtml = capIcon
+    ? `<img class="cap-icon chip-icon-caps" src="${capIcon}" alt="chapas" style="width:16px;height:16px;vertical-align:middle;filter:sepia(1) saturate(8) hue-rotate(-50deg) brightness(0.95);">`
+    : '<span style="color:#e05050;">◎</span>';
   let myChips = getCasinoChips(casinoId);
   let html = `<h2 style="color:${c.color};margin-top:0;">🎰 ${c.name}</h2>
     <p style="font-size:12px;color:#8d9880;">${chipsHtml} Fichas ${c.name}: <b style="color:#fff;">${myChips}</b> · ${capsHtml} Chapas: <b style="color:#e05050;">${P.caps}</b></p>
@@ -5155,12 +5172,7 @@ function openCasinoUI(casinoId, tab) {
       <button onclick="exchangeChipsToCaps('${casinoId}',500,5000)">${chipsHtml} 500 → ${capsHtml} 5000</button>
       <button onclick="exchangeChipsToCaps('${casinoId}',1000,10000)">${chipsHtml} 1000 → ${capsHtml} 10000</button>`;
   } else if (tab === 'play') {
-    html += `<h3 style="color:var(--accent);font-size:13px;">Tabla de premios</h3>
-      <div class="item" style="font-size:11px;">
-        <b>Tragaperras</b> (5/10/25): 🍒 x3 · 7️⃣ x10 · 💎 x25<br>
-        <b>Blackjack</b>: BJ 3:2 · Victoria 1:1 · Empate devuelve<br>
-        <b>Ruleta</b>: Número x35 · Color/Par x2
-      </div>
+    html += `<p style="font-size:12px;color:#8d9880;">Elige un juego. La tabla de premios se muestra dentro de cada uno.</p>
       <button onclick="playSlotsUI('${casinoId}')">🎰 Tragaperras</button>
       <button onclick="playBlackjackUI('${casinoId}')">🃏 Blackjack</button>
       <button onclick="playRouletteUI('${casinoId}')">🎡 Ruleta</button>`;
@@ -5281,57 +5293,141 @@ function buyCasinoModule(casinoId, cost) {
   updateStats();
 }
 
+let _slotsBet = {};
 function playSlotsUI(casinoId) {
   ensureChips();
+  if (_slotsBet[casinoId] === undefined) _slotsBet[casinoId] = 5;
+  let bet = _slotsBet[casinoId];
   let back = casinoId === 'sierra' ? "renderSierraCasinoUI('vip')" : "openCasinoUI('" + casinoId + "','play')";
   let col = getCasinoColor(casinoId);
-  let html = `<h2 style="color:${col};">🎰 Tragaperras</h2>
-    <p style="font-size:12px;">Fichas: <b style="color:${col};">${getCasinoChips(casinoId)}</b></p>
-    <button onclick="doSlots(5,'${casinoId}')">Apostar 5</button>
-    <button onclick="doSlots(10,'${casinoId}')">Apostar 10</button>
-    <button onclick="doSlots(25,'${casinoId}')">Apostar 25</button>
-    <div id="slots-result" style="margin:10px 0;font-size:18px;text-align:center;"></div>
-    <button style="width:100%;" onclick="${back}">Volver</button>`;
+  let chips = getCasinoChips(casinoId);
+  let grid = '';
+  for (let r = 0; r < 3; r++) {
+    grid += '<div style="display:flex;justify-content:center;gap:4px;margin:2px 0;">';
+    for (let c = 0; c < 3; c++) {
+      let mid = (r === 1);
+      let border = mid ? '2px solid var(--gold)' : '1px solid #3e4737';
+      let bg = mid ? '#1a220a' : '#0d100c';
+      grid += '<div id="slot-c' + r + c + '" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;background:' + bg + ';border:' + border + ';border-radius:4px;">—</div>';
+    }
+    grid += '</div>';
+  }
+  let html = `<h2 style="color:${col};margin-top:0;">🎰 Tragaperras</h2>
+    <p style="font-size:12px;">Fichas: <b style="color:${col};">${chips}</b></p>
+    <div class="item" style="font-size:11px;border-color:var(--gold);">
+      <b style="color:var(--gold);">Línea de pago (fila central)</b><br>
+      🍒🍒🍒 ×3 · 🍋🍋🍋 ×4 · 🔔🔔🔔 ×5 · 7️⃣7️⃣7️⃣ ×10 · 💎💎💎 ×25
+    </div>
+    <div style="margin:10px 0;text-align:center;">${grid}
+      <div style="font-size:10px;color:var(--gold);margin-top:4px;">—— línea ganadora ——</div>
+    </div>
+    <div id="slots-result" style="margin:6px 0;font-size:14px;text-align:center;min-height:20px;color:#8d9880;">Listo</div>
+    <p style="text-align:center;margin:8px 0;"><b>Apuesta: <span id="slots-bet-val" style="color:var(--accent);">${bet}</span></b> fichas</p>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;">
+      <button onclick="addSlotsBet('${casinoId}',1)">+1</button>
+      <button onclick="addSlotsBet('${casinoId}',5)">+5</button>
+      <button onclick="addSlotsBet('${casinoId}',10)">+10</button>
+      <button onclick="addSlotsBet('${casinoId}',50)">+50</button>
+      <button onclick="addSlotsBet('${casinoId}',100)">+100</button>
+      <button onclick="_slotsBet['${casinoId}']=0;document.getElementById('slots-bet-val').textContent=0;">Reset</button>
+    </div>
+    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="spinSlots('${casinoId}')">▶ JUGAR</button>
+    <button style="width:100%;margin-top:8px;" onclick="${back}">Volver</button>`;
   document.getElementById('main-view').innerHTML = html;
 }
-
-function doSlots(bet, casinoId) {
+function addSlotsBet(casinoId, n) {
+  if (_slotsBet[casinoId] === undefined) _slotsBet[casinoId] = 0;
+  _slotsBet[casinoId] = Math.min(5000, (_slotsBet[casinoId] || 0) + n);
+  let el = document.getElementById('slots-bet-val');
+  if (el) el.textContent = _slotsBet[casinoId];
+}
+function spinSlots(casinoId) {
   ensureChips();
   casinoId = String(casinoId || '');
+  let bet = _slotsBet[casinoId] || 0;
+  if (bet < 1) { logMsg('Añade fichas a la apuesta (+1 / +5 / …).'); return; }
   if (!spendCasinoChips(casinoId, bet)) {
-    logMsg("Fichas insuficientes (" + casinoId + ": " + getCasinoChips(casinoId) + ").");
+    logMsg('Fichas insuficientes. Tienes ' + getCasinoChips(casinoId) + '.');
     return;
   }
-  let syms = ['🍒','🍋','7️⃣','💎','🔔'];
-  let a = syms[Math.floor(Math.random()*syms.length)];
-  let b = syms[Math.floor(Math.random()*syms.length)];
-  let c = syms[Math.floor(Math.random()*syms.length)];
+  let syms = ['🍒','🍋','🔔','7️⃣','💎'];
+  let weights = [30, 25, 20, 15, 10];
+  function pick() {
+    let t = weights.reduce((a,b)=>a+b,0), r = Math.random()*t, a=0;
+    for (let i=0;i<syms.length;i++) { a += weights[i]; if (r <= a) return syms[i]; }
+    return syms[0];
+  }
+  let grid = [];
+  for (let r = 0; r < 3; r++) {
+    grid[r] = [];
+    for (let c = 0; c < 3; c++) {
+      grid[r][c] = pick();
+      let cell = document.getElementById('slot-c' + r + c);
+      if (cell) cell.textContent = grid[r][c];
+    }
+  }
+  let a = grid[1][0], b = grid[1][1], c = grid[1][2];
   let win = 0;
   if (a === b && b === c) {
     if (a === '💎') win = bet * 25;
     else if (a === '7️⃣') win = bet * 10;
+    else if (a === '🔔') win = bet * 5;
+    else if (a === '🍋') win = bet * 4;
     else win = bet * 3;
   }
   if (win) addCasinoChips(casinoId, win);
   let el = document.getElementById('slots-result');
-  if (el) el.innerHTML = `${a} ${b} ${c}<br>${win ? '<span style="color:var(--gold)">Ganas '+win+'</span>' : 'Sin premio'}`;
-  logMsg(win ? ("Tragaperras: +" + win + " fichas") : "Tragaperras: sin premio");
+  if (el) el.innerHTML = win
+    ? '<span style="color:var(--gold);font-weight:bold;">¡' + a + b + c + '! +' + win + ' fichas</span>'
+    : '<span style="color:#8d9880;">Línea: ' + a + ' ' + b + ' ' + c + ' — sin premio</span>';
+  logMsg(win ? ('Tragaperras: +' + win + ' fichas') : 'Tragaperras: sin premio');
   updateStats();
-  setTimeout(() => playSlotsUI(casinoId), 800);
+  // Actualizar contador de fichas sin destruir la rejilla
+  let hdr = document.querySelector('#main-view p');
+  if (hdr) {
+    let col = getCasinoColor(casinoId);
+    hdr.innerHTML = 'Fichas: <b style="color:' + col + ';">' + getCasinoChips(casinoId) + '</b>';
+  }
 }
 
+let _bjBet = {};
 function playBlackjackUI(casinoId) {
-  let html = `<h2 style="color:#ff88cc;">🃏 Blackjack</h2>
-    <p style="font-size:12px;">Fichas: <b style="color:#fff;">${getCasinoChips(casinoId)}</b>. BJ 3:2 · Victoria 1:1.</p>
-    <button onclick="doBlackjack(10,'${casinoId}')">Apostar 10</button>
-    <button onclick="doBlackjack(25,'${casinoId}')">Apostar 25</button>
-    <button onclick="doBlackjack(50,'${casinoId}')">Apostar 50</button>
-    <div id="bj-result" style="margin:10px 0;font-size:14px;"></div>
-    <button style="width:100%;" onclick="${casinoId==='sierra'?"renderSierraCasinoUI('vip')":"openCasinoUI('"+casinoId+"','play')"}">Volver</button>`;
+  if (_bjBet[casinoId] === undefined) _bjBet[casinoId] = 10;
+  let bet = _bjBet[casinoId];
+  let col = getCasinoColor(casinoId);
+  let back = casinoId==='sierra' ? "renderSierraCasinoUI('vip')" : "openCasinoUI('"+casinoId+"','play')";
+  let html = `<h2 style="color:${col};margin-top:0;">🃏 Blackjack</h2>
+    <p style="font-size:12px;">Fichas: <b style="color:${col};">${getCasinoChips(casinoId)}</b></p>
+    <div class="item" style="font-size:11px;border-color:var(--gold);">
+      <b style="color:var(--gold);">Tabla de premios</b><br>
+      Blackjack natural → 3:2 (×2.5 la apuesta)<br>
+      Victoria → 1:1 (×2 total devuelto)<br>
+      Empate → se devuelve la apuesta
+    </div>
+    <div id="bj-result" style="margin:10px 0;font-size:14px;min-height:24px;text-align:center;">Listo</div>
+    <p style="text-align:center;"><b>Apuesta: <span id="bj-bet-val" style="color:var(--accent);">${bet}</span></b> fichas</p>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;">
+      <button onclick="addBjBet('${casinoId}',1)">+1</button>
+      <button onclick="addBjBet('${casinoId}',5)">+5</button>
+      <button onclick="addBjBet('${casinoId}',10)">+10</button>
+      <button onclick="addBjBet('${casinoId}',50)">+50</button>
+      <button onclick="addBjBet('${casinoId}',100)">+100</button>
+      <button onclick="_bjBet['${casinoId}']=0;document.getElementById('bj-bet-val').textContent=0;">Reset</button>
+    </div>
+    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="doBlackjack(_bjBet['${casinoId}']||0,'${casinoId}')">▶ JUGAR</button>
+    <button style="width:100%;margin-top:8px;" onclick="${back}">Volver</button>`;
   document.getElementById('main-view').innerHTML = html;
+}
+function addBjBet(casinoId, n) {
+  if (_bjBet[casinoId] === undefined) _bjBet[casinoId] = 0;
+  _bjBet[casinoId] = Math.min(5000, (_bjBet[casinoId] || 0) + n);
+  let el = document.getElementById('bj-bet-val');
+  if (el) el.textContent = _bjBet[casinoId];
 }
 
 function doBlackjack(bet, casinoId) {
+  bet = parseInt(bet, 10) || 0;
+  if (bet < 1) { logMsg('Añade fichas a la apuesta.'); return; }
   if (!spendCasinoChips(casinoId, bet)) { logMsg("Fichas insuficientes."); return; }
   let draw = () => 2 + Math.floor(Math.random() * 10);
   let p = draw() + draw();
@@ -5355,35 +5451,76 @@ function doBlackjack(bet, casinoId) {
   updateStats();
 }
 
+let _rouBet = {};
+let _rouKind = {};
 function playRouletteUI(casinoId) {
-  let html = `<h2 style="color:#ff88cc;">🎡 Ruleta</h2>
-    <p style="font-size:12px;">Fichas: <b style="color:#fff;">${getCasinoChips(casinoId)}</b></p>
-    <button onclick="doRoulette(10,'red','${casinoId}')">Rojo x2 (10)</button>
-    <button onclick="doRoulette(10,'black','${casinoId}')">Negro x2 (10)</button>
-    <button onclick="doRoulette(5,'num','${casinoId}')">Número x35 (5)</button>
-    <div id="rou-result" style="margin:10px 0;font-size:14px;"></div>
-    <button style="width:100%;" onclick="${casinoId==='sierra'?"renderSierraCasinoUI('vip')":"openCasinoUI('"+casinoId+"','play')"}">Volver</button>`;
+  if (_rouBet[casinoId] === undefined) _rouBet[casinoId] = 10;
+  if (!_rouKind[casinoId]) _rouKind[casinoId] = 'red';
+  let bet = _rouBet[casinoId];
+  let kind = _rouKind[casinoId];
+  let col = getCasinoColor(casinoId);
+  let back = casinoId==='sierra' ? "renderSierraCasinoUI('vip')" : "openCasinoUI('"+casinoId+"','play')";
+  let html = `<h2 style="color:${col};margin-top:0;">🎡 Ruleta</h2>
+    <p style="font-size:12px;">Fichas: <b style="color:${col};">${getCasinoChips(casinoId)}</b></p>
+    <div class="item" style="font-size:11px;border-color:var(--gold);">
+      <b style="color:var(--gold);">Tabla de premios</b><br>
+      Rojo / Negro → ×2 · Par / Impar → ×2<br>
+      Número exacto (0–36) → ×35
+    </div>
+    <div id="rou-result" style="margin:10px 0;font-size:14px;text-align:center;min-height:24px;">Listo</div>
+    <p style="font-size:12px;text-align:center;">Tipo: <b id="rou-kind-lab">${kind === 'red' ? 'Rojo' : kind === 'black' ? 'Negro' : kind === 'even' ? 'Par' : kind === 'odd' ? 'Impar' : 'Nº 7'}</b></p>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:6px;">
+      <button onclick="setRouKind('${casinoId}','red')">Rojo</button>
+      <button onclick="setRouKind('${casinoId}','black')">Negro</button>
+      <button onclick="setRouKind('${casinoId}','even')">Par</button>
+      <button onclick="setRouKind('${casinoId}','odd')">Impar</button>
+      <button onclick="setRouKind('${casinoId}','num')">Nº 7</button>
+    </div>
+    <p style="text-align:center;"><b>Apuesta: <span id="rou-bet-val" style="color:var(--accent);">${bet}</span></b> fichas</p>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;">
+      <button onclick="addRouBet('${casinoId}',1)">+1</button>
+      <button onclick="addRouBet('${casinoId}',5)">+5</button>
+      <button onclick="addRouBet('${casinoId}',10)">+10</button>
+      <button onclick="addRouBet('${casinoId}',50)">+50</button>
+      <button onclick="addRouBet('${casinoId}',100)">+100</button>
+      <button onclick="_rouBet['${casinoId}']=0;document.getElementById('rou-bet-val').textContent=0;">Reset</button>
+    </div>
+    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="doRoulette(_rouBet['${casinoId}']||0,_rouKind['${casinoId}']||'red','${casinoId}')">▶ JUGAR</button>
+    <button style="width:100%;margin-top:8px;" onclick="${back}">Volver</button>`;
   document.getElementById('main-view').innerHTML = html;
 }
-
+function addRouBet(casinoId, n) {
+  if (_rouBet[casinoId] === undefined) _rouBet[casinoId] = 0;
+  _rouBet[casinoId] = Math.min(5000, (_rouBet[casinoId] || 0) + n);
+  let el = document.getElementById('rou-bet-val');
+  if (el) el.textContent = _rouBet[casinoId];
+}
+function setRouKind(casinoId, k) {
+  _rouKind[casinoId] = k;
+  let lab = document.getElementById('rou-kind-lab');
+  if (lab) lab.textContent = k === 'red' ? 'Rojo' : k === 'black' ? 'Negro' : k === 'even' ? 'Par' : k === 'odd' ? 'Impar' : 'Nº 7';
+}
 function doRoulette(bet, kind, casinoId) {
+  bet = parseInt(bet, 10) || 0;
+  if (bet < 1) { logMsg('Añade fichas a la apuesta.'); return; }
   if (!spendCasinoChips(casinoId, bet)) { logMsg("Fichas insuficientes."); return; }
   let n = Math.floor(Math.random() * 37);
   let color = (n === 0) ? 'green' : (n % 2 === 0 ? 'black' : 'red');
   let win = 0;
-  let msg = `Salió ${n} (${color}). `;
-  if (kind === 'num' && n === Math.floor(Math.random() * 37)) { // player picks random number for simplicity
-    win = bet * 35;
-  } else if (kind === 'num') {
-    // compare to a fixed player pick 7 for simplicity
+  let msg = 'Salió ' + n + ' (' + color + '). ';
+  if (kind === 'num') {
     if (n === 7) win = bet * 35;
+  } else if (kind === 'even') {
+    if (n !== 0 && n % 2 === 0) win = bet * 2;
+  } else if (kind === 'odd') {
+    if (n % 2 === 1) win = bet * 2;
   } else if (kind === color) {
     win = bet * 2;
   }
-  if (win) { addCasinoChips(casinoId, win); msg += "Ganas " + win + " fichas!"; }
-  else msg += "Pierdes.";
+  if (win) { addCasinoChips(casinoId, win); msg += 'Ganas ' + win + ' fichas!'; }
+  else msg += 'Pierdes.';
   let el = document.getElementById('rou-result');
-  if (el) el.textContent = msg;
+  if (el) el.innerHTML = win ? '<span style="color:var(--gold);font-weight:bold;">' + msg + '</span>' : msg;
   logMsg(msg);
   updateStats();
 }
@@ -6876,24 +7013,42 @@ function openHouseRestUI(settlementId) {
     return;
   }
   let maxhp = getMaxHp();
-  // Curación por hora ≈ 4% de max HP + bonus por nivel (mín 2)
   let perHour = Math.max(2, Math.floor(maxhp * 0.04) + Math.floor(P.lvl * 0.5));
-  let hoursOpts = '';
+  let marks = '';
   for (let h = 1; h <= 24; h++) {
-    hoursOpts += `<option value="${h}">${h} hora${h > 1 ? 's' : ''} (~${Math.min(maxhp - P.hp, perHour * h)} HP)</option>`;
+    let show = (h === 1 || h === 6 || h === 12 || h === 18 || h === 24);
+    marks += `<span style="flex:1;text-align:center;font-size:9px;color:${show ? '#8d9880' : 'transparent'};">${show ? h : '·'}</span>`;
   }
   let m = document.getElementById('modal');
   document.getElementById('modal-body').innerHTML = `
     <h2 style="color:var(--accent);margin-top:0;">🏠 Descansar en casa</h2>
-    <p style="font-size:12px;color:#8d9880;">Salud actual: ${P.hp}/${maxhp}. Recuperación ≈ ${perHour} HP/hora (según tu nivel). El compañero no se cura.</p>
-    <label style="font-size:12px;">Horas (1–24):</label>
-    <select id="rest-hours" style="width:100%;margin:8px 0;padding:8px;background:#111;color:var(--txt);border:1px solid var(--line);">
-      ${hoursOpts}
-    </select>
+    <p style="font-size:12px;color:#8d9880;">Salud: ${P.hp}/${maxhp} · ≈ ${perHour} HP/hora. El compañero no se cura.</p>
+    <div style="margin:12px 0 4px 0;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+        <span style="font-size:12px;color:#8d9880;">Pasar el tiempo</span>
+        <span id="rest-hours-label" style="font-size:16px;color:var(--accent);font-weight:bold;">1 h</span>
+      </div>
+      <input id="rest-hours" type="range" min="1" max="24" value="1" step="1"
+        style="width:100%;accent-color:var(--accent);height:28px;"
+        oninput="updateRestHoursLabel(this.value, ${perHour}, ${maxhp})">
+      <div style="display:flex;margin-top:2px;padding:0 2px;">${marks}</div>
+      <p id="rest-heal-preview" style="font-size:11px;color:#8d9880;margin:8px 0 0 0;">Recuperarás ~${Math.min(maxhp - P.hp, perHour)} HP</p>
+    </div>
     <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;" onclick="doHouseRest('${settlementId}')">Descansar</button>
     <button style="width:100%;margin-top:6px;" onclick="closeModal();renderSettlementUI('${settlementId}','base');">Cancelar</button>
   `;
   m.classList.add('show');
+}
+
+function updateRestHoursLabel(v, perHour, maxhp) {
+  let h = parseInt(v, 10) || 1;
+  let lab = document.getElementById('rest-hours-label');
+  if (lab) lab.textContent = h + (h === 1 ? ' h' : ' h');
+  let prev = document.getElementById('rest-heal-preview');
+  if (prev) {
+    let heal = Math.min(Math.max(0, maxhp - P.hp), perHour * h);
+    prev.textContent = 'Recuperarás ~' + heal + ' HP';
+  }
 }
 
 function doHouseRest(settlementId) {
