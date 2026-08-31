@@ -1248,6 +1248,14 @@ const DB_ITEMS = [
   { id: 2420, name: "Célula energética alienígena", type: "ammo", ammoKey: "Célula energética alienígena", qty: 12, weight: 0.1, value: 40, stackable: true, zetanLoot: true },
   { id: 2421, name: "Módulo de alimentación alienígena", type: "ammo", ammoKey: "Módulo de alimentación alienígena", qty: 8, weight: 0.25, value: 55, stackable: true, zetanLoot: true },
   { id: 915, name: "Chip de navegación Zetan", type: "other", weight: 0.2, value: 50, stackable: true, questItem: true },
+  { id: 916, name: "Registro de abducción", type: "other", weight: 0.2, value: 45, stackable: true, questItem: true },
+  { id: 917, name: "Muestra de tejido Zetan", type: "other", weight: 0.3, value: 60, stackable: true, questItem: true },
+  { id: 918, name: "Emisor de frecuencia alienígena", type: "other", weight: 0.4, value: 80, stackable: true, questItem: true },
+  { id: 919, name: "Diario de un abducido", type: "other", weight: 0.2, value: 40, stackable: true, questItem: true },
+  { id: 930, name: "Insignia de la RNC", type: "other", weight: 0.2, value: 50, stackable: true, questItem: true },
+  { id: 931, name: "Ficha de casino marcada", type: "other", weight: 0.1, value: 40, stackable: true, questItem: true },
+  { id: 932, name: "Chip de síntesis del Instituto", type: "other", weight: 0.2, value: 55, stackable: true, questItem: true },
+
 
   { id: 2305, name: "Esclavo", type: "other", weight: 0, value: 500, stackable: true, slave: true, noCommerceSell: true, effectDesc: "Mercancía viva. Véndela en Paradise Falls (Base → Vender Esclavos) por 500 chapas y reputación. No se vende en Comercio." },
   { id: 2311, name: "Látigo de negrero", type: "weapon", damage: 22, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 180, stackable: false, factionOnly: true, faction: "slavers" },
@@ -3941,155 +3949,166 @@ const IMPORTANT_LOCS = [
 // type collect + itemId: el objeto solo aparece en el Yermo si la misión está activa
 const FACTION_QUEST_POOL = {
   bos: [
-    { id: 'bos_q1', title: 'Caza de saqueadores', desc: 'Derrota a 5 saqueadores o enemigos del Yermo.', type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'bos_q2', title: 'Recuperar el núcleo de fusión antiguo', desc: 'Encuentra 1 Núcleo de fusión antiguo (solo aparece con esta misión).', type: 'collect', itemId: 901, target: 1, reward: { caps: 120, xp: 80, rep: 15 }, minRep: 0 },
-    { id: 'bos_q3', title: 'Patrulla de reconocimiento', desc: 'Explora 8 zonas del mapa.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
-    { id: 'bos_q4', title: 'Holocinta de la Hermandad', desc: 'Recupera 1 Holocinta de la Hermandad del Yermo.', type: 'collect', itemId: 902, target: 1, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 200 },
-    { id: 'bos_q5', title: 'Purga de amenazas', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 200, xp: 140, rep: 18 }, minRep: 400 },
-    { id: 'bos_q6', title: 'Caza de legendarios', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 350, xp: 220, rep: 20 }, minRep: 700 }
+    { id: 'bos_q1', title: "Ad victoriam... o casi", desc: "Derrota a 5 saqueadores o enemigos del Yermo.", type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'bos_q2', title: "El corazón de la máquina", desc: "Encuentra 1 Núcleo de fusión antiguo (solo aparece con esta misión).", type: 'collect', itemId: 901, target: 1, reward: { caps: 120, xp: 80, rep: 15 }, minRep: 0 },
+    { id: 'bos_q3', title: "Ojos en el Yermo", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'bos_q4', title: "Cinta perdida, honor recuperado", desc: "Recupera 1 Holocinta de la Hermandad del Yermo.", type: 'collect', itemId: 902, target: 1, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 200 },
+    { id: 'bos_q5', title: "Botín digno de un escriba", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 130, xp: 80, rep: 14 }, minRep: 150 },
+    { id: 'bos_q6', title: "Purga por el acero", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 200, xp: 140, rep: 18 }, minRep: 350 },
+    { id: 'bos_q7', title: "Cartografía del ancestro", desc: "Explora 12 zonas del mapa.", type: 'explore', target: 12, reward: { caps: 150, xp: 95, rep: 16 }, minRep: 450 },
+    { id: 'bos_q8', title: "El Yermo no se rinde fácil", desc: "Derrota 8 enemigos.", type: 'kill', target: 8, reward: { caps: 160, xp: 100, rep: 15 }, minRep: 250 },
+    { id: 'bos_q9', title: "Leyenda contra leyenda", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 350, xp: 220, rep: 20 }, minRep: 650 },
+    { id: 'bos_q10', title: "Acero contra monstruos", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 420, xp: 260, rep: 22 }, minRep: 850 }
   ],
   enclave: [
-    { id: 'enc_q1', title: 'Protocolo de limpieza', desc: 'Elimina 6 amenazas del Yermo.', type: 'kill', target: 6, reward: { caps: 110, xp: 75, rep: 12 }, minRep: 0 },
-    { id: 'enc_q2', title: 'Recuperar chip genético', desc: 'Encuentra 1 Chip genético del Enclave.', type: 'collect', itemId: 903, target: 1, reward: { caps: 130, xp: 85, rep: 15 }, minRep: 0 },
-    { id: 'enc_q3', title: 'Cartografía táctica', desc: 'Explora 10 zonas.', type: 'explore', target: 10, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'enc_q4', title: 'Códigos de acceso clasificados', desc: 'Recupera 1 Código de acceso del Enclave.', type: 'collect', itemId: 904, target: 1, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
-    { id: 'enc_q5', title: 'Dominio regional', desc: 'Derrota 12 enemigos.', type: 'kill', target: 12, reward: { caps: 220, xp: 150, rep: 18 }, minRep: 400 },
-    { id: 'enc_q6', title: 'Amenaza legendaria', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 380, xp: 240, rep: 20 }, minRep: 700 }
+    { id: 'enc_q1', title: "Protocolo: limpia y calla", desc: "Elimina 6 amenazas del Yermo.", type: 'kill', target: 6, reward: { caps: 110, xp: 75, rep: 12 }, minRep: 0 },
+    { id: 'enc_q2', title: "ADN de segunda clase", desc: "Encuentra 1 Chip genético del Enclave.", type: 'collect', itemId: 903, target: 1, reward: { caps: 130, xp: 85, rep: 15 }, minRep: 0 },
+    { id: 'enc_q3', title: "Mapa clasificado", desc: "Explora 10 zonas.", type: 'explore', target: 10, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'enc_q4', title: "Códigos que no existen", desc: "Recupera 1 Código de acceso del Enclave.", type: 'collect', itemId: 904, target: 1, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
+    { id: 'enc_q5', title: "Material recuperado, boca cerrada", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 140, xp: 85, rep: 14 }, minRep: 150 },
+    { id: 'enc_q6', title: "América a cualquier precio", desc: "Derrota 12 enemigos.", type: 'kill', target: 12, reward: { caps: 220, xp: 150, rep: 18 }, minRep: 350 },
+    { id: 'enc_q7', title: "El Yermo bajo vigilancia", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 160, xp: 100, rep: 16 }, minRep: 450 },
+    { id: 'enc_q8', title: "Orden desde las sombras", desc: "Derrota 9 enemigos.", type: 'kill', target: 9, reward: { caps: 170, xp: 105, rep: 15 }, minRep: 250 },
+    { id: 'enc_q9', title: "Amenaza de alto valor", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 380, xp: 240, rep: 20 }, minRep: 650 },
+    { id: 'enc_q10', title: "Objetivos prioritarios", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 450, xp: 270, rep: 22 }, minRep: 850 }
   ],
   outcasts: [
-    { id: 'out_q1', title: 'Independencia armada', desc: 'Derrota 5 enemigos en combate.', type: 'kill', target: 5, reward: { caps: 95, xp: 65, rep: 12 }, minRep: 0 },
-    { id: 'out_q2', title: 'Placa de servoarmadura perdida', desc: 'Encuentra 1 Placa de servoarmadura marcada.', type: 'collect', itemId: 905, target: 1, reward: { caps: 125, xp: 80, rep: 15 }, minRep: 0 },
-    { id: 'out_q3', title: 'Rutas seguras', desc: 'Explora 7 zonas.', type: 'explore', target: 7, reward: { caps: 85, xp: 55, rep: 12 }, minRep: 0 },
-    { id: 'out_q4', title: 'Emblema de los Proscritos', desc: 'Recupera 1 Emblema de los Proscritos.', type: 'collect', itemId: 906, target: 1, reward: { caps: 190, xp: 125, rep: 18 }, minRep: 200 },
-    { id: 'out_q5', title: 'Golpe quirúrgico', desc: 'Derrota 9 enemigos.', type: 'kill', target: 9, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 400 },
-    { id: 'out_q6', title: 'Trofeo legendario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 360, xp: 230, rep: 20 }, minRep: 700 }
+    { id: 'out_q1', title: "Sin Hermandad, sin piedad", desc: "Derrota 5 enemigos en combate.", type: 'kill', target: 5, reward: { caps: 95, xp: 65, rep: 12 }, minRep: 0 },
+    { id: 'out_q2', title: "Placa que no es de nadie", desc: "Encuentra 1 Placa de servoarmadura marcada.", type: 'collect', itemId: 905, target: 1, reward: { caps: 125, xp: 80, rep: 15 }, minRep: 0 },
+    { id: 'out_q3', title: "Caminos que no marcamos", desc: "Explora 7 zonas.", type: 'explore', target: 7, reward: { caps: 85, xp: 55, rep: 12 }, minRep: 0 },
+    { id: 'out_q4', title: "Emblema de los olvidados", desc: "Recupera 1 Emblema de los Proscritos.", type: 'collect', itemId: 906, target: 1, reward: { caps: 190, xp: 125, rep: 18 }, minRep: 200 },
+    { id: 'out_q5', title: "Lo que la Hermandad abandonó", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 135, xp: 85, rep: 14 }, minRep: 150 },
+    { id: 'out_q6', title: "Golpe limpio", desc: "Derrota 9 enemigos.", type: 'kill', target: 9, reward: { caps: 210, xp: 140, rep: 18 }, minRep: 350 },
+    { id: 'out_q7', title: "Mapa de los desertores", desc: "Explora 11 zonas.", type: 'explore', target: 11, reward: { caps: 145, xp: 90, rep: 16 }, minRep: 450 },
+    { id: 'out_q8', title: "Acero sin cadena", desc: "Derrota 8 enemigos.", type: 'kill', target: 8, reward: { caps: 165, xp: 100, rep: 15 }, minRep: 250 },
+    { id: 'out_q9', title: "Trofeo de proscrito", desc: "Derrota 3 legendarios.", type: 'kill_leg', target: 3, reward: { caps: 360, xp: 230, rep: 20 }, minRep: 650 },
+    { id: 'out_q10', title: "Leyendas fuera de la orden", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 430, xp: 260, rep: 22 }, minRep: 850 }
   ],
   settlers: [
-    { id: 'set_q1', title: 'Defensa del asentamiento', desc: 'Derrota 4 enemigos que amenazan a los colonos.', type: 'kill', target: 4, reward: { caps: 70, xp: 50, rep: 12 }, minRep: 0 },
-    { id: 'set_q2', title: 'Semillas de cultivos irradiados', desc: 'Recoge 1 Bolsa de semillas de cultivo.', type: 'collect', itemId: 907, target: 1, reward: { caps: 90, xp: 55, rep: 12 }, minRep: 0 },
-    { id: 'set_q3', title: 'Rutas comerciales', desc: 'Explora 6 zonas buscando rutas.', type: 'explore', target: 6, reward: { caps: 65, xp: 45, rep: 10 }, minRep: 0 },
-    { id: 'set_q4', title: 'Medicina para el refugio', desc: 'Encuentra 1 Caja de medicinas de colono.', type: 'collect', itemId: 908, target: 1, reward: { caps: 150, xp: 100, rep: 15 }, minRep: 200 },
-    { id: 'set_q5', title: 'Protección civil', desc: 'Derrota 8 enemigos.', type: 'kill', target: 8, reward: { caps: 170, xp: 120, rep: 18 }, minRep: 400 },
-    { id: 'set_q6', title: 'Héroes del pueblo', desc: 'Derrota 2 enemigos legendarios.', type: 'kill_leg', target: 2, reward: { caps: 280, xp: 190, rep: 20 }, minRep: 700 }
+    { id: 'set_q1', title: "Nadie toca el asentamiento", desc: "Derrota 4 enemigos que amenazan a los colonos.", type: 'kill', target: 4, reward: { caps: 80, xp: 55, rep: 12 }, minRep: 0 },
+    { id: 'set_q2', title: "Semillas en tierra muerta", desc: "Recoge 1 Bolsa de semillas de cultivo.", type: 'collect', itemId: 907, target: 1, reward: { caps: 100, xp: 65, rep: 15 }, minRep: 0 },
+    { id: 'set_q3', title: "Rutas que alimentan", desc: "Explora 6 zonas buscando rutas seguras.", type: 'explore', target: 6, reward: { caps: 75, xp: 50, rep: 12 }, minRep: 0 },
+    { id: 'set_q4', title: "Herramientas del mañana", desc: "Recupera 1 Caja de herramientas de colono.", type: 'collect', itemId: 908, target: 1, reward: { caps: 160, xp: 110, rep: 18 }, minRep: 200 },
+    { id: 'set_q5', title: "Lo que el desierto deja", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 70, xp: 50, rep: 12 }, minRep: 100 },
+    { id: 'set_q6', title: "Murallas con sangre", desc: "Derrota 8 enemigos.", type: 'kill', target: 8, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 350 },
+    { id: 'set_q7', title: "Más lejos, más seguro", desc: "Explora 10 zonas del mapa.", type: 'explore', target: 10, reward: { caps: 120, xp: 80, rep: 15 }, minRep: 400 },
+    { id: 'set_q8', title: "El huerto no se defiende solo", desc: "Derrota 7 enemigos.", type: 'kill', target: 7, reward: { caps: 140, xp: 90, rep: 14 }, minRep: 250 },
+    { id: 'set_q9', title: "Cuando el Yermo responde", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 320, xp: 200, rep: 20 }, minRep: 650 },
+    { id: 'set_q10', title: "Monstruos a la puerta", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 400, xp: 250, rep: 22 }, minRep: 850 }
   ],
   railroad: [
-    { id: 'rr_q1', title: 'Silenciar amenazas', desc: 'Derrota 5 enemigos en la ruta.', type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'rr_q2', title: 'Paquete del Ferrocarril', desc: 'Recupera 1 Paquete cifrado del Ferrocarril.', type: 'collect', itemId: 909, target: 1, reward: { caps: 120, xp: 80, rep: 15 }, minRep: 0 },
-    { id: 'rr_q3', title: 'Ruta de escape', desc: 'Explora 7 zonas para marcar la ruta.', type: 'explore', target: 7, reward: { caps: 95, xp: 60, rep: 12 }, minRep: 0 },
-    { id: 'rr_q4', title: 'Tarjeta de agente encubierto', desc: 'Encuentra 1 Tarjeta de agente del Ferrocarril.', type: 'collect', itemId: 910, target: 1, reward: { caps: 185, xp: 125, rep: 18 }, minRep: 200 },
-    { id: 'rr_q5', title: 'Operación sombra', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 400 },
-    { id: 'rr_q6', title: 'Objetivo prioritario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 370, xp: 235, rep: 20 }, minRep: 700 }
-  ]
-,
-
+    { id: 'rr_q1', title: "Libertad bajo tierra", desc: "Derrota 5 enemigos que amenazan la red.", type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'rr_q2', title: "Huellas que no se siguen", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'rr_q3', title: "Paquete en tránsito", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'rr_q4', title: "Tarjeta de agente fantasma", desc: "Encuentra 1 Tarjeta de agente del Ferrocarril.", type: 'collect', itemId: 910, target: 1, reward: { caps: 185, xp: 125, rep: 18 }, minRep: 200 },
+    { id: 'rr_q5', title: "El tren no espera", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 130, xp: 85, rep: 14 }, minRep: 150 },
+    { id: 'rr_q6', title: "Silencio operativo", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 350 },
+    { id: 'rr_q7', title: "Rutas que nadie ve", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 155, xp: 95, rep: 16 }, minRep: 450 },
+    { id: 'rr_q8', title: "Sombras en movimiento", desc: "Derrota 8 enemigos.", type: 'kill', target: 8, reward: { caps: 160, xp: 100, rep: 15 }, minRep: 250 },
+    { id: 'rr_q9', title: "Leyendas que no existen", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 360, xp: 230, rep: 20 }, minRep: 650 },
+    { id: 'rr_q10', title: "Fantasmas del Yermo", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 430, xp: 260, rep: 22 }, minRep: 850 }
+  ],
   rnc: [
-    { id: 'rnc_q1', title: 'Patrulla fronteriza', desc: 'Derrota 5 enemigos en territorio RNC.', type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'rnc_q2', title: 'Cartografía militar', desc: 'Explora 8 zonas del mapa.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
-    { id: 'rnc_q3', title: 'Recuperar botín de campo', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
-    { id: 'rnc_q4', title: 'Operación pacificación', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 200 },
-    { id: 'rnc_q5', title: 'Cartografía del desierto', desc: 'Explora 12 zonas.', type: 'explore', target: 12, reward: { caps: 160, xp: 110, rep: 16 }, minRep: 400 },
-    { id: 'rnc_q6', title: 'Amenaza legendaria RNC', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 320, xp: 200, rep: 20 }, minRep: 700 }
+    { id: 'rnc_q1', title: "La ley no se discute", desc: "Derrota 5 enemigos del Yermo.", type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'rnc_q2', title: "Patrulla republicana", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'rnc_q3', title: "Suministros para la causa", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'rnc_q4', title: "Insignia de la República", desc: "Recupera 1 Insignia de la RNC.", type: 'collect', itemId: 930, target: 1, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 200 },
+    { id: 'rnc_q5', title: "El desierto no es tierra de nadie", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 130, xp: 85, rep: 14 }, minRep: 150 },
+    { id: 'rnc_q6', title: "Orden en el caos", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 350 },
+    { id: 'rnc_q7', title: "Fronteras que se defienden", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 155, xp: 95, rep: 16 }, minRep: 450 },
+    { id: 'rnc_q8', title: "Justicia con placa", desc: "Derrota 9 enemigos.", type: 'kill', target: 9, reward: { caps: 170, xp: 105, rep: 15 }, minRep: 250 },
+    { id: 'rnc_q9', title: "Héroes de la RNC", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 360, xp: 230, rep: 20 }, minRep: 650 },
+    { id: 'rnc_q10', title: "Medallas para los vivos", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 430, xp: 260, rep: 22 }, minRep: 850 }
   ],
   strip: [
-    { id: 'str_q1', title: 'Seguridad del Strip', desc: 'Derrota 4 enemigos cerca del Strip.', type: 'kill', target: 4, reward: { caps: 110, xp: 65, rep: 12 }, minRep: 0 },
-    { id: 'str_q2', title: 'Turismo del Yermo', desc: 'Explora 6 zonas.', type: 'explore', target: 6, reward: { caps: 80, xp: 50, rep: 10 }, minRep: 0 },
-    { id: 'str_q3', title: 'Botín de la suerte', desc: 'Consigue 3 botines explorando.', type: 'loot', target: 3, reward: { caps: 90, xp: 55, rep: 10 }, minRep: 0 },
-    { id: 'str_q4', title: 'Limpieza de bandidos', desc: 'Derrota 9 enemigos.', type: 'kill', target: 9, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
-    { id: 'str_q5', title: 'Rutas de clientes', desc: 'Explora 14 zonas.', type: 'explore', target: 14, reward: { caps: 170, xp: 115, rep: 16 }, minRep: 400 },
-    { id: 'str_q6', title: 'Jackpot legendario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 350, xp: 210, rep: 20 }, minRep: 700 }
+    { id: 'str_q1', title: "Problemas en el Strip", desc: "Derrota 5 enemigos que molestan al negocio.", type: 'kill', target: 5, reward: { caps: 110, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'str_q2', title: "Fichas y balas", desc: "Explora 7 zonas del mapa.", type: 'explore', target: 7, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'str_q3', title: "Promoción a la fuerza", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 90, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'str_q4', title: "Ficha de oro falso", desc: "Recupera 1 Ficha de casino marcada.", type: 'collect', itemId: 931, target: 1, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
+    { id: 'str_q5', title: "Lo que brilla en el desierto", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 140, xp: 85, rep: 14 }, minRep: 150 },
+    { id: 'str_q6', title: "Limpieza de mesa", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 220, xp: 145, rep: 18 }, minRep: 350 },
+    { id: 'str_q7', title: "Luces, cámara, balas", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 160, xp: 100, rep: 16 }, minRep: 450 },
+    { id: 'str_q8', title: "Sin apuestas, sin piedad", desc: "Derrota 9 enemigos.", type: 'kill', target: 9, reward: { caps: 175, xp: 105, rep: 15 }, minRep: 250 },
+    { id: 'str_q9', title: "Jackpot mortal", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 380, xp: 240, rep: 20 }, minRep: 650 },
+    { id: 'str_q10', title: "La casa siempre gana", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 450, xp: 270, rep: 22 }, minRep: 850 }
   ],
   institute: [
-    { id: 'ins_q1', title: 'Recolección de datos', desc: 'Explora 7 zonas.', type: 'explore', target: 7, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'ins_q2', title: 'Prueba de combate', desc: 'Derrota 5 enemigos.', type: 'kill', target: 5, reward: { caps: 110, xp: 75, rep: 12 }, minRep: 0 },
-    { id: 'ins_q3', title: 'Muestras de campo', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 95, xp: 60, rep: 10 }, minRep: 0 },
-    { id: 'ins_q4', title: 'Eliminar variables', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 190, xp: 135, rep: 18 }, minRep: 200 },
-    { id: 'ins_q5', title: 'Expansión del relé', desc: 'Explora 13 zonas.', type: 'explore', target: 13, reward: { caps: 175, xp: 120, rep: 16 }, minRep: 400 },
-    { id: 'ins_q6', title: 'Protocolo legendario', desc: 'Derrota 3 legendarios.', type: 'kill_leg', target: 3, reward: { caps: 360, xp: 220, rep: 20 }, minRep: 700 }
+    { id: 'ins_q1', title: "Observación de campo", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 95, xp: 65, rep: 12 }, minRep: 0 },
+    { id: 'ins_q2', title: "Muestra para el laboratorio", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'ins_q3', title: "Interferencia genética", desc: "Derrota 5 enemigos del Yermo.", type: 'kill', target: 5, reward: { caps: 110, xp: 75, rep: 12 }, minRep: 0 },
+    { id: 'ins_q4', title: "Chip de síntesis", desc: "Recupera 1 Chip de síntesis del Instituto.", type: 'collect', itemId: 932, target: 1, reward: { caps: 200, xp: 135, rep: 18 }, minRep: 200 },
+    { id: 'ins_q5', title: "Material para la superficie", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 140, xp: 85, rep: 14 }, minRep: 150 },
+    { id: 'ins_q6', title: "Purga de variables", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 220, xp: 150, rep: 18 }, minRep: 350 },
+    { id: 'ins_q7', title: "Cartografía subterránea", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 160, xp: 100, rep: 16 }, minRep: 450 },
+    { id: 'ins_q8', title: "Hipótesis armada", desc: "Derrota 9 enemigos.", type: 'kill', target: 9, reward: { caps: 175, xp: 110, rep: 15 }, minRep: 250 },
+    { id: 'ins_q9', title: "Anomalía legendaria", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 380, xp: 240, rep: 20 }, minRep: 650 },
+    { id: 'ins_q10', title: "Variables fuera de control", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 450, xp: 270, rep: 22 }, minRep: 850 }
   ],
   atom: [
-    { id: 'atm_q1', title: 'Gloria de la División', desc: 'Derrota 5 enemigos en nombre de Átomo.', type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'atm_q2', title: 'Peregrinaje radiactivo', desc: 'Explora 8 zonas irradiadas del Yermo.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
-    { id: 'atm_q3', title: 'Reliquia de Átomo', desc: 'Encuentra 1 Reliquia de Átomo en el Yermo.', type: 'collect', itemId: 911, target: 1, reward: { caps: 130, xp: 85, rep: 15 }, minRep: 0 },
-    { id: 'atm_q4', title: 'Purificación por fuego', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 190, xp: 130, rep: 18 }, minRep: 200 },
-    { id: 'atm_q5', title: 'Cartografía del cráter', desc: 'Explora 12 zonas.', type: 'explore', target: 12, reward: { caps: 170, xp: 115, rep: 16 }, minRep: 400 },
-    { id: 'atm_q6', title: 'Juicio legendario', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 360, xp: 220, rep: 20 }, minRep: 700 }
+    { id: 'atm_q1', title: "Alabado sea el resplandor", desc: "Derrota 5 enemigos del Yermo.", type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'atm_q2', title: "Peregrinaje irradiado", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'atm_q3', title: "Reliquia de Átomo", desc: "Encuentra 1 Reliquia de Átomo en el Yermo.", type: 'collect', itemId: 911, target: 1, reward: { caps: 130, xp: 85, rep: 15 }, minRep: 0 },
+    { id: 'atm_q4', title: "Bendición nuclear", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 100, xp: 70, rep: 14 }, minRep: 100 },
+    { id: 'atm_q5', title: "Ofrendas del polvo", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 140, xp: 90, rep: 14 }, minRep: 200 },
+    { id: 'atm_q6', title: "Cruzada del cráter", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 350 },
+    { id: 'atm_q7', title: "Más allá del cráter", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 160, xp: 100, rep: 16 }, minRep: 450 },
+    { id: 'atm_q8', title: "Fuego que purifica", desc: "Derrota 9 enemigos.", type: 'kill', target: 9, reward: { caps: 175, xp: 110, rep: 15 }, minRep: 250 },
+    { id: 'atm_q9', title: "Santos legendarios", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 370, xp: 230, rep: 20 }, minRep: 650 },
+    { id: 'atm_q10', title: "Átomo no perdona", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 440, xp: 265, rep: 22 }, minRep: 850 }
   ],
   minutemen: [
-    { id: 'min_q1', title: 'Defensa de colonos', desc: 'Derrota 5 amenazas del Yermo.', type: 'kill', target: 5, reward: { caps: 95, xp: 65, rep: 12 }, minRep: 0 },
-    { id: 'min_q2', title: 'Patrulla de la Commonwealth', desc: 'Explora 7 zonas del mapa.', type: 'explore', target: 7, reward: { caps: 85, xp: 55, rep: 12 }, minRep: 0 },
-    { id: 'min_q3', title: 'Suministros de milicia', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 80, xp: 50, rep: 10 }, minRep: 0 },
-    { id: 'min_q4', title: 'Bandera de los Minutemen', desc: 'Recupera 1 Bandera de los Minutemen.', type: 'collect', itemId: 912, target: 1, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 200 },
-    { id: 'min_q5', title: 'Libertad armada', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 200, xp: 140, rep: 18 }, minRep: 400 },
-    { id: 'min_q6', title: 'Héroes legendarios', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 350, xp: 210, rep: 20 }, minRep: 700 }
+    { id: 'min_q1', title: "Cuando suena la campana", desc: "Derrota 5 enemigos del Yermo.", type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'min_q2', title: "Patrulla de la Commonwealth", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'min_q3', title: "Suministros de milicia", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'min_q4', title: "Bandera que no se rinde", desc: "Recupera 1 Bandera de los Minutemen.", type: 'collect', itemId: 912, target: 1, reward: { caps: 180, xp: 120, rep: 18 }, minRep: 200 },
+    { id: 'min_q5', title: "Lo que queda para el pueblo", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 130, xp: 85, rep: 14 }, minRep: 150 },
+    { id: 'min_q6', title: "Libertad armada", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 350 },
+    { id: 'min_q7', title: "Más allá de la frontera", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 155, xp: 95, rep: 16 }, minRep: 450 },
+    { id: 'min_q8', title: "Campana de guerra", desc: "Derrota 9 enemigos.", type: 'kill', target: 9, reward: { caps: 170, xp: 105, rep: 15 }, minRep: 250 },
+    { id: 'min_q9', title: "Héroes del Yermo", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 360, xp: 230, rep: 20 }, minRep: 650 },
+    { id: 'min_q10', title: "La última línea", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 430, xp: 260, rep: 22 }, minRep: 850 }
   ],
   legion: [
-    { id: 'leg_q1', title: 'Tributo de sangre', desc: 'Derrota 5 enemigos en nombre de César.', type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'leg_q2', title: 'Marcha por el Yermo', desc: 'Explora 8 zonas del mapa.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
-    { id: 'leg_q3', title: 'Botín de conquista', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
-    { id: 'leg_q4', title: 'Águila de César', desc: 'Recupera 1 Águila de bronce de César.', type: 'collect', itemId: 913, target: 1, reward: { caps: 190, xp: 130, rep: 18 }, minRep: 200 },
-    { id: 'leg_q5', title: 'Disciplina de hierro', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 400 },
-    { id: 'leg_q6', title: 'Gloria legendaria', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 360, xp: 220, rep: 20 }, minRep: 700 }
+    { id: 'leg_q1', title: "Tributo de sangre", desc: "Derrota 5 enemigos en nombre de César.", type: 'kill', target: 5, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'leg_q2', title: "Marcha bajo el águila", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'leg_q3', title: "Botín de conquista", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'leg_q4', title: "Águila de César", desc: "Recupera 1 Águila de bronce de César.", type: 'collect', itemId: 913, target: 1, reward: { caps: 190, xp: 130, rep: 18 }, minRep: 200 },
+    { id: 'leg_q5', title: "Espolios de guerra", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 135, xp: 85, rep: 14 }, minRep: 150 },
+    { id: 'leg_q6', title: "Disciplina de hierro", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 210, xp: 145, rep: 18 }, minRep: 350 },
+    { id: 'leg_q7', title: "Más allá del Colorado", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 160, xp: 100, rep: 16 }, minRep: 450 },
+    { id: 'leg_q8', title: "Ave, César", desc: "Derrota 9 enemigos.", type: 'kill', target: 9, reward: { caps: 175, xp: 110, rep: 15 }, minRep: 250 },
+    { id: 'leg_q9', title: "Gloria ante César", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 360, xp: 220, rep: 20 }, minRep: 650 },
+    { id: 'leg_q10', title: "Trofeos dignos del dictador", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 440, xp: 265, rep: 22 }, minRep: 850 }
   ],
   slavers: [
-    { id: 'sla_q1', title: 'Caza de mercancía', desc: 'Derrota 5 humanos del Yermo.', type: 'kill', target: 5, reward: { caps: 110, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'sla_q2', title: 'Rutas de captura', desc: 'Explora 8 zonas del mapa.', type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
-    { id: 'sla_q3', title: 'Botín de negreros', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
-    { id: 'sla_q4', title: 'Collar marcado', desc: 'Recupera 1 Collar de negrero marcado.', type: 'collect', itemId: 914, target: 1, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
-    { id: 'sla_q5', title: 'Expansión del mercado', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 220, xp: 145, rep: 18 }, minRep: 400 },
-    { id: 'sla_q6', title: 'Trofeo legendario', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 370, xp: 230, rep: 20 }, minRep: 700 }
+    { id: 'sla_q1', title: "Mercancía que camina", desc: "Derrota 5 humanos del Yermo.", type: 'kill', target: 5, reward: { caps: 110, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'sla_q2', title: "Rutas de captura", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'sla_q3', title: "Botín de negreros", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
+    { id: 'sla_q4', title: "Collar marcado", desc: "Recupera 1 Collar de negrero marcado.", type: 'collect', itemId: 914, target: 1, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
+    { id: 'sla_q5', title: "Lo que el Yermo no reclama", desc: "Consigue 5 botines explorando.", type: 'loot', target: 5, reward: { caps: 140, xp: 90, rep: 14 }, minRep: 150 },
+    { id: 'sla_q6', title: "Expansión del mercado", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 220, xp: 145, rep: 18 }, minRep: 350 },
+    { id: 'sla_q7', title: "Más allá de la jaula", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 160, xp: 100, rep: 16 }, minRep: 450 },
+    { id: 'sla_q8', title: "Paradise Falls espera", desc: "Derrota 9 enemigos.", type: 'kill', target: 9, reward: { caps: 180, xp: 110, rep: 15 }, minRep: 250 },
+    { id: 'sla_q9', title: "Trofeo de la cadena", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 370, xp: 230, rep: 20 }, minRep: 650 },
+    { id: 'sla_q10', title: "Cadenas para leyendas", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 450, xp: 270, rep: 22 }, minRep: 850 }
   ],
   nucleologos: [
-    { id: 'nuc_q1', title: 'Primera muestra', desc: 'Derrota 5 Zetans (en la nave o en misiones).', type: 'kill', target: 5, reward: { caps: 150, xp: 90, rep: 14 }, minRep: 0 },
-    { id: 'nuc_q2', title: 'Cartografía alienígena', desc: 'Explora 10 zonas del Yermo.', type: 'explore', target: 10, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
-    { id: 'nuc_q3', title: 'Sangre azul', desc: 'Consigue 3 Sangre de Zetan (en Otros).', type: 'collect', itemId: 2400, target: 3, reward: { caps: 200, xp: 120, rep: 16 }, minRep: 100 },
-    { id: 'nuc_q4', title: 'Chip de navegación', desc: 'Recupera 1 Chip de navegación Zetan.', type: 'collect', itemId: 915, target: 1, reward: { caps: 250, xp: 140, rep: 18 }, minRep: 250 },
-    { id: 'nuc_q5', title: 'Incursión en la flota', desc: 'Derrota 12 enemigos.', type: 'kill', target: 12, reward: { caps: 280, xp: 160, rep: 18 }, minRep: 400 },
-    { id: 'nuc_q6', title: 'Amenaza legendaria', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 400, xp: 240, rep: 22 }, minRep: 700 }
+    { id: 'nuc_q1', title: "Esta galaxia no es tan grande", desc: "Derrota 5 enemigos del Yermo. Los Nucleólogos necesitan datos de combate de campo.", type: 'kill', target: 5, reward: { caps: 150, xp: 90, rep: 14 }, minRep: 0 },
+    { id: 'nuc_q2', title: "La encuesta dice... abducción", desc: "Explora 10 zonas del Yermo en busca de señales de actividad Zetan.", type: 'explore', target: 10, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'nuc_q3', title: "Aterrizaje forzoso", desc: "Consigue 4 botines explorando. Puede haber tecnología caída del cielo.", type: 'loot', target: 4, reward: { caps: 110, xp: 75, rep: 13 }, minRep: 0 },
+    { id: 'nuc_q4', title: "Sácame hasta la última gota", desc: "Consigue 3× Sangre de Zetan (en Otros). Solo se obtiene a bordo de naves Zetan.", type: 'collect', itemId: 2400, target: 3, reward: { caps: 200, xp: 120, rep: 16 }, minRep: 100 },
+    { id: 'nuc_q5', title: "La verdad está ahí fuera", desc: "Recupera 1 Registro de abducción (aparece solo con esta misión).", type: 'collect', itemId: 916, target: 1, reward: { caps: 220, xp: 130, rep: 17 }, minRep: 150 },
+    { id: 'nuc_q6', title: "No es de este mundo", desc: "Recupera 1 Chip de navegación Zetan del Yermo.", type: 'collect', itemId: 915, target: 1, reward: { caps: 250, xp: 140, rep: 18 }, minRep: 250 },
+    { id: 'nuc_q7', title: "Encuentros cercanos", desc: "Recupera 1 Muestra de tejido Zetan del Yermo.", type: 'collect', itemId: 917, target: 1, reward: { caps: 260, xp: 150, rep: 18 }, minRep: 350 },
+    { id: 'nuc_q8', title: "Conexión con la nave madre", desc: "Derrota 12 enemigos. Cada baja alimenta el archivo de amenazas alienígenas.", type: 'kill', target: 12, reward: { caps: 280, xp: 160, rep: 18 }, minRep: 450 },
+    { id: 'nuc_q9', title: "Caminan entre nosotros", desc: "Derrota 3 enemigos legendarios. Los Nucleólogos sospechan infiltración de alto nivel.", type: 'kill_leg', target: 3, reward: { caps: 400, xp: 240, rep: 22 }, minRep: 650 },
+    { id: 'nuc_q10', title: "Día de la Independencia", desc: "Derrota 20 enemigos del Yermo. Demuestra que la Tierra aún se defiende.", type: 'kill', target: 20, reward: { caps: 480, xp: 260, rep: 22 }, minRep: 850 }
   ]
-
 };
 
 // Misiones extra para más variedad (añadidas a cada facción)
 function __expandFactionQuests() {
-  const extra = {
-    bos: [
-      { id: 'bos_q7', title: 'Reconocimiento corto', desc: 'Explora 5 zonas del mapa.', type: 'explore', target: 5, reward: { caps: 70, xp: 45, rep: 10 }, minRep: 0 },
-      { id: 'bos_q8', title: 'Baja de hostiles', desc: 'Derrota 6 enemigos del Yermo.', type: 'kill', target: 6, reward: { caps: 110, xp: 70, rep: 12 }, minRep: 100 },
-      { id: 'bos_q9', title: 'Recuperación de botín', desc: 'Consigue 5 botines explorando.', type: 'loot', target: 5, reward: { caps: 130, xp: 80, rep: 14 }, minRep: 300 }
-    ],
-    enclave: [
-      { id: 'enc_q7', title: 'Cartografía de zona', desc: 'Explora 6 zonas del mapa.', type: 'explore', target: 6, reward: { caps: 85, xp: 55, rep: 10 }, minRep: 0 },
-      { id: 'enc_q8', title: 'Neutralizar hostiles', desc: 'Derrota 7 enemigos del Yermo.', type: 'kill', target: 7, reward: { caps: 120, xp: 80, rep: 12 }, minRep: 100 },
-      { id: 'enc_q9', title: 'Recuperar material', desc: 'Consigue 5 botines explorando.', type: 'loot', target: 5, reward: { caps: 140, xp: 85, rep: 14 }, minRep: 300 }
-    ],
-    outcasts: [
-      { id: 'out_q7', title: 'Patrulla de exploración', desc: 'Explora 5 zonas del mapa.', type: 'explore', target: 5, reward: { caps: 75, xp: 50, rep: 10 }, minRep: 0 },
-      { id: 'out_q8', title: 'Emboscada ofensiva', desc: 'Derrota 6 enemigos del Yermo.', type: 'kill', target: 6, reward: { caps: 115, xp: 75, rep: 12 }, minRep: 100 }
-    ],
-    settlers: [
-      { id: 'set_q7', title: 'Caza de alimañas', desc: 'Derrota 4 enemigos del Yermo.', type: 'kill', target: 4, reward: { caps: 60, xp: 40, rep: 10 }, minRep: 0 },
-      { id: 'set_q8', title: 'Recogida de botín', desc: 'Consigue 4 botines explorando.', type: 'loot', target: 4, reward: { caps: 70, xp: 50, rep: 12 }, minRep: 100 }
-    ],
-    railroad: [
-      { id: 'rr_q7', title: 'Marcar camino seguro', desc: 'Explora 5 zonas del mapa.', type: 'explore', target: 5, reward: { caps: 80, xp: 55, rep: 10 }, minRep: 0 },
-      { id: 'rr_q8', title: 'Eliminar rastreadores', desc: 'Derrota 6 enemigos del Yermo.', type: 'kill', target: 6, reward: { caps: 120, xp: 80, rep: 12 }, minRep: 100 }
-    ],
-    rnc: [
-      { id: 'rnc_q7', title: 'Aplicar la ley', desc: 'Derrota 5 enemigos del Yermo.', type: 'kill', target: 5, reward: { caps: 90, xp: 60, rep: 10 }, minRep: 0 },
-      { id: 'rnc_q8', title: 'Inspección de rutas', desc: 'Explora 8 zonas del mapa.', type: 'explore', target: 8, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 100 }
-    ],
-    strip: [
-      { id: 'str_q7', title: 'Echar a problemáticos', desc: 'Derrota 5 enemigos del Yermo.', type: 'kill', target: 5, reward: { caps: 100, xp: 60, rep: 10 }, minRep: 0 },
-      { id: 'str_q8', title: 'Promoción del Strip', desc: 'Explora 7 zonas del mapa.', type: 'explore', target: 7, reward: { caps: 90, xp: 55, rep: 12 }, minRep: 100 }
-    ],
-    institute: [
-      { id: 'ins_q7', title: 'Observación de campo', desc: 'Explora 6 zonas del mapa.', type: 'explore', target: 6, reward: { caps: 95, xp: 65, rep: 10 }, minRep: 0 },
-      { id: 'ins_q8', title: 'Eliminar interferencias', desc: 'Derrota 6 enemigos del Yermo.', type: 'kill', target: 6, reward: { caps: 115, xp: 75, rep: 12 }, minRep: 100 }
-    ]
-  };
-  for (let fid in extra) {
-    if (FACTION_QUEST_POOL[fid]) FACTION_QUEST_POOL[fid] = FACTION_QUEST_POOL[fid].concat(extra[fid]);
-  }
+  // Misiones extra ya integradas en FACTION_QUEST_POOL
 }
 __expandFactionQuests();
 
@@ -5001,7 +5020,7 @@ function openAdditionalContentUI() {
   document.getElementById('modal-body').innerHTML = `
     <h2 style="color:var(--accent);text-align:center;margin-top:0;">📦 Contenido Adicional</h2>
     <p style="font-size:12px;color:#8d9880;text-align:center;">Expansiones disponibles</p>
-    <button style="width:100%;margin:8px 0;border-color:#66ffaa;color:#66ffaa;font-weight:bold;" onclick="openZetanDlcInfo()">🛸 DLC: Los Zetans</button>
+    <button style="width:100%;margin:8px 0;border-color:#66ffaa;color:#66ffaa;font-weight:bold;" onclick="openZetanDlcInfo()">🛸 DLC: Mothership Zeta</button>
     <button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>
     <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
   `;
@@ -5013,16 +5032,17 @@ function openZetanDlcInfo() {
     ? ('Nucleólogos desbloqueados · Abducciones: ' + (P.zetanAbductions || 0))
     : 'Aún no has escapado de una nave';
   document.getElementById('modal-body').innerHTML = `
-    <h2 style="color:#66ffaa;text-align:center;margin-top:0;">🛸 DLC: Los Zetans</h2>
+    <h2 style="color:#66ffaa;text-align:center;margin-top:0;">🛸 Mothership Zeta</h2>
+    <p style="text-align:center;font-size:11px;color:#8d9880;margin:0 0 8px 0;">Expansión · Wasteland</p>
     <div class="item" style="border-color:#66ffaa;">
       <span style="font-size:12px;color:#8d9880;">
-        En una ubicación remota del Yermo puedes ser abducido por una nave Zetan.
-        Explora el interior (mapa 7×7 procedural), combate emboscadas constantes
-        de alienígenas y recoge <b>Sangre de Zetan</b> y equipo exclusivo.
-        Tu objetivo es alcanzar la escotilla de escape. Si mueres a bordo, pierdes
-        toda la Sangre de Zetan y reapareces en la entrada de la nave.
-        Tras escapar al menos una vez se desbloquea la facción <b>Los Nucleólogos</b>,
-        que compra sangre y ofrece misiones y tienda relacionadas con los Zetans.
+        Una señal extraña marca el cielo del Yermo. En coordenadas remotas puedes ser
+        <b>abducido</b> por una nave Zetan: un mapa limitado y procedural, emboscadas constantes
+        y tecnología que no pertenece a este mundo.
+        Recoge <b>Sangre de Zetan</b> y armamento alienígena; alcanza la escotilla de escape
+        para volver a tierra. Si mueres a bordo, pierdes toda la sangre y despiertas en la entrada.
+        Tras escapar al menos una vez se revela <b>Los Nucleólogos</b> — científicos obsesionados
+        con lo que cae del cielo: misiones, tienda exclusiva y un mercado de muestras alienígenas.
       </span><br><br>
       <span style="font-size:11px;color:#66ffaa;">Estado: ${st}</span><br>
       <span style="font-size:11px;color:#8d9880;">Sitio de abducción: [${ABDUCTION_SITE.x >= 0 ? '+' : ''}${ABDUCTION_SITE.x}, ${ABDUCTION_SITE.y >= 0 ? '+' : ''}${ABDUCTION_SITE.y}]</span><br>
@@ -5090,7 +5110,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.4.0</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.4.1</div>
   `;
   m.classList.add('show');
 }
