@@ -924,7 +924,7 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
     <button class="btn-settings panel" title="Ajustes" onclick="openSettings()">⚙</button>
   </div>
 
-  <audio id="radio-audio" preload="auto" src="./audio/RadioWasteland1.mp3"></audio>
+  <audio id="radio-audio" preload="auto"></audio>
   <audio id="ambient-audio" loop preload="auto" src="./audio/AmbientMap.mp3"></audio>
   <audio id="casino-audio" loop preload="auto" src="./audio/CasinoStrip.mp3"></audio>
 </div>
@@ -7745,8 +7745,7 @@ const RADIO_STATIONS = {
 let radioPlaying = false;
 let radioStationId = null;
 let radioTrackIndex = 0;
-let radioPlayToken = 0; // evita carreras al cambiar de emisora
-let radioPlayTimer = null;
+let radioGen = 0; // generación: invalida callbacks viejos al cambiar pista/emisora
 
 function openRadioTuneUI() {
   let active = !!(radioPlaying && radioStationId && RADIO_STATIONS[radioStationId]);
@@ -7807,39 +7806,41 @@ function getRadioAudio() {
   return audio;
 }
 
-function bindRadioEnded() {
-  let audio = getRadioAudio();
-  audio.onended = function() {
-    if (!radioPlaying || !radioStationId) return;
-    let st = RADIO_STATIONS[radioStationId];
-    if (!st) return;
-    if (st.loopTrack) {
-      audio.currentTime = 0;
-      audio.play().catch(() => {});
-      return;
-    }
-    // Siguiente pista y ciclo 1→8→1
-    radioTrackIndex = (radioTrackIndex + 1) % st.tracks.length;
-    playCurrentRadioTrack(false);
-  };
+function radioResolveSrc(src) {
+  try { return new URL(src, window.location.href).href; }
+  catch (e) { return src; }
 }
 
+function updateRadioStatusUI(userGesture, st, trackIdx) {
+  let stEl = document.getElementById('music-status');
+  let extra = (st.tracks.length > 1) ? (' · Transmisión ' + (trackIdx + 1) + '/' + st.tracks.length) : '';
+  if (stEl) stEl.textContent = '♪ En antena: ' + st.name + extra;
+  if (userGesture) logMsg(st.name + ' sintonizada' + (st.tracks.length > 1 ? ' (pista ' + (trackIdx + 1) + ')' : '') + '.');
+  if (document.querySelector('.radio-panel')) openRadioTuneUI();
+}
+
+/** Reproduce la pista actual de la emisora activa. Único punto que toca audio.src */
 function playCurrentRadioTrack(userGesture) {
-  let st = RADIO_STATIONS[radioStationId];
-  if (!st) return;
-  let token = ++radioPlayToken;
-  let intendedStation = radioStationId;
-  let intendedTrack = radioTrackIndex;
+  let stationId = radioStationId;
+  let st = RADIO_STATIONS[stationId];
+  if (!st || !st.tracks || !st.tracks.length) return;
+
+  let trackIdx = radioTrackIndex % st.tracks.length;
+  if (trackIdx < 0) trackIdx += st.tracks.length;
+  radioTrackIndex = trackIdx;
+
+  let gen = ++radioGen;
   let audio = getRadioAudio();
-  if (radioPlayTimer) { clearTimeout(radioPlayTimer); radioPlayTimer = null; }
+
+  // Limpiar handlers previos
   audio.oncanplay = null;
-  bindRadioEnded();
+  audio.oncanplaythrough = null;
+  audio.onended = null;
+  audio.onerror = null;
+  try { audio.pause(); } catch (e) {}
 
-  let src = st.tracks[radioTrackIndex % st.tracks.length];
-  let fullSrc = src;
-  try { fullSrc = new URL(src, window.location.href).href; } catch (e) {}
-
-  audio.loop = !!st.loopTrack;
+  let fullSrc = radioResolveSrc(st.tracks[trackIdx]);
+  audio.loop = false;
   audio.volume = (P.volMusic !== undefined ? P.volMusic : 0.6);
   pauseAmbientMusic();
   let cas = document.getElementById('casino-audio');
@@ -7847,94 +7848,89 @@ function playCurrentRadioTrack(userGesture) {
 
   radioPlaying = true;
 
-  const finishOk = () => {
-    if (token !== radioPlayToken) return;
-    radioPlaying = true;
-    radioStationId = intendedStation;
-    pauseAmbientMusic();
-    let stEl = document.getElementById('music-status');
-    if (stEl) {
-      let extra = (st.tracks.length > 1) ? (' · Transmisión ' + (intendedTrack + 1) + '/' + st.tracks.length) : '';
-      stEl.textContent = '♪ En antena: ' + st.name + extra;
-    }
-    if (userGesture) logMsg(st.name + ' sintonizada' + (st.tracks.length > 1 ? ' (pista ' + (intendedTrack + 1) + ')' : '') + '.');
-    if (document.querySelector('.radio-panel')) openRadioTuneUI();
-  };
-
-  const tryPlay = () => {
-    if (token !== radioPlayToken) return;
-    if (radioStationId !== intendedStation) return;
+  let played = false;
+  const doPlay = () => {
+    if (gen !== radioGen) return;
+    if (played) return;
+    played = true;
     let p = audio.play();
     if (!p || typeof p.then !== 'function') {
-      // navegadores viejos
-      finishOk();
+      updateRadioStatusUI(userGesture, st, trackIdx);
       return;
     }
-    p.then(finishOk).catch((err) => {
-      if (token !== radioPlayToken) return;
-      if (radioStationId !== intendedStation) return;
-      // AbortError: carga interrumpida, reintentar una vez
-      if (err && (err.name === 'AbortError' || err.name === 'NotAllowedError')) {
-        radioPlayTimer = setTimeout(() => {
-          if (token !== radioPlayToken) return;
-          audio.play().then(finishOk).catch((err2) => {
-            if (token !== radioPlayToken) return;
-            console.warn('radio retry', err2);
-            let stEl = document.getElementById('music-status');
-            if (stEl) stEl.textContent = 'No se pudo reproducir. Toca de nuevo ▶ Sintonizar.';
-            logMsg('No se pudo iniciar la radio. Prueba otra vez.');
-            // NO apagar radioPlaying del todo: deja el botón Apagar y no forces ambiente si el usuario sigue en panel
-          });
-        }, 200);
+    p.then(() => {
+      if (gen !== radioGen) return;
+      radioPlaying = true;
+      pauseAmbientMusic();
+      updateRadioStatusUI(userGesture, st, trackIdx);
+    }).catch((err) => {
+      if (gen !== radioGen) return;
+      played = false; // permitir reintento
+      if (err && err.name === 'AbortError') {
+        setTimeout(() => {
+          if (gen !== radioGen) return;
+          audio.play().then(() => {
+            if (gen !== radioGen) return;
+            radioPlaying = true;
+            pauseAmbientMusic();
+            updateRadioStatusUI(false, st, trackIdx);
+          }).catch(() => {});
+        }, 180);
         return;
       }
-      console.warn('radio', err);
-      radioPlaying = false;
-      radioStationId = null;
-      startAmbientMusic();
+      console.warn('radio play', err);
       let stEl = document.getElementById('music-status');
-      if (stEl) stEl.textContent = 'No se pudo reproducir. ¿Están los MP3 en audio/?';
-      logMsg('No se pudo iniciar la radio. Comprueba los archivos en audio/.');
-      if (document.querySelector('.radio-panel')) openRadioTuneUI();
+      if (stEl) stEl.textContent = 'No se pudo reproducir esta pista. Prueba Siguiente o otra emisora.';
+      logMsg('Error de radio en pista ' + (trackIdx + 1) + '. ¿Existe el MP3 en audio/?');
     });
   };
 
-  // Cargar fuente y esperar a que esté lista
+  audio.onended = function() {
+    if (gen !== radioGen) return;
+    if (!radioPlaying || radioStationId !== stationId) return;
+    let cur = RADIO_STATIONS[radioStationId];
+    if (!cur) return;
+    radioTrackIndex = (radioTrackIndex + 1) % cur.tracks.length;
+    playCurrentRadioTrack(false);
+  };
+
+  audio.onerror = function() {
+    if (gen !== radioGen) return;
+    console.warn('radio load error', st.tracks[trackIdx]);
+    logMsg('No se pudo cargar: ' + st.tracks[trackIdx]);
+  };
+
+  // Un solo load → play cuando esté listo (sin doble disparo)
+  audio.oncanplay = function() {
+    if (gen !== radioGen) return;
+    audio.oncanplay = null;
+    doPlay();
+  };
+
   try {
-    let needLoad = true;
-    try {
-      if (audio.src && (audio.src === fullSrc || audio.src.indexOf(src.replace('./', '')) !== -1) && audio.readyState >= 2) {
-        needLoad = false;
-      }
-    } catch (e) {}
-    if (needLoad) {
-      audio.src = fullSrc;
-      audio.load();
-      audio.oncanplay = function() {
-        if (token !== radioPlayToken) return;
-        audio.oncanplay = null;
-        tryPlay();
-      };
-      radioPlayTimer = setTimeout(tryPlay, 500);
-    } else {
-      try { audio.currentTime = 0; } catch (e) {}
-      tryPlay();
-    }
+    audio.src = fullSrc;
+    audio.load();
   } catch (e) {
     audio.src = fullSrc;
-    radioPlayTimer = setTimeout(tryPlay, 400);
   }
+
+  // Respaldo si oncanplay no dispara (algunos WebViews Android)
+  setTimeout(() => {
+    if (gen !== radioGen) return;
+    if (!played) doPlay();
+  }, 700);
 }
 
 function startRadioStation(stationId) {
   let st = RADIO_STATIONS[stationId];
   if (!st) return;
   let prev = radioStationId;
+  // Nueva generación invalida cualquier play en curso
+  radioGen++;
   let audio = getRadioAudio();
-  // Invalidar plays previos SIN consumir el token del play nuevo (playCurrentRadioTrack lo incrementa)
-  if (radioPlayTimer) { clearTimeout(radioPlayTimer); radioPlayTimer = null; }
   audio.oncanplay = null;
   audio.onended = null;
+  audio.onerror = null;
   try { audio.pause(); } catch (e) {}
   pauseAmbientMusic();
   let cas = document.getElementById('casino-audio');
@@ -7955,19 +7951,14 @@ function radioNextTrack() {
     return;
   }
   let st = RADIO_STATIONS[radioStationId];
-  radioPlaying = true;
   if (st.tracks.length <= 1) {
+    // reiniciar la única pista
     let audio = getRadioAudio();
     try { audio.currentTime = 0; audio.play().catch(() => {}); } catch (e) {}
     logMsg(st.name + ": reiniciando emisión.");
-    if (document.querySelector('.radio-panel')) openRadioTuneUI();
     return;
   }
   radioTrackIndex = (radioTrackIndex + 1) % st.tracks.length;
-  let audio = getRadioAudio();
-  let src = st.tracks[radioTrackIndex];
-  try { audio.src = new URL(src, window.location.href).href; } catch (e) { audio.src = src; }
-  audio.load();
   if (document.querySelector('.radio-panel')) openRadioTuneUI();
   playCurrentRadioTrack(true);
 }
@@ -7978,26 +7969,22 @@ function radioPrevTrack() {
     return;
   }
   let st = RADIO_STATIONS[radioStationId];
-  radioPlaying = true;
   if (st.tracks.length <= 1) {
     let audio = getRadioAudio();
     try { audio.currentTime = 0; audio.play().catch(() => {}); } catch (e) {}
     logMsg(st.name + ": reiniciando emisión.");
-    if (document.querySelector('.radio-panel')) openRadioTuneUI();
     return;
   }
   radioTrackIndex = (radioTrackIndex - 1 + st.tracks.length) % st.tracks.length;
-  let audio = getRadioAudio();
-  let src = st.tracks[radioTrackIndex];
-  try { audio.src = new URL(src, window.location.href).href; } catch (e) { audio.src = src; }
-  audio.load();
   if (document.querySelector('.radio-panel')) openRadioTuneUI();
   playCurrentRadioTrack(true);
 }
 
 function pauseAmbientMusic() {
   let amb = document.getElementById('ambient-audio');
-  if (amb) amb.pause();
+  if (amb) {
+    try { amb.pause(); } catch (e) {}
+  }
 }
 
 function startAmbientMusic() {
@@ -8014,33 +8001,30 @@ function startAmbientMusic() {
 }
 
 function startRadioMusic() {
-  // compat: arranca Wasteland
   startRadioStation('wasteland');
 }
 
 function stopRadioMusic() {
-  radioPlayToken++; // cancela plays pendientes
-  if (radioPlayTimer) { clearTimeout(radioPlayTimer); radioPlayTimer = null; }
+  radioGen++; // cancela plays pendientes
   let audio = document.getElementById('radio-audio');
   if (audio) {
     try { audio.pause(); audio.currentTime = 0; } catch (e) {}
     audio.onended = null;
     audio.oncanplay = null;
+    audio.onerror = null;
   }
   radioPlaying = false;
   radioStationId = null;
   let st = document.getElementById('music-status');
   if (st) st.textContent = "Radio apagada.";
   logMsg("Radio apagada.");
-  // Si estamos en el Strip sin radio, casino; si no, ambiente
   if (casinoActive) {
-    // reanudar casino solo si no hay radio
     let cas = document.getElementById('casino-audio');
     if (cas) cas.play().catch(() => {});
   } else {
     startAmbientMusic();
   }
-  if (document.getElementById('music-status') && document.querySelector('.radio-panel')) {
+  if (document.querySelector('.radio-panel')) {
     try { openRadioTuneUI(); } catch (e) {}
   }
 }
