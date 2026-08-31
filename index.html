@@ -1225,6 +1225,30 @@ const DB_ITEMS = [
   { id: 2302, name: "Hipnotron MK2", type: "weapon", damage: 1, ammoType: "Célula de Hipnotron", weight: 4.5, value: 5000, stackable: false, factionOnly: true, faction: "slavers", hypnoChance: 0.40, hypno: true, effectDesc: "40% de acabar el combate hipnotizando a un humano. Sin XP, loot ni chapas; otorga 1× Esclavo. Falla al 100% en no humanos." },
   { id: 2303, name: "Hipnotron MK3", type: "weapon", damage: 1, ammoType: "Célula de Hipnotron", weight: 5, value: 10000, stackable: false, factionOnly: true, faction: "slavers", hypnoChance: 0.60, hypno: true, effectDesc: "60% de acabar el combate hipnotizando a un humano. Sin XP, loot ni chapas; otorga 1× Esclavo. Falla al 100% en no humanos." },
   { id: 2304, name: "Célula de Hipnotron", type: "ammo", ammoKey: "Célula de Hipnotron", qty: 5, weight: 0.1, value: 100, stackable: true, factionOnly: true, faction: "slavers" },
+  
+  // --- DLC Zetans ---
+  { id: 2400, name: "Sangre de Zetan", type: "other", weight: 0.1, value: 100, stackable: true, zetanBlood: true, noCommerceSell: true, effectDesc: "Sangre alienígena. Véndela a los Nucleólogos: 100 chapas + 5 rep por unidad. Se pierde si mueres en la nave." },
+  { id: 2401, name: "Blaster alienígena", type: "weapon", damage: 48, ammoType: "Célula energética alienígena", weight: 2.5, value: 750, stackable: false, zetanLoot: true },
+  { id: 2402, name: "Blaster alienígena mejorado", type: "weapon", damage: 62, ammoType: "Célula energética alienígena", weight: 3, value: 1100, stackable: false, zetanLoot: true },
+  { id: 2410, name: "Blaster alienígena de élite", type: "weapon", damage: 78, ammoType: "Célula energética alienígena", weight: 3.2, value: 1600, stackable: false, zetanLoot: true },
+  { id: 2411, name: "Blaster de destello Zetan", type: "weapon", damage: 55, ammoType: "Célula energética alienígena", weight: 2.8, value: 980, stackable: false, zetanLoot: true },
+  { id: 2412, name: "Pistola de rayos Zetan", type: "weapon", damage: 58, ammoType: "Célula energética alienígena", weight: 3, value: 1050, stackable: false, zetanLoot: true },
+  { id: 2413, name: "Rifle de disrupción Zetan", type: "weapon", damage: 72, ammoType: "Módulo de alimentación alienígena", weight: 7, value: 1400, stackable: false, zetanLoot: true },
+  { id: 2414, name: "Cañón de iones Zetan", type: "weapon", damage: 88, ammoType: "Módulo de alimentación alienígena", weight: 9, value: 1900, stackable: false, zetanLoot: true },
+  { id: 2415, name: "Lanzador de plasma alienígena", type: "weapon", damage: 80, ammoType: "Módulo de alimentación alienígena", weight: 8, value: 1750, stackable: false, zetanLoot: true },
+  { id: 2416, name: "Rifle de haz concentrado", type: "weapon", damage: 95, ammoType: "Módulo de alimentación alienígena", weight: 10, value: 2200, stackable: false, zetanLoot: true },
+  { id: 2417, name: "Desintegrador Zetan", type: "weapon", damage: 110, ammoType: "Módulo de alimentación alienígena", weight: 11, value: 2800, stackable: false, zetanLoot: true },
+  { id: 2418, name: "Pistola de pulso alienígena", type: "weapon", damage: 50, ammoType: "Módulo de alimentación alienígena", weight: 3.5, value: 900, stackable: false, zetanLoot: true },
+  { id: 2419, name: "Arma de contención Zetan", type: "weapon", damage: 65, ammoType: "Módulo de alimentación alienígena", weight: 6, value: 1300, stackable: false, zetanLoot: true },
+  { id: 2403, name: "Traje espacial Zetan", type: "armor", def: 35, weight: 8, value: 800, stackable: false, factionOnly: true, faction: "nucleologos", radRes: 40, zetanLoot: true },
+  { id: 2404, name: "Casco de sonda Zetan", type: "armor", def: 18, weight: 2, value: 450, stackable: false, factionOnly: true, faction: "nucleologos", radRes: 15, zetanLoot: true },
+  { id: 2405, name: "Dispositivo de abducción", type: "other", weight: 0.5, value: 300, stackable: true, zetanLoot: true, effectDesc: "Fragmento de tecnología Zetan. Coleccionable / venta." },
+  { id: 2406, name: "Cristal de energía alienígena", type: "junk", weight: 0.3, value: 80, stackable: true, zetanLoot: true },
+  { id: 2407, name: "Implante neural Zetan", type: "other", weight: 0.2, value: 500, stackable: true, zetanLoot: true, effectDesc: "Tecnología de control mental. Válido para Nucleólogos." },
+  { id: 2420, name: "Célula energética alienígena", type: "ammo", ammoKey: "Célula energética alienígena", qty: 12, weight: 0.1, value: 40, stackable: true, zetanLoot: true },
+  { id: 2421, name: "Módulo de alimentación alienígena", type: "ammo", ammoKey: "Módulo de alimentación alienígena", qty: 8, weight: 0.25, value: 55, stackable: true, zetanLoot: true },
+  { id: 915, name: "Chip de navegación Zetan", type: "other", weight: 0.2, value: 50, stackable: true, questItem: true },
+
   { id: 2305, name: "Esclavo", type: "other", weight: 0, value: 500, stackable: true, slave: true, noCommerceSell: true, effectDesc: "Mercancía viva. Véndela en Paradise Falls (Base → Vender Esclavos) por 500 chapas y reputación. No se vende en Comercio." },
   { id: 2311, name: "Látigo de negrero", type: "weapon", damage: 22, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 180, stackable: false, factionOnly: true, faction: "slavers" },
   { id: 2312, name: "Chaleco de negrero", type: "armor", def: 20, weight: 7, value: 220, stackable: false, factionOnly: true, faction: "slavers", radRes: 0 },
@@ -1712,7 +1736,7 @@ let P = {
   weather: 'day',
   volMusic: 0.6,
   volSfx: 0.7,
-  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0, slavers: 0 },
+  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0, slavers: 0, nucleologos: 0 },
   chips: 0,
   playerSettlement: {
     claimed: false,
@@ -1742,7 +1766,7 @@ let P = {
   perkPts: 0,
   special: { S: 1, P: 1, E: 1, C: 1, I: 1, A: 1, L: 1 },
   perks: {},
-  ammoBox: { "Célula de Hipnotron": 0, ".38": 24, "Cartucho de escopeta": 6, "Célula de microfusión": 0, "5.56mm": 0, "10mm": 10, ".44 Magnum": 0, "Bengala": 0, "Cartucho de plasma": 0, "Célula de energía": 0, "Onda Gamma": 0, "Dardo": 0, "Clavo": 0, ".45 ACP": 0, ".308": 0, "Cartucho de 2mm": 0, ".45-70": 0, "5mm": 0, "Misil": 0, "Combustible de lanzallamas": 0, "Mini Nukes": 0, "Bala de cañón": 0, "7.62mm": 0, "Núcleo de fusión": 0, "Célula criogénica": 0 },
+  ammoBox: { "Célula de Hipnotron": 0, ".38": 24, "Cartucho de escopeta": 6, "Célula de microfusión": 0, "5.56mm": 0, "10mm": 10, ".44 Magnum": 0, "Bengala": 0, "Cartucho de plasma": 0, "Célula de energía": 0, "Onda Gamma": 0, "Dardo": 0, "Clavo": 0, ".45 ACP": 0, ".308": 0, "Cartucho de 2mm": 0, ".45-70": 0, "5mm": 0, "Misil": 0, "Combustible de lanzallamas": 0, "Mini Nukes": 0, "Bala de cañón": 0, "7.62mm": 0, "Núcleo de fusión": 0, "Célula criogénica": 0, "Célula energética alienígena": 0, "Módulo de alimentación alienígena": 0 },
   inv: [
     { uid: 101, id: 1, qty: 1, mods: [], itemLevel: 1 },
     { uid: 102, id: 5, qty: 1, mods: [], itemLevel: 1 },
@@ -1837,6 +1861,27 @@ const ENEMIES = [
   { name: "Courser del Instituto", level: 24, hp: 180, dmg: 34, loot: [2071, 13, 28], caps: [70, 130] },
   { name: "Synth defectuoso", level: 6, hp: 55, dmg: 12, loot: [13, 22], caps: [12, 28] },
 
+];
+
+
+const ZETAN_ENEMIES = [
+  { name: "Zetan explorador", level: 5, hp: 45, dmg: 12, loot: [2400, 2420, 2406, 7], caps: [10, 25], zetan: true },
+  { name: "Zetan soldado", level: 8, hp: 70, dmg: 16, loot: [2400, 2420, 2401, 13], caps: [15, 35], zetan: true },
+  { name: "Zetan técnico", level: 10, hp: 85, dmg: 14, loot: [2400, 2421, 2406, 2405], caps: [18, 40], zetan: true },
+  { name: "Zetan centinela", level: 12, hp: 100, dmg: 20, loot: [2400, 2420, 2411, 13], caps: [22, 50], zetan: true },
+  { name: "Zetan genético", level: 14, hp: 115, dmg: 22, loot: [2400, 2421, 2412, 28], caps: [28, 55], zetan: true },
+  { name: "Zetan comandante", level: 18, hp: 150, dmg: 28, loot: [2400, 2421, 2413, 2402], caps: [40, 80], zetan: true },
+  { name: "Zetan de élite", level: 22, hp: 180, dmg: 32, loot: [2400, 2421, 2410, 2415], caps: [50, 95], zetan: true },
+  { name: "Zetan experimental", level: 16, hp: 130, dmg: 26, loot: [2400, 2420, 2418, 2405], caps: [35, 70], zetan: true },
+  { name: "Drone Zetan", level: 6, hp: 50, dmg: 14, loot: [2420, 2406, 13], caps: [12, 28], zetan: true },
+  { name: "Sonda de abducción", level: 9, hp: 75, dmg: 15, loot: [2400, 2420, 2405, 2406], caps: [16, 38], zetan: true },
+  { name: "Zetan inquisidor", level: 20, hp: 165, dmg: 30, loot: [2400, 2421, 2414, 2419], caps: [45, 90], zetan: true },
+  { name: "Zetan aniquilador", level: 25, hp: 220, dmg: 38, loot: [2400, 2421, 2416, 2417], caps: [70, 130], zetan: true }
+];
+const ZETAN_LEGENDARY = [
+  { name: "Zetan Señor de la Flota", level: 20, hp: 280, dmg: 40, loot: [2400, 2410, 2414, 2421], caps: [100, 200], zetan: true },
+  { name: "Zetan Primordial", level: 25, hp: 320, dmg: 45, loot: [2400, 2416, 2417, 2421], caps: [120, 240], zetan: true },
+  { name: "Núcleo de mando Zetan", level: 28, hp: 360, dmg: 48, loot: [2400, 2417, 2415, 2420], caps: [140, 260], zetan: true }
 ];
 
 const LEGENDARY_ENEMIES = [
@@ -3780,6 +3825,7 @@ const FACTIONS = {
   minutemen: { id: 'minutemen', name: 'Los Minutemen', color: '#44aaff', shopLevels: [100, 250, 500, 750, 1000] },
   legion: { id: 'legion', name: 'La Legión de César', color: '#cc4422', shopLevels: [100, 250, 500, 750, 1000] },
   slavers: { id: 'slavers', name: 'Los Negreros', color: '#aa6644', shopLevels: [100, 250, 500, 750, 1000] },
+  nucleologos: { id: 'nucleologos', name: 'Los Nucleólogos', color: '#66ffaa', shopLevels: [100, 250, 500, 750, 1000] },
   player: { id: 'player', name: 'Tu Asentamiento', color: '#44ddaa', shopLevels: [0, 0, 0, 0, 0] },
   sierra: { id: 'sierra', name: 'Sierra Madre', color: '#e8d48b', shopLevels: [0,0,0,0,0] },
   robco: { id: 'robco', name: 'RobCo Industries', color: '#a0a0a0', shopLevels: [0,0,0,0,0] }
@@ -3878,6 +3924,7 @@ const SETTLEMENTS = [
   { id: 'minutemen_fort', name: 'Fuerte Independencia', faction: 'minutemen', x: 6, y: -14 },
   { id: 'legion_camp', name: 'Campamento de la Legión', faction: 'legion', x: -7, y: 12 },
   { id: 'paradise_falls', name: 'Paradise Falls', faction: 'slavers', x: 11, y: -3 },
+  { id: 'nucleo_lab', name: 'Laboratorio Nucleólogo', faction: 'nucleologos', x: 18, y: 15 },
   { id: 'player_home', name: 'Tu Asentamiento', faction: 'player', x: -10, y: -12, playerOwned: true },
   { id: 'sierra_madre', name: 'Casino Sierra Madre', faction: 'sierra', x: -14, y: 8, sierraCasino: true },
   { id: 'robco_factory', name: 'Fábrica RobCo Industries', faction: 'robco', x: 8, y: -10, robcoFactory: true }
@@ -3990,6 +4037,14 @@ const FACTION_QUEST_POOL = {
     { id: 'sla_q4', title: 'Collar marcado', desc: 'Recupera 1 Collar de negrero marcado.', type: 'collect', itemId: 914, target: 1, reward: { caps: 200, xp: 130, rep: 18 }, minRep: 200 },
     { id: 'sla_q5', title: 'Expansión del mercado', desc: 'Derrota 10 enemigos.', type: 'kill', target: 10, reward: { caps: 220, xp: 145, rep: 18 }, minRep: 400 },
     { id: 'sla_q6', title: 'Trofeo legendario', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 370, xp: 230, rep: 20 }, minRep: 700 }
+  ],
+  nucleologos: [
+    { id: 'nuc_q1', title: 'Primera muestra', desc: 'Derrota 5 Zetans (en la nave o en misiones).', type: 'kill', target: 5, reward: { caps: 150, xp: 90, rep: 14 }, minRep: 0 },
+    { id: 'nuc_q2', title: 'Cartografía alienígena', desc: 'Explora 10 zonas del Yermo.', type: 'explore', target: 10, reward: { caps: 100, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'nuc_q3', title: 'Sangre azul', desc: 'Consigue 3 Sangre de Zetan (en Otros).', type: 'collect', itemId: 2400, target: 3, reward: { caps: 200, xp: 120, rep: 16 }, minRep: 100 },
+    { id: 'nuc_q4', title: 'Chip de navegación', desc: 'Recupera 1 Chip de navegación Zetan.', type: 'collect', itemId: 915, target: 1, reward: { caps: 250, xp: 140, rep: 18 }, minRep: 250 },
+    { id: 'nuc_q5', title: 'Incursión en la flota', desc: 'Derrota 12 enemigos.', type: 'kill', target: 12, reward: { caps: 280, xp: 160, rep: 18 }, minRep: 400 },
+    { id: 'nuc_q6', title: 'Amenaza legendaria', desc: 'Derrota 3 enemigos legendarios.', type: 'kill_leg', target: 3, reward: { caps: 400, xp: 240, rep: 22 }, minRep: 700 }
   ]
 
 };
@@ -4111,6 +4166,13 @@ const FACTION_SHOP_ITEMS = {
     { id: 28, shopLevel: 3 }, { id: 14, shopLevel: 3 },
     { id: 29, shopLevel: 4 }, { id: 112, shopLevel: 4 },
     { id: 15, shopLevel: 5 }, { id: 51, shopLevel: 5 }
+  ],
+  nucleologos: [
+    { id: 7, shopLevel: 1 }, { id: 13, shopLevel: 1 }, { id: 2406, shopLevel: 1 }, { id: 2420, shopLevel: 1 },
+    { id: 2401, shopLevel: 2 }, { id: 28, shopLevel: 2 }, { id: 2421, shopLevel: 2 },
+    { id: 2403, shopLevel: 3 }, { id: 2404, shopLevel: 3 }, { id: 2411, shopLevel: 3 },
+    { id: 2413, shopLevel: 4 }, { id: 14, shopLevel: 4 }, { id: 2418, shopLevel: 4 },
+    { id: 15, shopLevel: 5 }, { id: 29, shopLevel: 5 }, { id: 2414, shopLevel: 5 }
   ]
 };
 
@@ -4164,6 +4226,13 @@ const FACTION_UNIQUE_SHOP = {
     { id: 2311, shopLevel: 1 }, { id: 2312, shopLevel: 1 },
     { id: 2313, shopLevel: 2 }, { id: 2314, shopLevel: 3 },
     { id: 2315, shopLevel: 4 }
+  ],
+  nucleologos: [
+    { id: 2401, shopLevel: 1 }, { id: 2411, shopLevel: 1 },
+    { id: 2404, shopLevel: 2 }, { id: 2412, shopLevel: 2 },
+    { id: 2403, shopLevel: 3 }, { id: 2413, shopLevel: 3 },
+    { id: 2410, shopLevel: 4 }, { id: 2415, shopLevel: 4 },
+    { id: 2417, shopLevel: 5 }, { id: 2407, shopLevel: 5 }
   ]
 };
 
@@ -4326,6 +4395,10 @@ function advanceTime(hours = 1) {
 function getSettlementAt(x, y) {
   return SETTLEMENTS.find(s => s.x === x && s.y === y) || null;
 }
+function isNucleologosLocked() {
+  if (typeof ensureZetanDefaults === 'function') ensureZetanDefaults();
+  return !(P && P.zetanEscapedOnce);
+}
 
 function getZoneAt(x, y) {
   // Ubicaciones importantes fijas
@@ -4337,6 +4410,9 @@ function getZoneAt(x, y) {
   }
   if (x === -5 && y === 4) {
     return { type: 'combatzone', ...ZONE_DEFS.combatzone, name: 'Combat Zone', importantId: 'combat_zone', enterable: false };
+  }
+  if (x === ABDUCTION_SITE.x && y === ABDUCTION_SITE.y) {
+    return { type: 'abduction', icon: '🛸', name: 'Zona de abducción Zetan', cls: 'poi', radChance: 0.1, enterable: false, abduction: true };
   }
   let sett = getSettlementAt(x, y);
   if (sett) {
@@ -4354,6 +4430,7 @@ function getZoneAt(x, y) {
     if (isPlayer) def.cls = 'player-settlement';
     if (sett.id === 'sierra_madre' || sett.sierraCasino) def.cls = 'sierra-settlement';
     if (sett.id === 'robco_factory' || sett.robcoFactory) def.cls = 'robco-settlement';
+    if (sett.faction === 'nucleologos') def.cls = 'nucleo-settlement';
     return {
       type: 'settlement',
       ...def,
@@ -4417,6 +4494,7 @@ function renderWorldGrid() {
       let cls = 'world-cell ' + z.cls + (isPlayer ? ' player' : '') + (z.enterable ? ' enterable' : '') + (z.playerOwned ? ' player-settlement' : '');
       if (z.settlementId === 'sierra_madre' || z.faction === 'sierra') cls += ' sierra-settlement';
       if (z.settlementId === 'robco_factory' || z.faction === 'robco') cls += ' robco-settlement';
+      if (z.faction === 'nucleologos') cls += ' nucleo-settlement';
       let icon = isPlayer ? '☺' : z.icon;
       cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
     }
@@ -4425,6 +4503,7 @@ function renderWorldGrid() {
 }
 
 function renderMap() {
+  if (isOnZetanShip && isOnZetanShip()) { renderZetanShipMap(); return; }
   if (P.location && P.location.type === 'settlement') {
     if (P.location.settlementId === 'player_home') {
       renderPlayerSettlementUI('base');
@@ -4487,6 +4566,9 @@ function renderMap() {
     actHint = P.combatZoneUnlocked
       ? `<span style="color:#ff6666;">⚔ Combat Zone desbloqueada — arena y tienda</span>`
       : `<span style="color:#ff6666;">⚔ Entra para desbloquear Combat Zone</span>`;
+  } else if (zone.type === 'abduction' || zone.abduction) {
+    actBtns = `<button style="background:#66ffaa;color:#111;font-weight:bold;" onclick="startZetanAbduction()">🛸 DEJARSE ABDUCIR</button>`;
+    actHint = `<span style="color:#66ffaa;">Señal Zetan — te llevarán a una nave (mapa limitado)</span>`;
   } else if (zone.enterable) {
     actBtns = `<button onclick="exploreZone()">EXPLORAR</button> <button style="background:var(--accent);color:#111;" onclick="enterLocation()">ENTRAR →</button>`;
   } else {
@@ -4520,6 +4602,9 @@ function renderMap() {
       } else {
         actHint = `<span style="color:#a0a0a0;">⚙ Fábrica RobCo Industries · Puedes reclamarla</span>`;
       }
+    } else if (zone.faction === 'nucleologos' && isNucleologosLocked()) {
+      actHint = `<span style="color:#66ffaa;">🧬 Laboratorio Nucleólogo · Aún no te aceptan</span>`;
+      // botón ENTRAR normal → muestra pantalla de rechazo
     } else {
       let rep = (P.reputation && P.reputation[zone.faction]) || 0;
       let fac = FACTIONS[zone.faction];
@@ -4651,6 +4736,339 @@ function interiorMove(dir) {
   updateStats();
 }
 
+
+// ========== DLC ZETANS ==========
+const ABDUCTION_SITE = { x: 22, y: 18 };
+const SHIP_ROOM_NAMES = [
+  'Corredor de acceso', 'Bahía de carga', 'Laboratorio genético', 'Sala de contención',
+  'Puente de mando', 'Hangar de sondas', 'Núcleo de energía', 'Camarote de oficiales',
+  'Sala de abducción', 'Depósito de muestras', 'Pasillo irradiado', 'Torre de observación',
+  'Cámaras de estasis', 'Taller de drones', 'Comunicaciones', 'Escotilla de escape'
+];
+
+function ensureZetanDefaults() {
+  if (P.zetanEscapedOnce === undefined) P.zetanEscapedOnce = false;
+  if (P.zetanShip === undefined) P.zetanShip = null;
+  if (P.zetanAbductions === undefined) P.zetanAbductions = 0;
+  if (!P.ammoBox) P.ammoBox = {};
+  if (P.ammoBox["Célula energética alienígena"] === undefined) P.ammoBox["Célula energética alienígena"] = 0;
+  if (P.ammoBox["Módulo de alimentación alienígena"] === undefined) P.ammoBox["Módulo de alimentación alienígena"] = 0;
+  // Si la nave guardada está corrupta, invalidar
+  if (P.zetanShip && P.zetanShip.active) {
+    if (!Array.isArray(P.zetanShip.grid) || P.zetanShip.grid.length < 7) {
+      P.zetanShip = null;
+    } else if (typeof P.zetanShip.px !== 'number' || typeof P.zetanShip.py !== 'number') {
+      P.zetanShip = null;
+    }
+  }
+}
+
+function isOnZetanShip() {
+  return !!(P && P.zetanShip && P.zetanShip.active && P.zetanShip.grid && P.zetanShip.grid.length);
+}
+
+function generateZetanShip() {
+  // Siempre 7x7 para que coincida con el grid del mapa del Yermo
+  let size = 7;
+  let grid = [];
+  for (let y = 0; y < size; y++) {
+    grid[y] = [];
+    for (let x = 0; x < size; x++) {
+      let name = SHIP_ROOM_NAMES[Math.floor(Math.random() * SHIP_ROOM_NAMES.length)];
+      grid[y][x] = { name: name, visited: false, icon: '◈' };
+    }
+  }
+  let edge = Math.floor(Math.random() * 4);
+  let sx, sy, ex, ey;
+  if (edge === 0) { sx = Math.floor(Math.random() * size); sy = 0; ex = Math.floor(Math.random() * size); ey = size - 1; }
+  else if (edge === 1) { sx = Math.floor(Math.random() * size); sy = size - 1; ex = Math.floor(Math.random() * size); ey = 0; }
+  else if (edge === 2) { sx = 0; sy = Math.floor(Math.random() * size); ex = size - 1; ey = Math.floor(Math.random() * size); }
+  else { sx = size - 1; sy = Math.floor(Math.random() * size); ex = 0; ey = Math.floor(Math.random() * size); }
+  if (sx === ex && sy === ey) { ex = (ex + 3) % size; ey = (ey + 2) % size; }
+  grid[sy][sx] = { name: 'Escotilla de entrada', visited: true, icon: '◎', isStart: true };
+  grid[ey][ex] = { name: 'Escotilla de escape', visited: false, icon: '⇨', isExit: true };
+  for (let i = 0; i < 3; i++) {
+    let rx = Math.floor(Math.random() * size), ry = Math.floor(Math.random() * size);
+    if (!grid[ry][rx].isStart && !grid[ry][rx].isExit) {
+      grid[ry][rx].name = ['Núcleo de energía', 'Sala de contención', 'Hangar de sondas'][i % 3];
+      grid[ry][rx].icon = ['⚡', '⛓', '🛸'][i % 3];
+      grid[ry][rx].special = true;
+    }
+  }
+  return {
+    active: true,
+    size: size,
+    grid: grid,
+    px: sx,
+    py: sy,
+    startX: sx,
+    startY: sy,
+    exitX: ex,
+    exitY: ey,
+    seed: Date.now() % 99999
+  };
+}
+
+function startZetanAbduction() {
+  ensureZetanDefaults();
+  P.location = null;
+  P.zetanShip = generateZetanShip();
+  P.zetanAbductions = (P.zetanAbductions || 0) + 1;
+  logMsg("¡Un rayo de abducción te envuelve! Despiertas a bordo de una nave Zetan...");
+  logMsg("Objetivo: alcanza la escotilla de escape ⇨. Si mueres, pierdes toda la Sangre de Zetan y vuelves a la entrada.");
+  renderZetanShipMap();
+  updateStats();
+}
+
+let _shipMoving = false;
+function moveOnZetanShip(dx, dy) {
+  if (!isOnZetanShip()) return;
+  if (_shipMoving) return;
+  if (typeof combatState !== 'undefined' && combatState) return;
+  if (P.inCombat) return;
+  let ship = P.zetanShip;
+  if (!ship || !Array.isArray(ship.grid) || !ship.grid.length) return;
+  dx = dx > 0 ? 1 : (dx < 0 ? -1 : 0);
+  dy = dy > 0 ? 1 : (dy < 0 ? -1 : 0);
+  if (dx === 0 && dy === 0) return;
+  let nx = (ship.px | 0) + dx;
+  let ny = (ship.py | 0) + dy;
+  let size = ship.size | 0;
+  if (nx < 0 || ny < 0 || nx >= size || ny >= size) {
+    logMsg("No puedes salir de los límites de la nave por aquí.");
+    return;
+  }
+  if (!ship.grid[ny] || !ship.grid[ny][nx]) {
+    logMsg("Casilla inválida.");
+    return;
+  }
+  _shipMoving = true;
+  ship.px = nx;
+  ship.py = ny;
+  let cell = ship.grid[ny][nx];
+  cell.visited = true;
+  logMsg("Te mueves a: " + (cell.icon || '◈') + " " + cell.name + " [" + nx + "," + ny + "]");
+  try { tickEffects(); } catch (e) {}
+  try { advanceTime(1); } catch (e) {}
+  renderZetanShipMap();
+  updateStats();
+  let ambush = Math.random() < 0.35;
+  if (ambush) {
+    setTimeout(function() {
+      _shipMoving = false;
+      if (isOnZetanShip() && !combatState) startCombat(Math.random() < 0.08, true);
+    }, 100);
+  } else {
+    setTimeout(function() { _shipMoving = false; }, 120);
+  }
+}
+
+function tryEscapeZetanShip() {
+  if (!isOnZetanShip()) return;
+  let ship = P.zetanShip;
+  if (ship.px !== ship.exitX || ship.py !== ship.exitY) {
+    logMsg("No hay escotilla de escape aquí.");
+    return;
+  }
+  // Escape exitoso
+  P.zetanShip = null;
+  let first = !P.zetanEscapedOnce;
+  P.zetanEscapedOnce = true;
+  // Volver cerca del sitio de abducción
+  P.x = ABDUCTION_SITE.x + (Math.random() < 0.5 ? -1 : 1);
+  P.y = ABDUCTION_SITE.y + (Math.random() < 0.5 ? -1 : 1);
+  logMsg("¡Escapas de la nave Zetan y caes de nuevo en el Yermo!");
+  if (first) {
+    logMsg("Has contactado con Los Nucleólogos. Su laboratorio está desbloqueado en el mapa.");
+    addXP(80);
+  } else {
+    addXP(40);
+  }
+  updateStats();
+  renderMap();
+}
+
+function onZetanShipDeath() {
+  if (!isOnZetanShip()) return;
+  // Perder toda sangre de zetan
+  let lost = 0;
+  for (let i = P.inv.length - 1; i >= 0; i--) {
+    if (P.inv[i].id === 2400) {
+      lost += P.inv[i].qty || 1;
+      P.inv.splice(i, 1);
+    }
+  }
+  let ship = P.zetanShip;
+  ship.px = ship.startX;
+  ship.py = ship.startY;
+  P.hp = Math.max(25, Math.floor(getMaxHp() * 0.3));
+  logMsg("Has caído en la nave. Pierdes " + lost + "× Sangre de Zetan. Despiertas en la escotilla de entrada.");
+  combatState = null;
+  closeModal();
+  renderZetanShipMap();
+  updateStats();
+}
+
+function renderZetanShipMap() {
+  if (!isOnZetanShip()) { renderMap(); return; }
+  let ship = P.zetanShip;
+  if (!ship.grid || !ship.grid[ship.py] || !ship.grid[ship.py][ship.px]) {
+    logMsg("Error de nave. Regenerando...");
+    P.zetanShip = generateZetanShip();
+    ship = P.zetanShip;
+  }
+  let cell = ship.grid[ship.py][ship.px];
+  cell.visited = true;
+  let cells = '';
+  for (let y = 0; y < ship.size; y++) {
+    for (let x = 0; x < ship.size; x++) {
+      let c = ship.grid[y][x];
+      let isHere = (x === ship.px && y === ship.py);
+      let cls = 'world-cell';
+      if (isHere) cls += ' player';
+      if (c.isExit) cls += ' enterable';
+      let content;
+      if (isHere) content = '☺';
+      else if (c.visited || c.isExit || c.isStart) content = c.icon || '◈';
+      else content = '·';
+      cells += '<div class="' + cls + '" title="' + (c.visited || isHere ? c.name : '???') + '">' + content + '</div>';
+    }
+  }
+  let isExit = !!cell.isExit;
+  let actBtns = isExit
+    ? '<button style="background:#66ffaa;color:#111;font-weight:bold;" onclick="tryEscapeZetanShip()">⇨ ESCAPAR DE LA NAVE</button>'
+    : '<button onclick="zetanShipExplore()">EXPLORAR SALA</button>';
+  let blood = countItemsByBaseId(2400);
+  document.getElementById('main-view').innerHTML = `
+    <div class="map-compact">
+    <div class="map-top"><b style="color:#66ffaa;">🛸 Nave Zetan</b> · ${cell.icon || '◈'} <b>${cell.name}</b></div>
+    <div class="map-signal-hint" style="color:#8d9880;">Sangre: <b style="color:#66ffaa;">${blood}</b> · [${ship.px},${ship.py}] · Si mueres pierdes la sangre</div>
+    <div class="world-grid" style="grid-template-columns:repeat(7,1fr);max-width:260px;width:260px;height:260px;">${cells}</div>
+    <div class="map-actions">
+      <div class="map-act-row">${actBtns}</div>
+      <div class="map-act-hint" style="color:#66ffaa;">Llega a ⇨ para escapar · Emboscadas frecuentes</div>
+    </div>
+    <div class="map-controls">
+      <div class="quick-meds">
+        <button onclick="quickUseStim()">💉 Stim</button>
+        <button onclick="quickUseRadAway()">☢ RadAway</button>
+      </div>
+      <div class="map-arrows">
+        <div></div><button onclick="moveOnZetanShip(0,-1)">▲</button><div></div>
+        <button onclick="moveOnZetanShip(-1,0)">◀</button><button onclick="moveOnZetanShip(0,1)">▼</button><button onclick="moveOnZetanShip(1,0)">▶</button>
+      </div>
+      <div class="quick-radio">
+        <button disabled style="opacity:0.4;">📻</button>
+        <button disabled style="opacity:0.4;">⚡</button>
+      </div>
+    </div>
+    </div>
+  `;
+}
+
+function zetanShipExplore() {
+  if (!isOnZetanShip()) return;
+  tickEffects();
+  advanceTime(1);
+  if (Math.random() < 0.55) {
+    startCombat(Math.random() < 0.1, true);
+    return;
+  }
+  // Loot: sangre, munición alienígena, a veces armas
+  let r = Math.random();
+  if (r < 0.28) {
+    if (addItemToInv(2400, 1)) logMsg("Encuentras 1× Sangre de Zetan.");
+  } else if (r < 0.50) {
+    let ammoId = Math.random() < 0.55 ? 2420 : 2421;
+    let qty = 1 + Math.floor(Math.random() * 3);
+    if (addItemToInv(ammoId, qty)) logMsg("Encuentras munición: " + getItemBase(ammoId).name + " ×" + qty);
+  } else if (r < 0.68) {
+    let id = [2405, 2406, 13, 7][Math.floor(Math.random() * 4)];
+    if (addItemToInv(id, 1)) logMsg("Explorando encuentras: " + getItemBase(id).name);
+  } else if (r < 0.82) {
+    let weapons = [2401, 2402, 2410, 2411, 2412, 2413, 2414, 2415, 2416, 2417, 2418, 2419];
+    let id = weapons[Math.floor(Math.random() * weapons.length)];
+    if (addItemToInv(id, 1)) logMsg("¡Encuentras un arma Zetan: " + getItemBase(id).name + "!");
+  } else {
+    logMsg("La sala está vacía... por ahora.");
+  }
+  updateStats();
+  renderZetanShipMap();
+}
+
+function openAdditionalContentUI() {
+  ensureZetanDefaults();
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:var(--accent);text-align:center;margin-top:0;">📦 Contenido Adicional</h2>
+    <p style="font-size:12px;color:#8d9880;text-align:center;">Expansiones disponibles</p>
+    <button style="width:100%;margin:8px 0;border-color:#66ffaa;color:#66ffaa;font-weight:bold;" onclick="openZetanDlcInfo()">🛸 DLC: Los Zetans</button>
+    <button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>
+    <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+function openZetanDlcInfo() {
+  ensureZetanDefaults();
+  let st = P.zetanEscapedOnce
+    ? ('Nucleólogos desbloqueados · Abducciones: ' + (P.zetanAbductions || 0))
+    : 'Aún no has escapado de una nave';
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#66ffaa;text-align:center;margin-top:0;">🛸 DLC: Los Zetans</h2>
+    <div class="item" style="border-color:#66ffaa;">
+      <span style="font-size:12px;color:#8d9880;">
+        En una ubicación remota del Yermo puedes ser abducido por una nave Zetan.
+        Explora el interior (mapa 7×7 procedural), combate emboscadas constantes
+        de alienígenas y recoge <b>Sangre de Zetan</b> y equipo exclusivo.
+        Tu objetivo es alcanzar la escotilla de escape. Si mueres a bordo, pierdes
+        toda la Sangre de Zetan y reapareces en la entrada de la nave.
+        Tras escapar al menos una vez se desbloquea la facción <b>Los Nucleólogos</b>,
+        que compra sangre y ofrece misiones y tienda relacionadas con los Zetans.
+      </span><br><br>
+      <span style="font-size:11px;color:#66ffaa;">Estado: ${st}</span><br>
+      <span style="font-size:11px;color:#8d9880;">Sitio de abducción: [${ABDUCTION_SITE.x >= 0 ? '+' : ''}${ABDUCTION_SITE.x}, ${ABDUCTION_SITE.y >= 0 ? '+' : ''}${ABDUCTION_SITE.y}]</span><br>
+      <span style="font-size:11px;color:#8d9880;">Laboratorio Nucleólogo: [+18, +15] (bloqueado hasta escapar)</span>
+    </div>
+    <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
+    <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+
+function sellZetanBloodUI() {
+  let n = countItemsByBaseId(2400);
+  if (n < 1) { logMsg('No tienes Sangre de Zetan.'); return; }
+  openQtyPad(n, '🧬 Vender Sangre de Zetan', function(qty) {
+    confirmSellZetanBlood(qty);
+  });
+  setTimeout(() => {
+    let h2 = document.querySelector('#modal-body h2');
+    if (h2) h2.style.color = '#66ffaa';
+    let p = document.querySelector('#modal-body p');
+    if (p) p.innerHTML = 'Tienes <b>' + n + '</b>. Cada una: <span style="color:#e05050;">100 chapas</span> + 5 rep.';
+    let btn = document.getElementById('qty-confirm-btn');
+    if (btn) { btn.textContent = 'Vender'; btn.style.background = '#66ffaa'; }
+  }, 0);
+}
+function confirmSellZetanBlood(qty) {
+  let n = countItemsByBaseId(2400);
+  qty = Math.min(n, Math.max(1, parseInt(qty, 10) || 0));
+  let left = qty;
+  for (let i = P.inv.length - 1; i >= 0 && left > 0; i--) {
+    if (P.inv[i].id === 2400) {
+      let q = P.inv[i].qty || 1;
+      if (q <= left) { left -= q; P.inv.splice(i, 1); }
+      else { P.inv[i].qty = q - left; left = 0; }
+    }
+  }
+  P.caps += qty * 100;
+  addFactionRep('nucleologos', qty * 5);
+  logMsg('Vendidas ' + qty + '× Sangre de Zetan: +' + (qty * 100) + ' chapas, +' + (qty * 5) + ' rep.');
+  updateStats();
+  let sett = SETTLEMENTS.find(s => s.faction === 'nucleologos');
+  if (sett) renderSettlementUI(sett.id, 'base');
+}
+
+
 function openSettings() {
   let vm = P.volMusic !== undefined ? P.volMusic : 0.6;
   let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
@@ -4670,8 +5088,9 @@ function openSettings() {
     <button style="width:100%; margin:6px 0;" onclick="loadGame(); closeModal();">📂 Cargar partida</button>
     <button style="width:100%; margin:6px 0;" onclick="renameSurvivor(); closeModal();">✏ Renombrar</button>
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
+    <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.3.1</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.4.0</div>
   `;
   m.classList.add('show');
 }
@@ -4692,9 +5111,11 @@ function setVolSfx(v) {
 
 function ensureFactionDefaults() {
   if (!P.reputation) P.reputation = {};
-  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute','atom','minutemen','legion','slavers'].forEach(k => {
+  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute','atom','minutemen','legion','slavers','nucleologos'].forEach(k => {
     if (P.reputation[k] === undefined || P.reputation[k] === null) P.reputation[k] = 0;
   });
+  try { ensureZetanDefaults(); } catch(e) {}
+
   if (!P.activeFactionQuests) P.activeFactionQuests = [];
   if (!Array.isArray(P.activeFactionQuests)) P.activeFactionQuests = [];
   if (!P.factionQuestPool) P.factionQuestPool = {};
@@ -4705,6 +5126,7 @@ function ensureFactionDefaults() {
   if (!P.fastTravelUnlocked) P.fastTravelUnlocked = ['vault_home'];
   if (!P.fastTravelUnlocked.includes('vault_home')) P.fastTravelUnlocked.unshift('vault_home');
   ensureChips();
+  try { if (typeof ensureZetanDefaults === 'function') ensureZetanDefaults(); } catch (e) {}
 }
 
 
@@ -4770,6 +5192,24 @@ function enterSettlement(settlementId) {
   if (!sett) return;
   if (P.x !== sett.x || P.y !== sett.y) {
     logMsg("Debes estar en el asentamiento.");
+    return;
+  }
+  if (sett.faction === 'nucleologos' && isNucleologosLocked()) {
+    document.getElementById('modal-body').innerHTML = `
+      <h2 style="color:#66ffaa;text-align:center;margin-top:0;">🧬 Laboratorio Nucleólogo</h2>
+      <div class="item" style="border-color:#66ffaa;">
+        <p style="font-size:13px;color:#d7dec9;text-align:center;margin:8px 0;">
+          Los Nucleólogos aún no te aceptan.
+        </p>
+        <p style="font-size:12px;color:#8d9880;text-align:center;">
+          Debes escapar al menos una vez de una nave Zetan para ganar su confianza.
+          Busca la zona de abducción en el Yermo.
+        </p>
+      </div>
+      <button style="width:100%;margin-top:10px;" onclick="closeModal();">Cerrar</button>
+    `;
+    document.getElementById('modal').classList.add('show');
+    logMsg("Los Nucleólogos aún no te aceptan. Escapa de una nave Zetan primero.");
     return;
   }
   if (sett.playerOwned || sett.id === 'player_home') {
@@ -4956,6 +5396,12 @@ function renderSettlementUI(settlementId, tab) {
       <button style="margin-top:6px;" ${needRad === 0 || P.caps < costRad ? 'disabled' : ''} onclick="settlementHealRad('${sett.id}')">Curar radiación (${costRad})</button>
       <button style="margin-top:6px;" ${(needHp === 0 && needRad === 0) || P.caps < (costHp + costRad) ? 'disabled' : ''} onclick="settlementHealFull('${sett.id}')">Curar todo (${costHp + costRad})</button>
     </div>
+    ${sett.faction === 'nucleologos' ? `
+    <div class="item" style="border-color:#66ffaa !important;">
+      <b style="color:#66ffaa;">🧬 Vender Sangre de Zetan</b><br>
+      <span style="font-size:12px;color:#8d9880;">Cada unidad: 100 chapas + 5 reputación. Tienes: <b>${countItemsByBaseId(2400)}</b></span><br>
+      <button style="margin-top:6px;background:#66ffaa;color:#111;font-weight:bold;" ${countItemsByBaseId(2400) < 1 ? 'disabled' : ''} onclick="sellZetanBloodUI()">Vender sangre</button>
+    </div>` : ''}
     ${sett.faction === 'slavers' ? `
     <div class="item" style="border-color:#aa6644 !important;">
       <b style="color:#aa6644;">⛓ Vender Esclavos</b><br>
@@ -7299,6 +7745,8 @@ const RADIO_STATIONS = {
 let radioPlaying = false;
 let radioStationId = null;
 let radioTrackIndex = 0;
+let radioPlayToken = 0; // evita carreras al cambiar de emisora
+let radioPlayTimer = null;
 
 function openRadioTuneUI() {
   let active = !!(radioPlaying && radioStationId && RADIO_STATIONS[radioStationId]);
@@ -7379,15 +7827,17 @@ function bindRadioEnded() {
 function playCurrentRadioTrack(userGesture) {
   let st = RADIO_STATIONS[radioStationId];
   if (!st) return;
+  let token = ++radioPlayToken;
+  let intendedStation = radioStationId;
   let audio = getRadioAudio();
+  // Cancelar callbacks pendientes de un play anterior
+  audio.oncanplay = null;
+  if (radioPlayTimer) { clearTimeout(radioPlayTimer); radioPlayTimer = null; }
   bindRadioEnded();
   let src = st.tracks[radioTrackIndex % st.tracks.length];
   try {
-    let file = src.split('/').pop();
-    if (!audio.src || audio.src.indexOf(file) === -1) {
-      try { audio.src = new URL(src, window.location.href).href; } catch (e) { audio.src = src; }
-      audio.load();
-    }
+    try { audio.src = new URL(src, window.location.href).href; } catch (e) { audio.src = src; }
+    audio.load();
   } catch (e2) {
     audio.src = src;
   }
@@ -7397,21 +7847,31 @@ function playCurrentRadioTrack(userGesture) {
   let cas = document.getElementById('casino-audio');
   if (cas && !cas.paused) { try { cas.pause(); } catch (e) {} }
 
-  radioPlaying = true; // mantener Apagar visible durante carga
+  radioPlaying = true;
+  radioStationId = intendedStation;
 
   const tryPlay = () => {
+    // Ignorar si ya se pidió otra emisora/pista
+    if (token !== radioPlayToken) return;
+    if (radioStationId !== intendedStation) return;
     audio.play().then(() => {
+      if (token !== radioPlayToken) {
+        try { audio.pause(); } catch (e) {}
+        return;
+      }
       radioPlaying = true;
+      radioStationId = intendedStation;
+      pauseAmbientMusic(); // por si un catch viejo la reactivó
       let stEl = document.getElementById('music-status');
       if (stEl) {
-        let extra = (RADIO_STATIONS[radioStationId] && RADIO_STATIONS[radioStationId].tracks.length > 1) ? (' · Transmisión ' + (radioTrackIndex + 1) + '/' + RADIO_STATIONS[radioStationId].tracks.length) : '';
+        let extra = (st.tracks.length > 1) ? (' · Transmisión ' + (radioTrackIndex + 1) + '/' + st.tracks.length) : '';
         stEl.textContent = '♪ En antena: ' + st.name + extra;
       }
-      if (userGesture) logMsg(st.name + ' sintonizada' + (RADIO_STATIONS[radioStationId] && RADIO_STATIONS[radioStationId].tracks.length > 1 ? ' (pista ' + (radioTrackIndex + 1) + ')' : '') + '.');
-      // Actualizar botones por si el panel sigue abierto
+      if (userGesture) logMsg(st.name + ' sintonizada' + (st.tracks.length > 1 ? ' (pista ' + (radioTrackIndex + 1) + ')' : '') + '.');
       if (document.querySelector('.radio-panel')) openRadioTuneUI();
     }).catch((err) => {
-      // Fallo real de reproducción
+      if (token !== radioPlayToken) return; // cambio de emisora: no tocar estado
+      if (radioStationId !== intendedStation) return;
       radioPlaying = false;
       radioStationId = null;
       startAmbientMusic();
@@ -7425,8 +7885,12 @@ function playCurrentRadioTrack(userGesture) {
 
   if (audio.readyState >= 2) tryPlay();
   else {
-    audio.oncanplay = () => { audio.oncanplay = null; tryPlay(); };
-    setTimeout(tryPlay, 250);
+    audio.oncanplay = () => {
+      if (token !== radioPlayToken) return;
+      audio.oncanplay = null;
+      tryPlay();
+    };
+    radioPlayTimer = setTimeout(tryPlay, 300);
   }
 }
 
@@ -7435,15 +7899,21 @@ function startRadioStation(stationId) {
   if (!st) return;
   let prev = radioStationId;
   let audio = getRadioAudio();
+  // Detener emisora anterior SIN arrancar ambiente
+  radioPlayToken++; // invalida plays en curso
+  if (radioPlayTimer) { clearTimeout(radioPlayTimer); radioPlayTimer = null; }
+  audio.oncanplay = null;
+  audio.onended = null;
   try { audio.pause(); audio.currentTime = 0; } catch (e) {}
+  pauseAmbientMusic();
+  let cas = document.getElementById('casino-audio');
+  if (cas && !cas.paused) { try { cas.pause(); } catch (e) {} }
+
   radioStationId = stationId;
-  radioPlaying = true; // sincronizar UI antes del play async
+  radioPlaying = true;
   if (prev !== stationId) radioTrackIndex = 0;
   else if (radioTrackIndex < 0 || radioTrackIndex >= st.tracks.length) radioTrackIndex = 0;
-  let src = st.tracks[radioTrackIndex % st.tracks.length];
-  try { audio.src = new URL(src, window.location.href).href; } catch (e) { audio.src = src; }
-  audio.load();
-  // Refrescar UI YA con botón Apagar
+
   if (document.querySelector('.radio-panel')) openRadioTuneUI();
   playCurrentRadioTrack(true);
 }
@@ -7518,10 +7988,13 @@ function startRadioMusic() {
 }
 
 function stopRadioMusic() {
+  radioPlayToken++; // cancela plays pendientes
+  if (radioPlayTimer) { clearTimeout(radioPlayTimer); radioPlayTimer = null; }
   let audio = document.getElementById('radio-audio');
   if (audio) {
     try { audio.pause(); audio.currentTime = 0; } catch (e) {}
     audio.onended = null;
+    audio.oncanplay = null;
   }
   radioPlaying = false;
   radioStationId = null;
@@ -7586,6 +8059,10 @@ function captureSignal() {
 }
 
 function move(dx, dy) {
+  if (isOnZetanShip()) {
+    moveOnZetanShip(dx, dy);
+    return;
+  }
   if (P.location) {
     logMsg("Estás en un interior. Usa las salidas de la habitación o SALIR.");
     return;
@@ -7900,8 +8377,14 @@ function isHumanEnemy(nameOrEnemy) {
   return false;
 }
 
-function startCombat(isLegendary = false) {
-  let pool = isLegendary ? LEGENDARY_ENEMIES : ENEMIES;
+function startCombat(isLegendary = false, forceZetan = false) {
+  let onShip = forceZetan || isOnZetanShip();
+  let pool;
+  if (onShip) {
+    pool = isLegendary ? (typeof ZETAN_LEGENDARY !== 'undefined' ? ZETAN_LEGENDARY : LEGENDARY_ENEMIES) : (typeof ZETAN_ENEMIES !== 'undefined' ? ZETAN_ENEMIES : ENEMIES);
+  } else {
+    pool = isLegendary ? LEGENDARY_ENEMIES : ENEMIES;
+  }
   let available = pool.filter(e => e.level <= P.lvl);
   if (available.length === 0) {
     // Si no hay del nivel, coger los de menor nivel
@@ -7918,6 +8401,7 @@ function startCombat(isLegendary = false) {
   combatState = {
     enemyName: e.name + " (Nv." + e.level + ")",
     enemyHuman: !!(e.human || isHumanEnemy(e)),
+    isZetan: !!(e.zetan || onShip),
     enemyMaxHp: Math.floor(e.hp * hpScale),
     enemyHp: Math.floor(e.hp * hpScale),
     enemyDmg: Math.floor(e.dmg * dmgScale),
@@ -8633,14 +9117,20 @@ updateQuestProgress('kill', 1);
     logMsg("Derrotaste a " + combatState.enemyName + ". Obtienes " + reward + " chapas" + lootTxt);
     }
   } else {
+    if (isOnZetanShip()) {
+      onZetanShipDeath();
+      return;
+    }
     P.hp = 25;
     P.caps = Math.max(0, P.caps - 15);
     logMsg("Has caído derrotado. Pierdes 15 chapas.");
   }
 
   let wasCZ = combatState && combatState.combatZone;
+  let wasShip = combatState && combatState.isZetan && isOnZetanShip();
   combatState = null;
   closeModal();
+  if (wasShip) { renderZetanShipMap(); updateStats(); return; }
   if (wasCZ) {
     P.location = { type: 'combatzone', name: 'Combat Zone' };
     renderCombatZoneUI('combat');
@@ -8862,6 +9352,7 @@ function renderInv(sub = P.subtab, page) {
         else if (it.id === 29) html += `<span style="font-size:12px; color:var(--gold);">Tartera Legendaria — abre en REFUGIO.</span><br>`;
         else if (it.robcoModule || it.id === 3500) html += `<span style="font-size:12px; color:var(--gold);">★ Módulo Legendario — úsalo en Fábrica RobCo para mejorar un robot.</span><br>`;
         else if (it.slave || it.id === 2305) html += `<span style="font-size:12px; color:#aa6644;">⛓ ${it.effectDesc || 'Véndelo en Paradise Falls por 500 chapas + reputación.'}</span><br>`;
+        else if (it.zetanBlood || it.id === 2400) html += `<span style="font-size:12px; color:#66ffaa;">🧬 ${it.effectDesc || 'Véndela a los Nucleólogos: 100 chapas + 5 rep.'}</span><br>`;
         else if (it.effectDesc) html += `<span style="font-size:12px; color:var(--gold);">${it.effectDesc}</span><br>`;
         else html += `<span style="font-size:12px; color:var(--gold);">Objeto especial.</span><br>`;
       }
