@@ -432,6 +432,16 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   color: #e8d48b !important;
   border-color: #e8d48b !important;
 }
+.world-cell.player-vault {
+  background: #1a2840;
+  border-color: #88aadd;
+  color: #88aadd;
+}
+.world-cell.vaulttec-settlement {
+  background: #1a2840;
+  border-color: #6688bb;
+  color: #aaccff;
+}
 .world-cell.robco-settlement {
   background: #1a1a1a !important;
   color: #a0a0a0 !important;
@@ -888,7 +898,6 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
     </div>
     <div class="stats stats-row-currency">
       <span class="stat-caps"><img class="cap-icon" src="data:image/png;base64,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" alt="caps"><b id="st-caps">0</b></span>
-      <span class="stat-tickets"><img class="ticket-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAv0lEQVR4nO2VMQ7DIAxFv6OcLQsMOUmmDj1Ch06cJEOy5HJ0qEyNVdGSulFV8TaQ8ZNsMECj8euQ3piWGK0lwVPy9Fq2zau1D9MSI0u7b8sAYJvXVLnuVbA1hwuzHg6jA3AvAXM9u+qkp8vjPOdkCMibymuLfg6jg85LWmYl1TKmfxYs+bSk1cLS4T10wRPp6WLRQ/n2ZN6soTKYeaekpSrIWxo82d/Mkjh4ov+fNEkYPJGeClbIN3n4f9hoVHMDA89mtC8SUbYAAAAASUVORK5CYII=" alt="tickets"><b id="st-tickets" style="color:#6eb5ff;">0</b></span>
       <span class="stat-chips"><img class="cap-icon chip-icon" src="data:image/webp;base64,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" alt="fichas"><b id="st-chips" style="color:#e8d48b;">0</b></span>
       <span class="stat-weight">Peso <b id="st-weight">0</b>/<b id="st-maxweight">35</b></span>
     </div>
@@ -1226,6 +1235,23 @@ const DB_ITEMS = [
   { id: 2303, name: "Hipnotron MK3", type: "weapon", damage: 1, ammoType: "Célula de Hipnotron", weight: 5, value: 10000, stackable: false, factionOnly: true, faction: "slavers", hypnoChance: 0.60, hypno: true, effectDesc: "60% de acabar el combate hipnotizando a un humano. Sin XP, loot ni chapas; otorga 1× Esclavo. Falla al 100% en no humanos." },
   { id: 2304, name: "Célula de Hipnotron", type: "ammo", ammoKey: "Célula de Hipnotron", qty: 5, weight: 0.1, value: 100, stackable: true, factionOnly: true, faction: "slavers" },
   
+  // --- DLC Espías entre nosotros ---
+  { id: 2600, name: "Libro antiguo", type: "other", weight: 0.5, value: 0, stackable: true, ancientBook: true, noCommerceSell: true, effectDesc: "Conocimiento prebélico. Véndelo a los Seguidores del Apocalipsis (500 chapas + 20 rep)." },
+  { id: 2601, name: "Documento antiguo", type: "other", weight: 0.2, value: 0, stackable: true, ancientDoc: true, noCommerceSell: true, effectDesc: "Archivo prebélico. Véndelo a los Seguidores del Apocalipsis (250 chapas + 10 rep)." },
+  { id: 2602, name: "Stealth Boy", type: "med", weight: 0.4, value: 800, stackable: true, shopTier: 99, factionOnly: true, faction: "followers", effectId: "stealth_boy", effectName: "Stealth Boy", effectDesc: "Sin emboscadas ni eventos al moverte (50 acciones). Explorar y entrar en sitios aún pueden combatir.", effectActions: 50, effectBonus: { stealth: 1 }, useDesc: "Camuflaje activo 50 acciones: sin eventos al moverte." },
+  { id: 2610, name: "Estimulante de los Seguidores", type: "med", heal: 120, weight: 0.3, value: 90, stackable: true, shopTier: 99, factionOnly: true, faction: "followers" },
+  { id: 2611, name: "Antídotos compuestos", type: "med", heal: 40, weight: 0.3, value: 70, stackable: true, shopTier: 99, factionOnly: true, faction: "followers", radHeal: 30 },
+  { id: 2612, name: "Suero regenerativo", type: "med", heal: 200, weight: 0.4, value: 180, stackable: true, shopTier: 99, factionOnly: true, faction: "followers" },
+  { id: 2613, name: "Bata de médico de campo", type: "armor", def: 8, weight: 3, value: 120, stackable: false, shopTier: 99, factionOnly: true, faction: "followers", radRes: 10 },
+  { id: 2614, name: "Traje de archivero", type: "armor", def: 6, weight: 2, value: 100, stackable: false, shopTier: 99, factionOnly: true, faction: "followers", radRes: 5 },
+  { id: 2615, name: "Chaleco sanitario reforzado", type: "armor", def: 14, weight: 5, value: 220, stackable: false, shopTier: 99, factionOnly: true, faction: "followers", radRes: 15 },
+  // Necrópolis exclusivos
+  { id: 2620, name: "Rifle de necrópolis", type: "weapon", damage: 38, ammoType: "5.56", weight: 4.5, value: 320, stackable: false, shopTier: 99, factionOnly: true, faction: "necropolis" },
+  { id: 2621, name: "Pistola ósea", type: "weapon", damage: 28, ammoType: "10mm", weight: 2.2, value: 180, stackable: false, shopTier: 99, factionOnly: true, faction: "necropolis" },
+  { id: 2622, name: "Cuchilla de necrófago", type: "weapon", damage: 32, ammoType: null, weight: 2, value: 150, stackable: false, shopTier: 99, factionOnly: true, faction: "necropolis" },
+  { id: 2623, name: "Armadura de piel curtida", type: "armor", def: 18, weight: 7, value: 200, stackable: false, shopTier: 99, factionOnly: true, faction: "necropolis", radRes: 40 },
+  { id: 2624, name: "Harapos de élite de Necrópolis", type: "armor", def: 12, weight: 3, value: 140, stackable: false, shopTier: 99, factionOnly: true, faction: "necropolis", radRes: 50 },
+  { id: 2625, name: "Máscara de necrófago", type: "armor", def: 8, weight: 1.5, value: 90, stackable: false, shopTier: 99, factionOnly: true, faction: "necropolis", radRes: 35 },
   // --- DLC Zetans ---
   { id: 2400, name: "Sangre de Zetan", type: "other", weight: 0.1, value: 100, stackable: true, zetanBlood: true, noCommerceSell: true, effectDesc: "Sangre alienígena. Véndela a los Nucleólogos: 100 chapas + 5 rep por unidad. Se pierde si mueres en la nave." },
   { id: 2401, name: "Blaster alienígena", type: "weapon", damage: 48, ammoType: "Célula energética alienígena", weight: 2.5, value: 750, stackable: false, zetanLoot: true },
@@ -1254,10 +1280,13 @@ const DB_ITEMS = [
   { id: 919, name: "Diario de un abducido", type: "other", weight: 0.2, value: 40, stackable: true, questItem: true },
   { id: 930, name: "Insignia de la RNC", type: "other", weight: 0.2, value: 50, stackable: true, questItem: true },
   { id: 931, name: "Ficha de casino marcada", type: "other", weight: 0.1, value: 40, stackable: true, questItem: true },
+  { id: 933, name: "Informe de campo Vaul-Tec", type: "other", weight: 0.2, value: 0, stackable: true, questItem: true },
   { id: 932, name: "Chip de síntesis del Instituto", type: "other", weight: 0.2, value: 55, stackable: true, questItem: true },
 
 
-  { id: 2305, name: "Esclavo", type: "other", weight: 0, value: 500, stackable: true, slave: true, noCommerceSell: true, effectDesc: "Mercancía viva. Véndela en Paradise Falls (Base → Vender Esclavos) por 500 chapas y reputación. No se vende en Comercio." },
+  { id: 2500, name: "Morador", type: "special", weight: 0, value: 0, stackable: true, dweller: true, noCommerceSell: true, effectDesc: "Habitante del Refugio atraído por la antena de Vaul-Tec. Peso 0. Úsalo en el Laboratorio para experimentos (gas, radiación, FEV…). No se vende en Comercio." },
+  { id: 2501, name: "Documentos del experimento", type: "other", weight: 0.1, value: 0, stackable: true, experimentDocs: true, noCommerceSell: true, effectDesc: "Informes clasificados de Vaul-Tec. Véndelos en la Oficina de Vaul-Tec por Dinero de antes de la guerra." },
+  { id: 2305, name: "Esclavo", type: "special", weight: 0, value: 500, stackable: true, slave: true, noCommerceSell: true, effectDesc: "Mercancía viva. Véndela en Paradise Falls (Base → Vender Esclavos) por 500 chapas y reputación. No se vende en Comercio." },
   { id: 2311, name: "Látigo de negrero", type: "weapon", damage: 22, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 180, stackable: false, factionOnly: true, faction: "slavers" },
   { id: 2312, name: "Chaleco de negrero", type: "armor", def: 20, weight: 7, value: 220, stackable: false, factionOnly: true, faction: "slavers", radRes: 0 },
   { id: 2313, name: "Escopeta de Paradise Falls", type: "weapon", damage: 40, ammoType: "Cartucho de escopeta", weight: 5.5, value: 320, stackable: false, factionOnly: true, faction: "slavers" },
@@ -1744,7 +1773,7 @@ let P = {
   weather: 'day',
   volMusic: 0.6,
   volSfx: 0.7,
-  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0, slavers: 0, nucleologos: 0 },
+  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0, slavers: 0, nucleologos: 0, vaulttec: 0 },
   chips: 0,
   playerSettlement: {
     claimed: false,
@@ -1968,7 +1997,14 @@ function createCompanionFromEnemy(enemyName, enemyLevel, baseHp, baseDmg, isLege
   let maxHp = baseHp;
   if (ability && ability.id === 'c_tank') maxHp = Math.floor(maxHp * 1.35);
   if (ability && ability.id === 'c_legend') maxHp = Math.floor(maxHp * 1.15);
+  
+  let arm = getCompanionArmorInfo(type, !!isLegendary, enemyLevel || 1);
+  let _radBase = companionDefaultRadRes({ name: enemyName, type: type });
+  let _rad = (_radBase >= 90) ? _radBase : Math.min(95, _radBase + (arm.radBonus || 0));
   return {
+    radRes: _rad,
+    armor: arm.name,
+    armorRadBonus: arm.radBonus || 0,
     id: 'comp_' + Date.now() + '_' + Math.floor(Math.random() * 9999),
     name: enemyName.replace(/\s*\(Nv\.\d+\)/, '').replace(/^★\s*/, ''),
     level: enemyLevel || 1,
@@ -1993,7 +2029,8 @@ function getPrisonCapacity() {
 
 function getEquippedCompanion() {
   if (!P.equippedCompanionId || !P.prison) return null;
-  return P.prison.find(c => c.id === P.equippedCompanionId) || null;
+  ensureCompanionIds();
+  return P.prison.find(c => c.id === P.equippedCompanionId || c.uid === P.equippedCompanionId) || null;
 }
 
 function companionRequiredXP(lvl) {
@@ -2021,8 +2058,10 @@ function addCompanionXP(comp, amount) {
 
 function getCompanionCombatStats(comp) {
   if (!comp) return null;
-  let dmg = comp.baseDmg + Math.floor((comp.special.S || 1) * 0.5);
-  let def = comp.baseDef;
+  let baseDmg = (comp.baseDmg != null && !isNaN(comp.baseDmg)) ? comp.baseDmg : ((comp.atk != null && !isNaN(comp.atk)) ? comp.atk : 8);
+  let baseDef = (comp.baseDef != null && !isNaN(comp.baseDef)) ? comp.baseDef : ((comp.def != null && !isNaN(comp.def)) ? comp.def : 5);
+  let dmg = baseDmg + Math.floor(((comp.special && comp.special.S) || 1) * 0.5);
+  let def = baseDef;
   let maxHp = comp.maxHp;
   let ab = comp.ability;
   if (ab) {
@@ -2040,7 +2079,23 @@ function getCompanionCombatStats(comp) {
   let lvlBonus = Math.max(0, (comp.level || 1) - 1);
   dmg += Math.floor(lvlBonus * 0.8);
   def += Math.floor(lvlBonus * 0.4);
-  return { dmg, def, maxHp };
+  let baseRad = companionDefaultRadRes(comp);
+  let armBonus = (comp.armorRadBonus != null) ? comp.armorRadBonus : 0;
+  if (!comp.armorRadBonus && comp.armor) {
+    let an = (comp.armor || '').toLowerCase();
+    if (an.includes('servo')) armBonus = 50;
+    else if (an.includes('combate pesada')) armBonus = 40;
+    else if (an.includes('combate')) armBonus = 30;
+    else if (an.includes('metal')) armBonus = 20;
+    else if (an.includes('cuero reforzado')) armBonus = 12;
+    else if (an.includes('cuero') || an.includes('chaqueta')) armBonus = 6;
+  }
+  let radRes;
+  if (baseRad >= 100) radRes = 100;
+  else if (baseRad >= 90) radRes = baseRad;
+  else radRes = Math.min(95, 5 + armBonus);
+  return {
+    radRes: radRes, dmg, def, maxHp, armor: comp.armor || 'Ninguna' };
 }
 
 // Genera un objeto legendario (arma o armadura) con habilidad aleatoria
@@ -2169,6 +2224,7 @@ function getRadResistance() {
 }
 
 function addRads(amount) {
+  if (typeof isPlayerGhoul === "function" && isPlayerGhoul()) return;
   if (amount <= 0) return;
   let res = getRadResistance();
   let actual = Math.max(1, Math.floor(amount * (1 - res / 100)));
@@ -2399,6 +2455,8 @@ function logMsg(msg) {
 }
 
 function updateStats() {
+  if (typeof isPlayerGhoul === 'function' && isPlayerGhoul()) { P.rads = 0; }
+
   let wCap = P.inv.reduce((acc, inst) => {
     let base = getItemBase(inst.id);
     return acc + ((base?.weight || 0) * (inst.qty || 1));
@@ -2647,6 +2705,16 @@ function renderCharacter(sub) {
         </div>`;
       });
     }
+    html += `<h3 style="color:#88aa66; font-size:13px; margin:12px 0 6px 0;">Efectos permanentes</h3>`;
+    if (P.isGhoul) {
+      html += `<div class="item" style="border-color:#88aa66;">
+        <b style="color:#88aa66;">☢ Necrófago</b>
+        <span style="font-size:11px; color:var(--accent);">Permanente</span><br>
+        <span style="font-size:12px; color:#8d9880;">Inmunidad total a la radiación. El Enclave, Hermandad del Acero, Proscritos, Vaul-Tec, Instituto, Legión de César y RNC no te aceptan. Puedes revertirlo en los Seguidores del Apocalipsis (1000 chapas).</span>
+      </div>`;
+    } else {
+      html += `<p style="font-size:12px; color:#8d9880;">Ningún efecto permanente.</p>`;
+    }
   } else if (sub === 'rep') {
     html += `<h3 style="color:var(--accent); font-size:13px; margin:6px 0;">Reputación de facciones</h3>`;
     html += Object.keys(FACTIONS).filter(fid => fid !== 'player' && fid !== 'sierra' && fid !== 'robco').map(fid => {
@@ -2658,11 +2726,18 @@ function renderCharacter(sub) {
     let ps = P.playerSettlement;
     let sc = P.sierraCasino;
     let rf = P.robcoFactory;
-    let hasAny = (ps && ps.claimed && ps.name) || (sc && sc.claimed) || (rf && rf.claimed);
+    ensurePlayerVault();
+    let pv = P.playerVault;
+    let hasAny = (ps && ps.claimed && ps.name) || (sc && sc.claimed) || (rf && rf.claimed) || (pv && pv.claimed && pv.number);
     if (!hasAny) {
       html += `<p style="font-size:12px;color:#8d9880;">Aún no has reclamado ningún asentamiento propio.</p>`;
     } else {
       html += `<h3 style="color:var(--accent); font-size:13px; margin:6px 0;">Asentamientos Propios</h3>`;
+      if (pv && pv.claimed && pv.number) {
+        html += '<div class="item" style="border-color:#88aadd; margin:0 0 6px 0; padding:8px;">' +
+          '<div class="row" style="margin:0;"><span style="color:#88aadd;font-weight:bold;">⌂ Refugio ' + pv.number + '</span>' +
+          '<b style="color:#88aadd;">Supervisor</b></div></div>';
+      }
       if (ps && ps.claimed && ps.name) {
         html += '<div class="item" style="border-color:#44ddaa; margin:0 0 6px 0; padding:8px;">' +
           '<div class="row" style="margin:0;"><span style="color:#44ddaa;font-weight:bold;">🏕 ' + ps.name + '</span>' +
@@ -2680,10 +2755,13 @@ function renderCharacter(sub) {
       }
     }
   } else if (sub === 'wallet') {
+    if (P.prewarMoney === undefined) P.prewarMoney = 0;
+
     html += `
       <h3 style="color:var(--gold); font-size:13px; margin:6px 0;">Monedero</h3>
       <div class="item" style="border-color:var(--gold);">
         <div class="row"><span style="color:#e05050;"><img class="cap-icon chip-icon-caps" src="${(document.querySelector('header .cap-icon:not(.chip-icon)')||{}).src||''}" alt="chapas" style="width:18px;height:18px;vertical-align:middle;filter:sepia(1) saturate(8) hue-rotate(-50deg) brightness(0.95);"> Chapas</span><b style="color:#e05050;">${P.caps}</b></div>
+        <div class="row"><span style="color:#88aadd;display:inline-flex;align-items:center;gap:4px;"><img src="${PREWAR_ICON_SRC}" alt="$" style="width:20px;height:20px;object-fit:contain;"> Dinero de antes de la guerra</span><b style="color:#88aadd;">${P.prewarMoney||0}</b></div>
         <div class="row"><span style="color:#6eb5ff;display:inline-flex;align-items:center;gap:4px;"><img class="ticket-icon" src="${typeof TICKET_ICON_SRC!=='undefined'?TICKET_ICON_SRC:((document.querySelector('header .ticket-icon')||{}).src||'')}" alt="tickets" style="width:18px;height:18px;vertical-align:middle;filter:none;"> Tickets Combat Zone</span><b style="color:#6eb5ff;">${P.tickets||0}</b></div>
         <div class="row"><span style="color:#e8d48b;">${chipIconHtml('sierra')} Sierra Madre</span><b style="color:#e8d48b;">${getCasinoChips('sierra')}</b></div>
         ${STRIP_CASINOS.map(c => {
@@ -3026,6 +3104,7 @@ function getStorageUpgradeCost() {
 
 function renderPrisonUI() {
   if (!P.prison) P.prison = [];
+  ensureCompanionIds();
   if (!P.prisonLevel) P.prisonLevel = 1;
   if (P.prisonPage === undefined) P.prisonPage = 0;
   let cap = getPrisonCapacity();
@@ -3047,10 +3126,14 @@ function renderPrisonUI() {
       let st = getCompanionCombatStats(c);
       let ab = c.ability ? `<br><span style="color:var(--gold);font-size:11px;">★ ${c.ability.name}: ${c.ability.desc}</span>` : '';
       let weap = c.weapon ? `Arma: ${c.weapon}` : 'Sin arma (cuerpo a cuerpo)';
+      let armN = c.armor || (st && st.armor) || 'Ninguna';
+      let radV = st.radRes != null ? st.radRes : (c.radRes || 0);
+      let radTxt = radV >= 100 ? 'Inmune' : (radV + '%');
       html += `<div class="item" style="${c.id === P.equippedCompanionId ? 'border-color:var(--accent);' : ''}">
         <b style="${c.isLegendary ? 'color:var(--gold);' : ''}">${c.isLegendary ? '★ ' : ''}${c.name}</b> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
         ${c.resting ? ' <span style="color:var(--danger);">[DESCANSANDO]</span>' : ''}
-        <br><span style="font-size:11px;color:#8d9880;">HP ${c.hp}/${c.maxHp} · ATK ${st.dmg} · DEF ${st.def} · ${weap}</span>
+        <br><span style="font-size:11px;color:#8d9880;">HP ${c.hp}/${c.maxHp} · ATK ${st.dmg} · DEF ${st.def || 0} · RAD ${radTxt}</span>
+        <br><span style="font-size:11px;color:#8d9880;">${weap} · Armadura: ${armN}</span>
         <br><span style="font-size:10px;">S${c.special.S} P${c.special.P} E${c.special.E} C${c.special.C} I${c.special.I} A${c.special.A} L${c.special.L}</span>
         ${ab}
         <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;">
@@ -3070,29 +3153,110 @@ function renderPrisonUI() {
 }
 
 function equipCompanion(id) {
-  let c = (P.prison || []).find(x => x.id === id);
-  if (!c || c.resting) { logMsg("No se puede equipar."); return; }
-  if (P.equippedCompanionId === id) {
+  ensureCompanionIds();
+  let c = (P.prison || []).find(x => x.id === id || x.uid === id);
+  if (!c) { logMsg("Compañero no encontrado."); return; }
+  if (c.resting) { logMsg("Está descansando."); return; }
+  let cid = c.id || c.uid;
+  if (P.equippedCompanionId === cid) {
     P.equippedCompanionId = null;
     logMsg("Compañero retirado.");
   } else {
-    P.equippedCompanionId = id;
+    P.equippedCompanionId = cid;
     logMsg("Compañero equipado: " + c.name);
   }
   renderVault('prison');
   updateStats();
 }
+function companionDefaultRadRes(c) {
+  let t = ((c && c.type) || '').toLowerCase();
+  let n = ((c && c.name) || '').toLowerCase();
+  if (t === 'robot' || t === 'synth' || t === 'robotic' ||
+      n.includes('robot') || n.includes('synth') || n.includes('courser') ||
+      n.includes('protectron') || n.includes('sentry') || n.includes('handy') ||
+      n.includes('assaultron') || n.includes('mr.') || n.includes('robobrain')) return 100;
+  if (t === 'ghoul' || t === 'necrofago' || n.includes('necr') || n.includes('ghoul')) return 95;
+  if (t === 'supermutant' || t === 'mutant' || n.includes('supermutante') || n.includes('mutante') || n.includes('supermutant')) return 90;
+  if (t === 'experiment' || n.includes('exp.')) {
+    if (n.includes('mutante') || n.includes('mutant')) return 90;
+    if (n.includes('necr') || n.includes('ghoul')) return 95;
+    return 5;
+  }
+  return 5;
+}
+
+function getCompanionArmorInfo(type, isLeg, level) {
+  let lvl = level || 1;
+  let leg = !!isLeg;
+  if (type === 'robot') return { name: leg ? 'Blindaje robótico reforzado' : 'Chasis metálico', radBonus: 0 };
+  if (type === 'synth') return { name: leg ? 'Carcasa sintética militar' : 'Carcasa sintética', radBonus: 0 };
+  if (type === 'ghoul') return { name: leg ? 'Harapos irradiados reforzados' : 'Harapos desgarrados', radBonus: 0 };
+  if (type === 'supermutant') return { name: leg ? 'Placas de metal soldadas' : 'Chatarra improvisada', radBonus: 0 };
+  if (type === 'creature') return { name: 'Ninguna (piel natural)', radBonus: 0 };
+  if (type === 'experiment') return { name: 'Traje de laboratorio', radBonus: 5 };
+  // Humanos: mejor armadura a mayor nivel
+  if (lvl >= 25 || leg) return { name: leg ? 'Servoarmadura de saqueador' : 'Armadura de combate pesada', radBonus: leg ? 50 : 40 };
+  if (lvl >= 18) return { name: 'Armadura de combate', radBonus: 30 };
+  if (lvl >= 12) return { name: 'Armadura metálica', radBonus: 20 };
+  if (lvl >= 6) return { name: 'Armadura de cuero reforzado', radBonus: 12 };
+  if (lvl >= 3) return { name: 'Chaqueta de cuero', radBonus: 6 };
+  return { name: 'Ropa de yermo', radBonus: 0 };
+}
+
+function ensureCompanionIds() {
+  if (!P.prison) return;
+  P.prison.forEach((c, i) => {
+    if (!c.id) c.id = c.uid || ('comp_' + i + '_' + Date.now());
+    if (!c.uid) c.uid = c.id;
+    if (c.xp === undefined) c.xp = 0;
+    if (c.resting === undefined) c.resting = false;
+    if (!c.special) c.special = { S: 5, P: 5, E: 5, C: 5, I: 5, A: 5, L: 5 };
+    if (c.maxHp === undefined) c.maxHp = c.hp || 50;
+    if (c.hp === undefined) c.hp = c.maxHp;
+    if (c.def === undefined || isNaN(c.def)) c.def = c.baseDef || 5;
+    if (c.atk === undefined || isNaN(c.atk)) c.atk = c.baseDmg || 8;
+    if (!c.armor) {
+      let arm = getCompanionArmorInfo(c.type || 'other', !!c.isLegendary, c.level || 1);
+      c.armor = arm.name;
+      c.armorRadBonus = arm.radBonus;
+    }
+    if (c.armorRadBonus === undefined || c.armorRadBonus === null) {
+      let arm = getCompanionArmorInfo(c.type || 'other', !!c.isLegendary, c.level || 1);
+      c.armorRadBonus = arm.radBonus;
+    }
+    let baseRad = companionDefaultRadRes(c);
+    if (baseRad >= 100) c.radRes = 100;
+    else if (baseRad >= 90) c.radRes = baseRad;
+    else c.radRes = Math.min(95, 5 + (c.armorRadBonus || 0));
+  });
+}
 
 function freeCompanion(id) {
-  if (!confirm("¿Liberar a este compañero? Se irá para siempre.")) return;
-  P.prison = (P.prison || []).filter(c => c.id !== id);
+  ensureCompanionIds();
+  let c = (P.prison || []).find(x => x.id === id || x.uid === id);
+  if (!c) return;
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:var(--accent);text-align:center;margin-top:0;">⛓ PRISIÓN</h2>
+    <div class="item" style="border-color:var(--danger);">
+      <p style="font-size:13px;text-align:center;margin:8px 0;">¿Liberar a <b style="color:var(--accent);">${c.isLegendary ? '★ ' : ''}${c.name}</b>?</p>
+      <p style="font-size:12px;color:#8d9880;text-align:center;">Se irá para siempre. No podrás recuperarlo.</p>
+    </div>
+    <button style="width:100%;margin-top:8px;border-color:var(--danger);color:var(--danger);" onclick="confirmFreeCompanion('${c.id}')">Liberar</button>
+    <button style="width:100%;margin-top:6px;" onclick="closeModal()">Cancelar</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+function confirmFreeCompanion(id) {
+  P.prison = (P.prison || []).filter(c => c.id !== id && c.uid !== id);
   if (P.equippedCompanionId === id) P.equippedCompanionId = null;
   logMsg("Compañero liberado.");
+  closeModal();
   renderVault('prison');
 }
 
 function showCompanionStats(id) {
-  let c = (P.prison || []).find(x => x.id === id);
+  ensureCompanionIds();
+  let c = (P.prison || []).find(x => x.id === id || x.uid === id);
   if (!c) return;
   let st = getCompanionCombatStats(c);
   let ab = c.ability ? `<p style="color:var(--gold);"><b>★ ${c.ability.name}</b><br>${c.ability.desc}</p>` : '<p style="color:#8d9880;">Sin habilidad legendaria.</p>';
@@ -3102,8 +3266,10 @@ function showCompanionStats(id) {
     <p style="font-size:12px;">Nivel ${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)} · Tipo: ${c.type}</p>
     <div class="row"><span>Salud</span><b>${c.hp} / ${c.maxHp}</b></div>
     <div class="row"><span>Ataque</span><b>${st.dmg}</b></div>
-    <div class="row"><span>Defensa</span><b>${st.def}</b></div>
+    <div class="row"><span>Defensa</span><b>${st.def || 0}</b></div>
+    <div class="row"><span>Def. radiación</span><b>${(function(){ let r = st.radRes != null ? st.radRes : (c.radRes || 0); return r >= 100 ? 'Inmune (100%)' : (r + '%'); })()}</b></div>
     <div class="row"><span>Arma</span><b>${c.weapon || 'Ninguna (melee)'}</b></div>
+    <div class="row"><span>Armadura</span><b>${c.armor || 'Ninguna'}</b></div>
     <div class="row"><span>Estado</span><b>${c.resting ? 'Descansando' : 'Listo'}</b></div>
     <h3 style="color:var(--accent);font-size:13px;">S.P.E.C.I.A.L.</h3>
     <p style="font-size:12px;">S${c.special.S} P${c.special.P} E${c.special.E} C${c.special.C} I${c.special.I} A${c.special.A} L${c.special.L}</p>
@@ -3726,6 +3892,7 @@ function claimReward(questId) {
   if (idx === -1) return;
 
   let q = P.activeQuests[idx];
+  if (q.reward.prewar) P.prewarMoney = (P.prewarMoney||0) + q.reward.prewar;
   P.caps += q.reward.caps;
   addXP(q.reward.xp);
   
@@ -3834,6 +4001,9 @@ const FACTIONS = {
   legion: { id: 'legion', name: 'La Legión de César', color: '#cc4422', shopLevels: [100, 250, 500, 750, 1000] },
   slavers: { id: 'slavers', name: 'Los Negreros', color: '#aa6644', shopLevels: [100, 250, 500, 750, 1000] },
   nucleologos: { id: 'nucleologos', name: 'Los Nucleólogos', color: '#66ffaa', shopLevels: [100, 250, 500, 750, 1000] },
+  vaulttec: { id: 'vaulttec', name: 'Vaul-Tec', color: '#88aadd', shopLevels: [100, 250, 500, 750, 1000], prewarOnly: true },
+  followers: { id: 'followers', name: 'Seguidores del Apocalipsis', color: '#66cc99', shopLevels: [100, 250, 500, 750, 1000], noWeapons: true },
+  necropolis: { id: 'necropolis', name: 'Necrópolis', color: '#88aa66', shopLevels: [100, 250, 500, 750, 1000], ghoulOnly: true },
   player: { id: 'player', name: 'Tu Asentamiento', color: '#44ddaa', shopLevels: [0, 0, 0, 0, 0] },
   sierra: { id: 'sierra', name: 'Sierra Madre', color: '#e8d48b', shopLevels: [0,0,0,0,0] },
   robco: { id: 'robco', name: 'RobCo Industries', color: '#a0a0a0', shopLevels: [0,0,0,0,0] }
@@ -3935,9 +4105,14 @@ const SETTLEMENTS = [
   { id: 'nucleo_lab', name: 'Laboratorio Nucleólogo', faction: 'nucleologos', x: 18, y: 15 },
   { id: 'player_home', name: 'Tu Asentamiento', faction: 'player', x: -10, y: -12, playerOwned: true },
   { id: 'sierra_madre', name: 'Casino Sierra Madre', faction: 'sierra', x: -14, y: 8, sierraCasino: true },
-  { id: 'robco_factory', name: 'Fábrica RobCo Industries', faction: 'robco', x: 8, y: -10, robcoFactory: true }
+  { id: 'robco_factory', name: 'Fábrica RobCo Industries', faction: 'robco', x: 8, y: -10, robcoFactory: true },
+  { id: 'player_vault', name: 'Refugio experimental', faction: 'vaulttec', x: -22, y: 18, playerVault: true },
+  { id: 'vaulttec_hq', name: 'Sede de Vaul-Tec', faction: 'vaulttec', x: -18, y: 14 },
+  { id: 'followers_hub', name: 'Clínica de los Seguidores', faction: 'followers', x: -20, y: -8 },
+  { id: 'necropolis_city', name: 'Necrópolis', faction: 'necropolis', x: 16, y: -12 }
 ];
 
+const PREWAR_ICON_SRC = 'data:image/webp;base64,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';
 const TICKET_ICON_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAv0lEQVR4nO2VMQ7DIAxFv6OcLQsMOUmmDj1Ch06cJEOy5HJ0qEyNVdGSulFV8TaQ8ZNsMECj8euQ3piWGK0lwVPy9Fq2zau1D9MSI0u7b8sAYJvXVLnuVbA1hwuzHg6jA3AvAXM9u+qkp8vjPOdkCMibymuLfg6jg85LWmYl1TKmfxYs+bSk1cLS4T10wRPp6WLRQ/n2ZN6soTKYeaekpSrIWxo82d/Mkjh4ov+fNEkYPJGeClbIN3n4f9hoVHMDA89mtC8SUbYAAAAASUVORK5CYII=';
 const IMPORTANT_LOCS = [
   { id: 'vault_home', name: 'El Refugio', x: 0, y: 0, kind: 'vault' },
@@ -4103,6 +4278,32 @@ const FACTION_QUEST_POOL = {
     { id: 'nuc_q8', title: "Conexión con la nave madre", desc: "Derrota 12 enemigos. Cada baja alimenta el archivo de amenazas alienígenas.", type: 'kill', target: 12, reward: { caps: 280, xp: 160, rep: 18 }, minRep: 450 },
     { id: 'nuc_q9', title: "Caminan entre nosotros", desc: "Derrota 3 enemigos legendarios. Los Nucleólogos sospechan infiltración de alto nivel.", type: 'kill_leg', target: 3, reward: { caps: 400, xp: 240, rep: 22 }, minRep: 650 },
     { id: 'nuc_q10', title: "Día de la Independencia", desc: "Derrota 20 enemigos del Yermo. Demuestra que la Tierra aún se defiende.", type: 'kill', target: 20, reward: { caps: 480, xp: 260, rep: 22 }, minRep: 850 }
+  ],
+  necropolis: [
+    { id: 'nec_q1', title: "Guardianes de la ciudad muerta", desc: "Derrota a 5 saqueadores o humanos hostiles que amenazan las afueras.", type: 'kill', target: 5, reward: { caps: 90, xp: 60, rep: 12, item: 2600, qty: 1 }, minRep: 0 },
+    { id: 'nec_q2', title: "Patrulla en las ruinas", desc: "Explora 6 zonas del Yermo en nombre de Necrópolis.", type: 'explore', target: 6, reward: { caps: 70, xp: 50, rep: 12, item: 2601, qty: 1 }, minRep: 0 },
+    { id: 'nec_q3', title: "Botín para los ancestros", desc: "Consigue 4 botines explorando ruinas.", type: 'loot', target: 4, reward: { caps: 80, xp: 55, rep: 14, item: 2600, qty: 1 }, minRep: 0 },
+    { id: 'nec_q4', title: "Caza en el polvo", desc: "Derrota a 8 enemigos del Yermo.", type: 'kill', target: 8, reward: { caps: 110, xp: 70, rep: 15, item: 2601, qty: 2 }, minRep: 100 },
+    { id: 'nec_q5', title: "Vigilancia nocturna", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 100, xp: 65, rep: 14, item: 2600, qty: 1 }, minRep: 100 },
+    { id: 'nec_q6', title: "Ecos de la biblioteca", desc: "Consigue 6 botines explorando.", type: 'loot', target: 6, reward: { caps: 120, xp: 80, rep: 16, item: 2601, qty: 2 }, minRep: 250 },
+    { id: 'nec_q7', title: "Sangre en el asfalto", desc: "Derrota a 12 enemigos del Yermo.", type: 'kill', target: 12, reward: { caps: 150, xp: 95, rep: 18, item: 2600, qty: 2 }, minRep: 250 },
+    { id: 'nec_q8', title: "Rutas del este", desc: "Explora 10 zonas del Yermo.", type: 'explore', target: 10, reward: { caps: 130, xp: 85, rep: 16, item: 2601, qty: 2 }, minRep: 500 },
+    { id: 'nec_q9', title: "Leyenda entre los muertos", desc: "Derrota a 2 enemigos legendarios.", type: 'kill_leg', target: 2, reward: { caps: 200, xp: 140, rep: 20, item: 2600, qty: 2 }, minRep: 500 },
+    { id: 'nec_q10', title: "Gloria de Necrópolis", desc: "Derrota a 15 enemigos y demuestra tu lealtad.", type: 'kill', target: 15, reward: { caps: 220, xp: 150, rep: 22, item: 2601, qty: 3 }, minRep: 750 }
+  ],
+  followers: [],
+
+  vaulttec: [
+    { id: 'vt_q1', title: "Protocolo de observación", desc: "Explora 8 zonas del Yermo. Datos para el supervisor.", type: 'explore', target: 8, reward: { caps: 0, xp: 70, rep: 12, prewar: 50 }, minRep: 0 },
+    { id: 'vt_q2', title: "Sujetos de prueba", desc: "Derrota 5 enemigos del Yermo.", type: 'kill', target: 5, reward: { caps: 0, xp: 80, rep: 12, prewar: 60 }, minRep: 0 },
+    { id: 'vt_q3', title: "Restos del Viejo Mundo", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 0, xp: 60, rep: 10, prewar: 40 }, minRep: 0 },
+    { id: 'vt_q4', title: "Informe de campo", desc: "Recupera 1 Informe de campo Vaul-Tec.", type: 'collect', itemId: 933, target: 1, reward: { caps: 0, xp: 120, rep: 18, prewar: 100 }, minRep: 150 },
+    { id: 'vt_q5', title: "El experimento continúa", desc: "Derrota 10 enemigos.", type: 'kill', target: 10, reward: { caps: 0, xp: 140, rep: 16, prewar: 120 }, minRep: 300 },
+    { id: 'vt_q6', title: "Cartografía de sujetos", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 0, xp: 110, rep: 15, prewar: 90 }, minRep: 400 },
+    { id: 'vt_q7', title: "Muestras del Yermo", desc: "Consigue 6 botines explorando.", type: 'loot', target: 6, reward: { caps: 0, xp: 100, rep: 14, prewar: 80 }, minRep: 250 },
+    { id: 'vt_q8', title: "Supervivencia forzada", desc: "Derrota 12 enemigos.", type: 'kill', target: 12, reward: { caps: 0, xp: 160, rep: 18, prewar: 140 }, minRep: 500 },
+    { id: 'vt_q9', title: "Anomalías de alto valor", desc: "Derrota 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 0, xp: 220, rep: 20, prewar: 200 }, minRep: 650 },
+    { id: 'vt_q10', title: "El supervisor está satisfecho", desc: "Derrota 4 enemigos legendarios.", type: 'kill_leg', target: 4, reward: { caps: 0, xp: 260, rep: 22, prewar: 250 }, minRep: 850 }
   ]
 };
 
@@ -4192,7 +4393,18 @@ const FACTION_SHOP_ITEMS = {
     { id: 2403, shopLevel: 3 }, { id: 2404, shopLevel: 3 }, { id: 2411, shopLevel: 3 },
     { id: 2413, shopLevel: 4 }, { id: 14, shopLevel: 4 }, { id: 2418, shopLevel: 4 },
     { id: 15, shopLevel: 5 }, { id: 29, shopLevel: 5 }, { id: 2414, shopLevel: 5 }
-  ]
+  ],
+  followers: [
+    { id: 2602, shopLevel: 1 }, { id: 2610, shopLevel: 1 }, { id: 2611, shopLevel: 1 },
+    { id: 2612, shopLevel: 2 }, { id: 2613, shopLevel: 1 }, { id: 2614, shopLevel: 2 },
+    { id: 2615, shopLevel: 3 }, { id: 7, shopLevel: 1 }, { id: 8, shopLevel: 2 },
+    { id: 301, shopLevel: 1 }, { id: 302, shopLevel: 2 }
+  ],
+  necropolis: [
+    { id: 2620, shopLevel: 1 }, { id: 2621, shopLevel: 1 }, { id: 2622, shopLevel: 2 },
+    { id: 2623, shopLevel: 1 }, { id: 2624, shopLevel: 2 }, { id: 2625, shopLevel: 1 },
+    { id: 1, shopLevel: 1 }, { id: 2, shopLevel: 2 }, { id: 5, shopLevel: 1 }
+  ],
 };
 
 // Extra: armas/armaduras de facción por nivel de tienda
@@ -4252,7 +4464,15 @@ const FACTION_UNIQUE_SHOP = {
     { id: 2403, shopLevel: 3 }, { id: 2413, shopLevel: 3 },
     { id: 2410, shopLevel: 4 }, { id: 2415, shopLevel: 4 },
     { id: 2417, shopLevel: 5 }, { id: 2407, shopLevel: 5 }
-  ]
+  ],
+  followers: [
+    { id: 2602, shopLevel: 1 }, { id: 2610, shopLevel: 1 }, { id: 2612, shopLevel: 3 },
+    { id: 2613, shopLevel: 2 }, { id: 2615, shopLevel: 4 }
+  ],
+  necropolis: [
+    { id: 2620, shopLevel: 2 }, { id: 2621, shopLevel: 1 }, { id: 2622, shopLevel: 3 },
+    { id: 2623, shopLevel: 2 }, { id: 2624, shopLevel: 4 }, { id: 2625, shopLevel: 1 }
+  ],
 };
 
 
@@ -4376,6 +4596,7 @@ function updateWeatherFromTime() {
 
 function advanceTime(hours = 1) {
   P.worldHours = (P.worldHours || 9) + hours;
+  if (typeof tickVaultDwellers === "function") tickVaultDwellers();
   let prev = P.weather;
   updateWeatherFromTime();
   // Efectos climáticos por hora
@@ -4449,6 +4670,8 @@ function getZoneAt(x, y) {
     if (isPlayer) def.cls = 'player-settlement';
     if (sett.id === 'sierra_madre' || sett.sierraCasino) def.cls = 'sierra-settlement';
     if (sett.id === 'robco_factory' || sett.robcoFactory) def.cls = 'robco-settlement';
+    if (sett.id === 'player_vault' || sett.playerVault) def.cls = 'player-vault';
+    if (sett.id === 'vaulttec_hq' || sett.faction === 'vaulttec') def.cls = 'vaulttec-settlement';
     if (sett.faction === 'nucleologos') def.cls = 'nucleo-settlement';
     return {
       type: 'settlement',
@@ -4513,6 +4736,8 @@ function renderWorldGrid() {
       let cls = 'world-cell ' + z.cls + (isPlayer ? ' player' : '') + (z.enterable ? ' enterable' : '') + (z.playerOwned ? ' player-settlement' : '');
       if (z.settlementId === 'sierra_madre' || z.faction === 'sierra') cls += ' sierra-settlement';
       if (z.settlementId === 'robco_factory' || z.faction === 'robco') cls += ' robco-settlement';
+      if (z.settlementId === 'player_vault') cls += ' player-vault';
+      if (z.settlementId === 'vaulttec_hq' || z.faction === 'vaulttec') cls += ' vaulttec-settlement';
       if (z.faction === 'nucleologos') cls += ' nucleo-settlement';
       let icon = isPlayer ? '☺' : z.icon;
       cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
@@ -4530,6 +4755,8 @@ function renderMap() {
       renderSierraCasinoUI('casino');
     } else if (P.location.settlementId === 'robco_factory') {
       renderRobcoFactoryUI('scrap');
+    } else if (P.location.settlementId === 'player_vault') {
+      renderPlayerVaultUI('door');
     } else {
       renderSettlementUI(P.location.settlementId, 'missions');
     }
@@ -4621,14 +4848,28 @@ function renderMap() {
       } else {
         actHint = `<span style="color:#a0a0a0;">⚙ Fábrica RobCo Industries · Puedes reclamarla</span>`;
       }
+    } else if (zone.settlementId === 'player_vault' || zone.playerVault) {
+      let pv = P.playerVault;
+      if (pv && pv.claimed && pv.number) {
+        actHint = `<span style="color:#88aadd;">⌂ Refugio ${pv.number} · Supervisor</span>`;
+      } else {
+        actHint = `<span style="color:#88aadd;">⌂ Refugio experimental · Puedes reclamarlo</span>`;
+      }
+    } else if (zone.settlementId === 'vaulttec_hq') {
+      ensurePlayerVault();
+      if (!(P.playerVault && P.playerVault.hqUnlocked)) {
+        actHint = `<span style="color:#88aadd;">🏢 Sede de Vaul-Tec · Aún no te aceptan</span>`;
+      } else {
+        let rep = (P.reputation && P.reputation.vaulttec) || 0;
+        actHint = `<span style="color:#88aadd;">⚑ Vaul-Tec · Rep: ${rep}</span>`;
+      }
     } else if (zone.faction === 'nucleologos' && isNucleologosLocked()) {
       actHint = `<span style="color:#66ffaa;">🧬 Laboratorio Nucleólogo · Aún no te aceptan</span>`;
-      // botón ENTRAR normal → muestra pantalla de rechazo
     } else {
       let rep = (P.reputation && P.reputation[zone.faction]) || 0;
       let fac = FACTIONS[zone.faction];
       let col = (fac && fac.color) || '#cc88ff';
-      actHint = `<span style="color:${col};">⚑ ${zone.factionName || ''} · Rep: ${rep}</span>`;
+      actHint = `<span style="color:${col};">⚑ ${zone.factionName || (fac && fac.name) || ''} · Rep: ${rep}</span>`;
     }
   }
 
@@ -5020,33 +5261,61 @@ function openAdditionalContentUI() {
   document.getElementById('modal-body').innerHTML = `
     <h2 style="color:var(--accent);text-align:center;margin-top:0;">📦 Contenido Adicional</h2>
     <p style="font-size:12px;color:#8d9880;text-align:center;">Expansiones disponibles</p>
-    <button style="width:100%;margin:8px 0;border-color:#66ffaa;color:#66ffaa;font-weight:bold;" onclick="openZetanDlcInfo()">🛸 DLC: Mothership Zeta</button>
+    <button style="width:100%;margin:8px 0;border-color:#66ffaa;color:#66ffaa;font-weight:bold;" onclick="openZetanDlcInfo()">🛸 DLC: A la caza de los Zentans</button>
+    <button style="width:100%;margin:8px 0;border-color:#88aadd;color:#88aadd;font-weight:bold;" onclick="openVaultTecDlcInfo()">🧪 DLC: El experimento de Vaul-Tec</button>
+    <button style="width:100%;margin:8px 0;border-color:#66cc99;color:#66cc99;font-weight:bold;" onclick="openSpiesDlcInfo()">🕵 DLC: Espías entre nosotros</button>
     <button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>
     <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
   `;
   document.getElementById('modal').classList.add('show');
 }
+function openSpiesDlcInfo() {
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#66cc99;text-align:center;margin-top:0;">🕵 Espías entre nosotros</h2>
+    <div class="item" style="border-color:#66cc99;font-size:12px;color:#8d9880;line-height:1.45;">
+      <p style="color:var(--txt);">Los <b style="color:#66cc99;">Seguidores del Apocalipsis</b> no son una facción militar: su guerra es contra el olvido. Buscan conocimiento antiguo —libros, archivos, memorias del mundo de antes— para reconstruir lo que la bomba destruyó.</p>
+      <p>Cuando localizaron una vieja biblioteca repleta de ese saber, descubrieron que estaba bajo el dominio de <b style="color:#88aa66;">Necrópolis</b>, una ciudad de necrófagos que no acepta a ningún humano entre sus muros.</p>
+      <p>Para infiltrarse y recuperar esos conocimientos, los Seguidores perfeccionaron un método de <b>Necrofaguización</b>: convertirte en necrófago, ganar acceso a Necrópolis… y pagar el precio de que facciones humanistas te cierren la puerta.</p>
+      <p><b style="color:#66cc99;">Seguidores</b> — Vende libros/documentos por chapas y reputación. Necrofaguización / revertir (1000 chapas). Tienda sin armas: consumibles, atuendos y Stealth Boy.</p>
+      <p><b style="color:#88aa66;">Necrópolis</b> — Solo necrófagos. Misiones normales cuya recompensa incluye libros o documentos antiguos. Tienda con armas y atuendos. El médico solo cura salud.</p>
+      <p style="color:#66cc99;margin-bottom:0;">Mapa: Clínica de los Seguidores <b>[-20, -8]</b> · Necrópolis <b>[+16, -12]</b></p>
+    </div>
+    <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
 function openZetanDlcInfo() {
   ensureZetanDefaults();
-  let st = P.zetanEscapedOnce
-    ? ('Nucleólogos desbloqueados · Abducciones: ' + (P.zetanAbductions || 0))
-    : 'Aún no has escapado de una nave';
+  let esc = P.zetanEscapedOnce ? 'Has escapado al menos una vez de una nave.' : 'Aún no has escapado de ninguna nave Zetan.';
   document.getElementById('modal-body').innerHTML = `
-    <h2 style="color:#66ffaa;text-align:center;margin-top:0;">🛸 Mothership Zeta</h2>
+    <h2 style="color:#66ffaa;text-align:center;margin-top:0;">🛸 A la caza de los Zentans</h2>
     <p style="text-align:center;font-size:11px;color:#8d9880;margin:0 0 8px 0;">Expansión · Wasteland</p>
-    <div class="item" style="border-color:#66ffaa;">
-      <span style="font-size:12px;color:#8d9880;">
-        Una señal extraña marca el cielo del Yermo. En coordenadas remotas puedes ser
-        <b>abducido</b> por una nave Zetan: un mapa limitado y procedural, emboscadas constantes
-        y tecnología que no pertenece a este mundo.
-        Recoge <b>Sangre de Zetan</b> y armamento alienígena; alcanza la escotilla de escape
-        para volver a tierra. Si mueres a bordo, pierdes toda la sangre y despiertas en la entrada.
-        Tras escapar al menos una vez se revela <b>Los Nucleólogos</b> — científicos obsesionados
-        con lo que cae del cielo: misiones, tienda exclusiva y un mercado de muestras alienígenas.
-      </span><br><br>
-      <span style="font-size:11px;color:#66ffaa;">Estado: ${st}</span><br>
-      <span style="font-size:11px;color:#8d9880;">Sitio de abducción: [${ABDUCTION_SITE.x >= 0 ? '+' : ''}${ABDUCTION_SITE.x}, ${ABDUCTION_SITE.y >= 0 ? '+' : ''}${ABDUCTION_SITE.y}]</span><br>
-      <span style="font-size:11px;color:#8d9880;">Laboratorio Nucleólogo: [+18, +15] (bloqueado hasta escapar)</span>
+    <div class="item" style="border-color:#66ffaa;font-size:12px;color:#8d9880;line-height:1.45;">
+      <p style="color:var(--txt);">No estás solo en el Yermo. Desde hace décadas, luces imposibles cruzan el cielo y dejan cicatrices en la tierra. Los <b style="color:#66ffaa;">Zentans</b> observan, abducen y experimentan: humanos convertidos en datos a bordo de naves que no deberían existir.</p>
+      <p>En una zona remota del mapa [<b>+18, +15</b>] puedes ser abducido. Dentro de la nave el espacio es limitado, las emboscadas constantes y la muerte te devuelve a la entrada… sin la <b>Sangre de Zetan</b> que hayas reunido. Si logras escapar, demuestras que la Tierra aún muerde.</p>
+      <p>Esa hazaña abre las puertas de los <b style="color:#66ffaa;">Nucleólogos</b> [+18, +15]: científicos obsesionados con lo alienígena. Misiones propias, tienda exclusiva y compra de sangre de Zetan (100 chapas + 5 rep por unidad). Armas y munición alienígena solo se obtienen farmeando a bordo.</p>
+      <p style="color:#66ffaa;margin-bottom:0;">Estado: ${esc}</p>
+    </div>
+    <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
+    <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+
+function openVaultTecDlcInfo() {
+  ensurePlayerVault();
+  let v = P.playerVault || {};
+  let st = v.claimed
+    ? ('Refugio ' + (v.number || '?') + ' · Antena: ' + (v.antennaFixed ? 'operativa' : 'averiada') + ' · Criogenia: ' + ((v.cryo || []).length) + ' sujeto(s)')
+    : 'Refugio aún no reclamado';
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#88aadd;text-align:center;margin-top:0;">🧪 El experimento de Vaul-Tec</h2>
+    <p style="text-align:center;font-size:11px;color:#8d9880;margin:0 0 8px 0;">Expansión · Wasteland</p>
+    <div class="item" style="border-color:#88aadd;font-size:12px;color:#8d9880;line-height:1.45;">
+      <p style="color:var(--txt);">Antes de la guerra, <b style="color:#88aadd;">Vaul-Tec</b> prometió salvación bajo tierra. En la práctica, muchos Refugios fueron laboratorios: gas, radiación, virus de evolución forzada… todo en nombre del “progreso”.</p>
+      <p>En un rincón remoto del Yermo [<b>-22, +18</b>] sigue en pie un <b>Refugio experimental</b>. Puedes reclamarlo, numerarlo y convertirte en Supervisor. Repara la antena de atracción para que lleguen <b>moradores</b> (Inventario → Especiales) y, en el <b>Laboratorio</b>, somételos a las pruebas de siempre.</p>
+      <p>Los que sobreviven pasan a <b>Criogenización</b>: úsalos como compañeros o sacrifícalos por <b>Documentos del experimento</b>. Desde la Sala del Supervisor contactas con la <b>Sede de Vaul-Tec</b> [<b>-18, +14</b>]: misiones, tienda y la moneda que solo ellos aceptan — el <b>Dinero de antes de la guerra</b>.</p>
+      <p style="color:#88aadd;margin-bottom:0;">Estado: ${st}</p>
     </div>
     <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
     <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
@@ -5081,6 +5350,7 @@ function confirmSellZetanBlood(qty) {
     }
   }
   P.caps += qty * 100;
+  playBuySound();
   addFactionRep('nucleologos', qty * 5);
   logMsg('Vendidas ' + qty + '× Sangre de Zetan: +' + (qty * 100) + ' chapas, +' + (qty * 5) + ' rep.');
   updateStats();
@@ -5207,11 +5477,689 @@ function getAvailableFactionQuests(fid) {
   return P.factionQuestPool[fid].map(id => pool.find(q => q.id === id)).filter(Boolean);
 }
 
+
+// ===== VAUL-TEC EXPERIMENTO / REFUGIO =====
+function ensurePlayerVault() {
+  if (!P.playerVault) {
+    P.playerVault = { claimed: false, number: '', antennaFixed: false, lastDwellerHour: -999, dwellersAtDoor: 0, cryo: [], houseBuilt: false, travelBuilt: false, hqUnlocked: false };
+  }
+  if (P.prewarMoney === undefined) P.prewarMoney = 0;
+  if (!P.reputation) P.reputation = {};
+  if (P.reputation.vaulttec === undefined) P.reputation.vaulttec = 0;
+}
+
+function sellExperimentDocs() {
+  let inst = P.inv.find(i => i.id === 2501);
+  if (!inst) { logMsg('No tienes Documentos del experimento.'); return; }
+  let qty = inst.qty || 1;
+  // sell one
+  if (qty > 1) inst.qty--;
+  else P.inv = P.inv.filter(i => i !== inst);
+  let pay = 75 + Math.floor(Math.random()*50);
+  P.prewarMoney = (P.prewarMoney || 0) + pay;
+  logMsg('Vaul-Tec paga ' + pay + ' $ de antes de la guerra por los documentos.');
+  updateStats();
+  if (P.location && P.location.settlementId) renderSettlementUI(P.location.settlementId, 'base');
+}
+function claimPlayerVault() {
+  ensurePlayerVault();
+  let num = '';
+  document.getElementById('modal-body').innerHTML = `
+    <h3 style="color:#88aadd;">Reclamar Refugio</h3>
+    <p style="font-size:12px;color:#8d9880;">Asigna un número al Refugio (1–999). Ejemplo: 101, 111, 22...</p>
+    <div style="text-align:center;font-size:28px;color:#88aadd;margin:10px 0;" id="vault-num-display">—</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:180px;margin:0 auto;">
+      ${[1,2,3,4,5,6,7,8,9,'C',0,'OK'].map(k =>
+        `<button style="padding:12px;" onclick="vaultPadInput('${k}')">${k}</button>`
+      ).join('')}
+    </div>
+    <button style="width:100%;margin-top:10px;" onclick="closeModal()">Cancelar</button>
+  `;
+  window._vaultPad = '';
+  document.getElementById('modal').classList.add('show');
+}
+function vaultPadInput(k) {
+  if (k === 'C') { window._vaultPad = ''; }
+  else if (k === 'OK') {
+    if (!window._vaultPad || window._vaultPad.length < 1) { logMsg('Introduce un número.'); return; }
+    ensurePlayerVault();
+    P.playerVault.claimed = true;
+    P.playerVault.number = window._vaultPad;
+    P.playerVault.houseBuilt = false;
+    P.playerVault.travelBuilt = false;
+    logMsg('Refugio ' + window._vaultPad + ' reclamado. Bienvenido, Supervisor.');
+    closeModal();
+    renderPlayerVaultUI('door');
+    updateStats();
+    return;
+  } else {
+    if ((window._vaultPad || '').length >= 3) return;
+    window._vaultPad = (window._vaultPad || '') + k;
+  }
+  let el = document.getElementById('vault-num-display');
+  if (el) el.textContent = window._vaultPad || '—';
+}
+
+function renderPlayerVaultUI(tab) {
+  ensurePlayerVault();
+  let v = P.playerVault;
+  if (!v.claimed) {
+    document.getElementById('main-view').innerHTML = `
+      <h2 style="color:#88aadd;">Refugio experimental</h2>
+      <div class="item" style="border-color:#88aadd;">
+        <p style="font-size:12px;color:#8d9880;">Un Refugio Vaul-Tec abandonado. Puedes reclamarlo y convertirte en Supervisor.</p>
+        <button style="width:100%;background:#88aadd;color:#111;font-weight:bold;" onclick="claimPlayerVault()">RECLAMAR REFUGIO</button>
+      </div>
+      <button style="width:100%;margin-top:8px;" onclick="P.location=null;renderMap();">← Salir</button>
+    `;
+    return;
+  }
+  let title = 'Refugio ' + (v.number || '???');
+  // Tabs: Puerta | Laboratorio (con sub Experimentar/Criogenización) | Base
+  let mainTab = tab;
+  let labSub = 'experiment';
+  if (tab === 'cryo' || tab === 'lab_cryo') { mainTab = 'lab'; labSub = 'cryo'; }
+  if (tab === 'lab' || tab === 'lab_exp') { mainTab = 'lab'; labSub = 'experiment'; }
+  if (tab === 'experiment') { mainTab = 'lab'; labSub = 'experiment'; }
+
+  let tabs = [
+    ['door', 'Puerta'],
+    ['lab', 'Laboratorio'],
+    ['base', 'Base']
+  ];
+  let html = `<h2 style="color:#88aadd;">${title}</h2>
+    <div class="subtabs">
+      ${tabs.map(t => `<button class="${mainTab===t[0]?'active':''}" onclick="renderPlayerVaultUI('${t[0]}')">${t[1]}</button>`).join('')}
+    </div>`;
+
+  if (mainTab === 'door') {
+    tickVaultDwellers();
+    let dwellersInv = countDwellers();
+    let atDoor = v.dwellersAtDoor || 0;
+    let hrsLeft = Math.max(0, 24 - ((P.worldHours||0) - (v.lastDwellerHour||0)));
+    html += `<div class="item" style="border-color:#88aadd;">
+      <b>Antena de atracción</b><br>
+      <span style="font-size:12px;color:#8d9880;">Estado: ${v.antennaFixed ? '<span style="color:var(--accent);">OPERATIVA</span>' : '<span style="color:var(--danger);">AVERIADA</span>'}</span><br>
+      ${!v.antennaFixed ? `<button style="margin-top:6px;" onclick="repairVaultAntenna()">Reparar antena (50 chapas + 5 chatarra electrónica)</button>` : ''}
+    </div>
+    <div class="item" style="border-color:#88aadd;">
+      <b>Reclamar moradores</b><br>
+      <span style="font-size:12px;color:#8d9880;">1 cada 24 h · Hasta <b>3</b> esperando en la puerta. Puedes reclamarlos aunque ya tengas en Especiales.</span><br>
+      <span style="font-size:11px;color:#8d9880;">En puerta: <b style="color:#88aadd;">${atDoor}/3</b> · En Especiales: <b>${dwellersInv}</b></span><br>
+      <span style="font-size:11px;color:#8d9880;">Próximo: ${!v.antennaFixed ? 'repara la antena' : atDoor >= 3 ? 'puerta llena (reclama para que lleguen más)' : 'en ' + hrsLeft + ' h'}</span><br>
+      <button style="margin-top:6px;" ${atDoor >= 1 ? '' : 'disabled'} onclick="claimVaultDweller()">Reclamar 1</button>
+      <button style="margin-top:6px;" ${atDoor > 1 ? '' : 'disabled'} onclick="claimAllVaultDwellers()">Reclamar todos (${atDoor})</button>
+    </div>`;
+  } else if (mainTab === 'lab') {
+    html += `<div class="subtabs" style="margin-bottom:8px;">
+      <button class="${labSub==='experiment'?'active':''}" onclick="renderPlayerVaultUI('lab')">Experimentar</button>
+      <button class="${labSub==='cryo'?'active':''}" onclick="renderPlayerVaultUI('cryo')">Criogenización</button>
+    </div>`;
+    if (labSub === 'experiment') {
+      let d = countDwellers();
+      html += `<div class="item" style="border-color:#88aadd;">
+        <b style="color:#88aadd;">Laboratorio de experimentos</b><br>
+        <span style="font-size:12px;color:#8d9880;">Cada prueba consume <b>1× Morador</b> (Especiales).</span><br>
+        <span style="font-size:11px;color:#8d9880;">Éxito → criogenización · Muerte → se pierde · Locura → combate · Mutación/necro → criogenización</span><br>
+        <span style="font-size:11px;">Moradores disponibles: <b style="color:#88aadd;">${d}</b></span>
+      </div>
+      <div class="item"><b>🧪 Gasear</b><br><span style="font-size:11px;color:#8d9880;">Neurotoxina controlada. Riesgo moderado.</span><br>
+        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('gas')">Iniciar prueba</button></div>
+      <div class="item"><b>☢ Irradiar</b><br><span style="font-size:11px;color:#8d9880;">Cámara de radiación. Puede crear resistencias… o necrofagia.</span><br>
+        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('rad')">Iniciar prueba</button></div>
+      <div class="item"><b>☣ Virus de Evolución Forzada</b><br><span style="font-size:11px;color:#8d9880;">FEV. Alto riesgo de mutación inestable.</span><br>
+        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('fev')">Iniciar prueba</button></div>
+      <div class="item"><b>🔒 Aislamiento prolongado</b><br><span style="font-size:11px;color:#8d9880;">Prueba psicológica. Locura frecuente.</span><br>
+        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('isolation')">Iniciar prueba</button></div>
+      <div class="item"><b>💉 Sobredosis de estimulantes</b><br><span style="font-size:11px;color:#8d9880;">Límite fisiológico. Muerte o hiperactividad.</span><br>
+        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('stim')">Iniciar prueba</button></div>`;
+    } else {
+      // cryo with full stats
+      let cryo = v.cryo || [];
+      html += `<p style="font-size:12px;color:#8d9880;">Sala de criogenización · ${cryo.length} sujeto(s)</p>`;
+      if (!cryo.length) html += `<p style="font-size:12px;color:#8d9880;">Vacía. Los experimentos exitosos aparecen aquí.</p>`;
+      cryo.forEach((ex, idx) => {
+        let sp = ex.special || { S:5,P:4,E:6,C:1,I:3,A:4,L:2 };
+        html += `<div class="item" style="border-color:#88aadd;">
+          <b style="color:#88aadd;">Experimento #${ex.id}</b> · ${ex.kind || 'Sujeto'}
+          <br><span style="font-size:11px;color:#8d9880;">Prueba: ${ex.label || '—'} · Nv.${ex.level || P.lvl || 1}</span>
+          <br><span style="font-size:11px;">HP ${ex.hp}/${ex.maxHp} · ATK ${ex.atk} · DEF ${ex.def} · RAD ${ex.radRes >= 100 ? 'Inmune' : ((ex.radRes != null ? ex.radRes : 5) + '%')}</span>
+          <br><span style="font-size:10px;">S${sp.S} P${sp.P} E${sp.E} C${sp.C} I${sp.I} A${sp.A} L${sp.L}</span>
+          <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;">
+            <button style="font-size:11px;" onclick="showVaultExperimentStats(${idx})">Stats</button>
+            <button style="font-size:11px;" onclick="equipVaultExperiment(${idx})">→ Compañero (Prisión)</button>
+            <button style="font-size:11px;border-color:var(--danger);color:var(--danger);" onclick="sacrificeVaultExperiment(${idx})">Sacrificar → Documentos</button>
+          </div>
+        </div>`;
+      });
+    }
+  } else if (mainTab === 'base') {
+    let houseCost = [{ id: 20, qty: 10 }, { id: 24, qty: 5 }, { id: 13, qty: 3 }];
+    let travelCost = [{ id: 13, qty: 8 }, { id: 27, qty: 4 }, { id: 21, qty: 5 }];
+    html += `<div class="item" style="border-color:#88aadd;">
+      <b>🏠 Habitación del Supervisor</b><br>
+      <span style="font-size:12px;color:#8d9880;">Casa del Refugio. Construye con chatarra para poder descansar.</span><br>
+      ${v.houseBuilt
+        ? `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="vaultRestUI()">Descansar</button>`
+        : `<span style="font-size:11px;">Coste: ${formatReqs(houseCost)}</span><br>
+           <button style="margin-top:6px;" ${!canPayReqs(houseCost)?'disabled':''} onclick="buildVaultHouse()">Construir habitación</button>`}
+    </div>
+    <div class="item" style="border-color:#aa55ff;">
+      <b>⚡ Viaje rápido</b><br>
+      <span style="font-size:12px;color:#8d9880;">Desbloquea viaje rápido a este Refugio.</span><br>
+      ${v.travelBuilt
+        ? `<button style="margin-top:6px;" disabled>Ya desbloqueado</button>`
+        : `<span style="font-size:11px;">Coste: ${formatReqs(travelCost)}</span><br>
+           <button style="margin-top:6px;" ${!canPayReqs(travelCost)?'disabled':''} onclick="buildVaultTravel()">Construir baliza</button>`}
+    </div>
+    <div class="item" style="border-color:#88aadd;">
+      <b>📡 Sala del Supervisor</b><br>
+      <span style="font-size:12px;color:#8d9880;">Contacta con la Sede de Vaul-Tec [-18, +14] para desbloquear el asentamiento de facción.</span><br>
+      <button style="margin-top:6px;" onclick="contactVaultTecHQ()">${v.hqUnlocked ? 'Sede desbloqueada ✓' : 'Contactar Vaul-Tec'}</button>
+    </div>`;
+  }
+  html += `<button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← Salir al mapa</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function countDwellers() {
+  return P.inv.filter(i => i.id === 2500).reduce((a, i) => a + (i.qty || 1), 0);
+}
+function tickVaultDwellers() {
+  ensurePlayerVault();
+  let v = P.playerVault;
+  if (!v.antennaFixed) return;
+  if (v.dwellersAtDoor === undefined) v.dwellersAtDoor = 0;
+  let hours = P.worldHours || 0;
+  if (v.lastDwellerHour === undefined || v.lastDwellerHour === null) v.lastDwellerHour = hours;
+  // 1 cada 24 h, máx. 3 esperando en la puerta (independiente del inventario)
+  while (v.dwellersAtDoor < 3 && (hours - v.lastDwellerHour) >= 24) {
+    v.dwellersAtDoor++;
+    v.lastDwellerHour += 24;
+  }
+}
+function canClaimDweller() {
+  ensurePlayerVault();
+  tickVaultDwellers();
+  return (P.playerVault.dwellersAtDoor || 0) > 0;
+}
+function repairVaultAntenna() {
+  ensurePlayerVault();
+  if (P.playerVault.antennaFixed) return;
+  if ((P.caps || 0) < 50) { logMsg('Necesitas 50 chapas.'); return; }
+  let junk = P.inv.find(i => i.id === 13);
+  let jq = junk ? (junk.qty || 1) : 0;
+  if (jq < 5) { logMsg('Necesitas 5× Chatarra electrónica.'); return; }
+  P.caps -= 50;
+  if (junk.qty && junk.qty > 5) junk.qty -= 5;
+  else if (junk.qty === 5) P.inv = P.inv.filter(i => i !== junk);
+  else {
+    let left = 5;
+    P.inv = P.inv.filter(i => {
+      if (i.id !== 13 || left <= 0) return true;
+      let q = i.qty || 1;
+      if (q <= left) { left -= q; return false; }
+      i.qty = q - left; left = 0; return true;
+    });
+  }
+  P.playerVault.antennaFixed = true;
+  P.playerVault.lastDwellerHour = P.worldHours || 0; // primer llegada en 24 h
+  P.playerVault.dwellersAtDoor = 0;
+  logMsg('Antena de atracción reparada. El primer morador llegará en 24 horas (máx. 3 en la puerta).');
+  renderPlayerVaultUI('door');
+  updateStats();
+}
+function claimVaultDweller() {
+  ensurePlayerVault();
+  tickVaultDwellers();
+  if ((P.playerVault.dwellersAtDoor || 0) < 1) { logMsg('Aún no hay moradores en la puerta.'); return; }
+  P.playerVault.dwellersAtDoor--;
+  addItemToInv(2500, 1);
+  logMsg('Un morador entra al Refugio. (Especiales) · En puerta: ' + (P.playerVault.dwellersAtDoor||0) + '/3 · En inventario: ' + countDwellers());
+  renderPlayerVaultUI('door');
+  updateStats();
+}
+function claimAllVaultDwellers() {
+  ensurePlayerVault();
+  tickVaultDwellers();
+  let n = P.playerVault.dwellersAtDoor || 0;
+  if (n < 1) { logMsg('Aún no hay moradores en la puerta.'); return; }
+  for (let i = 0; i < n; i++) addItemToInv(2500, 1);
+  P.playerVault.dwellersAtDoor = 0;
+  logMsg(n + ' morador(es) entran al Refugio. (Especiales) · Total inventario: ' + countDwellers());
+  renderPlayerVaultUI('door');
+  updateStats();
+}
+function consumeDweller() {
+  let inst = P.inv.find(i => i.id === 2500);
+  if (!inst) return false;
+  if ((inst.qty || 1) > 1) inst.qty--;
+  else P.inv = P.inv.filter(i => i !== inst);
+  return true;
+}
+function runVaultExperiment(kind) {
+  ensurePlayerVault();
+  if (!consumeDweller()) { logMsg('No tienes moradores.'); return; }
+  let names = { gas: 'Gas neurotóxico', rad: 'Cámara de radiación', fev: 'FEV', isolation: 'Aislamiento', stim: 'Sobredosis de stimpaks' };
+  let label = names[kind] || kind;
+  let lvl = P.lvl || 1;
+  let roll = Math.random();
+  let pSuccess = 0.32, pDeath = 0.28, pMad = 0.18, pMut = 0.14;
+  if (kind === 'isolation') { pMad = 0.30; pSuccess = 0.25; }
+  if (kind === 'fev') { pMut = 0.28; pSuccess = 0.22; }
+  if (kind === 'stim') { pDeath = 0.35; pSuccess = 0.28; }
+  let r = roll;
+  if (r < pSuccess) {
+    let ex = makeVaultExperiment(label, kind === 'fev' ? 'Mutante controlado' : kind === 'rad' ? 'Resistente a radiación' : kind === 'stim' ? 'Hiperactivo' : kind === 'isolation' ? 'Estable mental' : 'Sujeto estable', lvl, false);
+    P.playerVault.cryo.push(ex);
+    showVaultExperimentResult('success', label, 'ÉXITO. El sujeto sobrevive y pasa a criogenización como Experimento #' + ex.id + ' (' + ex.kind + ').');
+  } else if (r < pSuccess + pDeath) {
+    showVaultExperimentResult('death', label, 'FALLO. El sujeto no sobrevive a la prueba. No hay restos útiles. No entra en criogenización.');
+  } else if (r < pSuccess + pDeath + pMad) {
+    showVaultExperimentResult('mad', label, '¡LOCURA! El sujeto rompe la contención y te ataca. Prepárate para el combate.');
+    window._pendingVaultCombat = { label: label, lvl: lvl };
+  } else if (r < pSuccess + pDeath + pMad + pMut) {
+    let ex = makeVaultExperiment('Mutante (FEV fallido)', 'Supermutante inestable', lvl, true);
+    P.playerVault.cryo.push(ex);
+    showVaultExperimentResult('mutant', label, 'Mutación inestable. El sujeto es contenido en criogenización · Experimento #' + ex.id + '.');
+  } else {
+    let ex = makeVaultExperiment('Necrosis inducida', 'Necrófago', lvl, false);
+    P.playerVault.cryo.push(ex);
+    showVaultExperimentResult('ghoul', label, 'Necrosis inducida. Sujeto necrófago almacenado · Experimento #' + ex.id + '.');
+  }
+  updateStats();
+}
+
+function showVaultExperimentResult(kind, label, msg) {
+  let colors = { success: 'var(--accent)', death: 'var(--danger)', mad: '#ff8844', mutant: '#aa66ff', ghoul: '#88aa66' };
+  let titles = { success: '🧪 EXPERIMENTO: ÉXITO', death: '💀 EXPERIMENTO: FALLO', mad: '⚠ EXPERIMENTO: LOCURA', mutant: '☣ EXPERIMENTO: MUTACIÓN', ghoul: '☢ EXPERIMENTO: NECROSIS' };
+  let col = colors[kind] || 'var(--accent)';
+  let title = titles[kind] || 'EXPERIMENTO';
+  let nextTab = (kind === 'success' || kind === 'mutant' || kind === 'ghoul') ? 'cryo' : 'lab';
+  logMsg(msg);
+  let btnAction = kind === 'mad'
+    ? "closeModal();if(window._pendingVaultCombat){startVaultExperimentCombat(window._pendingVaultCombat.label,window._pendingVaultCombat.lvl);window._pendingVaultCombat=null;}"
+    : "closeModal();renderPlayerVaultUI('" + nextTab + "');";
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:${col};text-align:center;margin-top:0;">${title}</h2>
+    <p style="text-align:center;font-size:12px;color:#8d9880;">Prueba: <b style="color:#88aadd;">${label}</b></p>
+    <div style="background:#10130e;border:1px solid #30362c;padding:12px;margin:12px 0;text-align:center;">
+      <div style="font-size:14px;color:var(--txt);">${msg}</div>
+    </div>
+    <button style="width:100%;" onclick="${btnAction}">${kind==='mad'?'COMBATIR':'ACEPTAR'}</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+
+function makeVaultExperiment(label, kind, lvl, strong) {
+  let sp = {
+    S: 3 + Math.floor(Math.random() * 6),
+    P: 2 + Math.floor(Math.random() * 6),
+    E: 3 + Math.floor(Math.random() * 6),
+    C: 1 + Math.floor(Math.random() * 4),
+    I: 2 + Math.floor(Math.random() * 6),
+    A: 2 + Math.floor(Math.random() * 6),
+    L: 1 + Math.floor(Math.random() * 5)
+  };
+  let atk = 6 + lvl * 2 + Math.floor(Math.random() * 8) + (strong ? 8 : 0);
+  let def = 4 + lvl + Math.floor(Math.random() * 6) + (strong ? 6 : 0);
+  let hp = 35 + lvl * 6 + Math.floor(Math.random() * 30) + (strong ? 25 : 0);
+  let radRes = 5;
+  let kl = (kind || '').toLowerCase();
+  if (kl.includes('mutante') || kl.includes('supermutante')) radRes = 90;
+  else if (kl.includes('necr') || kl.includes('ghoul')) radRes = 95;
+  else if (kl.includes('robot') || kl.includes('synth')) radRes = 100;
+  else if (kl.includes('resistente')) radRes = 40;
+  return {
+    id: 100 + Math.floor(Math.random() * 9000),
+    label: label,
+    kind: kind,
+    level: lvl,
+    atk: atk,
+    def: def,
+    hp: hp,
+    maxHp: hp,
+    special: sp,
+    radRes: radRes,
+    xp: 0
+  };
+}
+
+function startVaultExperimentCombat(label, lvl) {
+  let hp = 40 + lvl * 8 + Math.floor(Math.random() * 20);
+  let dmg = 8 + lvl * 2 + Math.floor(Math.random() * 6);
+  combatState = {
+    enemyName: 'Experimento enloquecido (' + label + ')',
+    enemyLevel: lvl,
+    enemyHp: hp,
+    enemyMaxHp: hp,
+    enemyDmg: dmg,
+    isLegendary: false,
+    log: ['El sujeto ha enloquecido y te ataca.'],
+    turn: 'player',
+    vaultExperiment: true,
+    noCapture: true,
+    noLoot: true
+  };
+  P.location = P.location || { type: 'settlement', settlementId: 'player_vault' };
+  renderCombatUI();
+}
+
+function showVaultExperimentStats(idx) {
+  ensurePlayerVault();
+  let ex = (P.playerVault.cryo || [])[idx];
+  if (!ex) return;
+  let sp = ex.special || {};
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#88aadd;margin-top:0;">Experimento #${ex.id}</h2>
+    <p style="font-size:12px;">${ex.kind} · Prueba: ${ex.label} · Nv.${ex.level || 1}</p>
+    <div class="row"><span>Salud</span><b>${ex.hp} / ${ex.maxHp}</b></div>
+    <div class="row"><span>Ataque</span><b>${ex.atk}</b></div>
+    <div class="row"><span>Defensa</span><b>${ex.def}</b></div>
+    <div class="row"><span>Def. radiación</span><b>${ex.radRes >= 100 ? 'Inmune' : ((ex.radRes != null ? ex.radRes : 5) + '%')}</b></div>
+    <div class="row"><span>S.P.E.C.I.A.L.</span><b>S${sp.S||'?'} P${sp.P||'?'} E${sp.E||'?'} C${sp.C||'?'} I${sp.I||'?'} A${sp.A||'?'} L${sp.L||'?'}</b></div>
+    <button style="width:100%;margin-top:10px;" onclick="closeModal()">Cerrar</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+
+function equipVaultExperiment(idx) {
+  ensurePlayerVault();
+  let ex = P.playerVault.cryo[idx];
+  if (!ex) return;
+  if (!P.prison) P.prison = [];
+  let cap = typeof getPrisonCapacity === 'function' ? getPrisonCapacity() : 10;
+  if (P.prison.length >= cap) { logMsg('Prisión llena.'); return; }
+  let id = 'exp_' + ex.id + '_' + Date.now();
+  let comp = {
+    id: id,
+    uid: id,
+    name: 'Exp. #' + ex.id + ' (' + (ex.kind || 'Sujeto') + ')',
+    type: 'experiment',
+    level: ex.level || P.lvl || 1,
+    xp: 0,
+    hp: ex.hp,
+    maxHp: ex.maxHp || ex.hp,
+    atk: ex.atk,
+    def: ex.def,
+    baseDmg: ex.atk,
+    baseDef: ex.def,
+    special: ex.special || { S: 5, P: 4, E: 6, C: 1, I: 3, A: 4, L: 2 },
+    experiment: true,
+    resting: false,
+    weapon: null,
+    radRes: ex.radRes != null ? ex.radRes : companionDefaultRadRes({ name: ex.kind, type: 'experiment' })
+  };
+  P.prison.push(comp);
+  P.playerVault.cryo.splice(idx, 1);
+  logMsg(comp.name + ' enviado a la Prisión. Puedes equiparlo en Refugio → Prisión.');
+  renderPlayerVaultUI('cryo');
+  updateStats();
+}
+
+function sacrificeVaultExperiment(idx) {
+  ensurePlayerVault();
+  let ex = P.playerVault.cryo[idx];
+  if (!ex) return;
+  P.playerVault.cryo.splice(idx, 1);
+  addItemToInv(2501, 1);
+  logMsg('Experimento sacrificado. +1 Documentos del experimento (Otros).');
+  renderPlayerVaultUI('cryo');
+  updateStats();
+}
+
+function buildVaultHouse() {
+  ensurePlayerVault();
+  if (P.playerVault.houseBuilt) return;
+  let cost = [{ id: 20, qty: 10 }, { id: 24, qty: 5 }, { id: 13, qty: 3 }];
+  if (typeof canPayReqs === 'function' && !canPayReqs(cost)) { logMsg('Chatarra insuficiente.'); return; }
+  if (typeof payReqs === 'function') payReqs(cost);
+  else {
+    // fallback consume
+    for (let r of cost) {
+      let left = r.qty;
+      P.inv = P.inv.filter(i => {
+        if (i.id !== r.id || left <= 0) return true;
+        let q = i.qty || 1;
+        if (q <= left) { left -= q; return false; }
+        i.qty = q - left; left = 0; return true;
+      });
+      if (left > 0) { logMsg('Faltan materiales.'); return; }
+    }
+  }
+  P.playerVault.houseBuilt = true;
+  logMsg('Habitación del Supervisor construida.');
+  renderPlayerVaultUI('base');
+}
+
+function buildVaultTravel() {
+  ensurePlayerVault();
+  if (P.playerVault.travelBuilt) return;
+  let cost = [{ id: 13, qty: 8 }, { id: 27, qty: 4 }, { id: 21, qty: 5 }];
+  if (typeof canPayReqs === 'function' && !canPayReqs(cost)) { logMsg('Chatarra insuficiente.'); return; }
+  if (typeof payReqs === 'function') payReqs(cost);
+  else {
+    for (let r of cost) {
+      let left = r.qty;
+      P.inv = P.inv.filter(i => {
+        if (i.id !== r.id || left <= 0) return true;
+        let q = i.qty || 1;
+        if (q <= left) { left -= q; return false; }
+        i.qty = q - left; left = 0; return true;
+      });
+      if (left > 0) { logMsg('Faltan materiales.'); return; }
+    }
+  }
+  P.playerVault.travelBuilt = true;
+  if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+  if (!P.fastTravelUnlocked.includes('player_vault')) P.fastTravelUnlocked.push('player_vault');
+  logMsg('Viaje rápido al Refugio desbloqueado.');
+  renderPlayerVaultUI('base');
+  updateStats();
+}
+
+function unlockVaultTravel() {
+  ensurePlayerVault();
+  if (P.playerVault.travelBuilt) return;
+  if ((P.caps||0) < 500) { logMsg('Necesitas 500 chapas.'); return; }
+  P.caps -= 500;
+  P.playerVault.travelBuilt = true;
+  if (!P.fastTravel) P.fastTravel = {};
+  P.fastTravel.player_vault = true;
+  logMsg('Viaje rápido al Refugio desbloqueado.');
+  renderPlayerVaultUI('base');
+  updateStats();
+}
+function contactVaultTecHQ() {
+  ensurePlayerVault();
+  if (P.playerVault.hqUnlocked) { logMsg('La Sede de Vaul-Tec ya está desbloqueada en el mapa.'); return; }
+  P.playerVault.hqUnlocked = true;
+  if (!P.fastTravel) P.fastTravel = {};
+  P.fastTravel.vaulttec_hq = true;
+  logMsg('Contacto establecido. Sede de Vaul-Tec desbloqueada [-18, +14].');
+  renderPlayerVaultUI('base');
+}
+function vaultRestUI() {
+  ensurePlayerVault();
+  if (!P.playerVault.houseBuilt) { logMsg('Construye primero la habitación del Supervisor.'); return; }
+  advanceTime(8);
+  let heal = Math.floor((getMaxHp() || 100) * 0.5);
+  P.hp = Math.min(getMaxHp(), (P.hp||0) + heal);
+  logMsg('Descansas 8 horas en la habitación del Supervisor. +' + heal + ' HP.');
+  updateStats();
+  renderPlayerVaultUI('base');
+}
+
+
+// ===== DLC Espías entre nosotros =====
+const GHOUL_HOSTILE_FACTIONS = ['enclave','bos','outcasts','vaulttec','institute','legion','rnc'];
+function isPlayerGhoul() { return !!(P && P.isGhoul); }
+function playerRadImmune() {
+  return isPlayerGhoul() || (typeof getEffectBonus === 'function' && getEffectBonus('radImmune'));
+}
+function canEnterFactionSettlement(factionId) {
+  if (!factionId) return true;
+  if (factionId === 'necropolis' && !isPlayerGhoul()) return false;
+  if (isPlayerGhoul() && GHOUL_HOSTILE_FACTIONS.includes(factionId)) return false;
+  return true;
+}
+function ghoulDenialMessage(factionId) {
+  if (factionId === 'necropolis') {
+    return {
+      title: 'Necrópolis',
+      color: '#88aa66',
+      icon: '☠',
+      subtitle: 'Acceso denegado',
+      msg: 'Los necrófagos no aceptan humanos entre sus muros.',
+      hint: 'Los Seguidores del Apocalipsis conocen un método de <b>Necrofaguización</b> para infiltrarte. Clínica de los Seguidores [-20, -8].'
+    };
+  }
+  let f = FACTIONS[factionId];
+  return {
+    title: (f && f.name) || 'Asentamiento',
+    color: (f && f.color) || '#ff6666',
+    icon: '🚫',
+    subtitle: 'Acceso denegado',
+    msg: 'Siendo necrófago, esta facción te considera una abominación.',
+    hint: 'Puedes revertir la necrofaguización en los Seguidores del Apocalipsis (1000 chapas) si necesitas entrar aquí.'
+  };
+}
+function showAccessDeniedModal(d) {
+  document.getElementById('modal-body').innerHTML = `
+    <div style="text-align:center;padding:4px 0 8px;">
+      <div style="font-size:36px;line-height:1;margin-bottom:6px;">${d.icon || '🚫'}</div>
+      <h2 style="color:${d.color};margin:0 0 4px 0;font-size:20px;">${d.title}</h2>
+      <div style="display:inline-block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:${d.color};border:1px solid ${d.color};padding:2px 10px;border-radius:3px;opacity:0.9;">${d.subtitle || 'Acceso denegado'}</div>
+    </div>
+    <div class="item" style="border-color:${d.color};margin-top:12px;">
+      <p style="font-size:14px;text-align:center;color:var(--txt);margin:8px 0;line-height:1.45;">${d.msg}</p>
+      ${d.hint ? `<p style="font-size:12px;text-align:center;color:#8d9880;margin:8px 0 4px;line-height:1.4;">${d.hint}</p>` : ''}
+    </div>
+    <button style="width:100%;margin-top:12px;border-color:${d.color};color:${d.color};font-weight:bold;" onclick="closeModal();">Cerrar</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+function becomeGhoul() {
+  if (P.isGhoul) { logMsg('Ya eres necrófago.'); return; }
+  if ((P.caps || 0) < 1000) { logMsg('Necesitas 1000 chapas.'); return; }
+  P.caps -= 1000;
+  P.isGhoul = true;
+  P.rads = 0;
+  logMsg('Te has convertido en necrófago. Inmune a la radiación. Varias facciones te rechazarán.');
+  updateStats();
+  renderSettlementUI('followers_hub', 'missions');
+}
+function becomeHuman() {
+  if (!P.isGhoul) { logMsg('Ya eres humano.'); return; }
+  if ((P.caps || 0) < 1000) { logMsg('Necesitas 1000 chapas.'); return; }
+  P.caps -= 1000;
+  P.isGhoul = false;
+  logMsg('Los Seguidores revierten el proceso. Vuelves a ser humano.');
+  updateStats();
+  renderSettlementUI('followers_hub', 'missions');
+}
+function countAncient(id) {
+  return P.inv.filter(i => i.id === id).reduce((a, i) => a + (i.qty || 1), 0);
+}
+function sellAncientPad(kind) {
+  let id = kind === 'book' ? 2600 : 2601;
+  let maxQ = countAncient(id);
+  if (maxQ < 1) { logMsg(kind === 'book' ? 'No tienes Libros antiguos.' : 'No tienes Documentos antiguos.'); return; }
+  let title = kind === 'book' ? 'Vender Libros antiguos (500 chapas + 20 rep c/u)' : 'Vender Documentos antiguos (250 chapas + 10 rep c/u)';
+  if (typeof openQtyPad === 'function') {
+    openQtyPad(maxQ, title, function(qty) {
+      if (!qty || qty < 1) return;
+      qty = Math.min(qty, maxQ);
+      for (let i = 0; i < qty; i++) removeOneItemByBaseId(id);
+      if (kind === 'book') {
+        P.caps += qty * 500;
+        addFactionRep('followers', qty * 20);
+        logMsg('Vendidos ' + qty + ' Libro(s): +' + (qty*500) + ' chapas, +' + (qty*20) + ' rep Seguidores.');
+      } else {
+        P.caps += qty * 250;
+        addFactionRep('followers', qty * 10);
+        logMsg('Vendidos ' + qty + ' Documento(s): +' + (qty*250) + ' chapas, +' + (qty*10) + ' rep Seguidores.');
+      }
+      updateStats();
+      renderSettlementUI('followers_hub', 'missions');
+    });
+  } else {
+    let qty = Math.min(maxQ, parseInt(prompt('Cantidad (máx ' + maxQ + '):', '1'), 10) || 0);
+    if (qty < 1) return;
+    for (let i = 0; i < qty; i++) removeOneItemByBaseId(id);
+    if (kind === 'book') { P.caps += qty * 500; addFactionRep('followers', qty * 20); }
+    else { P.caps += qty * 250; addFactionRep('followers', qty * 10); }
+    playBuySound();
+    updateStats();
+    renderSettlementUI('followers_hub', 'missions');
+  }
+}
+function addFactionRep(fid, amount) {
+  if (!P.reputation) P.reputation = {};
+  P.reputation[fid] = Math.min(1000, (P.reputation[fid] || 0) + amount);
+}
+function hasStealthBoyActive() {
+  if (!P.activeEffects) return false;
+  return P.activeEffects.some(e => e.id === 'stealth_boy' && e.remaining > 0);
+}
+function renderFollowersMissionsUI() {
+  let books = countAncient(2600), docs = countAncient(2601);
+  let html = `<h3 style="color:#66cc99;font-size:13px;">Servicios de los Seguidores</h3>
+    <div class="item" style="border-color:#66cc99;">
+      <b style="color:#66cc99;">📚 Recuperación de conocimiento antiguo</b><br>
+      <span style="font-size:12px;color:#8d9880;">Vende Libros (500 chapas + 20 rep) o Documentos (250 chapas + 10 rep). Solo aquí.</span><br>
+      <span style="font-size:11px;">Tienes: ${books} libro(s) · ${docs} documento(s)</span><br>
+      <button style="margin-top:6px;" ${books<1?'disabled':''} onclick="sellAncientPad('book')">Vender Libros…</button>
+      <button style="margin-top:6px;" ${docs<1?'disabled':''} onclick="sellAncientPad('doc')">Vender Documentos…</button>
+    </div>
+    <div class="item" style="border-color:#88aa66;">
+      <b style="color:#88aa66;">☢ Necrofaguización</b><br>
+      <span style="font-size:12px;color:#8d9880;">Estado actual: <b>${P.isGhoul ? 'NECRÓFAGO (inmune a radiación)' : 'Humano'}</b></span><br>
+      <span style="font-size:11px;color:#8d9880;">Ventaja: inmunidad total a la radiación. Desventaja: Enclave, Hermandad, Proscritos, Vaul-Tec, Instituto, Legión y RNC no te aceptan.</span><br>
+      ${P.isGhoul
+        ? `<button style="margin-top:6px;" ${(P.caps||0)<1000?'disabled':''} onclick="becomeHuman()">Volver a humano (1000 chapas)</button>`
+        : `<button style="margin-top:6px;" ${(P.caps||0)<1000?'disabled':''} onclick="becomeGhoul()">Convertirme en necrófago (1000 chapas)</button>`}
+    </div>`;
+  return html;
+}
+
 function enterSettlement(settlementId) {
+  if (settlementId === 'player_vault') {
+    P.location = { type: 'settlement', settlementId: 'player_vault' };
+    renderPlayerVaultUI('door');
+    return;
+  }
+  if (settlementId === 'vaulttec_hq') {
+    ensurePlayerVault();
+    if (!P.playerVault.hqUnlocked) {
+      document.getElementById('modal-body').innerHTML = `
+        <h2 style="color:#88aadd;text-align:center;margin-top:0;">🏢 Sede de Vaul-Tec</h2>
+        <div class="item" style="border-color:#88aadd;">
+          <p style="font-size:13px;color:#d7dec9;text-align:center;margin:8px 0;">
+            Vaul-Tec aún no te acepta.
+          </p>
+          <p style="font-size:12px;color:#8d9880;text-align:center;">
+            Debes reclamar el Refugio experimental y usar <b>Contactar Vaul-Tec</b>
+            desde la Sala del Supervisor para establecer comunicación.
+          </p>
+        </div>
+        <button style="width:100%;margin-top:10px;" onclick="closeModal();">Cerrar</button>
+      `;
+      document.getElementById('modal').classList.add('show');
+      logMsg('Vaul-Tec aún no te acepta. Contacta desde tu Refugio experimental.');
+      return;
+    }
+  }
   let sett = SETTLEMENTS.find(s => s.id === settlementId);
   if (!sett) return;
   if (P.x !== sett.x || P.y !== sett.y) {
     logMsg("Debes estar en el asentamiento.");
+    return;
+  }
+  if (sett.faction && !canEnterFactionSettlement(sett.faction)) {
+    let d = ghoulDenialMessage(sett.faction);
+    showAccessDeniedModal(d);
+    logMsg(d.msg);
     return;
   }
   if (sett.faction === 'nucleologos' && isNucleologosLocked()) {
@@ -5285,6 +6233,12 @@ function renderSettlementUI(settlementId, tab) {
   `;
 
   if (tab === 'missions') {
+    if (sett.faction === 'followers') {
+      html += renderFollowersMissionsUI();
+      html += `<button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
+      document.getElementById('main-view').innerHTML = html;
+      return;
+    }
     html += `<h3 style="color:${fcol}; font-size:13px;">Misiones principales (reclamar aquí)</h3>`;
     let mine = (P.activeFactionQuests || []).filter(q => q && q.faction === sett.faction);
     if (mine.length > 0) {
@@ -5363,6 +6317,12 @@ function renderSettlementUI(settlementId, tab) {
       let items = [...uniqueItems, ...baseItems];
       let seen = {};
       items = items.filter(e => { if (!e || seen[e.id]) return false; seen[e.id] = true; return true; });
+      if (sett.faction === 'followers' || (fac && fac.noWeapons)) {
+        items = items.filter(e => {
+          let it = getItemBase(e.id);
+          return it && it.type !== 'weapon';
+        });
+      }
       if (items.length === 0) {
         html += `<p style="font-size:12px;color:#8d9880;">Sin mercancía.</p>`;
       } else {
@@ -5411,10 +6371,20 @@ function renderSettlementUI(settlementId, tab) {
     <div class="item medic-box">
       <b>🩺 Médico del asentamiento</b><br>
       <span style="font-size:12px;color:#8d9880;">Cura total de salud y/o radiación. La radiación cuesta más.</span><br>
-      <span style="font-size:11px;">HP: ${P.hp}/${maxhp} → coste ${costHp} chapas · RAD: ${needRad} → coste ${costRad} chapas</span><br>
+      ${sett.faction === 'vaulttec' ? (() => {
+        let cHp = Math.ceil(needHp / 10), cRad = Math.ceil(needRad / 5);
+        let pm = P.prewarMoney || 0;
+        return `<span style="font-size:11px;">HP: ${P.hp}/${maxhp} → ${cHp} dinero preguerra (1=10HP) · RAD: ${needRad} → ${cRad} (1=5Rad) · Tienes ${pm}</span><br>
+      <button style="margin-top:6px;" ${needHp === 0 || pm < cHp ? 'disabled' : ''} onclick="settlementHealHp('${sett.id}')">Curar salud (${cHp} $)</button>
+      <button style="margin-top:6px;" ${needRad === 0 || pm < cRad ? 'disabled' : ''} onclick="settlementHealRad('${sett.id}')">Curar radiación (${cRad} $)</button>
+      <button style="margin-top:6px;" ${(needHp === 0 && needRad === 0) || pm < (cHp+cRad) ? 'disabled' : ''} onclick="settlementHealFull('${sett.id}')">Curar todo (${cHp+cRad} $)</button>`;
+      })() : sett.faction === 'necropolis' ? (() => {
+        return `<span style="font-size:11px;">Solo curan salud (inmunes a radiación). HP: ${P.hp}/${maxhp} → ${costHp} chapas</span><br>
+      <button style="margin-top:6px;" ${needHp === 0 || P.caps < costHp ? 'disabled' : ''} onclick="settlementHealHp('${sett.id}')">Curar salud (${costHp})</button>`;
+      })() : `<span style="font-size:11px;">HP: ${P.hp}/${maxhp} → coste ${costHp} chapas · RAD: ${needRad} → coste ${costRad} chapas</span><br>
       <button style="margin-top:6px;" ${needHp === 0 || P.caps < costHp ? 'disabled' : ''} onclick="settlementHealHp('${sett.id}')">Curar salud (${costHp})</button>
       <button style="margin-top:6px;" ${needRad === 0 || P.caps < costRad ? 'disabled' : ''} onclick="settlementHealRad('${sett.id}')">Curar radiación (${costRad})</button>
-      <button style="margin-top:6px;" ${(needHp === 0 && needRad === 0) || P.caps < (costHp + costRad) ? 'disabled' : ''} onclick="settlementHealFull('${sett.id}')">Curar todo (${costHp + costRad})</button>
+      <button style="margin-top:6px;" ${(needHp === 0 && needRad === 0) || P.caps < (costHp + costRad) ? 'disabled' : ''} onclick="settlementHealFull('${sett.id}')">Curar todo (${costHp + costRad})</button>`}
     </div>
     ${sett.faction === 'nucleologos' ? `
     <div class="item" style="border-color:#66ffaa !important;">
@@ -5427,6 +6397,12 @@ function renderSettlementUI(settlementId, tab) {
       <b style="color:#aa6644;">⛓ Vender Esclavos</b><br>
       <span style="font-size:12px;color:#8d9880;">Cada Esclavo: 500 chapas + 10–20 reputación. Tienes: <b>${countItemsByBaseId(2305)}</b></span><br>
       <button style="margin-top:6px;background:#aa6644;color:#111;font-weight:bold;" ${countItemsByBaseId(2305) < 1 ? 'disabled' : ''} onclick="sellSlavesUI()">Vender esclavos</button>
+    </div>` : ''}
+    ${sett.faction === 'vaulttec' ? `
+    <div class="item" style="border-color:#88aadd !important;">
+      <b style="color:#88aadd;">📋 Oficina de Vaul-Tec</b><br>
+      <span style="font-size:12px;color:#8d9880;">Vende Documentos del experimento por Dinero de antes de la guerra. Tienes: <b>${countItemsByBaseId(2501)}</b> · $ preguerra: <b style="color:#88aadd;">${P.prewarMoney||0}</b></span><br>
+      <button style="margin-top:6px;background:#88aadd;color:#111;font-weight:bold;" ${countItemsByBaseId(2501) < 1 ? 'disabled' : ''} onclick="sellExperimentDocs()">Vender documentos</button>
     </div>` : ''}
     <div class="item" style="border-color:var(--gold) !important;">
       <b>🏠 Casa en ${sett.name}</b> — 2000 chapas<br>
@@ -5521,6 +6497,7 @@ function sellSynthCompanion(id, settlementId) {
   if (P.equippedCompanionId === id) P.equippedCompanionId = null;
   P.prison.splice(idx, 1);
   P.caps += price;
+  playBuySound();
   logMsg("Has liberado a " + c.name + " a cambio de " + price + " chapas.");
   openSynthLiberationUI(settlementId);
   updateStats();
@@ -5823,6 +6800,7 @@ function confirmSellSlaves(qty) {
   }
   let caps = qty * 500;
   P.caps += caps;
+  playBuySound();
   let repGain = 0;
   for (let i = 0; i < qty; i++) repGain += 10 + Math.floor(Math.random() * 11);
   addFactionRep('slavers', repGain);
@@ -5845,6 +6823,7 @@ function buySlaverHypno(itemId, cost) {
     logMsg('Compras ' + it.name + ' (+' + (it.qty || 5) + ' células) por ' + cost + ' chapas.');
   } else {
     if (!addItemToInv(itemId, 1)) { P.caps += cost; logMsg('Inventario lleno.'); return; }
+  playBuySound();
     logMsg('Compras ' + it.name + ' por ' + cost + ' chapas.');
   }
   updateStats();
@@ -5856,6 +6835,7 @@ function exchangeCapsToChips(casinoId, caps, chips) {
   if (P.caps < caps) { logMsg("No tienes chapas."); return; }
   P.caps -= caps;
   addCasinoChips(casinoId, chips);
+  playBuySound();
   logMsg("Cambias " + caps + " chapas por " + chips + " fichas de " + (getCasinoDef(casinoId)||{}).name + ".");
   openCasinoUI(casinoId, 'exchange');
   updateStats();
@@ -5863,6 +6843,7 @@ function exchangeCapsToChips(casinoId, caps, chips) {
 function exchangeChipsToCaps(casinoId, chips, caps) {
   if (!spendCasinoChips(casinoId, chips)) { logMsg("No tienes fichas de este casino."); return; }
   P.caps += caps;
+  playBuySound();
   logMsg("Cambias " + chips + " fichas por " + caps + " chapas.");
   openCasinoUI(casinoId, 'exchange');
   updateStats();
@@ -5877,6 +6858,7 @@ function buyCasinoItem(itemId, cost, casinoId) {
   } else {
     if (!addItemToInv(itemId, 1)) { addCasinoChips(casinoId, cost); return; }
   }
+  playBuySound();
   logMsg("Comprado en " + ((getCasinoDef(casinoId)||{}).name || 'casino') + ": " + it.name);
   openCasinoUI(casinoId, 'shop');
   updateStats();
@@ -5890,6 +6872,7 @@ function buyCasinoModule(casinoId, cost) {
   if (!spendCasinoChips(casinoId, cost)) { logMsg("Fichas insuficientes."); return; }
   if (!addItemToInv(3100, 1)) { addCasinoChips(casinoId, cost); return; }
   P.casinoModulesBought[casinoId] = bought + 1;
+  playBuySound();
   logMsg("Comprado Módulo de Mejora para Casino (" + (bought + 1) + "/" + c.modules + ").");
   openCasinoUI(casinoId, 'shop');
   updateStats();
@@ -7245,6 +8228,7 @@ function claimFactionQuest(questId) {
     }
     removeItemsByBaseId(q.itemId, need);
   }
+  if (q.reward.prewar) P.prewarMoney = (P.prewarMoney||0) + q.reward.prewar;
   P.caps += q.reward.caps || 0;
   addXP(q.reward.xp || 0);
   addFactionRep(q.faction, q.reward.rep || 5);
@@ -7271,6 +8255,7 @@ function buyFactionItem(factionId, itemId, price) {
   }
   P.caps -= price;
   if ((getItemBase(itemId) && (getItemBase(itemId).type === "weapon" || getItemBase(itemId).type === "armor")) ? addLeveledGearToInv(itemId) : addItemToInv(itemId, 1)) {
+    playBuySound();
     logMsg("Compraste en la tienda de facción: " + getItemBase(itemId).name);
   } else {
     P.caps += price;
@@ -7411,6 +8396,7 @@ function buyCombatZoneItem(id) {
     // ticket dorado - handled on use, just add to inv
   }
   addItemToInv(id, 1);
+  playBuySound();
   logMsg("Comprado: " + it.name + " (−" + it.ticketCost + " tickets).");
   renderCombatZoneUI('shop');
   updateStats();
@@ -7539,6 +8525,7 @@ function buyRouteVoucher(settlementId) {
     return;
   }
   P.caps -= 1000;
+  playBuySound();
   P.fastTravelUnlocked.push(settlementId);
   logMsg("¡Vale de ruta comprado! Viaje rápido a " + s.name + " desbloqueado.");
   renderSettlementUI(settlementId, 'base');
@@ -7546,27 +8533,52 @@ function buyRouteVoucher(settlementId) {
 }
 
 
+function isVaultTecSettlement(settlementId) {
+  let s = SETTLEMENTS.find(x => x.id === settlementId);
+  return s && s.faction === 'vaulttec';
+}
+function isNecropolisSettlement(settlementId) {
+  let s = SETTLEMENTS.find(x => x.id === settlementId);
+  return s && s.faction === 'necropolis';
+}
 function settlementHealHp(settlementId) {
   let maxhp = getMaxHp();
   let need = Math.max(0, maxhp - P.hp);
-  let cost = Math.ceil(need / 2);
   if (need <= 0) { logMsg("Ya estás a máxima salud."); return; }
-  if (P.caps < cost) { logMsg("No tienes chapas suficientes."); return; }
-  P.caps -= cost;
-  P.hp = maxhp;
-  logMsg("El médico te cura por completo (" + cost + " chapas).");
+  if (isVaultTecSettlement(settlementId)) {
+    let cost = Math.ceil(need / 10); // 1 dinero = 10 HP
+    if ((P.prewarMoney || 0) < cost) { logMsg("Necesitas " + cost + " de dinero de antes de la guerra."); return; }
+    P.prewarMoney -= cost;
+    P.hp = maxhp;
+    logMsg("Médico Vaul-Tec: curado (" + cost + " dinero preguerra).");
+  } else {
+    let cost = Math.ceil(need / 2);
+    if (P.caps < cost) { logMsg("No tienes chapas suficientes."); return; }
+    P.caps -= cost;
+    P.hp = maxhp;
+    logMsg("El médico te cura por completo (" + cost + " chapas).");
+  }
   renderSettlementUI(settlementId, 'base');
   updateStats();
 }
 
 function settlementHealRad(settlementId) {
+  if (isNecropolisSettlement(settlementId)) { logMsg("En Necrópolis no tratan la radiación: no les afecta."); return; }
   let need = P.rads || 0;
-  let cost = need * 1;
   if (need <= 0) { logMsg("No tienes radiación."); return; }
-  if (P.caps < cost) { logMsg("No tienes chapas suficientes."); return; }
-  P.caps -= cost;
-  P.rads = 0;
-  logMsg("El médico elimina toda tu radiación (" + cost + " chapas).");
+  if (isVaultTecSettlement(settlementId)) {
+    let cost = Math.ceil(need / 5); // 1 dinero = 5 Rad
+    if ((P.prewarMoney || 0) < cost) { logMsg("Necesitas " + cost + " de dinero de antes de la guerra."); return; }
+    P.prewarMoney -= cost;
+    P.rads = 0;
+    logMsg("Médico Vaul-Tec: radiación eliminada (" + cost + " dinero preguerra).");
+  } else {
+    let cost = need * 1;
+    if (P.caps < cost) { logMsg("No tienes chapas suficientes."); return; }
+    P.caps -= cost;
+    P.rads = 0;
+    logMsg("El médico elimina toda tu radiación (" + cost + " chapas).");
+  }
   renderSettlementUI(settlementId, 'base');
   updateStats();
 }
@@ -7574,14 +8586,23 @@ function settlementHealRad(settlementId) {
 function settlementHealFull(settlementId) {
   let maxhp = getMaxHp();
   let needHp = Math.max(0, maxhp - P.hp);
-  let needRad = P.rads || 0;
-  let cost = Math.ceil(needHp / 2) + needRad * 1;
+  let needRad = isNecropolisSettlement(settlementId) ? 0 : (P.rads || 0);
   if (needHp <= 0 && needRad <= 0) { logMsg("Ya estás en perfectas condiciones."); return; }
-  if (P.caps < cost) { logMsg("No tienes chapas suficientes."); return; }
-  P.caps -= cost;
-  P.hp = maxhp;
-  P.rads = 0;
-  logMsg("El médico te cura por completo (salud y radiación, " + cost + " chapas).");
+  if (isVaultTecSettlement(settlementId)) {
+    let cost = Math.ceil(needHp / 10) + Math.ceil(needRad / 5);
+    if ((P.prewarMoney || 0) < cost) { logMsg("Necesitas " + cost + " de dinero de antes de la guerra."); return; }
+    P.prewarMoney -= cost;
+    P.hp = maxhp;
+    P.rads = 0;
+    logMsg("Médico Vaul-Tec: curación completa (" + cost + " dinero preguerra).");
+  } else {
+    let cost = Math.ceil(needHp / 2) + needRad * 1;
+    if (P.caps < cost) { logMsg("No tienes chapas suficientes."); return; }
+    P.caps -= cost;
+    P.hp = maxhp;
+    if (!isNecropolisSettlement(settlementId)) P.rads = 0;
+    logMsg("El médico te cura por completo (" + cost + " chapas).");
+  }
   renderSettlementUI(settlementId, 'base');
   updateStats();
 }
@@ -7597,6 +8618,7 @@ function buySettlementHouse(settlementId) {
     return;
   }
   P.caps -= 2000;
+  playBuySound();
   P.ownedHouses.push(settlementId);
   let s = SETTLEMENTS.find(x => x.id === settlementId);
   logMsg("Has comprado una casa en " + (s ? s.name : settlementId) + ".");
@@ -8126,6 +9148,8 @@ function move(dx, dy) {
 function tryWastelandEvent(source) {
   if (P.location) return false;
   if (P.inCombat) return false;
+  // Stealth Boy: sin emboscadas ni eventos al moverse
+  if (source === 'move' && hasStealthBoyActive()) return false;
   let chance = source === 'move' ? 0.14 : 0.22;
   if (Math.random() > chance) return false;
   return triggerRandomWastelandEvent(source);
@@ -9289,6 +10313,7 @@ function renderInv(sub = P.subtab, page) {
       <button class="${sub === 'junk' ? 'active' : ''}" onclick="renderInv('junk')">Chatarra</button>
       <button class="${sub === 'ammo' ? 'active' : ''}" onclick="renderInv('ammo')">Munición</button>
       <button class="${sub === 'other' ? 'active' : ''}" onclick="renderInv('other')">Otros</button>
+      <button class="${sub === 'special' ? 'active' : ''}" onclick="renderInv('special')">Especiales</button>
     </div>
   `;
 
@@ -9312,6 +10337,7 @@ function renderInv(sub = P.subtab, page) {
     if (sub === 'food') return it.type === 'food' || it.type === 'drink';
     if (sub === 'ingredient') return it.type === 'ingredient';
     if (sub === 'other') return it.type === 'other' || it.type === 'quest';
+    if (sub === 'special') return it.type === 'special';
     return false;
   });
 
@@ -9387,6 +10413,8 @@ function renderInv(sub = P.subtab, page) {
         else if (it.id === 29) html += `<span style="font-size:12px; color:var(--gold);">Tartera Legendaria — abre en REFUGIO.</span><br>`;
         else if (it.robcoModule || it.id === 3500) html += `<span style="font-size:12px; color:var(--gold);">★ Módulo Legendario — úsalo en Fábrica RobCo para mejorar un robot.</span><br>`;
         else if (it.slave || it.id === 2305) html += `<span style="font-size:12px; color:#aa6644;">⛓ ${it.effectDesc || 'Véndelo en Paradise Falls por 500 chapas + reputación.'}</span><br>`;
+        else if (it.dweller || it.id === 2500) html += `<span style="font-size:12px; color:#88aadd;">⌂ ${it.effectDesc || 'Morador del Refugio. Úsalo en el Laboratorio de experimentos Vaul-Tec.'}</span><br>`;
+        else if (it.type === 'special' && it.effectDesc) html += `<span style="font-size:12px; color:#8d9880;">${it.effectDesc}</span><br>`;
         else if (it.zetanBlood || it.id === 2400) html += `<span style="font-size:12px; color:#66ffaa;">🧬 ${it.effectDesc || 'Véndela a los Nucleólogos: 100 chapas + 5 rep.'}</span><br>`;
         else if (it.effectDesc) html += `<span style="font-size:12px; color:var(--gold);">${it.effectDesc}</span><br>`;
         else html += `<span style="font-size:12px; color:var(--gold);">Objeto especial.</span><br>`;
@@ -9482,6 +10510,7 @@ function sellItem(uid) {
   let finalValue = Math.max(1, Math.floor(baseVal * sellBonus));
 
   P.caps += finalValue;
+  playBuySound();
 
   if (inst.qty && inst.qty > 1) {
     inst.qty--;
@@ -9773,6 +10802,7 @@ function buyItem(id, price) {
     : addItemToInv(id, 1);
   if (success) {
     P.caps -= price;
+    playBuySound();
     logMsg("Compraste 1x " + (base?.name || id) + (base && (base.type === 'weapon' || base.type === 'armor') ? (" (Nv." + (P.lvl || 1) + ")") : "") + ".");
   }
   renderShop(P.shopSubtab);
@@ -9843,6 +10873,19 @@ function pipClick() {
     gain.connect(ctx.destination);
     osc.start(t);
     osc.stop(t + 0.06);
+  } catch (e) {}
+}
+
+let _buyAudio = null;
+function playBuySound() {
+  try {
+    if (!_buyAudio) {
+      _buyAudio = new Audio('./audio/Buy.mp3');
+      _buyAudio.preload = 'auto';
+    }
+    let a = _buyAudio.cloneNode ? _buyAudio.cloneNode() : new Audio('./audio/Buy.mp3');
+    a.volume = (P.volSfx !== undefined ? P.volSfx : 0.7);
+    a.play().catch(() => {});
   } catch (e) {}
 }
 

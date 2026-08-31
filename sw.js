@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v73';
+const CACHE = 'wasteland-v82';
 const ASSETS = [
   './',
   './index.html',
@@ -20,7 +20,8 @@ const ASSETS = [
   './audio/EnclaveRadio7.mp3',
   './audio/EnclaveRadio8.mp3',
   './audio/AmbientMap.mp3',
-  './audio/CasinoStrip.mp3'
+  './audio/CasinoStrip.mp3',
+  './audio/Buy.mp3'
 ];
 
 self.addEventListener('install', (event) => {
