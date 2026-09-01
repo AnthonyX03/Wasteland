@@ -1325,6 +1325,19 @@ const DB_ITEMS = [
   { id: 2206, name: "Casco de legionario", type: "armor", def: 14, weight: 3, value: 200, stackable: false, factionOnly: true, faction: "legion", radRes: 0 },
   { id: 913, name: "Águila de bronce de César", type: "other", weight: 0.5, value: 80, stackable: true, questItem: true },
 
+  // --- LOS REYES (exclusivos) ---
+  { id: 2701, name: "Pistola del Rey", type: "weapon", damage: 40, ammoType: ".45 ACP", weight: 2.5, value: 480, stackable: false, factionOnly: true, faction: "kings" },
+  { id: 2702, name: "Chaqueta de terciopelo del Rey", type: "armor", def: 18, weight: 4, value: 360, stackable: false, factionOnly: true, faction: "kings", radRes: 0 },
+  { id: 2703, name: "Micrófono blindado", type: "weapon", damage: 34, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 300, stackable: false, factionOnly: true, faction: "kings" },
+  { id: 2704, name: "Traje de escenario de Los Reyes", type: "armor", def: 26, weight: 7, value: 450, stackable: false, factionOnly: true, faction: "kings", radRes: 0 },
+  { id: 2705, name: "Guitarra eléctrica del Rey", type: "weapon", damage: 46, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 5, value: 520, stackable: false, factionOnly: true, faction: "kings" },
+  { id: 2706, name: "Botas de baile reforzadas", type: "armor", def: 12, weight: 2.5, value: 200, stackable: false, factionOnly: true, faction: "kings", radRes: 0 },
+  { id: 2707, name: "Revólver de Freeside", type: "weapon", damage: 52, ammoType: ".44 Magnum", weight: 3.2, value: 620, stackable: false, factionOnly: true, faction: "kings" },
+  { id: 2708, name: "Armadura de guardaespaldas del Rey", type: "armor", def: 38, weight: 14, value: 700, stackable: false, factionOnly: true, faction: "kings", radRes: 5 },
+  { id: 2709, name: "Rifle de rockabilly", type: "weapon", damage: 58, ammoType: "5.56mm", weight: 7, value: 750, stackable: false, factionOnly: true, faction: "kings" },
+  { id: 2710, name: "Gafas de sol del Rey", type: "armor", def: 8, weight: 0.3, value: 180, stackable: false, factionOnly: true, faction: "kings", radRes: 0 },
+
+
   // --- OBJETOS DE MISIÓN DE FACCIÓN (solo aparecen con misión activa) ---
   { id: 901, name: "Núcleo de fusión antiguo", type: "quest", weight: 1, value: 0, stackable: true, shopTier: 99, questOnly: true },
   { id: 902, name: "Holocinta de la Hermandad", type: "quest", weight: 0.2, value: 0, stackable: true, shopTier: 99, questOnly: true },
@@ -1773,7 +1786,7 @@ let P = {
   weather: 'day',
   volMusic: 0.6,
   volSfx: 0.7,
-  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0, slavers: 0, nucleologos: 0, vaulttec: 0 },
+  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0, slavers: 0, nucleologos: 0, vaulttec: 0, kings: 0, followers: 0, necropolis: 0 },
   chips: 0,
   playerSettlement: {
     claimed: false,
@@ -2052,6 +2065,9 @@ function addCompanionXP(comp, amount) {
       comp.hp = Math.min(comp.maxHp, comp.hp + Math.floor(comp.maxHp * 0.15));
     }
     logMsg(comp.name + " sube a nivel " + comp.level + "!");
+    if (comp.isRex || comp.id === 'rex_kings') {
+      try { saveRexFromPrison(); } catch (e) {}
+    }
     req = companionRequiredXP(comp.level);
   }
 }
@@ -2627,7 +2643,9 @@ function renderCharacter(sub) {
     { id: 'special', label: 'S.P.E.C.I.A.L.' },
     { id: 'perks', label: 'Perks' },
     { id: 'effects', label: 'Efectos' },
+    { id: 'companion', label: 'Compañero' },
     { id: 'rep', label: 'Reputación' },
+    { id: 'notes', label: 'Notas' },
     { id: 'settlements', label: 'Asentamientos' },
     { id: 'wallet', label: 'Monedero' }
   ];
@@ -2648,6 +2666,7 @@ function renderCharacter(sub) {
       <div class="row"><span>Armadura Res.RAD</span><b>${(a.radRes||0)}%</b></div>
       <div class="row"><span>Arma equipada</span><b style="${w.legendary?'color:var(--gold);':''}">${w.legendary?'★ ':''}${w.name} <span style="font-size:10px;color:#8d9880;">Lv:${w.itemLevel||1}</span></b></div>
       <div class="row"><span>Armadura</span><b style="${a.legendary?'color:var(--gold);':''}">${a.legendary?'★ ':''}${a.name} <span style="font-size:10px;color:#8d9880;">Lv:${a.itemLevel||1}</span></b></div>
+      <div class="row"><span>Compañero</span><b>${(function(){ let c = (typeof getEquippedCompanion==='function') ? getEquippedCompanion() : null; if (!c) return '<span style="color:#8d9880;">Ninguno</span>'; return (c.isLegendary?'★ ':'') + c.name + ' <span style="font-size:10px;color:#8d9880;">Nv.' + (c.level||1) + '</span>'; })()}</b></div>
       <div class="row"><span>Carga máxima</span><b>${maxw} kg</b></div>
       <div class="row"><span>Fecha / clima</span><b>${formatGameDateTime()} · ${wInfo.label}</b></div>
       <p style="font-size:10px; color:#8d9880;margin-top:8px;">Radiación limita HP. Clima afecta combate.</p>
@@ -2715,6 +2734,40 @@ function renderCharacter(sub) {
     } else {
       html += `<p style="font-size:12px; color:#8d9880;">Ningún efecto permanente.</p>`;
     }
+  } else if (sub === 'companion') {
+    ensureCompanionIds();
+    let c = (typeof getEquippedCompanion === 'function') ? getEquippedCompanion() : null;
+    html += `<h3 style="color:var(--accent); margin:6px 0;">COMPAÑERO EQUIPADO</h3>`;
+    if (!c) {
+      html += `<p style="font-size:12px; color:#8d9880;">No llevas ningún compañero. Equípalo desde Refugio → Prisión.</p>`;
+    } else {
+      let st = getCompanionCombatStats(c);
+      let radTxt = (st.radRes >= 100) ? 'Inmune' : ((st.radRes || 0) + '%');
+      let ab = c.ability ? `<p style="color:var(--gold);margin:6px 0 0;font-size:12px;"><b>★ ${c.ability.name}</b><br><span style="color:#8d9880;">${c.ability.desc}</span></p>` : '';
+      html += `<div class="item" style="border-color:${c.isLegendary || c.isRex ? 'var(--gold)' : 'var(--line)'};">
+        <b style="${c.isLegendary || c.isRex ? 'color:var(--gold);' : ''}">${c.isLegendary || c.isRex ? '★ ' : ''}${c.name}</b>
+        <span style="font-size:11px;color:#8d9880;"> · Nv.${c.level || 1} · ${c.type || '?'}</span>
+        ${c.resting ? ' <span style="color:var(--danger);font-size:11px;">[DESCANSANDO]</span>' : ''}
+        <div class="row" style="margin-top:6px;"><span>Salud</span><b>${c.hp} / ${c.maxHp}</b></div>
+        <div class="row"><span>Ataque</span><b>${st.dmg}</b></div>
+        <div class="row"><span>Defensa</span><b>${st.def || 0}</b></div>
+        <div class="row"><span>Def. radiación</span><b>${radTxt}</b></div>
+        <div class="row"><span>Arma</span><b>${c.weapon || 'Ninguna (melee)'}</b></div>
+        <div class="row"><span>Armadura</span><b>${c.armor || 'Ninguna'}</b></div>
+        <div class="row"><span>XP</span><b>${c.xp || 0} / ${companionRequiredXP(c.level || 1)}</b></div>
+        <p style="font-size:11px;color:#8d9880;margin:4px 0 0;">S${c.special?.S||'?'} P${c.special?.P||'?'} E${c.special?.E||'?'} C${c.special?.C||'?'} I${c.special?.I||'?'} A${c.special?.A||'?'} L${c.special?.L||'?'}</p>
+        ${ab}
+        ${(c.isRex || c.id === 'rex_kings')
+          ? `<button style="width:100%;margin-top:10px;border-color:#e8c547;color:#e8c547;" onclick="returnRexToTheater('${c.id}');renderCharacter('companion');">Devolver al Teatro</button>`
+          : `<button style="width:100%;margin-top:10px;border-color:var(--danger);color:var(--danger);" ${c.resting ? 'disabled' : ''} onclick="unequipCompanionFromChar()">${c.resting ? 'Descansando…' : 'Retirar compañero'}</button>`}
+      </div>`;
+    }
+  } else if (sub === 'notes') {
+    html += `<h3 style="color:var(--accent); margin:6px 0;">NOTAS</h3>
+      <div class="item" style="border-color:#8d9880;">
+        <p style="font-size:13px;color:#8d9880;text-align:center;margin:12px 0;">📔 Sección de notas del Pip-Boy.</p>
+        <p style="font-size:12px;color:#8d9880;text-align:center;margin:0 0 8px;">Se implementará en un futuro.</p>
+      </div>`;
   } else if (sub === 'rep') {
     html += `<h3 style="color:var(--accent); font-size:13px; margin:6px 0;">Reputación de facciones</h3>`;
     html += Object.keys(FACTIONS).filter(fid => fid !== 'player' && fid !== 'sierra' && fid !== 'robco').map(fid => {
@@ -3159,6 +3212,10 @@ function equipCompanion(id) {
   if (c.resting) { logMsg("Está descansando."); return; }
   let cid = c.id || c.uid;
   if (P.equippedCompanionId === cid) {
+    if (c.isRex || c.id === 'rex_kings') {
+      logMsg("Rex no se puede retirar así. Usa «Devolver al Teatro».");
+      return;
+    }
     P.equippedCompanionId = null;
     logMsg("Compañero retirado.");
   } else {
@@ -3166,6 +3223,18 @@ function equipCompanion(id) {
     logMsg("Compañero equipado: " + c.name);
   }
   renderVault('prison');
+  updateStats();
+}
+function unequipCompanionFromChar() {
+  if (!P.equippedCompanionId) { logMsg("No llevas compañero."); return; }
+  let c = getEquippedCompanion();
+  if (c && (c.isRex || c.id === 'rex_kings')) {
+    logMsg("Rex no se puede retirar. Usa «Devolver al Teatro».");
+    return;
+  }
+  P.equippedCompanionId = null;
+  logMsg(c ? ("Compañero retirado: " + c.name) : "Compañero retirado.");
+  renderCharacter('companion');
   updateStats();
 }
 function companionDefaultRadRes(c) {
@@ -3247,11 +3316,138 @@ function freeCompanion(id) {
   document.getElementById('modal').classList.add('show');
 }
 function confirmFreeCompanion(id) {
+  let _c = (P.prison || []).find(c => c.id === id || c.uid === id);
+  if (_c && (_c.isRex || _c.id === 'rex_kings')) { logMsg('Rex no puede ser liberado.'); closeModal(); return; }
   P.prison = (P.prison || []).filter(c => c.id !== id && c.uid !== id);
   if (P.equippedCompanionId === id) P.equippedCompanionId = null;
   logMsg("Compañero liberado.");
   closeModal();
   renderVault('prison');
+}
+
+
+// ===== LOS REYES / REX =====
+const REX_ABILITY = { id: 'c_rex', name: 'Fauces Cibernéticas', desc: 'Rex muerde con mandíbulas de titanio: +20% daño, +10 daño plano y +15% defensa. Única de Rex.' };
+
+function ensureRexDefaults() {
+  if (!P.rexData) {
+    P.rexData = {
+      available: true,
+      everRecruited: false,
+      level: 5,
+      xp: 0,
+      maxHp: 140,
+      hp: 140,
+      baseDmg: 22,
+      baseDef: 12,
+      special: { S: 6, P: 7, E: 7, C: 4, I: 3, A: 8, L: 5 },
+      resting: false
+    };
+  }
+}
+
+function buildRexCompanion() {
+  ensureRexDefaults();
+  let d = P.rexData;
+  return {
+    id: 'rex_kings',
+    uid: 'rex_kings',
+    name: 'Rex',
+    type: 'dog',
+    level: d.level || 5,
+    xp: d.xp || 0,
+    maxHp: d.maxHp || 140,
+    hp: d.hp != null ? d.hp : (d.maxHp || 140),
+    baseDmg: d.baseDmg || 22,
+    baseDef: d.baseDef || 12,
+    special: d.special || { S: 6, P: 7, E: 7, C: 4, I: 3, A: 8, L: 5 },
+    weapon: 'Mandíbulas cibernéticas',
+    armor: 'Chasis de perro ciber',
+    armorRadBonus: 40,
+    radRes: 90,
+    isLegendary: true,
+    isRex: true,
+    cannotFree: true,
+    ability: REX_ABILITY,
+    resting: !!d.resting
+  };
+}
+
+function isRexInPrison() {
+  return !!(P.prison || []).find(c => c.isRex || c.id === 'rex_kings');
+}
+
+function saveRexFromPrison() {
+  let c = (P.prison || []).find(x => x.isRex || x.id === 'rex_kings');
+  if (!c) return;
+  ensureRexDefaults();
+  P.rexData.level = c.level;
+  P.rexData.xp = c.xp || 0;
+  P.rexData.maxHp = c.maxHp;
+  P.rexData.hp = c.hp;
+  P.rexData.baseDmg = c.baseDmg;
+  P.rexData.baseDef = c.baseDef;
+  P.rexData.special = c.special;
+  P.rexData.resting = !!c.resting;
+  P.rexData.everRecruited = true;
+  P.rexData.available = true;
+}
+
+function recruitRex() {
+  ensureRexDefaults();
+  ensureVaultDefaults();
+  if (isRexInPrison()) { logMsg('Rex ya está contigo.'); return; }
+  if (!P.rexData.available && P.rexData.everRecruited) {
+    logMsg('Rex no está disponible.'); return;
+  }
+  let cap = getPrisonCapacity();
+  if ((P.prison || []).length >= cap) {
+    logMsg('Prisión llena. Libera o mejora celdas.'); return;
+  }
+  let rex = buildRexCompanion();
+  if (!P.prison) P.prison = [];
+  P.prison.push(rex);
+  P.rexData.available = false;
+  P.rexData.everRecruited = true;
+  P.equippedCompanionId = 'rex_kings';
+  logMsg('★ Rex se une a ti. El perro cibernético del Rey te sigue.');
+  renderSettlementUI('kings_theater', 'base');
+  updateStats();
+}
+
+function returnRexToTheater(id) {
+  ensureCompanionIds();
+  let c = (P.prison || []).find(x => x.id === id || x.uid === id);
+  if (!c || !(c.isRex || c.id === 'rex_kings')) { logMsg('Solo Rex puede volver al teatro.'); return; }
+  saveRexFromPrison();
+  P.prison = (P.prison || []).filter(x => !(x.isRex || x.id === 'rex_kings'));
+  if (P.equippedCompanionId === 'rex_kings' || P.equippedCompanionId === id) P.equippedCompanionId = null;
+  P.rexData.available = true;
+  logMsg('Rex vuelve al Teatro de Los Reyes. Conserva su nivel ' + (P.rexData.level || 5) + '.');
+  closeModal();
+  if (P.charSubtab === 'companion') renderCharacter('companion');
+  else if (document.querySelector('.tabs button.active') && document.querySelector('.tabs button.active').textContent.includes('efugio')) renderVault('prison');
+  else renderVault('prison');
+  updateStats();
+}
+
+function renderKingsTheaterUI() {
+  ensureRexDefaults();
+  let inPrison = isRexInPrison();
+  let d = P.rexData;
+  let lvl = d.level || 5;
+  let html = `<div class="item" style="border-color:#e8c547 !important;">
+    <b style="color:#e8c547;">🎭 Teatro del Rey</b><br>
+    <span style="font-size:12px;color:#8d9880;">Aquí reside <b style="color:#e8c547;">Rex</b>, el perro cibernético del Rey. Compañero legendario exclusivo. No puede liberarse: solo devolverlo al teatro.</span><br>`;
+  if (inPrison) {
+    html += `<p style="font-size:12px;color:#8d9880;margin:6px 0 0;">Rex está contigo (Nv.${lvl}). Si lo despides, vuelve aquí conservando su progreso.</p>`;
+  } else {
+    html += `<p style="font-size:12px;margin:6px 0 0;"><b style="color:#e8c547;">★ Rex</b> · Nv.${lvl} · HP ${d.hp||d.maxHp}/${d.maxHp||140}<br>
+      <span style="font-size:11px;color:#e8c547;">★ ${REX_ABILITY.name}</span> — ${REX_ABILITY.desc}</p>
+      <button style="margin-top:6px;background:#e8c547;color:#111;font-weight:bold;" onclick="recruitRex()">${d.everRecruited ? 'Recuperar a Rex' : 'Unirte a Rex'}</button>`;
+  }
+  html += `</div>`;
+  return html;
 }
 
 function showCompanionStats(id) {
@@ -4004,6 +4200,7 @@ const FACTIONS = {
   vaulttec: { id: 'vaulttec', name: 'Vaul-Tec', color: '#88aadd', shopLevels: [100, 250, 500, 750, 1000], prewarOnly: true },
   followers: { id: 'followers', name: 'Seguidores del Apocalipsis', color: '#66cc99', shopLevels: [100, 250, 500, 750, 1000], noWeapons: true },
   necropolis: { id: 'necropolis', name: 'Necrópolis', color: '#88aa66', shopLevels: [100, 250, 500, 750, 1000], ghoulOnly: true },
+  kings: { id: 'kings', name: 'Los Reyes', color: '#e8c547', shopLevels: [100, 250, 500, 750, 1000], noMedic: true },
   player: { id: 'player', name: 'Tu Asentamiento', color: '#44ddaa', shopLevels: [0, 0, 0, 0, 0] },
   sierra: { id: 'sierra', name: 'Sierra Madre', color: '#e8d48b', shopLevels: [0,0,0,0,0] },
   robco: { id: 'robco', name: 'RobCo Industries', color: '#a0a0a0', shopLevels: [0,0,0,0,0] }
@@ -4097,6 +4294,7 @@ const SETTLEMENTS = [
   { id: 'rail_hq', name: 'Cuartel del Ferrocarril', faction: 'railroad', x: 9, y: 10 },
   { id: 'rnc_camp', name: 'Campamento RNC', faction: 'rnc', x: -12, y: 3 },
   { id: 'strip_gate', name: 'Puerta del Strip', faction: 'strip', x: 14, y: 2 },
+  { id: 'kings_theater', name: 'Teatro de Los Reyes', faction: 'kings', x: 12, y: 0 },
   { id: 'institute_relay', name: 'Relé del Instituto', faction: 'institute', x: 1, y: 14 },
   { id: 'atom_crater', name: 'Cráter del Átomo', faction: 'atom', x: -16, y: -5 },
   { id: 'minutemen_fort', name: 'Fuerte Independencia', faction: 'minutemen', x: 6, y: -14 },
@@ -4291,6 +4489,18 @@ const FACTION_QUEST_POOL = {
     { id: 'nec_q9', title: "Leyenda entre los muertos", desc: "Derrota a 2 enemigos legendarios.", type: 'kill_leg', target: 2, reward: { caps: 200, xp: 140, rep: 20, item: 2600, qty: 2 }, minRep: 500 },
     { id: 'nec_q10', title: "Gloria de Necrópolis", desc: "Derrota a 15 enemigos y demuestra tu lealtad.", type: 'kill', target: 15, reward: { caps: 220, xp: 150, rep: 22, item: 2601, qty: 3 }, minRep: 750 }
   ],
+  kings: [
+    { id: 'kng_q1', title: "El show debe continuar", desc: "Derrota a 5 matones que molestan en Freeside.", type: 'kill', target: 5, reward: { caps: 100, xp: 65, rep: 12 }, minRep: 0 },
+    { id: 'kng_q2', title: "Calles de Freeside", desc: "Explora 6 zonas del Yermo.", type: 'explore', target: 6, reward: { caps: 80, xp: 55, rep: 12 }, minRep: 0 },
+    { id: 'kng_q3', title: "Botín para el vestuario", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 90, xp: 60, rep: 12 }, minRep: 0 },
+    { id: 'kng_q4', title: "Ritmo y pólvora", desc: "Derrota a 8 enemigos del Yermo.", type: 'kill', target: 8, reward: { caps: 130, xp: 85, rep: 15 }, minRep: 100 },
+    { id: 'kng_q5', title: "Gira por el Yermo", desc: "Explora 9 zonas del mapa.", type: 'explore', target: 9, reward: { caps: 110, xp: 70, rep: 14 }, minRep: 100 },
+    { id: 'kng_q6', title: "Fans peligrosos", desc: "Consigue 6 botines explorando.", type: 'loot', target: 6, reward: { caps: 140, xp: 90, rep: 16 }, minRep: 250 },
+    { id: 'kng_q7', title: "Seguridad del teatro", desc: "Derrota a 12 enemigos.", type: 'kill', target: 12, reward: { caps: 170, xp: 110, rep: 18 }, minRep: 250 },
+    { id: 'kng_q8', title: "Noche de estreno", desc: "Explora 11 zonas del Yermo.", type: 'explore', target: 11, reward: { caps: 150, xp: 95, rep: 16 }, minRep: 500 },
+    { id: 'kng_q9', title: "Leyenda del Strip", desc: "Derrota a 2 enemigos legendarios.", type: 'kill_leg', target: 2, reward: { caps: 220, xp: 150, rep: 20 }, minRep: 500 },
+    { id: 'kng_q10', title: "Viva el Rey", desc: "Derrota a 15 enemigos en nombre de Los Reyes.", type: 'kill', target: 15, reward: { caps: 260, xp: 170, rep: 22 }, minRep: 750 }
+  ],
   followers: [],
 
   vaulttec: [
@@ -4405,6 +4615,13 @@ const FACTION_SHOP_ITEMS = {
     { id: 2623, shopLevel: 1 }, { id: 2624, shopLevel: 2 }, { id: 2625, shopLevel: 1 },
     { id: 1, shopLevel: 1 }, { id: 2, shopLevel: 2 }, { id: 5, shopLevel: 1 }
   ],
+  kings: [
+    { id: 7, shopLevel: 1 }, { id: 8, shopLevel: 1 }, { id: 20, shopLevel: 1 }, { id: 40, shopLevel: 1 },
+    { id: 101, shopLevel: 2 }, { id: 13, shopLevel: 2 }, { id: 50, shopLevel: 2 },
+    { id: 109, shopLevel: 3 }, { id: 28, shopLevel: 3 }, { id: 51, shopLevel: 3 },
+    { id: 112, shopLevel: 4 }, { id: 29, shopLevel: 4 }, { id: 15, shopLevel: 4 },
+    { id: 210, shopLevel: 5 }, { id: 77, shopLevel: 5 }, { id: 52, shopLevel: 5 }
+  ],
 };
 
 // Extra: armas/armaduras de facción por nivel de tienda
@@ -4472,6 +4689,12 @@ const FACTION_UNIQUE_SHOP = {
   necropolis: [
     { id: 2620, shopLevel: 2 }, { id: 2621, shopLevel: 1 }, { id: 2622, shopLevel: 3 },
     { id: 2623, shopLevel: 2 }, { id: 2624, shopLevel: 4 }, { id: 2625, shopLevel: 1 }
+  ],
+  kings: [
+    { id: 2701, shopLevel: 1 }, { id: 2702, shopLevel: 1 }, { id: 2703, shopLevel: 2 },
+    { id: 2704, shopLevel: 2 }, { id: 2705, shopLevel: 3 }, { id: 2706, shopLevel: 3 },
+    { id: 2707, shopLevel: 4 }, { id: 2708, shopLevel: 4 }, { id: 2709, shopLevel: 5 },
+    { id: 2710, shopLevel: 5 }
   ],
 };
 
@@ -5401,7 +5624,7 @@ function setVolSfx(v) {
 
 function ensureFactionDefaults() {
   if (!P.reputation) P.reputation = {};
-  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute','atom','minutemen','legion','slavers','nucleologos'].forEach(k => {
+  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute','atom','minutemen','legion','slavers','nucleologos','vaulttec','followers','necropolis','kings'].forEach(k => {
     if (P.reputation[k] === undefined || P.reputation[k] === null) P.reputation[k] = 0;
   });
   try { ensureZetanDefaults(); } catch(e) {}
@@ -6368,7 +6591,7 @@ function renderSettlementUI(settlementId, tab) {
       <b style="color:${fcol} !important;">${fac.name}</b> · Rep <b style="color:${fcol} !important;">${rep}/1000</b><br>
       <span style="font-size:11px;color:#8d9880;">Tienda: <span style="color:${fcol};">Nv1@100 · Nv2@250 · Nv3@500 · Nv4@750 · Nv5@1000</span></span>
     </div>
-    <div class="item medic-box">
+    ${!(fac.noMedic || sett.faction === 'kings') ? `<div class="item medic-box">
       <b>🩺 Médico del asentamiento</b><br>
       <span style="font-size:12px;color:#8d9880;">Cura total de salud y/o radiación. La radiación cuesta más.</span><br>
       ${sett.faction === 'vaulttec' ? (() => {
@@ -6385,7 +6608,7 @@ function renderSettlementUI(settlementId, tab) {
       <button style="margin-top:6px;" ${needHp === 0 || P.caps < costHp ? 'disabled' : ''} onclick="settlementHealHp('${sett.id}')">Curar salud (${costHp})</button>
       <button style="margin-top:6px;" ${needRad === 0 || P.caps < costRad ? 'disabled' : ''} onclick="settlementHealRad('${sett.id}')">Curar radiación (${costRad})</button>
       <button style="margin-top:6px;" ${(needHp === 0 && needRad === 0) || P.caps < (costHp + costRad) ? 'disabled' : ''} onclick="settlementHealFull('${sett.id}')">Curar todo (${costHp + costRad})</button>`}
-    </div>
+    </div>` : ''}
     ${sett.faction === 'nucleologos' ? `
     <div class="item" style="border-color:#66ffaa !important;">
       <b style="color:#66ffaa;">🧬 Vender Sangre de Zetan</b><br>
@@ -6405,12 +6628,13 @@ function renderSettlementUI(settlementId, tab) {
       <button style="margin-top:6px;background:#88aadd;color:#111;font-weight:bold;" ${countItemsByBaseId(2501) < 1 ? 'disabled' : ''} onclick="sellExperimentDocs()">Vender documentos</button>
     </div>` : ''}
     <div class="item" style="border-color:var(--gold) !important;">
-      <b>🏠 Casa en ${sett.name}</b> — 2000 chapas<br>
+      <b>🏠 ${sett.faction === 'kings' ? 'Habitación de hotel' : ('Casa en ' + sett.name)}</b> — 2000 chapas<br>
       <span style="font-size:12px;color:#8d9880;">Descansa 1–24 h. Recuperas salud según tu nivel. El compañero NO se cura aquí.</span><br>
       ${hasHouse
         ? `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHouseRestUI('${sett.id}')">Entrar y descansar</button>`
-        : `<button style="margin-top:6px;" ${P.caps < 2000 ? 'disabled' : ''} onclick="buySettlementHouse('${sett.id}')">Comprar casa (2000)</button>`}
+        : `<button style="margin-top:6px;" ${P.caps < 2000 ? 'disabled' : ''} onclick="buySettlementHouse('${sett.id}')">Comprar ${sett.faction === 'kings' ? 'habitación' : 'casa'} (2000)</button>`}
     </div>
+    ${sett.faction === 'kings' ? renderKingsTheaterUI() : ''}
     <div class="item" style="border-color:#aa55ff !important;">
       <b>⚡ Vale de Ruta</b> — 1000 chapas<br>
       <span style="font-size:12px;color:#8d9880;">Desbloquea viaje rápido a este asentamiento.</span><br>
@@ -10876,18 +11100,57 @@ function pipClick() {
   } catch (e) {}
 }
 
-let _buyAudio = null;
-function playBuySound() {
+let _buyPool = [];
+let _buyPoolIdx = 0;
+let _buySrc = './audio/Buy.mp3';
+function ensureBuyPool() {
+  if (_buyPool.length >= 3) return;
   try {
-    if (!_buyAudio) {
-      _buyAudio = new Audio('./audio/Buy.mp3');
-      _buyAudio.preload = 'auto';
+    for (let i = _buyPool.length; i < 3; i++) {
+      let a = new Audio(_buySrc);
+      a.preload = 'auto';
+      a.load();
+      _buyPool.push(a);
     }
-    let a = _buyAudio.cloneNode ? _buyAudio.cloneNode() : new Audio('./audio/Buy.mp3');
-    a.volume = (P.volSfx !== undefined ? P.volSfx : 0.7);
-    a.play().catch(() => {});
   } catch (e) {}
 }
+function playBuySound() {
+  try {
+    ensureBuyPool();
+    let vol = (P && P.volSfx !== undefined) ? P.volSfx : 0.7;
+    // Reusar instancias precargadas (sin clone) para evitar retardo en móvil/PWA
+    let a = _buyPool[_buyPoolIdx % _buyPool.length];
+    _buyPoolIdx++;
+    if (!a) {
+      a = new Audio(_buySrc);
+      a.preload = 'auto';
+    }
+    try { a.pause(); } catch (e) {}
+    a.currentTime = 0;
+    a.volume = vol;
+    let p = a.play();
+    if (p && p.catch) p.catch(() => {
+      // Reintento con nueva instancia si el pool falló
+      try {
+        let b = new Audio(_buySrc);
+        b.volume = vol;
+        b.play().catch(() => {});
+      } catch (e2) {}
+    });
+  } catch (e) {}
+}
+// Precargar en la primera interacción del usuario
+(function warmBuySound() {
+  let once = function() {
+    ensureBuyPool();
+    document.removeEventListener('pointerdown', once, true);
+    document.removeEventListener('touchstart', once, true);
+    document.removeEventListener('click', once, true);
+  };
+  document.addEventListener('pointerdown', once, true);
+  document.addEventListener('touchstart', once, true);
+  document.addEventListener('click', once, true);
+})();
 
 function playWeaponSound(weapon) {
   try {
