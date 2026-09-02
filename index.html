@@ -416,6 +416,12 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   border-color: #3399ff !important;
 }
 .world-cell.home { background: #0a2a1a; border-color: #66ddaa; color: #66ddaa; }
+.world-cell.unique { background: #1a1408; border-color: #d4a017; color: #e8c547; }
+.world-cell.unique-int { background: #12100a; border-color: #8a7020; color: #c9a227; }
+.world-cell.unique-int.player { background: #2a2208; box-shadow: 0 0 6px #e8c547; }
+.world-cell.unique-wall { background: #050505; color: #333; border-color: #222; }
+.world-cell.unique-loot { border-color: #ffcc00; }
+.world-cell.unique-exit { border-color: #00ff41; }
 .world-cell.commerce {
   background: #1a1500 !important;
   color: #ffcc44 !important;
@@ -4245,7 +4251,8 @@ const ZONE_DEFS = {
   vault: { icon: '⌂', label: 'El Refugio', cls: 'vault', enterable: false, radChance: 0.0, exploreBias: 'nothing' },
   home: { icon: '🏠', label: 'Hogar', cls: 'home', enterable: false, radChance: 0.0, exploreBias: 'nothing' },
   commerce: { icon: '⚖', label: 'Zona de Comercio', cls: 'commerce', enterable: false, radChance: 0.05, exploreBias: 'nothing' },
-  combatzone: { icon: '⚔', label: 'Combat Zone', cls: 'combatzone', enterable: false, radChance: 0.1, exploreBias: 'nothing' }
+  combatzone: { icon: '⚔', label: 'Combat Zone', cls: 'combatzone', enterable: false, radChance: 0.1, exploreBias: 'nothing' },
+  unique: { icon: '◆', label: 'Localidad única', cls: 'unique', enterable: true, radChance: 0.22, exploreBias: 'loot' }
 };
 
 // Facciónes y asentamientos fijos en el mapa
@@ -4786,6 +4793,261 @@ const FACTION_UNIQUE_SHOP = {
 };
 
 
+const UNIQUE_LOCATIONS = [
+  { id: 'u01', name: 'Estación de metro Cambridge', x: -4, y: -2, theme: 'metro', icon: 'Ⓜ' },
+  { id: 'u02', name: 'Hospital General de Boston', x: 6, y: -3, theme: 'hospital', icon: '✚' },
+  { id: 'u03', name: 'Instituto Politécnico', x: -3, y: 6, theme: 'school', icon: '🎓' },
+  { id: 'u04', name: 'Museo de la Historia', x: 7, y: 1, theme: 'museum', icon: '🏛' },
+  { id: 'u05', name: 'Fábrica de motores Poseidon', x: -9, y: -3, theme: 'factory', icon: '⚙' },
+  { id: 'u06', name: 'Cárcel del Condado', x: 4, y: -7, theme: 'prison', icon: '⛓' },
+  { id: 'u07', name: 'Centro comercial Quincy', x: -2, y: -6, theme: 'mall', icon: '🛒' },
+  { id: 'u08', name: 'Aeródromo de Bedford', x: 9, y: -2, theme: 'airport', icon: '✈' },
+  { id: 'u09', name: 'Biblioteca pública', x: 2, y: 6, theme: 'library', icon: '📚' },
+  { id: 'u10', name: 'Teatro Classic', x: -6, y: -5, theme: 'theater', icon: '🎭' },
+  { id: 'u11', name: 'Comisaría de Cambridge', x: 5, y: 7, theme: 'police', icon: '🚓' },
+  { id: 'u12', name: 'Central eléctrica', x: -11, y: 1, theme: 'power', icon: '⚡' },
+  { id: 'u13', name: 'Depósito de trenes', x: 8, y: 5, theme: 'train', icon: '🚂' },
+  { id: 'u14', name: 'Laboratorio Med-Tek', x: -7, y: 4, theme: 'lab', icon: '🧪' },
+  { id: 'u15', name: 'Hotel Rexford', x: 11, y: 3, theme: 'hotel', icon: '🏨' },
+  { id: 'u16', name: 'Iglesia de la Trinidad', x: -4, y: 9, theme: 'church', icon: '⛪' },
+  { id: 'u17', name: 'Estadio Diamond City', x: 3, y: 9, theme: 'stadium', icon: '🏟' },
+  { id: 'u18', name: 'Puerto de Charlestown', x: 13, y: -4, theme: 'port', icon: '⚓' },
+  { id: 'u19', name: 'Fábrica de Nuka-Cola', x: -13, y: -6, theme: 'nuka', icon: '🥤' },
+  { id: 'u20', name: 'Base militar Fort Hagen', x: -3, y: -11, theme: 'military', icon: '🪖' },
+  { id: 'u21', name: 'Universidad de Massachusetts', x: 7, y: -9, theme: 'school', icon: '🎓' },
+  { id: 'u22', name: 'Observatorio', x: 0, y: 11, theme: 'lab', icon: '🔭' },
+  { id: 'u23', name: 'Mina de carbón', x: -15, y: 2, theme: 'mine', icon: '⛏' },
+  { id: 'u24', name: 'Planta de tratamiento', x: 15, y: -1, theme: 'factory', icon: '💧' },
+  { id: 'u25', name: 'Cine Starlight', x: -8, y: -9, theme: 'theater', icon: '🎬' },
+  { id: 'u26', name: 'Banco de la Commonwealth', x: 1, y: -9, theme: 'bank', icon: '🏦' },
+  { id: 'u27', name: 'Mercado de Lexington', x: -1, y: 8, theme: 'mall', icon: '🏪' },
+  { id: 'u28', name: 'Torre de radio WRVR', x: 10, y: 7, theme: 'radio', icon: '📡' },
+  { id: 'u29', name: 'Silo de misiles', x: -12, y: 9, theme: 'military', icon: '🚀' },
+  { id: 'u30', name: 'Acueducto antiguo', x: 12, y: -8, theme: 'ruin', icon: '🌉' },
+  { id: 'u31', name: 'Zoológico de Boston', x: -9, y: 11, theme: 'zoo', icon: '🦁' },
+  { id: 'u32', name: 'Parque de atracciones', x: 16, y: 4, theme: 'mall', icon: '🎡' },
+  { id: 'u33', name: 'Crematorio municipal', x: 4, y: 12, theme: 'church', icon: '🕯' },
+  { id: 'u34', name: 'Almacén GNN', x: -14, y: -2, theme: 'factory', icon: '📦' },
+  { id: 'u35', name: 'Clínica de Concord', x: -6, y: 14, theme: 'hospital', icon: '💊' },
+  { id: 'u36', name: 'Escuela primaria', x: 9, y: 12, theme: 'school', icon: '✏' },
+  { id: 'u37', name: 'Garaje de camiones', x: 17, y: -6, theme: 'factory', icon: '🚛' },
+  { id: 'u38', name: 'Refinería de petróleo', x: -17, y: 5, theme: 'factory', icon: '🛢' },
+  { id: 'u39', name: 'Farol de la costa', x: 18, y: 1, theme: 'port', icon: '🗼' },
+  { id: 'u40', name: 'Búnker de protección civil', x: 0, y: -13, theme: 'bunker', icon: '⛨' },
+  { id: 'u41', name: 'Jardín botánico', x: 14, y: 8, theme: 'park', icon: '🌿' },
+  { id: 'u42', name: 'Estudio de televisión', x: -10, y: -11, theme: 'theater', icon: '📺' },
+  { id: 'u43', name: 'Correos de Nahant', x: 19, y: -3, theme: 'office', icon: '✉' },
+  { id: 'u44', name: 'Granja de Wind Farm', x: -16, y: -9, theme: 'farm', icon: '🌾' },
+  { id: 'u45', name: 'Dique del río Charles', x: 8, y: -12, theme: 'port', icon: '🌊' },
+  { id: 'u46', name: 'Archivo del tribunal', x: -5, y: 16, theme: 'office', icon: '⚖' },
+  { id: 'u47', name: 'Taller de robots surplus', x: 15, y: 11, theme: 'factory', icon: '🤖' },
+  { id: 'u48', name: 'Cripta familiar', x: 11, y: -11, theme: 'church', icon: '⚰' },
+  { id: 'u49', name: 'Hangar de dirigibles', x: -18, y: 0, theme: 'airport', icon: '🎈' },
+  { id: 'u50', name: 'Cámara del Consejo', x: 6, y: 15, theme: 'office', icon: '🏛' }
+];
+
+const UNIQUE_THEME_ROOMS = {
+  metro: ['Andén', 'Túnel lateral', 'Cabina de control', 'Sala de máquinas', 'Boletería', 'Pasillo de servicio', 'Almacén de vías'],
+  hospital: ['Recepción', 'Urgencias', 'Quirofano', 'Farmacia', 'Habitación 12', 'Morgue', 'Almacén médico'],
+  school: ['Aula 1-A', 'Biblioteca escolar', 'Gimnasio', 'Cafetería', 'Laboratorio', 'Dirección', 'Patio cubierto'],
+  museum: ['Sala de exposiciones', 'Ala este', 'Depósito', 'Taller de restauración', 'Cúpula', 'Archivo', 'Entrada principal'],
+  factory: ['Cadena de montaje', 'Oficina del capataz', 'Almacén de piezas', 'Sala de calderas', 'Vestuarios', 'Control de calidad'],
+  prison: ['Celda bloque A', 'Patio de recreo', 'Sala de guardias', 'Cocina', 'Aislamiento', 'Armería', 'Entrada principal'],
+  mall: ['Atrio', 'Tienda de ropa', 'Food court', 'Aparcamiento subterráneo', 'Almacén', 'Cine del centro', 'Seguridad'],
+  airport: ['Terminal', 'Pista de servicio', 'Torre de control', 'Hangar 3', 'Sala de equipajes', 'Aduanas'],
+  library: ['Sala de lectura', 'Archivo histórico', 'Sótano', 'Mostrador', 'Sala infantil', 'Almacén de libros'],
+  theater: ['Platea', 'Escenario', 'Camerinos', 'Foso de orquesta', 'Taquilla', 'Almacén de atrezzo'],
+  police: ['Recepción', 'Celdas', 'Armería', 'Sala de interrogatorios', 'Archivo de casos', 'Garaje policial'],
+  power: ['Sala de turbinas', 'Control central', 'Transformadores', 'Almacén', 'Oficina técnica', 'Tejado'],
+  train: ['Andén 2', 'Loco-taller', 'Oficina de cargas', 'Almacén', 'Torre de señales', 'Vía muerta'],
+  lab: ['Laboratorio A', 'Contención', 'Oficina', 'Cámara frigorífica', 'Sala limpia', 'Almacén de muestras'],
+  hotel: ['Lobby', 'Habitación 203', 'Cocina', 'Sótano', 'Azotea', 'Bar del hotel'],
+  church: ['Nave central', 'Sacristía', 'Campanario', 'Cripta', 'Jardín', 'Archivo parroquial'],
+  stadium: ['Grada norte', 'Vestuario', 'Campo', 'Concesionario', 'Sala de prensa', 'Túnel de acceso'],
+  port: ['Muelle', 'Almacén portuario', 'Torre de control', 'Oficina aduanera', 'Bodega', 'Grúa'],
+  nuka: ['Línea de embotellado', 'Laboratorio de sabores', 'Oficina Nuka', 'Almacén de jarabe', 'Cámaras frías'],
+  military: ['Cuartel', 'Armería', 'Centro de mando', 'Polvorín', 'Torre de vigilancia', 'Hangar'],
+  mine: ['Pozo principal', 'Galería este', 'Sala de bombas', 'Vagonetas', 'Oficina del minero', 'Túnel derrumbado'],
+  bank: ['Vestíbulo', 'Cajas fuertes', 'Oficina del director', 'Archivo', 'Sótano', 'Vigilancia'],
+  radio: ['Estudio de emisión', 'Antena', 'Sala de equipos', 'Archivo de cintas', 'Oficina'],
+  bunker: ['Acceso sellado', 'Sala de mando', 'Dormitorios', 'Despensa', 'Generador', 'Observatorio'],
+  zoo: ['Jaula de felinos', 'Acuario seco', 'Almacén de pienso', 'Clínica veterinaria', 'Entrada'],
+  park: ['Invernadero', 'Estanque seco', 'Pabellón', 'Almacén de jardinería', 'Mirador'],
+  office: ['Recepción', 'Sala de juntas', 'Archivo', 'Despacho', 'Azotea', 'Sótano de servidores'],
+  farm: ['Granero', 'Silo', 'Casa de labranza', 'Gallinero', 'Taller', 'Pozo'],
+  ruin: ['Sala derruida', 'Pasillo', 'Sótano húmedo', 'Azotea agrietada', 'Almacén'],
+  default: ['Sala 1', 'Pasillo', 'Almacén', 'Sala lateral', 'Acceso', 'Fondo']
+};
+
+function getUniqueLocAt(x, y) {
+  return UNIQUE_LOCATIONS.find(u => u.x === x && u.y === y) || null;
+}
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h) + s.charCodeAt(i) | 0;
+  return Math.abs(h);
+}
+function generateUniqueInterior(loc) {
+  let size = 5;
+  let theme = loc.theme || 'default';
+  let names = UNIQUE_THEME_ROOMS[theme] || UNIQUE_THEME_ROOMS.default;
+  let seed = hashStr(loc.id + ':' + loc.x + ',' + loc.y);
+  function rnd() { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+  let grid = [];
+  for (let y = 0; y < size; y++) {
+    grid[y] = [];
+    for (let x = 0; x < size; x++) {
+      // bordes a veces muro
+      let edge = (x === 0 || y === 0 || x === size - 1 || y === size - 1);
+      if (edge && rnd() < 0.35 && !(x === Math.floor(size/2) && y === size - 1)) {
+        grid[y][x] = { wall: true, name: 'Muro', icon: '▓', visited: false };
+      } else {
+        let nm = names[Math.floor(rnd() * names.length)];
+        grid[y][x] = { wall: false, name: nm, icon: '·', visited: false, searched: false };
+      }
+    }
+  }
+  // entrada sur centro
+  let sx = Math.floor(size / 2), sy = size - 1;
+  grid[sy][sx] = { wall: false, name: 'Entrada — ' + loc.name, icon: '◎', visited: true, searched: false, isStart: true };
+  // asegurar camino simple hacia el norte
+  for (let y = sy - 1; y >= 0; y--) {
+    if (grid[y][sx].wall) grid[y][sx] = { wall: false, name: names[Math.floor(rnd() * names.length)], icon: '·', visited: false, searched: false };
+  }
+  // salida / punto especial
+  let ex = Math.floor(rnd() * size), ey = 0;
+  if (grid[ey][ex].wall) { ex = sx; }
+  grid[ey][ex] = { wall: false, name: 'Salida interior / mirador', icon: '⇨', visited: false, searched: false, isExit: true };
+  // loot nodes
+  let lootN = 3 + Math.floor(rnd() * 3);
+  for (let i = 0; i < lootN; i++) {
+    let lx = Math.floor(rnd() * size), ly = Math.floor(rnd() * size);
+    if (!grid[ly][lx].wall && !grid[ly][lx].isStart) {
+      grid[ly][lx].icon = '💰';
+      grid[ly][lx].loot = true;
+      grid[ly][lx].name = names[Math.floor(rnd() * names.length)] + ' (posible botín)';
+    }
+  }
+  return {
+    type: 'unique',
+    uniqueId: loc.id,
+    name: loc.name,
+    theme: theme,
+    icon: loc.icon,
+    worldX: loc.x,
+    worldY: loc.y,
+    size: size,
+    grid: grid,
+    px: sx,
+    py: sy,
+    searchedCells: {}
+  };
+}
+
+function isInUniqueInterior() {
+  return !!(P.location && P.location.type === 'unique' && P.location.grid);
+}
+
+function enterUniqueLocation(loc) {
+  P.location = generateUniqueInterior(loc);
+  logMsg('Entras en: ' + loc.name + '. Cuadrícula interior.');
+  renderUniqueInteriorMap();
+  updateStats();
+}
+
+function moveInUniqueInterior(dx, dy) {
+  if (!isInUniqueInterior()) return;
+  if (typeof combatState !== 'undefined' && combatState) return;
+  let loc = P.location;
+  let nx = loc.px + dx, ny = loc.py + dy;
+  if (nx < 0 || ny < 0 || nx >= loc.size || ny >= loc.size) {
+    logMsg('No puedes salir por ahí. Usa SALIR AL YERMO en la entrada.');
+    return;
+  }
+  let cell = loc.grid[ny][nx];
+  if (cell.wall) { logMsg('Bloqueado: muro.'); return; }
+  loc.px = nx; loc.py = ny;
+  cell.visited = true;
+  advanceTime(1);
+  tickEffects();
+  // combate al moverse
+  let combatChance = 0.14 + (getWeatherInfo().combatMod || 0);
+  if (cell.loot && !cell.searched) combatChance += 0.05;
+  if (Math.random() < combatChance) {
+    startCombat(false);
+    return;
+  }
+  renderUniqueInteriorMap();
+  updateStats();
+}
+
+function searchUniqueCell() {
+  if (!isInUniqueInterior()) return;
+  let loc = P.location;
+  let cell = loc.grid[loc.py][loc.px];
+  if (cell.searched) { logMsg('Ya registraste esta zona.'); return; }
+  cell.searched = true;
+  cell.icon = cell.isExit ? '⇨' : (cell.isStart ? '◎' : '·');
+  // loot / combat / nothing
+  let roll = Math.random();
+  if (roll < 0.45 || cell.loot) {
+    findLoot();
+  } else if (roll < 0.70) {
+    startCombat(false);
+    return;
+  } else {
+    logMsg('No encuentras nada útil aquí.');
+  }
+  renderUniqueInteriorMap();
+  updateStats();
+}
+
+function renderUniqueInteriorMap() {
+  if (!isInUniqueInterior()) { renderMap(); return; }
+  let loc = P.location;
+  let cell = loc.grid[loc.py][loc.px];
+  let stims = countMedsById(7);
+  let radaways = countMedsById(74);
+  let cells = '';
+  for (let y = 0; y < loc.size; y++) {
+    for (let x = 0; x < loc.size; x++) {
+      let c = loc.grid[y][x];
+      let isHere = (x === loc.px && y === loc.py);
+      let cls = 'world-cell unique-int';
+      if (c.wall) cls += ' unique-wall';
+      if (isHere) cls += ' player';
+      if (c.loot && !c.searched) cls += ' unique-loot';
+      if (c.isExit) cls += ' unique-exit';
+      let content = isHere ? '☺' : (c.wall ? '▓' : (c.visited || c.isStart || c.isExit ? (c.icon || '·') : '·'));
+      cells += '<div class="' + cls + '" title="' + (c.visited || isHere ? c.name : '???') + '">' + content + '</div>';
+    }
+  }
+  let gridStyle = 'grid-template-columns:repeat(' + loc.size + ',1fr);max-width:260px;width:260px;height:260px;margin:8px auto;';
+  let canExit = !!(cell && cell.isStart);
+  let html = '<div><b style="color:#e8c547;">◆ LOCALIDAD ÚNICA</b></div>' +
+    '<div style="font-size:14px;color:#e8c547;text-align:center;margin:4px 0;">' + (loc.icon||'◆') + ' ' + loc.name + '</div>' +
+    '<div style="font-size:12px;color:#8d9880;text-align:center;">' + (cell ? cell.name : '') + (cell && cell.searched ? ' · registrado' : '') + '</div>' +
+    '<div class="world-grid" style="' + gridStyle + '">' + cells + '</div>' +
+    '<div class="map-actions">' +
+    '<div class="map-act-row">' +
+    '<button onclick="pipClick();searchUniqueCell()">REGISTRAR ZONA</button> ' +
+    (canExit ? '<button style="border-color:var(--danger);color:var(--danger);" onclick="pipClick();exitLocation()">← SALIR AL YERMO</button>' : '<span style="font-size:11px;color:#8d9880;">Vuelve a la entrada ◎ para salir</span>') +
+    '</div></div>' +
+    '<div class="map-controls" style="margin-top:10px;">' +
+    '<div class="quick-meds">' +
+    '<button onclick="pipClick();quickUseStim()" ' + (stims===0?'disabled':'') + '>💉 Stim (' + stims + ')</button>' +
+    '<button onclick="pipClick();quickUseRadAway()" ' + (radaways===0?'disabled':'') + '>☢ RadAway (' + radaways + ')</button>' +
+    '</div>' +
+    '<div class="map-arrows">' +
+    '<div></div><button onclick="pipClick();moveInUniqueInterior(0,-1)">▲</button><div></div>' +
+    '<button onclick="pipClick();moveInUniqueInterior(-1,0)">◀</button><button onclick="pipClick();moveInUniqueInterior(0,1)">▼</button><button onclick="pipClick();moveInUniqueInterior(1,0)">▶</button>' +
+    '</div>' +
+    '<div class="quick-radio"><button onclick="pipClick();openRadioUI()">📻 RADIO</button></div>' +
+    '</div>';
+  document.getElementById('main-view').innerHTML = html;
+}
+
+
 const INTERIOR_TEMPLATES = {
   ruin: [
     { id: 'entrada', name: 'Entrada derruida', exits: { n: 'pasillo', e: null, s: null, w: null } },
@@ -4968,6 +5230,19 @@ function getZoneAt(x, y) {
   if (x === ABDUCTION_SITE.x && y === ABDUCTION_SITE.y) {
     return { type: 'abduction', icon: '🛸', name: 'Zona de abducción Zetan', cls: 'poi', radChance: 0.1, enterable: false, abduction: true };
   }
+  let uni = getUniqueLocAt(x, y);
+  if (uni) {
+    return {
+      type: 'unique',
+      ...ZONE_DEFS.unique,
+      name: uni.name,
+      icon: uni.icon || '◆',
+      uniqueId: uni.id,
+      theme: uni.theme,
+      enterable: true,
+      cls: 'unique'
+    };
+  }
   let sett = getSettlementAt(x, y);
   if (sett) {
     let fac = FACTIONS[sett.faction];
@@ -5088,6 +5363,10 @@ function renderMap() {
     renderCombatZoneUI(P.czTab || 'combat');
     return;
   }
+  if (P.location && P.location.type === 'unique') {
+    renderUniqueInteriorMap();
+    return;
+  }
   if (P.location) {
     renderInteriorMap();
     return;
@@ -5139,6 +5418,9 @@ function renderMap() {
   } else if (zone.type === 'abduction' || zone.abduction) {
     actBtns = `<button style="background:#66ffaa;color:#111;font-weight:bold;" onclick="startZetanAbduction()">🛸 DEJARSE ABDUCIR</button>`;
     actHint = `<span style="color:#66ffaa;">Señal Zetan — te llevarán a una nave (mapa limitado)</span>`;
+  } else if (zone.type === 'unique') {
+    actBtns = `<button onclick="exploreZone()">EXPLORAR</button> <button style="background:#e8c547;color:#111;font-weight:bold;" onclick="enterLocation()">ENTRAR →</button>`;
+    actHint = `<span style="color:#e8c547;">◆ Localidad única — interior con cuadrícula</span>`;
   } else if (zone.enterable) {
     actBtns = `<button onclick="exploreZone()">EXPLORAR</button> <button style="background:var(--accent);color:#111;" onclick="enterLocation()">ENTRAR →</button>`;
   } else {
@@ -5274,6 +5556,10 @@ function enterLocation() {
   if (!zone.enterable) {
     logMsg("No hay nada a lo que entrar aquí.");
     return;
+  }
+  if (zone.type === 'unique' || zone.uniqueId) {
+    let loc = getUniqueLocAt(P.x, P.y) || UNIQUE_LOCATIONS.find(u => u.id === zone.uniqueId);
+    if (loc) { enterUniqueLocation(loc); return; }
   }
   let templateKey = zone.type;
   if (!INTERIOR_TEMPLATES[templateKey]) templateKey = 'ruin';
@@ -5704,7 +5990,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.4.1</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.5.0</div>
   `;
   m.classList.add('show');
 }
