@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#000000">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Wasteland">
 <meta name="description" content="Wasteland — supervivencia en el Yermo. Offline.">
 <link rel="manifest" href="manifest.webmanifest">
@@ -412,6 +412,7 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   color: #66b3ff !important;
   border-color: #3399ff !important;
 }
+.world-cell.home { background: #0a2a1a; border-color: #66ddaa; color: #66ddaa; }
 .world-cell.commerce {
   background: #1a1500 !important;
   color: #ffcc44 !important;
@@ -2282,6 +2283,20 @@ function formatItemGainName(item, count = 1) {
   }
   return count > 1 ? `${count}x ${item.name}` : `1x ${item.name}`;
 }
+function formatFactionRewardText(rw) {
+  if (!rw) return '';
+  let parts = [];
+  if (rw.caps) parts.push((rw.caps || 0) + ' chapas');
+  if (rw.xp) parts.push((rw.xp || 0) + ' XP');
+  if (rw.rep) parts.push('+' + (rw.rep || 0) + ' rep');
+  if (rw.prewar) parts.push('+' + rw.prewar + ' $ preguerra');
+  if (rw.item) {
+    let it = getItemBase(rw.item);
+    if (it) parts.push(formatItemGainName(it, rw.qty || 1));
+  }
+  return parts.join(' · ');
+}
+
 
 function addLeveledGearToInv(baseId) {
   let it = getItemBase(baseId);
@@ -2757,17 +2772,39 @@ function renderCharacter(sub) {
         <div class="row"><span>XP</span><b>${c.xp || 0} / ${companionRequiredXP(c.level || 1)}</b></div>
         <p style="font-size:11px;color:#8d9880;margin:4px 0 0;">S${c.special?.S||'?'} P${c.special?.P||'?'} E${c.special?.E||'?'} C${c.special?.C||'?'} I${c.special?.I||'?'} A${c.special?.A||'?'} L${c.special?.L||'?'}</p>
         ${ab}
-        ${(c.isRex || c.id === 'rex_kings')
-          ? `<button style="width:100%;margin-top:10px;border-color:#e8c547;color:#e8c547;" onclick="returnRexToTheater('${c.id}');renderCharacter('companion');">Devolver al Teatro</button>`
+        ${(c.isRex || c.id === 'rex_kings' || c.isUnique)
+          ? `<button style="width:100%;margin-top:10px;border-color:#66ddaa;color:#66ddaa;" onclick="sendCompanionToHome('${c.id}')">Enviar al Hogar</button>
+             ${(c.isRex || c.id === 'rex_kings') ? `<button style="width:100%;margin-top:6px;border-color:#e8c547;color:#e8c547;" onclick="returnRexToTheater('${c.id}');renderCharacter('companion');">Devolver al Teatro</button>` : ''}`
           : `<button style="width:100%;margin-top:10px;border-color:var(--danger);color:var(--danger);" ${c.resting ? 'disabled' : ''} onclick="unequipCompanionFromChar()">${c.resting ? 'Descansando…' : 'Retirar compañero'}</button>`}
       </div>`;
     }
   } else if (sub === 'notes') {
+    if (!P.playerNotes) P.playerNotes = [];
+    if (!P.notesSubtab) P.notesSubtab = 'mine';
+    let ns = P.notesSubtab;
     html += `<h3 style="color:var(--accent); margin:6px 0;">NOTAS</h3>
-      <div class="item" style="border-color:#8d9880;">
-        <p style="font-size:13px;color:#8d9880;text-align:center;margin:12px 0;">📔 Sección de notas del Pip-Boy.</p>
-        <p style="font-size:12px;color:#8d9880;text-align:center;margin:0 0 8px;">Se implementará en un futuro.</p>
+      <div class="subtabs" style="margin-bottom:8px;">
+        <button class="${ns==='important'?'active':''}" onclick="P.notesSubtab='important';renderCharacter('notes')">Importantes</button>
+        <button class="${ns==='mine'?'active':''}" onclick="P.notesSubtab='mine';renderCharacter('notes')">Mis Notas</button>
       </div>`;
+    if (ns === 'important') {
+      html += `<div class="item" style="border-color:#8d9880;">
+        <p style="font-size:12px;color:#8d9880;text-align:center;margin:12px 0;">(Aún no implementado)</p>
+      </div>`;
+    } else {
+      let notes = P.playerNotes.filter(n => !n.important);
+      if (notes.length === 0) {
+        html += `<p style="font-size:12px;color:#8d9880;">Ninguna nota. Escríbelas en el ordenador de tu Hogar [+2, -1].</p>`;
+      } else {
+        notes.forEach(n => {
+          html += `<div class="item">
+            <b>${n.title || 'Sin título'}</b>
+            <p style="font-size:12px;color:#8d9880;margin:4px 0;white-space:pre-wrap;">${(n.body||'').replace(/</g,'&lt;')}</p>
+            <button style="font-size:11px;border-color:var(--danger);color:var(--danger);" onclick="discardPlayerNote('${n.id}')">Desechar</button>
+          </div>`;
+        });
+      }
+    }
   } else if (sub === 'rep') {
     html += `<h3 style="color:var(--accent); font-size:13px; margin:6px 0;">Reputación de facciones</h3>`;
     html += Object.keys(FACTIONS).filter(fid => fid !== 'player' && fid !== 'sierra' && fid !== 'robco').map(fid => {
@@ -3083,8 +3120,10 @@ function renderScrapUI() {
     if (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid) return false;
     return it.type === 'weapon' || it.type === 'armor';
   });
-  if (list.length === 0) {
-    html += `<p style="font-size:12px; color:#8d9880;">No tienes armas/armaduras desequipadas para desguazar.</p>`;
+    if (list.length === 0) {
+    html += sub === 'notes'
+      ? `<p style="font-size:12px; color:#8d9880;">Ninguna nota. Escríbelas en el ordenador de tu Hogar [+2, -1].</p>`
+      : `<p style="font-size:12px; color:#8d9880;">No tienes objetos en esta categoría.</p>`;
   } else {
     list.forEach(inst => {
       let it = getItemBase(inst.id);
@@ -3192,7 +3231,8 @@ function renderPrisonUI() {
         <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;">
           <button style="font-size:11px;" ${c.resting ? 'disabled' : ''} onclick="equipCompanion('${c.id}')">${c.id === P.equippedCompanionId ? 'Equipado' : 'Equipar'}</button>
           <button style="font-size:11px;" onclick="showCompanionStats('${c.id}')">Stats</button>
-          <button style="font-size:11px;border-color:var(--danger);color:var(--danger);" onclick="freeCompanion('${c.id}')">Liberar</button>
+          ${(c.isRex || c.id === 'rex_kings' || c.isUnique) ? `<button style="font-size:11px;border-color:#66ddaa;color:#66ddaa;" onclick="sendCompanionToHome('${c.id}')">Al Hogar</button>` : ''}
+          ${c.isRex || c.id === 'rex_kings' ? `<button style="font-size:11px;border-color:#e8c547;color:#e8c547;" onclick="returnRexToTheater('${c.id}')">Al Teatro</button>` : (!c.isUnique && !(c.isRex || c.id === 'rex_kings') ? `<button style="font-size:11px;border-color:var(--danger);color:var(--danger);" onclick="freeCompanion('${c.id}')">Liberar</button>` : '')}
         </div>
       </div>`;
     });
@@ -3367,6 +3407,7 @@ function buildRexCompanion() {
     radRes: 90,
     isLegendary: true,
     isRex: true,
+    isUnique: true,
     cannotFree: true,
     ability: REX_ABILITY,
     resting: !!d.resting
@@ -3397,6 +3438,7 @@ function recruitRex() {
   ensureRexDefaults();
   ensureVaultDefaults();
   if (isRexInPrison()) { logMsg('Rex ya está contigo.'); return; }
+  if (typeof isRexAtHome === 'function' && isRexAtHome()) { logMsg('Rex está en tu Hogar. Equípalo desde Habitaciones.'); return; }
   if (!P.rexData.available && P.rexData.everRecruited) {
     logMsg('Rex no está disponible.'); return;
   }
@@ -3433,14 +3475,18 @@ function returnRexToTheater(id) {
 
 function renderKingsTheaterUI() {
   ensureRexDefaults();
+  ensurePlayerHome();
   let inPrison = isRexInPrison();
+  let atHome = isRexAtHome();
   let d = P.rexData;
   let lvl = d.level || 5;
   let html = `<div class="item" style="border-color:#e8c547 !important;">
     <b style="color:#e8c547;">🎭 Teatro del Rey</b><br>
-    <span style="font-size:12px;color:#8d9880;">Aquí reside <b style="color:#e8c547;">Rex</b>, el perro cibernético del Rey. Compañero legendario exclusivo. No puede liberarse: solo devolverlo al teatro.</span><br>`;
+    <span style="font-size:12px;color:#8d9880;">Aquí reside <b style="color:#e8c547;">Rex</b>, el perro cibernético del Rey. Compañero legendario exclusivo.</span><br>`;
   if (inPrison) {
-    html += `<p style="font-size:12px;color:#8d9880;margin:6px 0 0;">Rex está contigo (Nv.${lvl}). Si lo despides, vuelve aquí conservando su progreso.</p>`;
+    html += `<p style="font-size:12px;color:#8d9880;margin:6px 0 0;">Rex está contigo (Nv.${lvl}).</p>`;
+  } else if (atHome) {
+    html += `<p style="font-size:12px;color:#66ddaa;margin:6px 0 0;">Rex está en <b>${getPlayerHomeName()}</b> (Nv.${lvl}). Ve a Habitaciones para equiparlo.</p>`;
   } else {
     html += `<p style="font-size:12px;margin:6px 0 0;"><b style="color:#e8c547;">★ Rex</b> · Nv.${lvl} · HP ${d.hp||d.maxHp}/${d.maxHp||140}<br>
       <span style="font-size:11px;color:#e8c547;">★ ${REX_ABILITY.name}</span> — ${REX_ABILITY.desc}</p>
@@ -4122,7 +4168,8 @@ function renderQuests() {
         <b style="color:${fcol} !important;">${q.title}</b> <span style="font-size:10px;color:${fcol} !important;">PRINCIPAL · ${fac ? fac.name : q.faction}</span><br>
         <span style="font-size:11px;">${q.desc || ''}</span><br>
         <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${fcol} !important;"></div></div>
-        <span style="font-size:11px;">${q.current || 0}/${q.target || 1} ${q.completed ? '— Completada (reclama en el asentamiento)' : ''}</span>
+        <span style="font-size:11px;">${q.current || 0}/${q.target || 1} ${q.completed ? '— Completada (reclama en el asentamiento)' : ''}</span><br>
+        <span style="font-size:11px;">Recompensa: ${formatFactionRewardText(q.reward)}</span>
       </div>`;
     });
   }
@@ -4178,6 +4225,7 @@ const ZONE_DEFS = {
   camp:   { icon: '⛺', label: 'Campamento',        cls: 'camp',   enterable: true,  radChance: 0.15, exploreBias: 'combat' },
   settlement: { icon: '⚑', label: 'Asentamiento', cls: 'settlement', enterable: true, radChance: 0.05, exploreBias: 'loot' },
   vault: { icon: '⌂', label: 'El Refugio', cls: 'vault', enterable: false, radChance: 0.0, exploreBias: 'nothing' },
+  home: { icon: '🏠', label: 'Hogar', cls: 'home', enterable: false, radChance: 0.0, exploreBias: 'nothing' },
   commerce: { icon: '⚖', label: 'Zona de Comercio', cls: 'commerce', enterable: false, radChance: 0.05, exploreBias: 'nothing' },
   combatzone: { icon: '⚔', label: 'Combat Zone', cls: 'combatzone', enterable: false, radChance: 0.1, exploreBias: 'nothing' }
 };
@@ -4314,9 +4362,30 @@ const PREWAR_ICON_SRC = 'data:image/webp;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHY
 const TICKET_ICON_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAv0lEQVR4nO2VMQ7DIAxFv6OcLQsMOUmmDj1Ch06cJEOy5HJ0qEyNVdGSulFV8TaQ8ZNsMECj8euQ3piWGK0lwVPy9Fq2zau1D9MSI0u7b8sAYJvXVLnuVbA1hwuzHg6jA3AvAXM9u+qkp8vjPOdkCMibymuLfg6jg85LWmYl1TKmfxYs+bSk1cLS4T10wRPp6WLRQ/n2ZN6soTKYeaekpSrIWxo82d/Mkjh4ov+fNEkYPJGeClbIN3n4f9hoVHMDA89mtC8SUbYAAAAASUVORK5CYII=';
 const IMPORTANT_LOCS = [
   { id: 'vault_home', name: 'El Refugio', x: 0, y: 0, kind: 'vault' },
+  { id: 'player_house', name: 'Hogar del Superviviente', x: 2, y: -1, kind: 'home' },
   { id: 'commerce_hub', name: 'Zona de Comercio', x: 3, y: -3, kind: 'commerce' },
   { id: 'combat_zone', name: 'Combat Zone', x: -5, y: 4, kind: 'combatzone' }
 ];
+function getPlayerHomeName() {
+  let n = (P && P.playerName) ? String(P.playerName).trim() : '';
+  if (!n) n = 'Superviviente';
+  return 'Hogar de ' + n;
+}
+function ensurePlayerHome() {
+  if (!P.playerHome) P.playerHome = { unlocked: false, tab: 'living' };
+  if (!P.homeCompanions) P.homeCompanions = [];
+  if (!Array.isArray(P.homeCompanions)) P.homeCompanions = [];
+  if (!P.playerNotes) P.playerNotes = [];
+}
+function isUniqueCompanion(c) {
+  if (!c) return false;
+  return !!(c.isUnique || c.isRex || c.id === 'rex_kings');
+}
+function isRexAtHome() {
+  ensurePlayerHome();
+  return !!(P.homeCompanions || []).find(c => c && (c.isRex || c.id === 'rex_kings'));
+}
+
 
 // Misiones principales por facción (se rotan de 3 en 3)
 // type collect + itemId: el objeto solo aparece en el Yermo si la misión está activa
@@ -4478,13 +4547,13 @@ const FACTION_QUEST_POOL = {
     { id: 'nuc_q10', title: "Día de la Independencia", desc: "Derrota 20 enemigos del Yermo. Demuestra que la Tierra aún se defiende.", type: 'kill', target: 20, reward: { caps: 480, xp: 260, rep: 22 }, minRep: 850 }
   ],
   necropolis: [
-    { id: 'nec_q1', title: "Guardianes de la ciudad muerta", desc: "Derrota a 5 saqueadores o humanos hostiles que amenazan las afueras.", type: 'kill', target: 5, reward: { caps: 90, xp: 60, rep: 12, item: 2600, qty: 1 }, minRep: 0 },
+    { id: 'nec_q1', title: "Guardianes de la ciudad muerta", desc: "Derrota a 5 saqueadores o humanos hostiles que amenazan las afueras.", type: 'kill', target: 5, reward: { caps: 90, xp: 60, rep: 12, item: 2601, qty: 1 }, minRep: 0 },
     { id: 'nec_q2', title: "Patrulla en las ruinas", desc: "Explora 6 zonas del Yermo en nombre de Necrópolis.", type: 'explore', target: 6, reward: { caps: 70, xp: 50, rep: 12, item: 2601, qty: 1 }, minRep: 0 },
-    { id: 'nec_q3', title: "Botín para los ancestros", desc: "Consigue 4 botines explorando ruinas.", type: 'loot', target: 4, reward: { caps: 80, xp: 55, rep: 14, item: 2600, qty: 1 }, minRep: 0 },
+    { id: 'nec_q3', title: "Botín para los ancestros", desc: "Consigue 4 botines explorando ruinas.", type: 'loot', target: 4, reward: { caps: 80, xp: 55, rep: 14, item: 2601, qty: 1 }, minRep: 0 },
     { id: 'nec_q4', title: "Caza en el polvo", desc: "Derrota a 8 enemigos del Yermo.", type: 'kill', target: 8, reward: { caps: 110, xp: 70, rep: 15, item: 2601, qty: 2 }, minRep: 100 },
     { id: 'nec_q5', title: "Vigilancia nocturna", desc: "Explora 8 zonas del mapa.", type: 'explore', target: 8, reward: { caps: 100, xp: 65, rep: 14, item: 2600, qty: 1 }, minRep: 100 },
     { id: 'nec_q6', title: "Ecos de la biblioteca", desc: "Consigue 6 botines explorando.", type: 'loot', target: 6, reward: { caps: 120, xp: 80, rep: 16, item: 2601, qty: 2 }, minRep: 250 },
-    { id: 'nec_q7', title: "Sangre en el asfalto", desc: "Derrota a 12 enemigos del Yermo.", type: 'kill', target: 12, reward: { caps: 150, xp: 95, rep: 18, item: 2600, qty: 2 }, minRep: 250 },
+    { id: 'nec_q7', title: "Sangre en el asfalto", desc: "Derrota a 12 enemigos del Yermo.", type: 'kill', target: 12, reward: { caps: 150, xp: 95, rep: 18, item: 2600, qty: 1 }, minRep: 250 },
     { id: 'nec_q8', title: "Rutas del este", desc: "Explora 10 zonas del Yermo.", type: 'explore', target: 10, reward: { caps: 130, xp: 85, rep: 16, item: 2601, qty: 2 }, minRep: 500 },
     { id: 'nec_q9', title: "Leyenda entre los muertos", desc: "Derrota a 2 enemigos legendarios.", type: 'kill_leg', target: 2, reward: { caps: 200, xp: 140, rep: 20, item: 2600, qty: 2 }, minRep: 500 },
     { id: 'nec_q10', title: "Gloria de Necrópolis", desc: "Derrota a 15 enemigos y demuestra tu lealtad.", type: 'kill', target: 15, reward: { caps: 220, xp: 150, rep: 22, item: 2601, qty: 3 }, minRep: 750 }
@@ -4868,6 +4937,10 @@ function getZoneAt(x, y) {
   if (x === 0 && y === 0) {
     return { type: 'vault', ...ZONE_DEFS.vault, name: 'El Refugio', importantId: 'vault_home' };
   }
+  if (x === 2 && y === -1) {
+    ensurePlayerHome();
+    return { type: 'home', ...ZONE_DEFS.home, name: getPlayerHomeName(), importantId: 'player_house', enterable: false };
+  }
   if (x === 3 && y === -3) {
     return { type: 'commerce', ...ZONE_DEFS.commerce, name: 'Zona de Comercio', importantId: 'commerce_hub', enterable: false };
   }
@@ -4985,6 +5058,10 @@ function renderMap() {
     }
     return;
   }
+  if (P.location && P.location.type === 'home') {
+    renderPlayerHomeUI(P.playerHome && P.playerHome.tab);
+    return;
+  }
   if (P.location && P.location.type === 'commerce') {
     renderCommerceHubUI();
     return;
@@ -5025,6 +5102,12 @@ function renderMap() {
   } else if (zone.type === 'vault') {
     actBtns = '';
     actHint = `<span style="color:#66b3ff;">⌂ Refugio — usa la pestaña REFUGIO (no se explora)</span>`;
+  } else if (zone.type === 'home') {
+    ensurePlayerHome();
+    actBtns = `<button style="background:#66ddaa;color:#111;font-weight:bold;" onclick="enterPlayerHome()">ENTRAR</button>`;
+    actHint = (P.playerHome && P.playerHome.unlocked)
+      ? `<span style="color:#66ddaa;">🏠 ${getPlayerHomeName()}</span>`
+      : `<span style="color:#66ddaa;">🏠 ${getPlayerHomeName()} · Entra para desbloquear</span>`;
   } else if (zone.type === 'commerce') {
     actBtns = `<button style="background:#ccaa00;color:#111;" onclick="enterCommerceHub()">ENTRAR</button>`;
     actHint = P.commerceUnlocked
@@ -5133,7 +5216,7 @@ function renderInteriorMap() {
   let exits = room ? room.exits : {};
   let exitBtns = '';
   const dirLabels = { n: '▲ Norte', s: '▼ Sur', e: '▶ Este', w: '◀ Oeste' };
-  const dirMove = { n: [0, 1], s: [0, -1], e: [1, 0], w: [-1, 0] };
+  const dirMove = { n: [0, 1], s: [0, -1], e: [1, 0], w: [+2, -1] };
   ['n', 'w', 'e', 's'].forEach(d => {
     if (exits[d]) {
       let target = loc.rooms.find(r => r.id === exits[d]);
@@ -6469,7 +6552,8 @@ function renderSettlementUI(settlementId, tab) {
         html += `<div class="item fcol" style="border-color:${fcol} !important;">
           <b style="color:${fcol} !important;">${q.title}</b> <span style="font-size:10px;color:${fcol} !important;">PRINCIPAL</span><br>
           <span style="font-size:11px;color:#8d9880;">${q.desc || ''}</span><br>
-          <span style="font-size:11px;">Progreso: ${q.current || 0}/${q.target || 1}</span><br>`;
+          <span style="font-size:11px;">Progreso: ${q.current || 0}/${q.target || 1}</span><br>
+          <span style="font-size:11px;">Recompensa: ${formatFactionRewardText(q.reward)}</span><br>`;
         if (q.completed) {
           html += `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="claimFactionQuest('${q.id}')">RECLAMAR RECOMPENSA</button>`;
         } else {
@@ -6492,7 +6576,7 @@ function renderSettlementUI(settlementId, tab) {
         html += `<div class="item fcol" style="border-color:${fcol} !important;">
           <b style="color:${fcol} !important;">${q.title}</b><br>
           <span style="font-size:11px;color:#8d9880;">${q.desc || ''}</span><br>
-          <span style="font-size:11px;">Recompensa: ${rw.caps || 0} chapas · ${rw.xp || 0} XP · +${rw.rep || 0} rep</span><br>
+          <span style="font-size:11px;">Recompensa: ${formatFactionRewardText(rw)}</span><br>
           <button style="margin-top:6px;" onclick="acceptFactionQuest('${sett.faction}','${q.id}')">ACEPTAR</button>
         </div>`;
       });
@@ -6912,10 +6996,13 @@ function openCasinoUI(casinoId, tab) {
       <button onclick="exchangeChipsToCaps('${casinoId}',500,5000)">${chipsHtml} 500 → ${capsHtml} 5000</button>
       <button onclick="exchangeChipsToCaps('${casinoId}',1000,10000)">${chipsHtml} 1000 → ${capsHtml} 10000</button>`;
   } else if (tab === 'play') {
-    html += `<p style="font-size:12px;color:#8d9880;">Elige un juego. La tabla de premios se muestra dentro de cada uno.</p>
-      <button onclick="playSlotsUI('${casinoId}')">🎰 Tragaperras</button>
-      <button onclick="playBlackjackUI('${casinoId}')">🃏 Blackjack</button>
-      <button onclick="playRouletteUI('${casinoId}')">🎡 Ruleta</button>`;
+    html += `<p style="font-size:12px;color:#8d9880;margin:0 0 10px 0;">Elige un juego. La tabla de premios está dentro de cada uno.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button style="padding:16px 8px;min-height:64px;font-size:14px;font-weight:bold;border:2px solid var(--line);background:#0a120a;" onclick="playSlotsUI('${casinoId}')">🎰<br>Tragaperras</button>
+        <button style="padding:16px 8px;min-height:64px;font-size:14px;font-weight:bold;border:2px solid var(--line);background:#0a120a;" onclick="playBlackjackUI('${casinoId}')">🃏<br>Blackjack</button>
+        <button style="padding:16px 8px;min-height:64px;font-size:14px;font-weight:bold;border:2px solid var(--line);background:#0a120a;" onclick="playRouletteUI('${casinoId}')">🎡<br>Ruleta</button>
+        <button style="padding:16px 8px;min-height:64px;font-size:14px;font-weight:bold;border:2px solid var(--line);background:#0a120a;" onclick="playPokerUI('${casinoId}')">🂡<br>Póker</button>
+      </div>`;
   } else if (tab === 'shop') {
     if (casinoId === 'sierra') {
       html += `<p style="font-size:12px;color:#8d9880;">La Sala VIP no tiene tienda. Compra exclusivos en los 5 casinos del Strip.</p>`;
@@ -7200,31 +7287,58 @@ function spinSlots(casinoId) {
 }
 
 let _bjBet = {};
+let _bjState = null;
+let _rouChipSize = {};
+let _rouPlaced = {}; // { casinoId: { 'n17': 10, 'red': 5, ... } }
+
+function bjCardFace(c) {
+  let red = (c.s === '♥' || c.s === '♦');
+  return '<div style="display:inline-block;width:44px;height:62px;background:#fff;color:' + (red?'#c00':'#111') + ';border-radius:6px;margin:2px;text-align:center;font-weight:bold;vertical-align:top;padding-top:8px;box-shadow:0 1px 3px #0008;">' +
+    '<div style="font-size:15px;">' + (c.r === 'T' ? '10' : c.r) + '</div><div style="font-size:18px;">' + c.s + '</div></div>';
+}
+function bjHiddenCard() {
+  return '<div style="display:inline-block;width:44px;height:62px;background:linear-gradient(135deg,#1a3a1a,#0a1a0a);border:2px solid var(--line);border-radius:6px;margin:2px;vertical-align:top;"></div>';
+}
+function bjNewDeck() {
+  let ranks = 'A23456789TJQK', suits = ['♠','♥','♦','♣'], d = [];
+  for (let s of suits) for (let r of ranks) d.push({ r, s });
+  for (let i = d.length - 1; i > 0; i--) { let j = Math.floor(Math.random()*(i+1)); let t=d[i]; d[i]=d[j]; d[j]=t; }
+  return d;
+}
+function bjHandValue(cards) {
+  let total = 0, aces = 0;
+  cards.forEach(c => {
+    if (c.r === 'A') { aces++; total += 11; }
+    else if ('TJQK'.indexOf(c.r) >= 0) total += 10;
+    else total += parseInt(c.r, 10);
+  });
+  while (total > 21 && aces > 0) { total -= 10; aces--; }
+  return total;
+}
+function bjIsNatural(cards) {
+  return cards.length === 2 && bjHandValue(cards) === 21;
+}
+
 function playBlackjackUI(casinoId) {
-  if (_bjBet[casinoId] === undefined) _bjBet[casinoId] = 10;
-  let bet = _bjBet[casinoId];
+  if (_bjBet[casinoId] === undefined) _bjBet[casinoId] = 0;
+  _bjState = null;
+  let bet = _bjBet[casinoId] || 0;
   let col = getCasinoColor(casinoId);
   let back = casinoId==='sierra' ? "renderSierraCasinoUI('vip')" : "openCasinoUI('"+casinoId+"','play')";
-  let html = `<h2 style="color:${col};margin-top:0;">🃏 Blackjack</h2>
-    <p style="font-size:12px;">Fichas: <b style="color:${col};">${getCasinoChips(casinoId)}</b></p>
-    <div class="item" style="font-size:11px;border-color:var(--gold);">
-      <b style="color:var(--gold);">Tabla de premios</b><br>
-      Blackjack natural → 3:2 (×2.5 la apuesta)<br>
-      Victoria → 1:1 (×2 total devuelto)<br>
-      Empate → se devuelve la apuesta
-    </div>
-    <div id="bj-result" style="margin:10px 0;font-size:14px;min-height:24px;text-align:center;">Listo</div>
-    <p style="text-align:center;"><b>Apuesta: <span id="bj-bet-val" style="color:var(--accent);">${bet}</span></b> fichas</p>
-    <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;">
-      <button onclick="addBjBet('${casinoId}',1)">+1</button>
-      <button onclick="addBjBet('${casinoId}',5)">+5</button>
-      <button onclick="addBjBet('${casinoId}',10)">+10</button>
-      <button onclick="addBjBet('${casinoId}',50)">+50</button>
-      <button onclick="addBjBet('${casinoId}',100)">+100</button>
-      <button onclick="_bjBet['${casinoId}']=0;document.getElementById('bj-bet-val').textContent=0;">Reset</button>
-    </div>
-    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="doBlackjack(_bjBet['${casinoId}']||0,'${casinoId}')">▶ JUGAR</button>
-    <button style="width:100%;margin-top:8px;" onclick="${back}">Volver</button>`;
+  let html = '<h2 style="color:'+col+';margin-top:0;">🃏 Blackjack</h2>' +
+    '<div class="item" style="font-size:11px;border-color:var(--gold);"><b style="color:var(--gold);">Tabla de premios</b><br>' +
+    'Blackjack natural → 3:2 (×2.5)<br>Victoria → 1:1 · Empate → se devuelve</div>' +
+    '<p style="font-size:12px;">Fichas: <b style="color:'+col+';">' + getCasinoChips(casinoId) + '</b></p>' +
+    '<p style="text-align:center;"><b>Apuesta: <span id="bj-bet-val" style="color:var(--accent);">' + bet + '</span></b> fichas</p>' +
+    '<div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;">' +
+    '<button onclick="addBjBet(\''+casinoId+'\',1)">+1</button>' +
+    '<button onclick="addBjBet(\''+casinoId+'\',5)">+5</button>' +
+    '<button onclick="addBjBet(\''+casinoId+'\',10)">+10</button>' +
+    '<button onclick="addBjBet(\''+casinoId+'\',50)">+50</button>' +
+    '<button onclick="addBjBet(\''+casinoId+'\',100)">+100</button>' +
+    '<button onclick="_bjBet[\''+casinoId+'\']=0;document.getElementById(\'bj-bet-val\').textContent=0;">Reset</button></div>' +
+    '<button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="startBlackjack(\''+casinoId+'\')">▶ REPARTIR</button>' +
+    '<button style="width:100%;margin-top:8px;" onclick="'+back+'">Volver</button>';
   document.getElementById('main-view').innerHTML = html;
 }
 function addBjBet(casinoId, n) {
@@ -7233,106 +7347,296 @@ function addBjBet(casinoId, n) {
   let el = document.getElementById('bj-bet-val');
   if (el) el.textContent = _bjBet[casinoId];
 }
-
-function doBlackjack(bet, casinoId) {
-  bet = parseInt(bet, 10) || 0;
+function startBlackjack(casinoId) {
+  let bet = parseInt(_bjBet[casinoId], 10) || 0;
   if (bet < 1) { logMsg('Añade fichas a la apuesta.'); return; }
-  if (!spendCasinoChips(casinoId, bet)) { logMsg("Fichas insuficientes."); return; }
-  let draw = () => 2 + Math.floor(Math.random() * 10);
-  let p = draw() + draw();
-  let d = draw() + draw();
-  while (p < 17) p += draw();
-  while (d < 17) d += draw();
-  let msg = `Tú: ${p} · Crupier: ${d}. `;
-  let win = 0;
-  if (p > 21) msg += "Te pasas.";
-  else if (d > 21 || p > d) {
-    win = (p === 21) ? Math.floor(bet * 2.5) : bet * 2;
-    addCasinoChips(casinoId, win);
-    msg += "Ganas " + win + " fichas!";
-  } else if (p === d) {
-    addCasinoChips(casinoId, bet);
-    msg += "Empate. Se devuelve la apuesta.";
-  } else msg += "Pierdes.";
-  let el = document.getElementById('bj-result');
-  if (el) el.textContent = msg;
-  logMsg(msg);
+  if (!spendCasinoChips(casinoId, bet)) { logMsg('Fichas insuficientes.'); return; }
+  let deck = bjNewDeck();
+  let player = [deck.pop(), deck.pop()];
+  let dealer = [deck.pop(), deck.pop()];
+  _bjState = { casinoId, bet, deck, player, dealer, phase: 'play', doubled: false };
+  // Natural check
+  let pNat = bjIsNatural(player);
+  let dNat = bjIsNatural(dealer);
+  if (pNat || dNat) {
+    _bjState.phase = 'done';
+    _bjState.reveal = true;
+    let win = 0, msg = '';
+    if (pNat && dNat) { win = bet; msg = 'Doble blackjack — empate. Se devuelve la apuesta.'; }
+    else if (pNat) { win = Math.floor(bet * 2.5); msg = '¡BLACKJACK! +' + win + ' fichas'; }
+    else { win = 0; msg = 'El crupier tiene blackjack. Pierdes.'; }
+    if (win) addCasinoChips(casinoId, win);
+    _bjState.result = msg;
+    logMsg(msg);
+  }
+  renderBlackjackTable();
   updateStats();
 }
-
-let _rouBet = {};
-let _rouKind = {};
-function playRouletteUI(casinoId) {
-  if (_rouBet[casinoId] === undefined) _rouBet[casinoId] = 10;
-  if (!_rouKind[casinoId]) _rouKind[casinoId] = 'red';
-  let bet = _rouBet[casinoId];
-  let kind = _rouKind[casinoId];
-  let col = getCasinoColor(casinoId);
-  let back = casinoId==='sierra' ? "renderSierraCasinoUI('vip')" : "openCasinoUI('"+casinoId+"','play')";
-  let html = `<h2 style="color:${col};margin-top:0;">🎡 Ruleta</h2>
-    <p style="font-size:12px;">Fichas: <b style="color:${col};">${getCasinoChips(casinoId)}</b></p>
-    <div class="item" style="font-size:11px;border-color:var(--gold);">
-      <b style="color:var(--gold);">Tabla de premios</b><br>
-      Rojo / Negro → ×2 · Par / Impar → ×2<br>
-      Número exacto (0–36) → ×35
-    </div>
-    <div id="rou-result" style="margin:10px 0;font-size:14px;text-align:center;min-height:24px;">Listo</div>
-    <p style="font-size:12px;text-align:center;">Tipo: <b id="rou-kind-lab">${kind === 'red' ? 'Rojo' : kind === 'black' ? 'Negro' : kind === 'even' ? 'Par' : kind === 'odd' ? 'Impar' : 'Nº 7'}</b></p>
-    <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:6px;">
-      <button onclick="setRouKind('${casinoId}','red')">Rojo</button>
-      <button onclick="setRouKind('${casinoId}','black')">Negro</button>
-      <button onclick="setRouKind('${casinoId}','even')">Par</button>
-      <button onclick="setRouKind('${casinoId}','odd')">Impar</button>
-      <button onclick="setRouKind('${casinoId}','num')">Nº 7</button>
-    </div>
-    <p style="text-align:center;"><b>Apuesta: <span id="rou-bet-val" style="color:var(--accent);">${bet}</span></b> fichas</p>
-    <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;">
-      <button onclick="addRouBet('${casinoId}',1)">+1</button>
-      <button onclick="addRouBet('${casinoId}',5)">+5</button>
-      <button onclick="addRouBet('${casinoId}',10)">+10</button>
-      <button onclick="addRouBet('${casinoId}',50)">+50</button>
-      <button onclick="addRouBet('${casinoId}',100)">+100</button>
-      <button onclick="_rouBet['${casinoId}']=0;document.getElementById('rou-bet-val').textContent=0;">Reset</button>
-    </div>
-    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="doRoulette(_rouBet['${casinoId}']||0,_rouKind['${casinoId}']||'red','${casinoId}')">▶ JUGAR</button>
-    <button style="width:100%;margin-top:8px;" onclick="${back}">Volver</button>`;
+function renderBlackjackTable() {
+  let st = _bjState;
+  if (!st) return;
+  let col = getCasinoColor(st.casinoId);
+  let pVal = bjHandValue(st.player);
+  let dVal = (st.phase === 'done' || st.reveal) ? bjHandValue(st.dealer) : pokerRankVal(st.dealer[0].r === 'A' ? 'A' : st.dealer[0].r);
+  // show dealer first card value only roughly
+  let dealerCards = '';
+  if (st.phase === 'done' || st.reveal) {
+    dealerCards = st.dealer.map(bjCardFace).join('');
+  } else {
+    dealerCards = bjCardFace(st.dealer[0]) + bjHiddenCard();
+  }
+  let playerCards = st.player.map(bjCardFace).join('');
+  let dShow = (st.phase === 'done' || st.reveal) ? bjHandValue(st.dealer) : '?';
+  let html = '<h2 style="color:'+col+';margin-top:0;">🃏 Blackjack</h2>' +
+    '<p style="font-size:12px;text-align:center;">Apuesta: <b>' + st.bet + '</b> fichas</p>' +
+    '<div style="text-align:center;margin:8px 0;"><span style="font-size:11px;color:#8d9880;">CRUPIER' + (dShow!=='?'?' · '+dShow:'') + '</span><br>' + dealerCards + '</div>' +
+    '<div style="text-align:center;margin:12px 0;"><span style="font-size:11px;color:#8d9880;">TÚ · ' + pVal + '</span><br>' + playerCards + '</div>';
+  if (st.phase === 'play') {
+    if (pVal > 21) {
+      st.phase = 'done'; st.reveal = true; st.result = 'Te pasaste (' + pVal + '). Pierdes.';
+      logMsg(st.result);
+      return renderBlackjackTable();
+    }
+    html += '<div style="display:flex;gap:8px;margin-top:8px;">' +
+      '<button style="flex:1;padding:12px;background:var(--accent);color:#111;font-weight:bold;" onclick="bjHit()">PEDIR</button>' +
+      '<button style="flex:1;padding:12px;font-weight:bold;" onclick="bjStand()">PLANTARSE</button></div>';
+    if (st.player.length === 2 && !st.doubled) {
+      html += '<button style="width:100%;margin-top:6px;" onclick="bjDouble()">DOBLAR</button>';
+    }
+  } else {
+    html += '<div class="item" style="text-align:center;border-color:var(--gold);"><b style="color:var(--gold);">' + (st.result||'') + '</b></div>' +
+      '<button style="width:100%;margin-top:8px;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="playBlackjackUI(\'' + st.casinoId + '\')">Otra mano</button>';
+  }
+  let back = st.casinoId === 'sierra' ? "renderSierraCasinoUI('vip')" : "openCasinoUI('"+st.casinoId+"','play')";
+  html += '<button style="width:100%;margin-top:8px;" onclick="' + back + '">Volver a juegos</button>';
   document.getElementById('main-view').innerHTML = html;
 }
-function addRouBet(casinoId, n) {
-  if (_rouBet[casinoId] === undefined) _rouBet[casinoId] = 0;
-  _rouBet[casinoId] = Math.min(5000, (_rouBet[casinoId] || 0) + n);
-  let el = document.getElementById('rou-bet-val');
-  if (el) el.textContent = _rouBet[casinoId];
-}
-function setRouKind(casinoId, k) {
-  _rouKind[casinoId] = k;
-  let lab = document.getElementById('rou-kind-lab');
-  if (lab) lab.textContent = k === 'red' ? 'Rojo' : k === 'black' ? 'Negro' : k === 'even' ? 'Par' : k === 'odd' ? 'Impar' : 'Nº 7';
-}
-function doRoulette(bet, kind, casinoId) {
-  bet = parseInt(bet, 10) || 0;
-  if (bet < 1) { logMsg('Añade fichas a la apuesta.'); return; }
-  if (!spendCasinoChips(casinoId, bet)) { logMsg("Fichas insuficientes."); return; }
-  let n = Math.floor(Math.random() * 37);
-  let color = (n === 0) ? 'green' : (n % 2 === 0 ? 'black' : 'red');
-  let win = 0;
-  let msg = 'Salió ' + n + ' (' + color + '). ';
-  if (kind === 'num') {
-    if (n === 7) win = bet * 35;
-  } else if (kind === 'even') {
-    if (n !== 0 && n % 2 === 0) win = bet * 2;
-  } else if (kind === 'odd') {
-    if (n % 2 === 1) win = bet * 2;
-  } else if (kind === color) {
-    win = bet * 2;
+function bjHit() {
+  let st = _bjState;
+  if (!st || st.phase !== 'play') return;
+  st.player.push(st.deck.pop());
+  let v = bjHandValue(st.player);
+  if (v > 21) {
+    st.phase = 'done'; st.reveal = true;
+    st.result = 'Te pasaste (' + v + '). Pierdes.';
+    logMsg(st.result);
   }
-  if (win) { addCasinoChips(casinoId, win); msg += 'Ganas ' + win + ' fichas!'; }
-  else msg += 'Pierdes.';
-  let el = document.getElementById('rou-result');
-  if (el) el.innerHTML = win ? '<span style="color:var(--gold);font-weight:bold;">' + msg + '</span>' : msg;
+  renderBlackjackTable();
+}
+function bjStand() {
+  let st = _bjState;
+  if (!st || st.phase !== 'play') return;
+  // Dealer draws to 17
+  while (bjHandValue(st.dealer) < 17) st.dealer.push(st.deck.pop());
+  st.phase = 'done'; st.reveal = true;
+  let p = bjHandValue(st.player), d = bjHandValue(st.dealer);
+  let win = 0, msg = '';
+  if (d > 21) { win = st.bet * 2; msg = 'Crupier se pasa (' + d + '). Ganas +' + win; }
+  else if (p > d) { win = st.bet * 2; msg = 'Tú ' + p + ' vs ' + d + '. Ganas +' + win; }
+  else if (p === d) { win = st.bet; msg = 'Empate ' + p + '. Se devuelve la apuesta.'; }
+  else { msg = 'Tú ' + p + ' vs ' + d + '. Pierdes.'; }
+  if (win) addCasinoChips(st.casinoId, win);
+  st.result = msg;
   logMsg(msg);
+  renderBlackjackTable();
   updateStats();
 }
+function bjDouble() {
+  let st = _bjState;
+  if (!st || st.phase !== 'play' || st.player.length !== 2 || st.doubled) return;
+  if (!spendCasinoChips(st.casinoId, st.bet)) { logMsg('Fichas insuficientes para doblar.'); return; }
+  st.bet *= 2;
+  st.doubled = true;
+  st.player.push(st.deck.pop());
+  let v = bjHandValue(st.player);
+  if (v > 21) {
+    st.phase = 'done'; st.reveal = true;
+    st.result = 'Doblas y te pasas (' + v + '). Pierdes.';
+    logMsg(st.result);
+    renderBlackjackTable();
+    updateStats();
+    return;
+  }
+  bjStand();
+}
+
+// ===== RULETA AMERICANA =====
+const AM_ROU_REDS = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+function amRouColor(n) {
+  if (n === 0 || n === '00' || n === 00) return 'green';
+  let num = (n === '00') ? -1 : parseInt(n, 10);
+  if (num === 0) return 'green';
+  return AM_ROU_REDS.indexOf(num) >= 0 ? 'red' : 'black';
+}
+function playRouletteUI(casinoId) {
+  ensureChips();
+  if (!_rouChipSize[casinoId]) _rouChipSize[casinoId] = 5;
+  if (!_rouPlaced[casinoId]) _rouPlaced[casinoId] = {};
+  renderRouletteBoard(casinoId);
+}
+function rouTotalBet(casinoId) {
+  let p = _rouPlaced[casinoId] || {};
+  return Object.keys(p).reduce((s,k) => s + (p[k]|0), 0);
+}
+function rouPlace(casinoId, key) {
+  let size = _rouChipSize[casinoId] || 5;
+  if (!_rouPlaced[casinoId]) _rouPlaced[casinoId] = {};
+  let cur = _rouPlaced[casinoId][key] || 0;
+  // max 5000 total
+  if (rouTotalBet(casinoId) + size > 5000) { logMsg('Apuesta máxima 5000.'); return; }
+  _rouPlaced[casinoId][key] = cur + size;
+  renderRouletteBoard(casinoId);
+}
+function rouClear(casinoId) {
+  _rouPlaced[casinoId] = {};
+  renderRouletteBoard(casinoId);
+}
+function setRouChipSize(casinoId, n) {
+  _rouChipSize[casinoId] = n;
+  renderRouletteBoard(casinoId);
+}
+function rouCell(casinoId, key, label, bg, extraStyle) {
+  let amt = (_rouPlaced[casinoId] && _rouPlaced[casinoId][key]) || 0;
+  let chip = amt ? '<div style="position:absolute;bottom:2px;right:2px;background:var(--gold);color:#111;border-radius:50%;width:18px;height:18px;font-size:9px;line-height:18px;font-weight:bold;">' + (amt>99?'99+':amt) + '</div>' : '';
+  return '<button onclick="rouPlace(\''+casinoId+'\',\''+key+'\')" style="position:relative;'+extraStyle+'background:'+bg+';color:#fff;border:1px solid #333;padding:0;font-size:11px;font-weight:bold;min-height:28px;">' + label + chip + '</button>';
+}
+function renderRouletteBoard(casinoId) {
+  let col = getCasinoColor(casinoId);
+  let chips = getCasinoChips(casinoId);
+  let size = _rouChipSize[casinoId] || 5;
+  let total = rouTotalBet(casinoId);
+  let back = casinoId==='sierra' ? "renderSierraCasinoUI('vip')" : "openCasinoUI('"+casinoId+"','play')";
+  // American layout: 0 and 00 on side, 3 columns of 1-36
+  // Order on board: rows of 3 (3,2,1), (6,5,4)... or European style columns
+  let html = '<h2 style="color:'+col+';margin-top:0;">🎡 Ruleta americana</h2>' +
+    '<div class="item" style="font-size:10px;border-color:'+col+' !important;">' +
+    '<b>Premios</b>: Pleno ×35 · Rojo/Negro/Par/Impar/1-18/19-36 ×1 · Docena/Columna ×2</div>' +
+    '<p style="font-size:12px;margin:4px 0;">Fichas: <b style="color:'+col+';">'+chips+'</b> · En mesa: <b style="color:var(--gold);">'+total+'</b></p>' +
+    '<div style="display:flex;gap:4px;flex-wrap:wrap;margin:6px 0;align-items:center;">' +
+    '<span style="font-size:11px;color:#8d9880;">Ficha:</span>';
+  [1,5,10,25,50,100].forEach(n => {
+    let on = size === n;
+    html += '<button style="padding:6px 10px;'+(on?'background:var(--gold);color:#111;font-weight:bold;':'')+'" onclick="setRouChipSize(\''+casinoId+'\','+n+')">' + n + '</button>';
+  });
+  html += '<button style="border-color:var(--danger);color:var(--danger);" onclick="rouClear(\''+casinoId+'\')">Limpiar</button></div>';
+
+  // Board
+  html += '<div style="overflow-x:auto;margin:8px 0;">';
+  html += '<div style="display:grid;grid-template-columns:28px repeat(12, minmax(22px,1fr)) 36px;gap:2px;min-width:320px;">';
+  // Top: 0 and 00 spanning - put as first column full height later; simplified grid
+  html += '</div>';
+
+  // Simpler visual board
+  html += '<div style="display:flex;gap:2px;align-items:stretch;">';
+  // 0 / 00 column
+  html += '<div style="display:flex;flex-direction:column;gap:2px;width:32px;">';
+  html += rouCell(casinoId, 'n0', '0', '#0a7a0a', 'flex:1;');
+  html += rouCell(casinoId, 'n00', '00', '#0a7a0a', 'flex:1;');
+  html += '</div>';
+  // Numbers 1-36 in 3 rows (top=3,6,9... middle=2,5,8... bottom=1,4,7...)
+  html += '<div style="flex:1;display:flex;flex-direction:column;gap:2px;">';
+  for (let row = 0; row < 3; row++) {
+    html += '<div style="display:grid;grid-template-columns:repeat(12,1fr);gap:2px;">';
+    for (let coln = 0; coln < 12; coln++) {
+      let num = coln * 3 + (3 - row);
+      let bg = amRouColor(num) === 'red' ? '#a01818' : '#1a1a1a';
+      html += rouCell(casinoId, 'n' + num, String(num), bg, '');
+    }
+    html += '</div>';
+  }
+  // Columns 2to1
+  html += '<div style="display:grid;grid-template-columns:repeat(12,1fr);gap:2px;">';
+  // actually column bets are vertical - put at end of each number column - simplified: 3 column buttons under
+  html += '</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-top:2px;">';
+  html += rouCell(casinoId, 'col1', '2:1', '#222', 'padding:6px;');
+  html += rouCell(casinoId, 'col2', '2:1', '#222', 'padding:6px;');
+  html += rouCell(casinoId, 'col3', '2:1', '#222', 'padding:6px;');
+  html += '</div>';
+  html += '</div></div>'; // end numbers + flex
+
+  // Outside bets
+  html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:8px;">';
+  html += rouCell(casinoId, 'd1', '1ª 12', '#222', 'padding:10px;');
+  html += rouCell(casinoId, 'd2', '2ª 12', '#222', 'padding:10px;');
+  html += rouCell(casinoId, 'd3', '3ª 12', '#222', 'padding:10px;');
+  html += '</div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:4px;">';
+  html += rouCell(casinoId, 'low', '1-18', '#222', 'padding:10px;font-size:10px;');
+  html += rouCell(casinoId, 'even', 'PAR', '#222', 'padding:10px;font-size:10px;');
+  html += rouCell(casinoId, 'red', 'ROJO', '#a01818', 'padding:10px;font-size:10px;');
+  html += rouCell(casinoId, 'black', 'NEGRO', '#1a1a1a', 'padding:10px;font-size:10px;');
+  html += rouCell(casinoId, 'odd', 'IMPAR', '#222', 'padding:10px;font-size:10px;');
+  html += rouCell(casinoId, 'high', '19-36', '#222', 'padding:10px;font-size:10px;');
+  html += '</div>';
+
+  html += '<div id="rou-result" style="min-height:28px;text-align:center;margin:10px 0;font-size:14px;"></div>';
+  html += '<button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:14px;font-size:15px;" onclick="spinAmericanRoulette(\''+casinoId+'\')">▶ LANZAR BOLA</button>';
+  html += '<button style="width:100%;margin-top:8px;" onclick="'+back+'">Volver</button>';
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function spinAmericanRoulette(casinoId) {
+  let placed = _rouPlaced[casinoId] || {};
+  let total = rouTotalBet(casinoId);
+  if (total < 1) { logMsg('Coloca fichas en el tablero.'); return; }
+  if (!spendCasinoChips(casinoId, total)) { logMsg('Fichas insuficientes.'); return; }
+
+  // American wheel: 0, 00, 1-36
+  let wheel = [0, '00'];
+  for (let i = 1; i <= 36; i++) wheel.push(i);
+  let result = wheel[Math.floor(Math.random() * wheel.length)];
+  let color = amRouColor(result);
+  let num = (result === '00') ? '00' : result;
+
+  let win = 0;
+  let hits = [];
+  function addWin(key, mult, label) {
+    let a = placed[key] || 0;
+    if (a > 0) { let w = a * (mult + 1); win += w; hits.push(label + ' +' + w); }
+  }
+
+  // Straight up
+  if (num === 0 && placed['n0']) addWin('n0', 35, 'Pleno 0');
+  if (num === '00' && placed['n00']) addWin('n00', 35, 'Pleno 00');
+  if (typeof num === 'number' && placed['n' + num]) addWin('n' + num, 35, 'Pleno ' + num);
+
+  if (typeof num === 'number' && num >= 1 && num <= 36) {
+    // red/black
+    if (color === 'red') addWin('red', 1, 'Rojo');
+    if (color === 'black') addWin('black', 1, 'Negro');
+    // even/odd
+    if (num % 2 === 0) addWin('even', 1, 'Par');
+    else addWin('odd', 1, 'Impar');
+    // high/low
+    if (num <= 18) addWin('low', 1, '1-18');
+    else addWin('high', 1, '19-36');
+    // dozens
+    if (num <= 12) addWin('d1', 2, '1ª docena');
+    else if (num <= 24) addWin('d2', 2, '2ª docena');
+    else addWin('d3', 2, '3ª docena');
+    // columns: 1,4,7... = col1; 2,5,8...=col2; 3,6,9...=col3
+    let cmod = num % 3;
+    if (cmod === 1) addWin('col1', 2, 'Columna 1');
+    else if (cmod === 2) addWin('col2', 2, 'Columna 2');
+    else addWin('col3', 2, 'Columna 3');
+  }
+
+  if (win > 0) addCasinoChips(casinoId, win);
+  let colorLabel = color === 'red' ? 'rojo' : color === 'black' ? 'negro' : 'verde';
+  let msg = 'Salió <b style="color:' + (color==='red'?'#ff6666':color==='green'?'#66ff66':'#ccc') + ';">' + num + '</b> (' + colorLabel + '). ';
+  if (win > 0) msg += '<span style="color:var(--gold);font-weight:bold;">Ganas ' + win + ' fichas</span>' + (hits.length ? ' · ' + hits.join(', ') : '');
+  else msg += 'Sin premio.';
+
+  // Clear board after spin, keep chip size
+  _rouPlaced[casinoId] = {};
+  renderRouletteBoard(casinoId);
+  let el = document.getElementById('rou-result');
+  if (el) el.innerHTML = msg;
+  logMsg('Ruleta: ' + num + (win ? ' +' + win : ' sin premio'));
+  updateStats();
+}
+
 
 
 
@@ -7820,17 +8124,169 @@ function hireSierraEmployee() {
   updateStats();
 }
 
+
+// ===== PÓKER (Video Poker estilo casino) =====
+const POKER_RANKS = 'A23456789TJQK';
+const POKER_SUITS = ['♠','♥','♦','♣'];
+let _pokerBet = {};
+let _pokerState = {};
+
+function pokerDeck() {
+  let d = [];
+  for (let s of POKER_SUITS) for (let r of POKER_RANKS) d.push({ r, s, k: r + s });
+  for (let i = d.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let t = d[i]; d[i] = d[j]; d[j] = t;
+  }
+  return d;
+}
+function pokerRankVal(r) {
+  if (r === 'A') return 14;
+  if (r === 'K') return 13;
+  if (r === 'Q') return 12;
+  if (r === 'J') return 11;
+  if (r === 'T') return 10;
+  return parseInt(r, 10);
+}
+function evaluatePokerHand(cards) {
+  let vals = cards.map(c => pokerRankVal(c.r)).sort((a,b)=>a-b);
+  let suits = cards.map(c => c.s);
+  let counts = {};
+  vals.forEach(v => { counts[v] = (counts[v]||0)+1; });
+  let freqs = Object.values(counts).sort((a,b)=>b-a);
+  let isFlush = suits.every(s => s === suits[0]);
+  let unique = [...new Set(vals)].sort((a,b)=>a-b);
+  let isStraight = false;
+  if (unique.length === 5) {
+    isStraight = unique[4] - unique[0] === 4;
+    // A-2-3-4-5
+    if (!isStraight && unique.join(',') === '2,3,4,5,14') isStraight = true;
+  }
+  let isRoyal = isFlush && isStraight && unique[0] === 10;
+  if (isRoyal) return { name: 'Escalera real', mult: 250 };
+  if (isFlush && isStraight) return { name: 'Escalera de color', mult: 50 };
+  if (freqs[0] === 4) return { name: 'Póker', mult: 25 };
+  if (freqs[0] === 3 && freqs[1] === 2) return { name: 'Full', mult: 9 };
+  if (isFlush) return { name: 'Color', mult: 6 };
+  if (isStraight) return { name: 'Escalera', mult: 4 };
+  if (freqs[0] === 3) return { name: 'Trío', mult: 3 };
+  if (freqs[0] === 2 && freqs[1] === 2) return { name: 'Doble pareja', mult: 2 };
+  if (freqs[0] === 2) {
+    let pairRank = parseInt(Object.keys(counts).find(k => counts[k] === 2), 10);
+    if (pairRank >= 11) return { name: 'Pareja (J+)', mult: 1 };
+    return { name: 'Pareja baja', mult: 0 };
+  }
+  return { name: 'Nada', mult: 0 };
+}
+function cardHtml(c, held, idx, interactive) {
+  let red = (c.s === '♥' || c.s === '♦');
+  let hold = held ? 'outline:2px solid var(--gold);' : '';
+  let click = interactive ? `onclick="togglePokerHold(${idx})"` : '';
+  return `<div ${click} style="flex:1;min-width:42px;max-width:56px;background:#fff;color:${red?'#c00':'#111'};border-radius:6px;padding:8px 2px;text-align:center;font-weight:bold;font-size:16px;${hold}cursor:${interactive?'pointer':'default'};">
+    <div>${c.r === 'T' ? '10' : c.r}</div><div style="font-size:18px;">${c.s}</div>
+    ${held ? '<div style="font-size:9px;color:#886600;">HOLD</div>' : '<div style="font-size:9px;color:transparent;">·</div>'}
+  </div>`;
+}
+function playPokerUI(casinoId) {
+  ensureChips();
+  let col = getCasinoColor(casinoId);
+  let chips = getCasinoChips(casinoId);
+  if (_pokerBet[casinoId] === undefined) _pokerBet[casinoId] = 0;
+  let bet = _pokerBet[casinoId] || 0;
+  let back = casinoId === 'sierra' ? "renderSierraCasinoUI('vip')" : "openCasinoUI('"+casinoId+"','play')";
+  let html = `<h2 style="color:${col};margin-top:0;">🂡 Póker</h2>
+    <div class="item" style="font-size:11px;border-color:${col} !important;">
+      <b>Tabla de premios</b> (× apuesta)<br>
+      Escalera real ×250 · Escalera de color ×50 · Póker ×25<br>
+      Full ×9 · Color ×6 · Escalera ×4 · Trío ×3<br>
+      Doble pareja ×2 · Pareja de jotas o mejor ×1
+    </div>
+    <p style="font-size:12px;">Fichas: <b style="color:${col};">${chips}</b></p>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:8px 0;">
+      <button onclick="addPokerBet('${casinoId}',1)">+1</button>
+      <button onclick="addPokerBet('${casinoId}',5)">+5</button>
+      <button onclick="addPokerBet('${casinoId}',10)">+10</button>
+      <button onclick="addPokerBet('${casinoId}',50)">+50</button>
+      <button onclick="addPokerBet('${casinoId}',100)">+100</button>
+      <button onclick="_pokerBet['${casinoId}']=0;document.getElementById('pk-bet-val').textContent=0;">Reset</button>
+    </div>
+    <p style="text-align:center;"><b>Apuesta: <span id="pk-bet-val" style="color:var(--accent);">${bet}</span></b> fichas</p>
+    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="startPokerHand('${casinoId}')">▶ REPARTIR</button>
+    <button style="width:100%;margin-top:8px;" onclick="${back}">Volver</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+function addPokerBet(casinoId, n) {
+  if (_pokerBet[casinoId] === undefined) _pokerBet[casinoId] = 0;
+  _pokerBet[casinoId] = Math.min(5000, (_pokerBet[casinoId] || 0) + n);
+  let el = document.getElementById('pk-bet-val');
+  if (el) el.textContent = _pokerBet[casinoId];
+}
+function startPokerHand(casinoId) {
+  let bet = parseInt(_pokerBet[casinoId], 10) || 0;
+  if (bet < 1) { logMsg('Añade fichas a la apuesta.'); return; }
+  if (!spendCasinoChips(casinoId, bet)) { logMsg('Fichas insuficientes.'); return; }
+  let deck = pokerDeck();
+  let hand = deck.splice(0, 5);
+  _pokerState = { casinoId, bet, deck, hand, held: [false,false,false,false,false], phase: 'hold' };
+  renderPokerTable();
+  updateStats();
+}
+function togglePokerHold(idx) {
+  if (!_pokerState || _pokerState.phase !== 'hold') return;
+  _pokerState.held[idx] = !_pokerState.held[idx];
+  renderPokerTable();
+}
+function renderPokerTable() {
+  let st = _pokerState;
+  if (!st) return;
+  let col = getCasinoColor(st.casinoId);
+  let cards = st.hand.map((c,i) => cardHtml(c, st.held[i], i, st.phase === 'hold')).join('');
+  let html = `<h2 style="color:${col};margin-top:0;">🂡 Póker</h2>
+    <p style="font-size:12px;text-align:center;">Apuesta: <b>${st.bet}</b> fichas · ${st.phase==='hold'?'Toca para retener (HOLD)':'Resultado'}</p>
+    <div style="display:flex;gap:6px;justify-content:center;margin:12px 0;flex-wrap:wrap;">${cards}</div>`;
+  if (st.phase === 'hold') {
+    html += `<button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="drawPokerCards()">▶ ROBAR / RESOLVER</button>`;
+  } else {
+    let res = evaluatePokerHand(st.hand);
+    let win = st.bet * res.mult;
+    html += `<div class="item" style="text-align:center;border-color:${win? 'var(--gold)': 'var(--line)'};">
+      <b style="font-size:15px;color:${win?'var(--gold)':'#8d9880'};">${res.name}</b>
+      ${win ? '<br><span style="color:var(--gold);font-weight:bold;">+' + win + ' fichas</span>' : '<br>Sin premio'}
+    </div>
+    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;margin-top:6px;" onclick="playPokerUI('${st.casinoId}')">Otra mano</button>`;
+  }
+  let back = st.casinoId === 'sierra' ? "renderSierraCasinoUI('vip')" : "openCasinoUI('"+st.casinoId+"','play')";
+  html += `<button style="width:100%;margin-top:8px;" onclick="${back}">Volver a juegos</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+function drawPokerCards() {
+  let st = _pokerState;
+  if (!st || st.phase !== 'hold') return;
+  for (let i = 0; i < 5; i++) {
+    if (!st.held[i]) st.hand[i] = st.deck.shift();
+  }
+  st.phase = 'done';
+  let res = evaluatePokerHand(st.hand);
+  let win = st.bet * res.mult;
+  if (win > 0) {
+    addCasinoChips(st.casinoId, win);
+    logMsg('Póker: ' + res.name + ' +' + win + ' fichas');
+  } else {
+    logMsg('Póker: ' + res.name + ' — sin premio');
+  }
+  renderPokerTable();
+  updateStats();
+}
+
 function openSierraVipGamesHtml() {
   let chips = getCasinoChips('sierra');
-  return `<h3 style="color:#e8d48b;font-size:13px;">Tabla de premios</h3>
-    <div class="item" style="font-size:11px;border-color:#e8d48b !important;">
-      <b>Tragaperras</b> (5/10/25): 🍒 x3 · 7️⃣ x10 · 💎 x25<br>
-      <b>Blackjack</b>: BJ 3:2 · Win 1:1 · Empate devuelve<br>
-      <b>Ruleta</b>: Número x35 · Color/Par x2
-    </div>
-    <button onclick="playSlotsUI('sierra')">🎰 Tragaperras</button>
-    <button onclick="playBlackjackUI('sierra')">🃏 Blackjack</button>
-    <button onclick="playRouletteUI('sierra')">🎡 Ruleta</button>`;
+  return `<p style="font-size:12px;color:#8d9880;margin:0 0 10px 0;">Elige un juego. Premios dentro de cada mesa.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <button style="padding:16px 8px;min-height:64px;font-size:14px;font-weight:bold;border:2px solid #e8d48b;background:#1a1808;color:#e8d48b;" onclick="playSlotsUI('sierra')">🎰<br>Tragaperras</button>
+      <button style="padding:16px 8px;min-height:64px;font-size:14px;font-weight:bold;border:2px solid #e8d48b;background:#1a1808;color:#e8d48b;" onclick="playBlackjackUI('sierra')">🃏<br>Blackjack</button>
+      <button style="padding:16px 8px;min-height:64px;font-size:14px;font-weight:bold;border:2px solid #e8d48b;background:#1a1808;color:#e8d48b;" onclick="playRouletteUI('sierra')">🎡<br>Ruleta</button>
+      <button style="padding:16px 8px;min-height:64px;font-size:14px;font-weight:bold;border:2px solid #e8d48b;background:#1a1808;color:#e8d48b;" onclick="playPokerUI('sierra')">🂡<br>Póker</button>
+    </div>`;
 }
 
 function claimSierraEarnings() {
@@ -8343,6 +8799,216 @@ function dismantleRobcoCompanion(compId) {
 }
 
 
+
+// ===== HOGAR DEL SUPERVIVIENTE =====
+function enterPlayerHome() {
+  if (P.x !== 2 || P.y !== -1) {
+    logMsg('Debes estar en tu Hogar [+2, -1].');
+    return;
+  }
+  ensurePlayerHome();
+  if (!P.playerHome.unlocked) {
+    P.playerHome.unlocked = true;
+    if (!P.fastTravelUnlocked) P.fastTravelUnlocked = ['vault_home'];
+    if (!P.fastTravelUnlocked.includes('player_house')) P.fastTravelUnlocked.push('player_house');
+    logMsg('Has desbloqueado ' + getPlayerHomeName() + '. Viaje rápido disponible.');
+  }
+  P.location = { type: 'home', name: getPlayerHomeName() };
+  renderPlayerHomeUI(P.playerHome.tab || 'living');
+  updateStats();
+}
+
+function renderPlayerHomeUI(tab) {
+  ensurePlayerHome();
+  tab = tab || P.playerHome.tab || 'living';
+  P.playerHome.tab = tab;
+  let name = getPlayerHomeName();
+  let html = '<h2 style="color:#66ddaa;text-align:center;margin:4px 0;">🏠 ' + name + '</h2>' +
+    '<div class="subtabs">' +
+    '<button class="' + (tab==='living'?'active':'') + '" onclick="renderPlayerHomeUI(\'living\')">Sala de estar</button>' +
+    '<button class="' + (tab==='rooms'?'active':'') + '" onclick="renderPlayerHomeUI(\'rooms\')">Habitaciones</button>' +
+    '<button class="' + (tab==='myroom'?'active':'') + '" onclick="renderPlayerHomeUI(\'myroom\')">Mi Habitación</button>' +
+    '</div>';
+
+  if (tab === 'living') {
+    html += '<div class="item" style="border-color:#66ddaa;"><b style="color:#66ddaa;">🛋 Sala de estar</b><br>' +
+      '<p style="font-size:12px;color:#8d9880;text-align:center;margin:12px 0;">(Aún no implementado)</p></div>';
+  } else if (tab === 'rooms') {
+    html += '<h3 style="color:#66ddaa;font-size:13px;">Habitaciones · Compañeros únicos</h3>' +
+      '<p style="font-size:11px;color:#8d9880;">Solo compañeros únicos pueden alojarse aquí. El resto va a la Prisión del Refugio.</p>';
+    let list = P.homeCompanions || [];
+    if (list.length === 0) {
+      html += '<p style="font-size:12px;color:#8d9880;">Ningún compañero único en casa.</p>';
+    } else {
+      list.forEach(function(c) {
+        let st = getCompanionCombatStats(c);
+        let radTxt = (st.radRes >= 100) ? 'Inmune' : ((st.radRes || 0) + '%');
+        let ab = c.ability ? '<p style="color:var(--gold);margin:6px 0 0;font-size:12px;"><b>★ ' + c.ability.name + '</b><br><span style="color:#8d9880;">' + (c.ability.desc || '') + '</span></p>' : '';
+        let leg = (c.isLegendary || c.isRex);
+        let sp = c.special || {};
+        html += '<div class="item" style="border-color:' + (leg ? 'var(--gold)' : '#66ddaa') + ';">' +
+          '<b style="' + (leg ? 'color:var(--gold);' : '') + '">' + (leg ? '★ ' : '') + c.name + '</b>' +
+          '<span style="font-size:11px;color:#8d9880;"> · Nv.' + (c.level||1) + ' · ' + (c.type||'?') + (c.resting ? ' · <span style="color:var(--danger);">DESCANSANDO</span>' : '') + '</span>' +
+          '<div class="row" style="margin-top:6px;"><span>Salud</span><b>' + c.hp + ' / ' + c.maxHp + '</b></div>' +
+          '<div class="row"><span>Ataque</span><b>' + st.dmg + '</b></div>' +
+          '<div class="row"><span>Defensa</span><b>' + (st.def||0) + '</b></div>' +
+          '<div class="row"><span>Def. radiación</span><b>' + radTxt + '</b></div>' +
+          '<div class="row"><span>Arma</span><b>' + (c.weapon || 'Ninguna (melee)') + '</b></div>' +
+          '<div class="row"><span>Armadura</span><b>' + (c.armor || 'Ninguna') + '</b></div>' +
+          '<div class="row"><span>XP</span><b>' + (c.xp||0) + ' / ' + companionRequiredXP(c.level||1) + '</b></div>' +
+          '<p style="font-size:11px;color:#8d9880;margin:4px 0 0;">S' + (sp.S||'?') + ' P' + (sp.P||'?') + ' E' + (sp.E||'?') + ' C' + (sp.C||'?') + ' I' + (sp.I||'?') + ' A' + (sp.A||'?') + ' L' + (sp.L||'?') + '</p>' +
+          ab +
+          '<button style="margin-top:8px;width:100%;" onclick="equipHomeCompanion(\'' + c.id + '\')">Equipar y acompañar</button></div>';
+      })
+    }
+  } else if (tab === 'myroom') {
+    html += '<div class="item" style="border-color:var(--gold);"><b>🛏 Descansar</b><br>' +
+      '<span style="font-size:12px;color:#8d9880;">Duerme en tu habitación. Recuperas salud según tu nivel.</span><br>' +
+      '<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHomeRestUI()">Descansar</button></div>' +
+      '<div class="item" style="border-color:#66aadd;"><b style="color:#66aadd;">💻 Ordenador personal</b><br>' +
+      '<span style="font-size:12px;color:#8d9880;">Escribe notas. Se guardan en Notas → Mis notas.</span><br>' +
+      '<button style="margin-top:6px;background:#66aadd;color:#111;font-weight:bold;" onclick="openHomeComputerUI()">Usar ordenador</button></div>';
+  }
+  html += '<button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← SALIR AL YERMO</button>';
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function openHomeRestUI() {
+  let maxhp = getMaxHp();
+  let perHour = Math.max(2, Math.floor(maxhp * 0.04) + Math.floor(P.lvl * 0.5));
+  let marks = '';
+  for (let h = 1; h <= 24; h++) {
+    let show = (h === 1 || h === 6 || h === 12 || h === 18 || h === 24);
+    marks += '<span style="flex:1;text-align:center;font-size:9px;color:' + (show ? '#8d9880' : 'transparent') + ';">' + (show ? h : '·') + '</span>';
+  }
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:#66ddaa;margin-top:0;">🛏 Descansar en casa</h2>' +
+    '<p style="font-size:12px;color:#8d9880;">Salud: ' + P.hp + '/' + maxhp + ' · ≈ ' + perHour + ' HP/hora</p>' +
+    '<div style="margin:12px 0 4px 0;">' +
+    '<div style="display:flex;justify-content:space-between;margin-bottom:6px;">' +
+    '<span style="font-size:12px;color:#8d9880;">Pasar el tiempo</span>' +
+    '<span id="rest-hours-label" style="font-size:16px;color:var(--accent);font-weight:bold;">1 h</span></div>' +
+    '<input id="rest-hours" type="range" min="1" max="24" value="1" step="1" style="width:100%;accent-color:var(--accent);height:28px;" oninput="updateRestHoursLabel(this.value, ' + perHour + ', ' + maxhp + ')">' +
+    '<div style="display:flex;margin-top:2px;padding:0 2px;">' + marks + '</div>' +
+    '<p id="rest-heal-preview" style="font-size:11px;color:#8d9880;margin:8px 0 0 0;">Recuperarás ~' + Math.min(maxhp - P.hp, perHour) + ' HP</p></div>' +
+    '<button style="width:100%;background:var(--accent);color:#111;font-weight:bold;" onclick="doHomeRest()">Descansar</button>' +
+    '<button style="width:100%;margin-top:6px;" onclick="closeModal();renderPlayerHomeUI(\'myroom\');">Cancelar</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+function doHomeRest() {
+  let h = parseInt((document.getElementById('rest-hours') || {}).value, 10) || 1;
+  h = Math.max(1, Math.min(24, h));
+  let maxhp = getMaxHp();
+  let perHour = Math.max(2, Math.floor(maxhp * 0.04) + Math.floor(P.lvl * 0.5));
+  let heal = Math.min(maxhp - P.hp, perHour * h);
+  P.hp = Math.min(maxhp, P.hp + heal);
+  advanceTime(h);
+  logMsg('Descansas ' + h + ' h en tu hogar. +' + heal + ' HP.');
+  closeModal();
+  renderPlayerHomeUI('myroom');
+  updateStats();
+}
+
+function openHomeComputerUI() {
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:#66aadd;margin-top:0;">💻 Ordenador</h2>' +
+    '<p style="font-size:12px;color:#8d9880;">Escribe una nota y guárdala en Mis notas.</p>' +
+    '<input id="note-title" type="text" maxlength="40" placeholder="Título" style="width:100%;margin:6px 0;padding:8px;background:#0a1008;border:1px solid var(--line);color:var(--txt);font:inherit;box-sizing:border-box;">' +
+    '<textarea id="note-body" maxlength="500" rows="6" placeholder="Texto de la nota..." style="width:100%;margin:6px 0;padding:8px;background:#0a1008;border:1px solid var(--line);color:var(--txt);font:inherit;box-sizing:border-box;resize:vertical;"></textarea>' +
+    '<button style="width:100%;background:#66aadd;color:#111;font-weight:bold;" onclick="saveHomeNote()">Guardar nota</button>' +
+    '<button style="width:100%;margin-top:6px;" onclick="closeModal();renderPlayerHomeUI(\'myroom\');">Cerrar</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+function saveHomeNote() {
+  let title = ((document.getElementById('note-title') || {}).value || '').trim() || 'Sin título';
+  let body = ((document.getElementById('note-body') || {}).value || '').trim();
+  if (!body) { logMsg('La nota está vacía.'); return; }
+  if (!P.playerNotes) P.playerNotes = [];
+  let id = 'note_' + Date.now() + '_' + Math.floor(Math.random() * 999);
+  P.playerNotes.push({ id: id, title: title, body: body, created: P.worldHours || 0, important: false });
+  if (!P.inv) P.inv = [];
+  P.inv.push({ uid: Date.now() + Math.floor(Math.random() * 100000), id: 2800, qty: 1, mods: [], noteId: id, noteTitle: title, noteBody: body });
+  logMsg('Nota guardada: «' + title + '»');
+  closeModal();
+  renderPlayerHomeUI('myroom');
+  updateStats();
+}
+
+function discardPlayerNote(noteId) {
+  if (!P.playerNotes) P.playerNotes = [];
+  P.playerNotes = P.playerNotes.filter(function(n) { return n.id !== noteId; });
+  P.inv = (P.inv || []).filter(function(i) { return i.noteId !== noteId; });
+  logMsg('Nota desechada.');
+  if (P.charSubtab === 'notes') renderCharacter('notes');
+  
+  updateStats();
+}
+
+function sendCompanionToHome(id) {
+  ensurePlayerHome();
+  if (!P.playerHome.unlocked) { logMsg('Primero desbloquea tu Hogar [+2, -1].'); return; }
+  ensureCompanionIds();
+  let c = (P.prison || []).find(function(x) { return x.id === id || x.uid === id; });
+  if (!c) { logMsg('Compañero no encontrado.'); return; }
+  if (!isUniqueCompanion(c)) {
+    logMsg('Solo los compañeros únicos pueden ir al Hogar.');
+    return;
+  }
+  if (c.isRex || c.id === 'rex_kings') { try { saveRexFromPrison(); } catch (e) {} }
+  if (P.equippedCompanionId === c.id || P.equippedCompanionId === c.uid) P.equippedCompanionId = null;
+  P.prison = (P.prison || []).filter(function(x) { return x.id !== c.id && x.uid !== c.id; });
+  P.homeCompanions = (P.homeCompanions || []).filter(function(x) { return x.id !== c.id && x.uid !== c.id; });
+  P.homeCompanions.push(c);
+  if (c.isRex || c.id === 'rex_kings') {
+    ensureRexDefaults();
+    P.rexData.available = false;
+    P.rexData.atHome = true;
+  }
+  logMsg(c.name + ' se queda en ' + getPlayerHomeName() + '.');
+  if (P.charSubtab === 'companion') renderCharacter('companion');
+  else renderVault('prison');
+  updateStats();
+}
+
+function equipHomeCompanion(id) {
+  ensurePlayerHome();
+  ensureVaultDefaults();
+  let idx = (P.homeCompanions || []).findIndex(function(x) { return x.id === id || x.uid === id; });
+  if (idx < 0) { logMsg('No está en casa.'); return; }
+  let c = P.homeCompanions[idx];
+  if ((P.prison || []).length >= getPrisonCapacity()) { logMsg('Prisión llena.'); return; }
+  P.homeCompanions.splice(idx, 1);
+  if (!P.prison) P.prison = [];
+  P.prison.push(c);
+  P.equippedCompanionId = c.id || c.uid;
+  if (c.isRex || c.id === 'rex_kings') {
+    ensureRexDefaults();
+    P.rexData.atHome = false;
+    P.rexData.available = false;
+  }
+  logMsg(c.name + ' te acompaña de nuevo.');
+  renderPlayerHomeUI('rooms');
+  updateStats();
+}
+
+function showHomeCompanionStats(id) {
+  let c = (P.homeCompanions || []).find(function(x) { return x.id === id || x.uid === id; });
+  if (!c) return;
+  let st = getCompanionCombatStats(c);
+  let ab = c.ability ? '<p style="color:var(--gold);"><b>★ ' + c.ability.name + '</b><br>' + c.ability.desc + '</p>' : '';
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:var(--accent);margin-top:0;">' + (c.isLegendary ? '★ ' : '') + c.name + '</h2>' +
+    '<p style="font-size:12px;">Nivel ' + c.level + ' · En el Hogar</p>' +
+    '<div class="row"><span>Salud</span><b>' + c.hp + ' / ' + c.maxHp + '</b></div>' +
+    '<div class="row"><span>Ataque</span><b>' + st.dmg + '</b></div>' +
+    '<div class="row"><span>Defensa</span><b>' + (st.def||0) + '</b></div>' + ab +
+    '<button style="width:100%;margin-top:8px;" onclick="closeModal();renderPlayerHomeUI(\'rooms\');">Cerrar</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+
 function enterCommerceHub() {
   if (P.x !== 3 || P.y !== -3) {
     logMsg("Debes estar en la Zona de Comercio [+3, -3].");
@@ -8456,12 +9122,34 @@ function claimFactionQuest(questId) {
   P.caps += q.reward.caps || 0;
   addXP(q.reward.xp || 0);
   addFactionRep(q.faction, q.reward.rep || 5);
+  let itemText = '';
+  if (q.reward && q.reward.item) {
+    let itemId = q.reward.item;
+    let qty = q.reward.qty || 1;
+    let itemObj = getItemBase(itemId);
+    if (itemObj) {
+      let ok = addItemToInv(itemId, qty);
+      if (ok) {
+        itemText = ' + ' + formatItemGainName(itemObj, qty);
+      } else {
+        // Si no cabe, forzar apilado/añadido sin bloquear la recompensa de misión
+        if (itemObj.stackable) {
+          let existing = P.inv.find(i => i.id === itemId);
+          if (existing) existing.qty = (existing.qty || 1) + qty;
+          else P.inv.push({ uid: Date.now() + Math.floor(Math.random()*9999), id: itemId, qty: qty, mods: [] });
+          itemText = ' + ' + formatItemGainName(itemObj, qty);
+        } else {
+          logMsg('No cabía el objeto de recompensa en la mochila.');
+        }
+      }
+    }
+  }
   // Rotar: invalidar pool para que salga nueva misión
   if (P.factionQuestPool[q.faction]) {
     P.factionQuestPool[q.faction] = P.factionQuestPool[q.faction].filter(id => id !== q.id);
   }
   P.activeFactionQuests.splice(idx, 1);
-  logMsg("Recompensa de facción reclamada: " + q.title);
+  logMsg("Recompensa de facción reclamada: " + q.title + " (+" + (q.reward.caps||0) + " chapas, EXP" + itemText + ").");
   let sett = SETTLEMENTS.find(s => s.faction === q.faction && s.x === P.x && s.y === P.y);
   if (sett) renderSettlementUI(sett.id, 'missions');
   updateStats();
@@ -8637,10 +9325,12 @@ function openFastTravelUI(section) {
 
   let important = IMPORTANT_LOCS.filter(l => P.fastTravelUnlocked.includes(l.id)).map(l => {
     let color = '#ffcc44', tag = 'Importante';
+    let name = l.name;
     if (l.kind === 'vault') { color = '#66b3ff'; tag = 'Refugio'; }
+    else if (l.kind === 'home') { color = '#66ddaa'; tag = 'Hogar'; name = getPlayerHomeName(); }
     else if (l.kind === 'commerce') { color = '#ffcc44'; tag = 'Comercio'; }
     else if (l.kind === 'combatzone') { color = '#ff6666'; tag = 'Arena'; }
-    return { id: l.id, name: l.name, x: l.x, y: l.y, color, tag };
+    return { id: l.id, name: name, x: l.x, y: l.y, color, tag };
   });
 
   let yours = [];
@@ -8730,7 +9420,8 @@ function doFastTravel(settlementId) {
   P.x = dest.x;
   P.y = dest.y;
   advanceTime(2);
-  logMsg("Viaje rápido a " + dest.name + ".");
+  let destName = (imp && imp.kind === 'home') ? getPlayerHomeName() : dest.name;
+  logMsg("Viaje rápido a " + destName + ".");
   closeModal();
   renderMap();
   updateStats();
