@@ -6329,14 +6329,22 @@ function tickVaultDwellers() {
   ensurePlayerVault();
   let v = P.playerVault;
   if (!v.antennaFixed) return;
-  if (v.dwellersAtDoor === undefined) v.dwellersAtDoor = 0;
+  if (v.dwellersAtDoor === undefined || v.dwellersAtDoor === null) v.dwellersAtDoor = 0;
+  v.dwellersAtDoor = Math.max(0, Math.min(3, parseInt(v.dwellersAtDoor, 10) || 0));
   let hours = P.worldHours || 0;
   if (v.lastDwellerHour === undefined || v.lastDwellerHour === null) v.lastDwellerHour = hours;
-  // 1 cada 24 h, máx. 3 esperando en la puerta (independiente del inventario)
+  // Con 3 en la puerta el contador SE PARA (no acumula horas de retraso)
+  if (v.dwellersAtDoor >= 3) {
+    v.dwellersAtDoor = 3;
+    v.lastDwellerHour = hours;
+    return;
+  }
+  // 1 cada 24 h mientras haya hueco (< 3)
   while (v.dwellersAtDoor < 3 && (hours - v.lastDwellerHour) >= 24) {
     v.dwellersAtDoor++;
     v.lastDwellerHour += 24;
   }
+  v.dwellersAtDoor = Math.min(3, v.dwellersAtDoor);
 }
 function canClaimDweller() {
   ensurePlayerVault();
@@ -6372,20 +6380,28 @@ function repairVaultAntenna() {
 function claimVaultDweller() {
   ensurePlayerVault();
   tickVaultDwellers();
-  if ((P.playerVault.dwellersAtDoor || 0) < 1) { logMsg('Aún no hay moradores en la puerta.'); return; }
-  P.playerVault.dwellersAtDoor--;
+  let v = P.playerVault;
+  let at = Math.min(3, Math.max(0, parseInt(v.dwellersAtDoor, 10) || 0));
+  if (at < 1) { logMsg('Aún no hay moradores en la puerta.'); return; }
+  let wasFull = at >= 3;
+  v.dwellersAtDoor = at - 1;
+  // Si estaba llena, el reloj arranca ahora (próximo en 24 h)
+  if (wasFull) v.lastDwellerHour = P.worldHours || 0;
   addItemToInv(2500, 1);
-  logMsg('Un morador entra al Refugio. (Especiales) · En puerta: ' + (P.playerVault.dwellersAtDoor||0) + '/3 · En inventario: ' + countDwellers());
+  logMsg('Un morador entra al Refugio. (Especiales) · En puerta: ' + v.dwellersAtDoor + '/3 · En inventario: ' + countDwellers());
   renderPlayerVaultUI('door');
   updateStats();
 }
 function claimAllVaultDwellers() {
   ensurePlayerVault();
   tickVaultDwellers();
-  let n = P.playerVault.dwellersAtDoor || 0;
+  let v = P.playerVault;
+  let n = Math.min(3, Math.max(0, parseInt(v.dwellersAtDoor, 10) || 0));
   if (n < 1) { logMsg('Aún no hay moradores en la puerta.'); return; }
   for (let i = 0; i < n; i++) addItemToInv(2500, 1);
-  P.playerVault.dwellersAtDoor = 0;
+  v.dwellersAtDoor = 0;
+  // Reloj reiniciado: el siguiente llega en 24 h
+  v.lastDwellerHour = P.worldHours || 0;
   logMsg(n + ' morador(es) entran al Refugio. (Especiales) · Total inventario: ' + countDwellers());
   renderPlayerVaultUI('door');
   updateStats();
