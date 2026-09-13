@@ -1,10 +1,13 @@
-const CACHE = 'wasteland-v100';
+const CACHE = 'wasteland-v118';
+const AUDIO_CACHE = 'wasteland-audio-v1';
 const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
   './icon-192.png',
-  './icon-512.png',
+  './icon-512.png'
+];
+const AUDIO_ASSETS = [
   './audio/RadioWasteland1.mp3',
   './audio/RadioWasteland2.mp3',
   './audio/RadioWasteland3.mp3',
@@ -26,19 +29,22 @@ const ASSETS = [
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE).then(async (cache) => {
-      for (const url of ASSETS) {
-        try { await cache.add(url); } catch (e) {}
-      }
-    })
-  );
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    for (const url of ASSETS) {
+      try { await cache.add(url); } catch (e) {}
+    }
+    const ac = await caches.open(AUDIO_CACHE);
+    for (const url of AUDIO_ASSETS) {
+      try { await ac.add(url); } catch (e) {}
+    }
+  })());
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => k !== CACHE ? caches.delete(k) : null))
+      Promise.all(keys.map((k) => (k !== CACHE && k !== AUDIO_CACHE) ? caches.delete(k) : null))
     ).then(() => self.clients.claim())
   );
 });
@@ -47,7 +53,27 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  const isAudio = /\.(mp3|ogg|wav|m4a)(\?|$)/i.test(url.pathname) || url.pathname.indexOf('/audio/') !== -1;
   const isHTML = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
+
+  if (isAudio) {
+    event.respondWith((async () => {
+      const cache = await caches.open(AUDIO_CACHE);
+      const cached = await cache.match(req) || await cache.match(url.pathname) || await cache.match('./audio/' + url.pathname.split('/').pop());
+      if (cached) return cached;
+      try {
+        const res = await fetch(req);
+        if (res && res.ok) {
+          try { await cache.put(req, res.clone()); } catch (e) {}
+        }
+        return res;
+      } catch (e) {
+        return cached || Response.error();
+      }
+    })());
+    return;
+  }
+
   if (isHTML) {
     event.respondWith(
       fetch(req, { cache: 'no-store' }).then((res) => {
@@ -60,6 +86,7 @@ self.addEventListener('fetch', (event) => {
     );
     return;
   }
+
   event.respondWith(
     caches.match(req).then((cached) => {
       const fetched = fetch(req).then((res) => {

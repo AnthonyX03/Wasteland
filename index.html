@@ -652,7 +652,7 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.92); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 100; }
 .modal.show { display: flex; }
-.modal-content { background: var(--panel); border: 2px solid var(--accent); padding: 16px; max-width: 480px; width: 100%; max-height: 85vh; overflow-y: auto; }
+.modal-content { background: var(--panel); border: 2px solid var(--accent); padding: 16px; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; }
 
 .progress-bar { background: var(--bar-bg); border: 1px solid #00aa2a; height: 14px; border-radius: 2px; overflow: hidden; margin: 4px 0 10px 0; }
 .progress-fill { height: 100%; width: 0%; transition: width 0.3s; }
@@ -1309,7 +1309,35 @@ const DB_ITEMS = [
   { id: 932, name: "Chip de síntesis del Instituto", type: "other", weight: 0.2, value: 55, stackable: true, questItem: true },
 
 
-  { id: 2500, name: "Morador", type: "special", weight: 0, value: 0, stackable: true, dweller: true, noCommerceSell: true, effectDesc: "Habitante del Refugio atraído por la antena de Vaul-Tec. Peso 0. Úsalo en el Laboratorio para experimentos (gas, radiación, FEV…). No se vende en Comercio." },
+    { id: 2801, name: "Rifle de francotirador de cazarrecompensas", type: "weapon", damage: 48, ammoType: "Cartucho .308", weight: 7, value: 900, stackable: false, factionOnly: true, faction: "bounty" },
+  { id: 2802, name: "Pistola de ejecutor", type: "weapon", damage: 32, ammoType: "Cartucho 10mm", weight: 3, value: 450, stackable: false, factionOnly: true, faction: "bounty" },
+  { id: 2803, name: "Chaleco de cazarrecompensas", type: "armor", def: 22, weight: 8, value: 400, stackable: false, factionOnly: true, faction: "bounty", radRes: 5 },
+  { id: 2804, name: "Sombrero de cazarrecompensas", type: "armor", def: 8, weight: 1, value: 120, stackable: false, factionOnly: true, faction: "bounty", radRes: 0 },
+  { id: 2805, name: "Cartel de se busca (souvenir)", type: "other", weight: 0.1, value: 50, stackable: true, factionOnly: true, faction: "bounty", effectDesc: "Trofeo de caza. Coleccionable." },
+  { id: 2811, name: "Lanza de cazador", type: "weapon", damage: 38, ammoType: "Ninguna (melee)", weight: 5, value: 380, stackable: false, factionOnly: true, faction: "hunters" },
+  { id: 2812, name: "Rifle de caza reforzado", type: "weapon", damage: 42, ammoType: "Cartucho .308", weight: 6.5, value: 700, stackable: false, factionOnly: true, faction: "hunters" },
+  { id: 2813, name: "Peletería de cazador", type: "armor", def: 20, weight: 7, value: 350, stackable: false, factionOnly: true, faction: "hunters", radRes: 10 },
+  { id: 2814, name: "Máscara de bestia", type: "armor", def: 12, weight: 2, value: 200, stackable: false, factionOnly: true, faction: "hunters", radRes: 8 },
+  { id: 2815, name: "Cebo de mutantes", type: "other", weight: 0.3, value: 80, stackable: true, factionOnly: true, faction: "hunters", effectDesc: "Cebo de cazadores. Coleccionable / venta." },
+    { id: 2820, name: "Dedo de justicia", type: "other", weight: 0.05, value: 10, stackable: true, regulatorFinger: true, noCommerceSell: true, effectDesc: "Trofeo de los Reguladores. Solo con la perk Autoritario. Canjéalo en el Cuartel General de los Reguladores (Intercambio): 10 chapas + 10 reputación por unidad. No se vende en Comercio." },
+  { id: 2821, name: "Oreja", type: "other", weight: 0.05, value: 10, stackable: true, hitmanEar: true, noCommerceSell: true, effectDesc: "Trofeo de los Sicarios. Solo con la perk Asesino a sueldo. Canjéala en El Desguace (Intercambio): 10 chapas + 10 reputación por unidad. No se vende en Comercio." },
+  { id: 2830, name: "Placa de regulador", type: "armor", def: 18, weight: 4, value: 320, stackable: false, factionOnly: true, faction: "regulators", radRes: 5 },
+  { id: 2831, name: "Revólver de la ley", type: "weapon", damage: 36, ammoType: "Cartucho .44", weight: 3.5, value: 480, stackable: false, factionOnly: true, faction: "regulators" },
+  { id: 2832, name: "Chaleco antidisturbios de regulador", type: "armor", def: 26, weight: 9, value: 550, stackable: false, factionOnly: true, faction: "regulators", radRes: 8 },
+  { id: 2833, name: "Porra de la ley", type: "weapon", damage: 28, ammoType: "Ninguna (melee)", weight: 2.5, value: 200, stackable: false, factionOnly: true, faction: "regulators" },
+  { id: 2840, name: "Chaqueta de sicario", type: "armor", def: 16, weight: 5, value: 300, stackable: false, factionOnly: true, faction: "hitmen", radRes: 3 },
+  { id: 2841, name: "Pistola silenciada", type: "weapon", damage: 34, ammoType: "Cartucho 10mm", weight: 2.8, value: 520, stackable: false, factionOnly: true, faction: "hitmen" },
+  { id: 2842, name: "Cuchillo de carnicero", type: "weapon", damage: 30, ammoType: "Ninguna (melee)", weight: 1.5, value: 220, stackable: false, factionOnly: true, faction: "hitmen" },
+  { id: 2843, name: "Máscara de sicario", type: "armor", def: 10, weight: 1.2, value: 180, stackable: false, factionOnly: true, faction: "hitmen", radRes: 0 },
+    { id: 2850, name: "Chaleco de caravanero Crimson", type: "armor", def: 18, weight: 6, value: 380, stackable: false, factionOnly: true, faction: "crimson", radRes: 6 },
+  { id: 2851, name: "Rifle de escolta Crimson", type: "weapon", damage: 40, ammoType: "Cartucho .308", weight: 6, value: 620, stackable: false, factionOnly: true, faction: "crimson" },
+  { id: 2852, name: "Pistola de caravana", type: "weapon", damage: 28, ammoType: "Cartucho 10mm", weight: 2.5, value: 280, stackable: false, factionOnly: true, faction: "crimson" },
+  { id: 2853, name: "Sombrero de caravanero", type: "armor", def: 6, weight: 0.8, value: 90, stackable: false, factionOnly: true, faction: "crimson", radRes: 0 },
+  { id: 2854, name: "Raciones de caravana", type: "food", heal: 35, weight: 0.5, value: 40, stackable: true, factionOnly: true, faction: "crimson", useDesc: "Cura 35 HP." },
+    { id: 2860, name: "Sobre Crimson (1 carta)", type: "other", weight: 0.1, value: 50, stackable: true, crimsonPack: 1, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (1 carta). Ábrelo en el Puesto Crimson → Mazo → Abrir sobre." },
+  { id: 2861, name: "Sobre Crimson (3 cartas)", type: "other", weight: 0.15, value: 120, stackable: true, crimsonPack: 3, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (3 cartas). Ábrelo en el Puesto Crimson → Mazo → Abrir sobre." },
+  { id: 2862, name: "Sobre Crimson (5 cartas)", type: "other", weight: 0.2, value: 200, stackable: true, crimsonPack: 5, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (5 cartas). Ábrelo en el Puesto Crimson → Mazo → Abrir sobre." },
+  { id: 2500, name: "Morador", type: "special", weight: 0, value: 0, stackable: true, dweller: true, noCommerceSell: true, effectDesc: "Sujeto experimental atraído por la antena del Refugio. Peso 0 kg. Úsalo en Laboratorio → Experimentar (gasear, irradiar, FEV). Los supervivientes van a Criogenización. No se vende en Comercio." },
   { id: 2501, name: "Documentos del experimento", type: "other", weight: 0.1, value: 0, stackable: true, experimentDocs: true, noCommerceSell: true, effectDesc: "Informes clasificados de Vaul-Tec. Véndelos en la Oficina de Vaul-Tec por Dinero de antes de la guerra." },
   { id: 2305, name: "Esclavo", type: "special", weight: 0, value: 500, stackable: true, slave: true, noCommerceSell: true, effectDesc: "Mercancía viva. Véndela en Paradise Falls (Base → Vender Esclavos) por 500 chapas y reputación. No se vende en Comercio." },
   { id: 2311, name: "Látigo de negrero", type: "weapon", damage: 22, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 180, stackable: false, factionOnly: true, faction: "slavers" },
@@ -1795,7 +1823,9 @@ const PERKS_DB = [
   { id: 'p_guns', name: "Pistolero Experto", desc: "+2 daño con armas que usen munición.", maxRank: 3 },
   { id: 'p_brawler', name: "Matón Callejero", desc: "+4 daño extra con armas cuerpo a cuerpo.", maxRank: 2 },
   { id: 'p_local', name: "Líder Local", desc: "La granja genera +25% chapas/hora (Nv.1) o +50% (Nv.2). No se acumula.", maxRank: 2 },
-  { id: 'p_greedy', name: "Avaricioso", desc: "El Casino Sierra Madre genera +25% fichas/hora (Nv.1) o +50% (Nv.2). No se acumula.", maxRank: 2 }
+  { id: 'p_greedy', name: "Avaricioso", desc: "El Casino Sierra Madre genera +25% fichas/hora (Nv.1) o +50% (Nv.2). No se acumula.", maxRank: 2 },
+  { id: 'p_autoritario', name: "Autoritario", desc: "Acceso a Los Reguladores. Cada humano abatido deja 1× Dedo de justicia (Otros) para canjear en su cuartel.", maxRank: 1 },
+  { id: 'p_hitman', name: "Asesino a sueldo", desc: "Acceso a Los Sicarios. En eventos aleatorios puedes atacar a civiles; si ganas, obtienes 1× Oreja (Otros) para canjear en El Desguace.", maxRank: 1 }
 ];
 
 let P = {
@@ -1825,6 +1855,10 @@ let P = {
   },
   factionQuestPool: {},
   activeFactionQuests: [],
+  questTab: 'main',
+  crimsonEscort: { active: null, pending: [], board: [], lastBoardHour: -9999 },
+  activeContracts: [],
+  contractBoards: {},
   baseMaxWeight: 25, 
   bagUpgradeCost: 50,
   shopLevel: 1,
@@ -1841,7 +1875,7 @@ let P = {
   perkPts: 0,
   special: { S: 1, P: 1, E: 1, C: 1, I: 1, A: 1, L: 1 },
   perks: {},
-  ammoBox: { "Célula de Hipnotron": 0, ".38": 24, "Cartucho de escopeta": 6, "Célula de microfusión": 0, "5.56mm": 0, "10mm": 10, ".44 Magnum": 0, "Bengala": 0, "Cartucho de plasma": 0, "Célula de energía": 0, "Onda Gamma": 0, "Dardo": 0, "Clavo": 0, ".45 ACP": 0, ".308": 0, "Cartucho de 2mm": 0, ".45-70": 0, "5mm": 0, "Misil": 0, "Combustible de lanzallamas": 0, "Mini Nukes": 0, "Bala de cañón": 0, "7.62mm": 0, "Núcleo de fusión": 0, "Célula criogénica": 0, "Célula energética alienígena": 0, "Módulo de alimentación alienígena": 0 },
+  ammoBox: { "Célula de Hipnotron": 0, ".38": 24, "Cartucho de escopeta": 6, "Cartucho .44": 0, "Célula de microfusión": 0, "5.56mm": 0, "10mm": 10, ".44 Magnum": 0, "Bengala": 0, "Cartucho de plasma": 0, "Célula de energía": 0, "Onda Gamma": 0, "Dardo": 0, "Clavo": 0, ".45 ACP": 0, ".308": 0, "Cartucho de 2mm": 0, ".45-70": 0, "5mm": 0, "Misil": 0, "Combustible de lanzallamas": 0, "Mini Nukes": 0, "Bala de cañón": 0, "7.62mm": 0, "Núcleo de fusión": 0, "Célula criogénica": 0, "Célula energética alienígena": 0, "Módulo de alimentación alienígena": 0 },
   inv: [
     { uid: 101, id: 1, qty: 1, mods: [], itemLevel: 1 },
     { uid: 102, id: 5, qty: 1, mods: [], itemLevel: 1 },
@@ -2720,7 +2754,7 @@ function renderCharacter(sub) {
         <div class="spec-box"><span>(C) Carisma: <b>${P.special.C}</b> (-${P.special.C * 2}% precio tienda)</span><button ${P.specialPts === 0 || P.special.C >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('C')">+</button></div>
         <div class="spec-box"><span>(I) Inteligencia: <b>${P.special.I}</b> (+${P.special.I * 5}% EXP)</span><button ${P.specialPts === 0 || P.special.I >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('I')">+</button></div>
         <div class="spec-box"><span>(A) Agilidad: <b>${P.special.A}</b> (+${P.special.A * 3}% huida)</span><button ${P.specialPts === 0 || P.special.A >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('A')">+</button></div>
-        <div class="spec-box" style="grid-column: span 2;"><span>(L) Suerte: <b>${P.special.L}</b> (+${P.special.L * 2}% crítico)</span><button ${P.specialPts === 0 || P.special.L >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('L')">+</button></div>
+        <div class="spec-box" style="grid-column: span 2;"><span>(L) Suerte: <b>${P.special.L}</b> (+${P.special.L * 2}% crítico · +casino)</span><button ${P.specialPts === 0 || P.special.L >= 10 ? 'disabled' : ''} onclick="addSpecialPoint('L')">+</button></div>
       </div>
     `;
   } else if (sub === 'perks') {
@@ -4176,59 +4210,140 @@ function claimReward(questId) {
   updateStats();
 }
 
-function renderQuests() {
+function renderQuests(tab) {
   ensureFactionDefaults();
-  let html = `<h2>REGISTRO DE MISIONES</h2>`;
-  html += `<h3 style="color:var(--gold); font-size:13px;">Principales de facción</h3>`;
-  html += `<p style="font-size:11px;color:#8d9880;">Se aceptan y reclaman dentro del asentamiento (⚑ en el mapa).</p>`;
-  if (!P.activeFactionQuests || P.activeFactionQuests.length === 0) {
-    html += `<p style="font-size:12px;color:#8d9880;">Ninguna misión de facción activa.</p>`;
-  } else {
-    P.activeFactionQuests.forEach(q => {
-      let fac = FACTIONS[q.faction];
-      let pct = Math.floor((q.current / q.target) * 100);
-      let fcol = (fac && fac.color) ? fac.color : '#00aa2a';
-      html += `<div class="item fcol" style="border-color:${fcol} !important;">
-        <b style="color:${fcol} !important;">${q.title}</b> <span style="font-size:10px;color:${fcol} !important;">PRINCIPAL · ${fac ? fac.name : q.faction}</span><br>
-        <span style="font-size:11px;">${q.desc || ''}</span><br>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${fcol} !important;"></div></div>
-        <span style="font-size:11px;">${q.current || 0}/${q.target || 1} ${q.completed ? '— Completada (reclama en el asentamiento)' : ''}</span><br>
-        <span style="font-size:11px;">Recompensa: ${formatFactionRewardText(q.reward)}</span>
-      </div>`;
-    });
-  }
-  html += `<h3 style="color:var(--accent); font-size:13px; margin-top:12px;">Secundarias</h3>`;
-  if (P.activeQuests.length === 0) {
-    html += `<p style="font-size:12px; color:#8d9880;">No tienes misiones secundarias. Explora el mapa para encontrar encargos.</p>`;
-  } else {
-    P.activeQuests.forEach(q => {
-      let pct = Math.floor((q.current / q.target) * 100);
-      let itemObj = q.reward.item ? getItemBase(q.reward.item) : null;
-      let itemRew = itemObj ? formatItemGainName(itemObj, q.reward.qty || 1) : null;
+  if (typeof ensureContracts === 'function') ensureContracts();
+  tab = tab || P.questTab || 'main';
+  P.questTab = tab;
 
-      html += `
-        <div class="item">
+  let tabs = [
+    ['main', 'Principales'],
+    ['factions', 'Facciones'],
+    ['escorts', 'Escoltas'],
+    ['side', 'Secundarias'],
+    ['contracts', 'Contratos']
+  ];
+  let html = `<h2 style="margin-bottom:6px;">REGISTRO DE MISIONES</h2>
+    <div class="subtabs" style="flex-wrap:wrap;">
+      ${tabs.map(t => `<button class="${tab===t[0]?'active':''}" onclick="renderQuests('${t[0]}')">${t[1]}</button>`).join('')}
+    </div>`;
+
+  if (tab === 'main') {
+    html += `<p style="font-size:11px;color:#8d9880;">Misiones de historia del Yermo.</p>`;
+    html += `<div class="item" style="border-color:#666;">
+      <b style="color:#8d9880;">Historia principal</b><br>
+      <span style="font-size:12px;color:#8d9880;">Aún no implementado. Aquí aparecerán las misiones de la trama principal cuando se añadan.</span>
+    </div>`;
+  } else if (tab === 'factions') {
+    html += `<p style="font-size:11px;color:#8d9880;">Misiones de facción. Se aceptan y reclaman en el asentamiento (⚑).</p>`;
+    let list = (P.activeFactionQuests || []).filter(q => q && q.faction !== 'bounty' && q.faction !== 'hunters');
+    if (!list.length) {
+      html += `<p style="font-size:12px;color:#8d9880;">Ninguna misión de facción activa. Visita un asentamiento para aceptar encargos.</p>`;
+    } else {
+      list.forEach(q => {
+        let fac = FACTIONS[q.faction];
+        let pct = Math.floor(((q.current || 0) / (q.target || 1)) * 100);
+        let fcol = (fac && fac.color) ? fac.color : 'var(--gold)';
+        html += `<div class="item fcol" style="border-color:${fcol} !important;">
+          <b style="color:${fcol} !important;">${q.title}</b>
+          <span style="font-size:10px;color:${fcol} !important;"> · ${fac ? fac.name : q.faction}</span><br>
+          <span style="font-size:11px;">${q.desc || ''}</span><br>
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${fcol} !important;"></div></div>
+          <span style="font-size:11px;">${q.current || 0}/${q.target || 1}${q.completed ? ' — Completada (reclama en el asentamiento)' : ''}</span><br>
+          <span style="font-size:11px;">Recompensa: ${formatFactionRewardText(q.reward)}</span>
+        </div>`;
+      });
+    }
+  } else if (tab === 'escorts') {
+    if (typeof ensureCrimson === 'function') ensureCrimson();
+    if (typeof tickCrimsonEscort === 'function') tickCrimsonEscort();
+    html += `<p style="font-size:11px;color:#8d9880;">Escoltas de <b style="color:#cc3333;">Caravanas Crimson</b>. Acepta en el Puesto Crimson.</p>`;
+    let a = P.crimsonEscort && P.crimsonEscort.active;
+    if (a) {
+      let left = Math.max(0, (a.deadlineHour || 0) - (P.worldHours || 0));
+      let here = (P.x === a.destX && P.y === a.destY);
+      html += `<div class="item" style="border-color:#cc3333;">
+        <b style="color:#cc3333;">🐪 Escolta activa: ${a.destName}</b><br>
+        <span style="font-size:11px;">Destino [${a.destX >= 0 ? '+' : ''}${a.destX}, ${a.destY >= 0 ? '+' : ''}${a.destY}] · Quedan <b>${left} h</b></span><br>
+        <span style="font-size:11px;">Recompensa: ${a.caps} chapas · +${a.rep} rep</span><br>`;
+      if (here) {
+        html += `<button style="margin-top:6px;width:100%;background:var(--accent);color:#111;font-weight:bold;" onclick="finishCrimsonEscort();renderQuests('escorts');">FINALIZAR ESCOLTA</button>`;
+      } else {
+        html += `<span style="font-size:11px;color:#8d9880;">Viaja al destino para poder finalizar.</span>`;
+      }
+      html += `</div>`;
+    } else {
+      html += `<p style="font-size:12px;color:#8d9880;">No hay escolta activa.</p>`;
+    }
+    let pend = (P.crimsonEscort && P.crimsonEscort.pending) || [];
+    if (pend.length) {
+      html += `<p style="font-size:11px;color:#8d9880;">${pend.length} recompensa(s) pendiente(s) — reclama en el Puesto Crimson → Escoltar → Recompensas.</p>`;
+    }
+  } else if (tab === 'side') {
+    html += `<p style="font-size:11px;color:#8d9880;">Encargos que encuentras explorando el Yermo.</p>`;
+    if (!P.activeQuests || P.activeQuests.length === 0) {
+      html += `<p style="font-size:12px;color:#8d9880;">No tienes misiones secundarias. Explora el mapa para encontrar encargos.</p>`;
+    } else {
+      P.activeQuests.forEach(q => {
+        let pct = Math.floor((q.current / q.target) * 100);
+        let itemObj = q.reward && q.reward.item ? getItemBase(q.reward.item) : null;
+        let itemRew = itemObj ? formatItemGainName(itemObj, q.reward.qty || 1) : null;
+        html += `<div class="item">
           <div class="item-head">
             <b>${q.title}</b>
-            <span style="font-size:11px; color:${q.completed ? 'var(--accent)' : 'var(--gold)'};">
+            <span style="font-size:11px;color:${q.completed ? 'var(--accent)' : 'var(--gold)'};">
               ${q.completed ? 'COMPLETADA' : 'EN PROGRESO'}
             </span>
           </div>
-          <p style="font-size:12px; margin: 4px 0;">${q.desc}</p>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: ${pct}%; background:var(--accent);"></div>
-          </div>
-          <div style="font-size:11px; color:#8d9880; display:flex; justify-content:space-between;">
+          <p style="font-size:12px;margin:4px 0;">${q.desc}</p>
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:var(--accent);"></div></div>
+          <div style="font-size:11px;color:#8d9880;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;">
             <span>Progreso: ${q.current} / ${q.target}</span>
-            <span>Recompensa: ${q.reward.caps} chapas, ${q.reward.xp} EXP ${itemRew ? '+ ' + itemRew : ''}</span>
-          </div>
-      `;
-      if (q.completed) {
-        html += `<button style="margin-top:8px; width:100%; background:var(--accent); color:#111; font-weight:bold;" onclick="claimReward('${q.id}')">RECLAMAR RECOMPENSA</button>`;
-      }
-      html += `</div>`;
-    });
+            <span>Recompensa: ${q.reward.caps} chapas, ${q.reward.xp} EXP${itemRew ? ' + ' + itemRew : ''}</span>
+          </div>`;
+        if (q.completed) {
+          html += `<button style="margin-top:8px;width:100%;background:var(--accent);color:#111;font-weight:bold;" onclick="claimReward('${q.id}')">RECLAMAR RECOMPENSA</button>`;
+        }
+        html += `</div>`;
+      });
+    }
+  } else if (tab === 'contracts') {
+    html += `<p style="font-size:11px;color:#8d9880;">Contratos de Cazarrecompensas (máx. 3) y Cazadores (máx. 3). Se cobran en su asentamiento.</p>`;
+    let contracts = (P.activeContracts || []).filter(c => c && !c.claimed);
+    let bounty = contracts.filter(c => c.faction === 'bounty');
+    let hunters = contracts.filter(c => c.faction === 'hunters');
+
+    html += `<h3 style="color:#dd8844;font-size:13px;margin:8px 0 4px;">🎯 Cazarrecompensas (${bounty.filter(c=>!c.completed).length}/3 activos)</h3>`;
+    if (!bounty.length) {
+      html += `<p style="font-size:12px;color:#8d9880;">Sin contratos de cazarrecompensas. Visita el Gremio [-9, -14].</p>`;
+    } else {
+      bounty.forEach(c => {
+        html += `<div class="item" style="border-color:#dd8844 !important;">
+          <b style="color:#dd8844;">${c.title}</b>
+          ${c.completed ? ' <span style="color:var(--accent);font-size:11px;">LISTO</span>' : ''}<br>
+          <span style="font-size:11px;color:#8d9880;">${c.desc || ''}</span><br>
+          <span style="font-size:11px;">Recompensa: ${c.reward.caps} chapas · ${c.reward.xp} XP · +${c.reward.rep} rep</span><br>
+          <span style="font-size:11px;color:#8d9880;">${c.completed ? 'Vuelve al Gremio a reclamar.' : 'En curso…'}</span>
+        </div>`;
+      });
+    }
+
+    html += `<h3 style="color:#88aa44;font-size:13px;margin:10px 0 4px;">🏹 Cazadores (${hunters.filter(c=>!c.completed).length}/3 activos)</h3>`;
+    if (!hunters.length) {
+      html += `<p style="font-size:12px;color:#8d9880;">Sin contratos de cazadores. Visita la Logia [+17, -14].</p>`;
+    } else {
+      hunters.forEach(c => {
+        html += `<div class="item" style="border-color:#88aa44 !important;">
+          <b style="color:#88aa44;">${c.title}</b>
+          ${c.completed ? ' <span style="color:var(--accent);font-size:11px;">LISTO</span>' : ''}<br>
+          <span style="font-size:11px;color:#8d9880;">${c.desc || ''}</span><br>
+          <span style="font-size:11px;">Recompensa: ${c.reward.caps} chapas · ${c.reward.xp} XP · +${c.reward.rep} rep</span><br>
+          <span style="font-size:11px;color:#8d9880;">${c.completed ? 'Vuelve a la Logia a reclamar.' : 'En curso…'}</span>
+        </div>`;
+      });
+    }
   }
+
   document.getElementById('main-view').innerHTML = html;
 }
 
@@ -4274,6 +4389,11 @@ const FACTIONS = {
   followers: { id: 'followers', name: 'Seguidores del Apocalipsis', color: '#66cc99', shopLevels: [100, 250, 500, 750, 1000], noWeapons: true },
   necropolis: { id: 'necropolis', name: 'Necrópolis', color: '#88aa66', shopLevels: [100, 250, 500, 750, 1000], ghoulOnly: true },
   kings: { id: 'kings', name: 'Los Reyes', color: '#e8c547', shopLevels: [100, 250, 500, 750, 1000], noMedic: true },
+  bounty: { id: 'bounty', name: 'Los Cazarrecompensas', color: '#dd8844', shopLevels: [100, 250, 500, 750, 1000], contractsOnly: true },
+  hunters: { id: 'hunters', name: 'Los Cazadores', color: '#88aa44', shopLevels: [100, 250, 500, 750, 1000], contractsOnly: true },
+  regulators: { id: 'regulators', name: 'Los Reguladores', color: '#5577cc', shopLevels: [100, 250, 500, 750, 1000], trophyExchange: true, perkRequired: 'p_autoritario', noMedic: true, travelOnlyBase: true },
+  hitmen: { id: 'hitmen', name: 'Los Sicarios', color: '#aa4455', shopLevels: [100, 250, 500, 750, 1000], trophyExchange: true, perkRequired: 'p_hitman', noMedic: true, travelOnlyBase: true },
+  crimson: { id: 'crimson', name: 'Caravanas Crimson', color: '#cc3333', shopLevels: [100, 250, 500, 750, 1000], escortFaction: true, noMedic: true },
   player: { id: 'player', name: 'Tu Asentamiento', color: '#44ddaa', shopLevels: [0, 0, 0, 0, 0] },
   sierra: { id: 'sierra', name: 'Sierra Madre', color: '#e8d48b', shopLevels: [0,0,0,0,0] },
   robco: { id: 'robco', name: 'RobCo Industries', color: '#a0a0a0', shopLevels: [0,0,0,0,0] }
@@ -4368,6 +4488,11 @@ const SETTLEMENTS = [
   { id: 'rnc_camp', name: 'Campamento RNC', faction: 'rnc', x: -12, y: 3 },
   { id: 'strip_gate', name: 'Puerta del Strip', faction: 'strip', x: 14, y: 2 },
   { id: 'kings_theater', name: 'Teatro de Los Reyes', faction: 'kings', x: 12, y: 0 },
+  { id: 'bounty_hq', name: '🎯 Gremio de Cazarrecompensas', faction: 'bounty', x: -9, y: -14 },
+  { id: 'hunters_lodge', name: '🏹 Logia de los Cazadores', faction: 'hunters', x: 17, y: -14 },
+  { id: 'regulators_hq', name: '⚖ Cuartel General de los Reguladores', faction: 'regulators', x: -17, y: -1 },
+  { id: 'hitmen_yard', name: '🗡 El Desguace', faction: 'hitmen', x: 12, y: 9 },
+  { id: 'crimson_outpost', name: '🐪 Puesto Crimson', faction: 'crimson', x: -6, y: -18 },
   { id: 'institute_relay', name: 'Relé del Instituto', faction: 'institute', x: 1, y: 14 },
   { id: 'atom_crater', name: 'Cráter del Átomo', faction: 'atom', x: -16, y: -5 },
   { id: 'minutemen_fort', name: 'Fuerte Independencia', faction: 'minutemen', x: 6, y: -14 },
@@ -4790,6 +4915,30 @@ const FACTION_UNIQUE_SHOP = {
     { id: 2707, shopLevel: 4 }, { id: 2708, shopLevel: 4 }, { id: 2709, shopLevel: 5 },
     { id: 2710, shopLevel: 5 }
   ],
+  bounty: [
+    { id: 2801, shopLevel: 1 }, { id: 2802, shopLevel: 1 }, { id: 2803, shopLevel: 2 },
+    { id: 2804, shopLevel: 2 }, { id: 2805, shopLevel: 1 }
+  ],
+  hunters: [
+    { id: 2811, shopLevel: 1 }, { id: 2812, shopLevel: 1 }, { id: 2813, shopLevel: 2 },
+    { id: 2814, shopLevel: 2 }, { id: 2815, shopLevel: 1 }
+  ],
+
+  regulators: [
+    { id: 2830, shopLevel: 1 }, { id: 2831, shopLevel: 1 }, { id: 2833, shopLevel: 2 },
+    { id: 2832, shopLevel: 3 }, { id: 2831, shopLevel: 4 }, { id: 2832, shopLevel: 5 }
+  ],
+  hitmen: [
+    { id: 2840, shopLevel: 1 }, { id: 2841, shopLevel: 1 }, { id: 2842, shopLevel: 2 },
+    { id: 2843, shopLevel: 2 }, { id: 2841, shopLevel: 4 }, { id: 2840, shopLevel: 5 }
+  ],
+
+  crimson: [
+    { id: 2850, shopLevel: 1 }, { id: 2852, shopLevel: 1 }, { id: 2853, shopLevel: 1 },
+    { id: 2854, shopLevel: 2 }, { id: 2851, shopLevel: 3 }, { id: 2850, shopLevel: 4 },
+    { id: 2851, shopLevel: 5 }
+  ],
+
 };
 
 
@@ -5219,6 +5368,7 @@ function updateWeatherFromTime() {
 function advanceTime(hours = 1) {
   P.worldHours = (P.worldHours || 9) + hours;
   if (typeof tickVaultDwellers === "function") tickVaultDwellers();
+  if (typeof tickCrimsonEscort === "function") tickCrimsonEscort();
   let prev = P.weather;
   updateWeatherFromTime();
   // Efectos climáticos por hora
@@ -5439,6 +5589,13 @@ function renderMap() {
     let ly = fmtCoord(P.lootTip.y);
     let hereLoot = (P.x === P.lootTip.x && P.y === P.lootTip.y);
     signalHint += `<div class="map-signal-hint" style="color:${hereLoot ? 'var(--gold)' : '#d5bd69'};">💰 Botín señalado [${lx}, ${ly}]${hereLoot ? ' — ¡AQUÍ!' : ''}</div>`;
+
+  if (P.crimsonEscort && P.crimsonEscort.active) {
+    let ae = P.crimsonEscort.active;
+    let sx = (ae.destX >= 0 ? '+' : '') + ae.destX, sy = (ae.destY >= 0 ? '+' : '') + ae.destY;
+    let hereE = (P.x === ae.destX && P.y === ae.destY);
+    signalHint += `<div class="map-signal-hint" style="color:${hereE ? 'var(--gold)' : '#cc3333'};">🐪 Escolta → [${sx}, ${sy}]${hereE ? ' — ¡AQUÍ!' : ''}</div>`;
+  }
   }
 
   let actBtns = '';
@@ -5535,6 +5692,9 @@ function renderMap() {
     ${zone.enterable ? ' <span style="color:var(--gold);font-size:11px;">(entrable)</span>' : ''}
     </div>
     ${signalHint || '<div class="map-signal-hint">&nbsp;</div>'}
+    ${(P.crimsonEscort && P.crimsonEscort.active && P.x === P.crimsonEscort.active.destX && P.y === P.crimsonEscort.active.destY)
+      ? '<button style="width:100%;margin:4px 0;background:var(--accent);color:#111;font-weight:bold;" onclick="finishCrimsonEscort();renderMap();">🐪 FINALIZAR ESCOLTA</button>'
+      : ''}
     ${renderWorldGrid()}
     <div class="map-actions">
       <div class="map-act-row">${actBtns}</div>
@@ -5916,6 +6076,214 @@ function zetanShipExplore() {
   renderZetanShipMap();
 }
 
+
+// ===== DLC: LOS TEMIBLES DEL YERMO (Contratos) =====
+const CONTRACT_BOUNTY_NAMES = [
+  'Silas "El Desollador" Kane','Mara Redhand','Viktor el Caníbal','Lila "Nueve Dedos"',
+  'Cyrus Ashford','Nina la Desolladora','Brock "Martillo"','Elena Voss','Jax el Desierto',
+  'Rook "Calavera"','Tessa Fen','Orin Blacktooth','Greta la Roja','Dane Hollow','Sable Quinn',
+  'Hektor "Cuchilla" Ruiz','Vera Nightingale','Tobias Crane','Ash "Ojo Muerto"','Irene Kol',
+  'Marcus Flint','Dahlia Rook','Kane "El Cobrado"','Soren Vale','Petra Grimm',
+  'Wade "Sin Rostro"','Clara Boone','Igor "Hueso" Malikov','Rosa Cinder','Finn Harlan',
+  'Yelena Stark','Butch "Cadena"','Mira Solano','Gideon Cross','Nora "Víbora"',
+  'Leon Kasper','Tara Quinn','Edgar "Polvo"','Selene Drake','Otto Reinhardt'
+];
+const CONTRACT_HUNTER_NAMES = [
+  'Colmillo de Ceniza','El Aullador de Lexington','Jorobado de Malden','Reina Necrófaga',
+  'Titán de la Cantera','Sangre Vieja','El Acechador Verde','Bestia del Acueducto',
+  'Cuerno Roto','La Sombra del Vertedero','Devorador de Caravanas','Garras del Páramo',
+  'El Mutante de la Torre','Hidra de lodo','Alfa irradiado',
+  'Espina del Vertedero','El Caminante de Óxido','Madre de la Madriguera','Ojo de Escoria',
+  'El Que No Duerme','Lomo de Plomo','Sombra de Quincy','Diente de Chatarra',
+  'La Viuda del Río','Rugido de la Fábrica','Piel de Asfalto','El Hambre Larga',
+  'Cuerno del Páramo','La Que Acecha','Coloso de óxido','Aullido Nocturno',
+  'Garra de Carbón','El Sin Nombre Verde','Marea de Putrefacción','Rey de las Ratas'
+];
+const CONTRACT_HUNTER_TYPES = ['necrófago','supermutante','sanguinario','mole rata gigante','yao guai','deathclaw menor','perro irradiado alfa','ceniciento','necrófago feral','supermutante behemot menor'];
+
+function ensureContracts() {
+  if (!P.activeContracts) P.activeContracts = [];
+  if (!P.contractBoards) P.contractBoards = {};
+  ['bounty','hunters'].forEach(fid => {
+    if (!P.contractBoards[fid]) P.contractBoards[fid] = { list: [], lastRefreshHour: -9999 };
+  });
+}
+function getActiveContracts(fid) {
+  ensureContracts();
+  return (P.activeContracts || []).filter(c => c.faction === fid && !c.claimed);
+}
+function refreshContractBoard(fid, force) {
+  ensureContracts();
+  let board = P.contractBoards[fid];
+  let hours = P.worldHours || 0;
+  // Si hay nombres duplicados en el tablero, forzar regeneración
+  if (board.list && board.list.length) {
+    let seen = new Set();
+    let dup = false;
+    board.list.forEach(c => {
+      if (seen.has(c.targetName)) dup = true;
+      seen.add(c.targetName);
+    });
+    if (dup) force = true;
+  }
+  // 7 días = 168 h
+  if (!force && board.list && board.list.length && (hours - (board.lastRefreshHour || 0)) < 168) {
+    return board.list;
+  }
+  let list = [];
+  let usedNames = new Set();
+  let usedLocs = new Set();
+  for (let i = 0; i < 6; i++) {
+    list.push(generateContract(fid, i, usedNames, usedLocs));
+  }
+  board.list = list;
+  board.lastRefreshHour = hours;
+  return list;
+}
+function pickUniqueContractName(pool, used) {
+  let free = pool.filter(n => !used.has(n));
+  if (!free.length) free = pool.slice();
+  let name = free[Math.floor(Math.random() * free.length)];
+  used.add(name);
+  return name;
+}
+function pickUniqueContractLoc(usedLocs) {
+  let free = UNIQUE_LOCATIONS.filter(l => !usedLocs.has(l.id));
+  if (!free.length) free = UNIQUE_LOCATIONS.slice();
+  let loc = free[Math.floor(Math.random() * free.length)];
+  usedLocs.add(loc.id);
+  return loc;
+}
+function generateContract(fid, idx, usedNames, usedLocs) {
+  usedNames = usedNames || new Set();
+  usedLocs = usedLocs || new Set();
+  // Excluir nombres ya en contratos activos
+  (P.activeContracts || []).forEach(c => {
+    if (c.faction === fid && c.targetName) usedNames.add(c.targetName);
+    if (c.locId) usedLocs.add(c.locId);
+  });
+  let id = fid + '_c_' + Date.now() + '_' + idx + '_' + Math.floor(Math.random() * 9999);
+  let lvl = Math.max(1, (P.lvl || 1) + Math.floor(Math.random() * 5) - 1);
+  let caps = 200 + lvl * 40 + Math.floor(Math.random() * 150);
+  let xp = 60 + lvl * 15;
+  let rep = 12 + Math.floor(Math.random() * 10);
+  if (fid === 'bounty') {
+    let loc = pickUniqueContractLoc(usedLocs);
+    let name = pickUniqueContractName(CONTRACT_BOUNTY_NAMES, usedNames);
+    return {
+      id, faction: 'bounty', type: 'bounty',
+      title: '🎯 Se busca: ' + name,
+      desc: 'Elimina a ' + name + ' (humano) en la localidad única «' + loc.name + '» [' + (loc.x>=0?'+':'') + loc.x + ', ' + (loc.y>=0?'+':'') + loc.y + '].',
+      targetName: name, targetKind: 'human', locId: loc.id, locName: loc.name, locX: loc.x, locY: loc.y,
+      level: lvl, reward: { caps, xp, rep }, completed: false, claimed: false
+    };
+  } else {
+    let name = pickUniqueContractName(CONTRACT_HUNTER_NAMES, usedNames);
+    let kind = CONTRACT_HUNTER_TYPES[Math.floor(Math.random() * CONTRACT_HUNTER_TYPES.length)];
+    let inUnique = Math.random() < 0.45;
+    let loc = inUnique ? pickUniqueContractLoc(usedLocs) : null;
+    let where = loc
+      ? ('en o cerca de «' + loc.name + '» [' + (loc.x>=0?'+':'') + loc.x + ', ' + (loc.y>=0?'+':'') + loc.y + ']')
+      : 'en el Yermo (puede aparecer al explorar o combatir)';
+    return {
+      id, faction: 'hunters', type: 'hunt',
+      title: '🏹 Cacería: ' + name,
+      desc: 'Caza a «' + name + '» (' + kind + ') ' + where + '.',
+      targetName: name, targetKind: kind, locId: loc ? loc.id : null, locName: loc ? loc.name : null,
+      locX: loc ? loc.x : null, locY: loc ? loc.y : null,
+      level: lvl, reward: { caps, xp, rep }, completed: false, claimed: false
+    };
+  }
+}
+function acceptContract(fid, contractId) {
+  ensureContracts();
+  let active = getActiveContracts(fid).filter(c => !c.completed);
+  if (active.length >= 3) { logMsg('Máximo 3 contratos activos con esta facción.'); return; }
+  if ((P.activeContracts || []).some(c => c.id === contractId)) { logMsg('Ya aceptado.'); return; }
+  let board = P.contractBoards[fid];
+  let c = (board.list || []).find(x => x.id === contractId);
+  if (!c) return;
+  board.list = board.list.filter(x => x.id !== contractId);
+  P.activeContracts.push(Object.assign({}, c, { acceptedHour: P.worldHours || 0 }));
+  logMsg('Contrato aceptado: ' + c.title);
+  let sett = SETTLEMENTS.find(s => s.faction === fid);
+  if (sett) renderSettlementUI(sett.id, 'missions');
+}
+function markContractComplete(contractId) {
+  ensureContracts();
+  let c = (P.activeContracts || []).find(x => x.id === contractId);
+  if (c && !c.completed) {
+    c.completed = true;
+    logMsg('¡Objetivo de contrato abatido! Vuelve al asentamiento a reclamar: ' + c.title);
+  }
+}
+function claimContract(contractId) {
+  ensureContracts();
+  let c = (P.activeContracts || []).find(x => x.id === contractId);
+  if (!c || !c.completed || c.claimed) { logMsg('No puedes reclamar este contrato aquí.'); return; }
+  // Debe estar en el asentamiento de la facción
+  let sett = SETTLEMENTS.find(s => s.faction === c.faction);
+  if (!sett || !P.location || P.location.settlementId !== sett.id) {
+    logMsg('Reclama el contrato en el asentamiento de la facción.');
+    return;
+  }
+  c.claimed = true;
+  P.caps += (c.reward.caps || 0);
+  addXP(c.reward.xp || 0);
+  addFactionRep(c.faction, c.reward.rep || 0);
+  playBuySound();
+  logMsg('Contrato cobrado: +' + c.reward.caps + ' chapas, +' + c.reward.xp + ' XP, +' + c.reward.rep + ' rep.');
+  P.activeContracts = P.activeContracts.filter(x => x.id !== contractId);
+  renderSettlementUI(sett.id, 'missions');
+  updateStats();
+}
+function renderContractsUI(sett, fcol) {
+  ensureContracts();
+  let fid = sett.faction;
+  let list = refreshContractBoard(fid, false);
+  let hours = P.worldHours || 0;
+  let board = P.contractBoards[fid];
+  let left = Math.max(0, 168 - (hours - (board.lastRefreshHour || 0)));
+  let days = Math.floor(left / 24), hrs = left % 24;
+  let icon = fid === 'bounty' ? '🎯' : '🏹';
+  let html = `<h3 style="color:${fcol};font-size:13px;">${icon} Contratos</h3>
+    <p style="font-size:11px;color:#8d9880;">Máx. 3 activos · Tablero de 6 · Se renueva cada 7 días (${days}d ${hrs}h).</p>`;
+  let mine = getActiveContracts(fid);
+  if (mine.length) {
+    html += `<h3 style="color:${fcol};font-size:12px;">Activos (${mine.filter(c=>!c.completed).length}/3)</h3>`;
+    mine.forEach(c => {
+      html += `<div class="item fcol" style="border-color:${fcol} !important;">
+        <b style="color:${fcol};">${c.title}</b> ${c.completed ? '<span style="color:var(--accent);">LISTO</span>' : ''}<br>
+        <span style="font-size:11px;color:#8d9880;">${c.desc}</span><br>
+        <span style="font-size:11px;">Recompensa: ${c.reward.caps} chapas · ${c.reward.xp} XP · +${c.reward.rep} rep</span><br>`;
+      if (c.completed) {
+        html += `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="claimContract('${c.id}')">RECLAMAR RECOMPENSA</button>`;
+      } else {
+        html += `<span style="font-size:11px;color:#8d9880;">En curso…</span>`;
+      }
+      html += `</div>`;
+    });
+  }
+  let activeCount = mine.filter(c => !c.completed).length;
+  html += `<h3 style="color:${fcol};font-size:12px;">Disponibles en el tablero</h3>`;
+  if (activeCount >= 3) {
+    html += `<p style="font-size:11px;color:var(--danger);">Máximo de 3 contratos activos. Completa o cobra alguno.</p>`;
+  }
+  (list || []).forEach(c => {
+    html += `<div class="item fcol" style="border-color:${fcol} !important;">
+      <b style="color:${fcol};">${c.title}</b><br>
+      <span style="font-size:11px;color:#8d9880;">${c.desc}</span><br>
+      <span style="font-size:11px;">Nv.obj ~${c.level} · ${c.reward.caps} chapas · ${c.reward.xp} XP · +${c.reward.rep} rep</span><br>
+      <button style="margin-top:6px;" ${activeCount>=3?'disabled':''} onclick="acceptContract('${fid}','${c.id}')">ACEPTAR CONTRATO</button>
+    </div>`;
+  });
+  if (!(list || []).length) {
+    html += `<p style="font-size:12px;color:#8d9880;">Tablero vacío. Vuelve más tarde.</p>`;
+  }
+  return html;
+}
+
+
 function openAdditionalContentUI() {
   ensureZetanDefaults();
   document.getElementById('modal-body').innerHTML = `
@@ -5924,11 +6292,31 @@ function openAdditionalContentUI() {
     <button style="width:100%;margin:8px 0;border-color:#66ffaa;color:#66ffaa;font-weight:bold;" onclick="openZetanDlcInfo()">🛸 DLC: A la caza de los Zentans</button>
     <button style="width:100%;margin:8px 0;border-color:#88aadd;color:#88aadd;font-weight:bold;" onclick="openVaultTecDlcInfo()">🧪 DLC: El experimento de Vaul-Tec</button>
     <button style="width:100%;margin:8px 0;border-color:#66cc99;color:#66cc99;font-weight:bold;" onclick="openSpiesDlcInfo()">🕵 DLC: Espías entre nosotros</button>
+    <button style="width:100%;margin:8px 0;border-color:#dd8844;color:#dd8844;font-weight:bold;" onclick="openTemiblesDlcInfo()">☠️ DLC: Los Temibles del Yermo</button>
     <button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>
     <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
   `;
   document.getElementById('modal').classList.add('show');
 }
+
+function openTemiblesDlcInfo() {
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#dd8844;text-align:center;margin-top:0;">☠️ Los Temibles del Yermo</h2>
+    <p style="text-align:center;font-size:11px;color:#8d9880;margin:0 0 8px 0;">Expansión · Wasteland</p>
+    <div class="item" style="border-color:#dd8844;font-size:12px;color:#8d9880;line-height:1.45;">
+      <p style="color:var(--txt);">Hay facciones que izan banderas y otras que solo cuelgan <b>carteles de “se busca”</b>. En los márgenes del mapa, dos gremios se reparten el trabajo sucio del Yermo: cobrar recompensas… y cazar lo que ya no es humano.</p>
+      <p>Los <b style="color:#dd8844;">Cazarrecompensas</b> 🎯 no hacen política. Hacen <b>contratos</b>. Cada cartel nombra a un objetivo humano concreto —asesinos, traficantes, desertores— oculto en una de las <b>localidades únicas</b> del mapa. Encuéntralo, elimínalo y cobra en el Gremio. El tablero ofrece hasta 6 contratos y se renueva cada 7 días; solo puedes llevar 3 activos a la vez.</p>
+      <p>Los <b style="color:#88aa44;">Cazadores</b> 🏹 persiguen otra clase de presa: necrófagos, supermutantes, bestias irradiadas… cada una con nombre propio. Pueden aparecer dentro de localidades o al azar en el Yermo. Misma regla de tablero y de contratos activos.</p>
+      <p><b style="color:#dd8844;">Cazarrecompensas</b> — Contratos de humanos en localidades únicas. Tienda de armas y atuendos de caza. Base con médico, casa y viaje rápido.</p>
+      <p><b style="color:#88aa44;">Cazadores</b> — Contratos de mutantes y fauna. Tienda exclusiva. Base igual que el resto de facciones.</p>
+      <p style="color:#dd8844;margin-bottom:0;">Mapa: Gremio de Cazarrecompensas 🎯 <b>[-9, -14]</b> · Logia de los Cazadores 🏹 <b>[+17, -14]</b></p>
+    </div>
+    <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
+    <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+
 function openSpiesDlcInfo() {
   document.getElementById('modal-body').innerHTML = `
     <h2 style="color:#66cc99;text-align:center;margin-top:0;">🕵 Espías entre nosotros</h2>
@@ -6040,7 +6428,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.5.5</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.7.7</div>
   `;
   m.classList.add('show');
 }
@@ -6799,6 +7187,922 @@ function renderFollowersMissionsUI() {
   return html;
 }
 
+
+function hasPerk(id) {
+  return !!(P.perks && P.perks[id]);
+}
+function renderTrophyExchangeUI(sett, fcol) {
+  let fid = sett.faction;
+  let isReg = fid === 'regulators';
+  let itemId = isReg ? 2820 : 2821;
+  let itemName = isReg ? 'Dedo de justicia' : 'Oreja';
+  let icon = isReg ? '⚖' : '🗡';
+  let n = countItemsByBaseId(itemId);
+  let html = `<h3 style="color:${fcol};font-size:13px;">${icon} Intercambio</h3>
+    <p style="font-size:11px;color:#8d9880;">Canjea ${itemName}s: <b>10 chapas</b> + <b>10 reputación</b> por unidad.</p>
+    <div class="item" style="border-color:${fcol};">
+      <b style="color:${fcol};">${itemName}</b><br>
+      <span style="font-size:12px;">En inventario: <b>${n}</b></span><br>
+      <button style="margin-top:8px;width:100%;" ${n < 1 ? 'disabled' : ''} onclick="sellTrophyUI('${fid}')">INTERCAMBIAR…</button>
+    </div>`;
+  return html;
+}
+function sellTrophyUI(fid) {
+  let isReg = fid === 'regulators';
+  let itemId = isReg ? 2820 : 2821;
+  let itemName = isReg ? 'Dedo de justicia' : 'Oreja';
+  let n = countItemsByBaseId(itemId);
+  if (n < 1) { logMsg('No tienes ' + itemName + '.'); return; }
+  openQtyPad(n, (isReg ? '⚖ ' : '🗡 ') + 'Intercambiar ' + itemName, function(qty) {
+    confirmSellTrophy(fid, qty);
+  });
+  setTimeout(() => {
+    let p = document.querySelector('#modal-body p');
+    if (p) p.innerHTML = 'Tienes <b>' + n + '</b>. Cada una: <span style="color:#e05050;">10 chapas</span> + 10 rep.';
+    let btn = document.getElementById('qty-confirm-btn');
+    if (btn) { btn.textContent = 'Intercambiar'; btn.style.background = (isReg ? '#5577cc' : '#aa4455'); }
+  }, 0);
+}
+function confirmSellTrophy(fid, qty) {
+  let isReg = fid === 'regulators';
+  let itemId = isReg ? 2820 : 2821;
+  let itemName = isReg ? 'Dedo de justicia' : 'Oreja';
+  let n = countItemsByBaseId(itemId);
+  qty = Math.min(n, Math.max(1, parseInt(qty, 10) || 0));
+  if (qty < 1) return;
+  removeItemsByBaseId(itemId, qty);
+  let caps = qty * 10;
+  let rep = qty * 10;
+  P.caps += caps;
+  addFactionRep(fid, rep);
+  playBuySound();
+  logMsg('Intercambio: ' + qty + '× ' + itemName + ' → +' + caps + ' chapas, +' + rep + ' rep.');
+  updateStats();
+  let sett = SETTLEMENTS.find(s => s.faction === fid);
+  if (sett) renderSettlementUI(sett.id, 'missions');
+}
+
+
+// ===== CARAVANAS CRIMSON =====
+function ensureCrimson() {
+  if (!P.crimsonEscort) P.crimsonEscort = { active: null, pending: [], board: [], lastBoardHour: -9999 };
+  if (!Array.isArray(P.crimsonEscort.pending)) P.crimsonEscort.pending = [];
+  if (!Array.isArray(P.crimsonEscort.board)) P.crimsonEscort.board = [];
+  if (!P.crimsonCards) {
+    // colección: mapa id -> qty; mazo activo: array de 30 ids
+    P.crimsonCards = { collection: {}, deck: [] };
+    initStarterCrimsonDeck();
+  }
+  if (!P.crimsonCards.collection) P.crimsonCards.collection = {};
+  if (!Array.isArray(P.crimsonCards.deck)) P.crimsonCards.deck = [];
+  if (window._CRIMSON_CARD_DB && !window._CRIMSON_CARD_DB._balanced) window._CRIMSON_CARD_DB = null;
+  buildCrimsonCardDB();
+  window._CRIMSON_CARD_DB = null; // regenerar DB (1000 cartas)
+  buildCrimsonCardDB();
+  let first = P.crimsonCards.deck[0];
+  if (!P.crimsonCards.deck.length || !getCrimsonCard(first)) {
+    P.crimsonCards.collection = {};
+    P.crimsonCards.deck = [];
+    initStarterCrimsonDeck();
+  }
+}
+
+
+const CRIMSON_SUITS = ['♣','♠','♦','♥'];
+const CRIMSON_RANK_ORDER = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const CRIMSON_RANK_VAL = { A:1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, J:11, Q:12, K:13 };
+const CRIMSON_RARITY = {
+  common:    { name: 'Común',      plural: 'Comunes',      color: '#9aa0a6', border: '#666' },
+  rare:      { name: 'Rara',       plural: 'Raras',        color: '#4ea1ff', border: '#2a7fd4' },
+  epic:      { name: 'Épica',      plural: 'Épicas',       color: '#b388ff', border: '#7c4dff' },
+  legendary: { name: 'Legendaria', plural: 'Legendarias',  color: '#ffd54f', border: '#c9a227' }
+};
+// Habilidades: se aplican al calcular el valor del carril
+const CRIMSON_ABILITIES = {
+  none:        { name: '', desc: '' },
+  boost2:      { name: 'Refuerzo', desc: '+2 al valor de esta carta' },
+  boost3:      { name: 'Impulso', desc: '+3 al valor de esta carta' },
+  boost5:      { name: 'Potencia', desc: '+5 al valor de esta carta' },
+  boost8:      { name: 'Fuerza', desc: '+8 al valor de esta carta' },
+  double:      { name: 'Doble', desc: 'Esta carta vale el doble' },
+  lane2:       { name: 'Apoyo', desc: '+2 a todo el carril' },
+  lane3:       { name: 'Mando', desc: '+3 a todo el carril' },
+  lane5:       { name: 'Dominio', desc: '+5 a todo el carril' },
+  penal2:      { name: 'Hostigar', desc: '-2 al carril rival del mismo palo' },
+  penal4:      { name: 'Sabotaje', desc: '-4 al carril rival del mismo palo' },
+  penal6:      { name: 'Devastar', desc: '-6 al carril rival del mismo palo' },
+  copy_high:   { name: 'Espejo', desc: 'Copia el valor base de tu carta más alta del carril' },
+  floor10:     { name: 'Mínimo 10', desc: 'Si esta carta vale menos de 10, cuenta como 10' },
+  ace_high:    { name: 'As alto', desc: 'Los Ases de este carril valen 14' },
+  face_bonus:  { name: 'Corte', desc: '+4 si es J, Q o K' },
+  pair_syn:    { name: 'Pareja', desc: '+3 si hay otra carta del mismo rango en el carril' },
+  full_lane:   { name: 'Completo', desc: '+6 si el carril tiene 4 cartas' },
+  anti_red:    { name: 'Anti-rojo', desc: '+5 si el carril rival tiene cartas rojas' },
+  anti_black:  { name: 'Anti-negro', desc: '+5 si el carril rival tiene cartas negras' },
+  legend_aura: { name: 'Aura', desc: '+2 a cada carta tuya del carril' },
+  thrice:      { name: 'Triple', desc: 'Esta carta vale el triple' },
+  drain:       { name: 'Drenar', desc: '-3 al rival y +3 a ti en este carril' }
+};
+
+function buildCrimsonCardDB() {
+  if (window._CRIMSON_CARD_DB && window._CRIMSON_CARD_DB.length >= 1000 && window._CRIMSON_CARD_DB._balanced) {
+    return window._CRIMSON_CARD_DB;
+  }
+  let db = [];
+  let n = 0;
+  const rareAbs = ['boost2','boost3','lane2','penal2','face_bonus','pair_syn','floor10'];
+  const epicAbs = ['boost5','double','lane3','penal4','ace_high','full_lane','anti_red','anti_black','copy_high'];
+  const legAbs = ['boost8','thrice','lane5','penal6','legend_aura','drain'];
+  // Por cada palo+rango: 1 común + mismas variantes de habilidad
+  // 10 raras + 6 épicas + 3 legendarias = 19 habilidades por cara
+  // 52 + 52*19 = 1040 cartas (equilibrado)
+  const RARE_N = 10, EPIC_N = 6, LEG_N = 3;
+  function add(s, rank, rarity, ability) {
+    n++;
+    let id = 'cc' + String(n).padStart(4, '0');
+    let val = CRIMSON_RANK_VAL[rank] || 1;
+    let ab = ability || 'none';
+    db.push({
+      id: id, s: s, rank: String(rank), r: val, rarity: rarity,
+      ability: ab,
+      abilityName: (CRIMSON_ABILITIES[ab] || {}).name || '',
+      abilityDesc: (CRIMSON_ABILITIES[ab] || {}).desc || ''
+    });
+  }
+  CRIMSON_SUITS.forEach(function(s) {
+    CRIMSON_RANK_ORDER.forEach(function(rank) {
+      add(s, rank, 'common', 'none');
+      for (let i = 0; i < RARE_N; i++) add(s, rank, 'rare', rareAbs[i % rareAbs.length]);
+      for (let i = 0; i < EPIC_N; i++) add(s, rank, 'epic', epicAbs[i % epicAbs.length]);
+      for (let i = 0; i < LEG_N; i++) add(s, rank, 'legendary', legAbs[i % legAbs.length]);
+    });
+  });
+  db._balanced = true;
+  window._CRIMSON_CARD_DB = db;
+  return db;
+}
+function getCrimsonCard(id) {
+  let db = buildCrimsonCardDB();
+  return db.find(c => c.id === id) || null;
+}
+function allCrimsonCardIds() {
+  return buildCrimsonCardDB().map(c => c.id);
+}
+function parseCardId(id) {
+  let c = getCrimsonCard(id);
+  if (c) return Object.assign({}, c);
+  // legacy fallback ♠2 etc.
+  if (typeof id === 'string' && id.length >= 2 && '♣♠♦♥'.includes(id.charAt(0))) {
+    let s = id.charAt(0);
+    let rank = id.slice(1);
+    let val = CRIMSON_RANK_VAL[rank] || parseInt(rank, 10) || 1;
+    return { id: id, s: s, rank: rank, r: val, rarity: 'common', ability: 'none', abilityName: '', abilityDesc: '' };
+  }
+  return { id: id, s: '♣', rank: 'A', r: 1, rarity: 'common', ability: 'none' };
+}
+function cardId(s, r) { return s + r; } // legacy
+
+function initStarterCrimsonDeck() {
+  if (!P.crimsonCards) P.crimsonCards = { collection: {}, deck: [] };
+  let db = buildCrimsonCardDB();
+  // starter: 30 common cards
+  let commons = db.filter(c => c.rarity === 'common').map(c => c.id);
+  for (let i = commons.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let tmp = commons[i]; commons[i] = commons[j]; commons[j] = tmp;
+  }
+  let deck = commons.slice(0, 30);
+  deck.forEach(id => {
+    P.crimsonCards.collection[id] = (P.crimsonCards.collection[id] || 0) + 1;
+  });
+  P.crimsonCards.deck = deck.slice();
+}
+
+function crimsonCardHtml(c, small) {
+  if (typeof c === 'string') c = parseCardId(c);
+  if (!c || !c.s) return '';
+  let red = (c.s === '♥' || c.s === '♦');
+  let ink = red ? '#c00' : '#111';
+  let rar = CRIMSON_RARITY[c.rarity] || CRIMSON_RARITY.common;
+  let label = c.rank || (c.r === 1 ? 'A' : String(c.r));
+  let w = small ? '34px' : '46px';
+  let h = small ? '46px' : '62px';
+  let fs = small ? '11px' : '14px';
+  let fs2 = small ? '13px' : '17px';
+  let star = c.rarity === 'legendary' ? '★' : (c.rarity === 'epic' ? '◆' : (c.rarity === 'rare' ? '●' : ''));
+  return '<div title="' + (c.abilityName ? (c.abilityName + ': ' + c.abilityDesc) : rar.name) +
+    '" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;' +
+    'width:' + w + ';height:' + h + ';min-width:' + w + ';background:#fff;color:' + ink +
+    ';border-radius:5px;padding:2px;margin:1px;font-weight:bold;font-size:' + fs +
+    ';box-shadow:0 1px 3px rgba(0,0,0,0.45);border:2px solid ' + rar.border +
+    ';box-sizing:border-box;position:relative;">' +
+    '<div style="line-height:1;">' + label + '</div>' +
+    '<div style="font-size:' + fs2 + ';line-height:1;">' + c.s + '</div>' +
+    (star ? '<div style="font-size:8px;color:' + rar.color + ';line-height:1;">' + star + '</div>' : '') +
+    '</div>';
+}
+
+function crimsonLaneGrid(cards, small) {
+  // rejilla 2x2
+  let cells = [0,1,2,3].map(i => {
+    if (cards[i]) return crimsonCardHtml(cards[i], small);
+    return '<div style="width:' + (small?'34px':'46px') + ';height:' + (small?'46px':'62px') +
+      ';margin:1px;border:1px dashed #333;border-radius:4px;opacity:0.35;"></div>';
+  });
+  return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;justify-items:center;max-width:100px;margin:0 auto;">' +
+    cells.join('') + '</div>';
+}
+
+function cardEffectiveValue(c, laneCards, enemyLane) {
+  if (!c) return 0;
+  let v = c.r || CRIMSON_RANK_VAL[c.rank] || 1;
+  let ab = c.ability || 'none';
+  if (ab === 'boost2') v += 2;
+  if (ab === 'boost3') v += 3;
+  if (ab === 'boost5') v += 5;
+  if (ab === 'boost8') v += 8;
+  if (ab === 'double') v *= 2;
+  if (ab === 'thrice') v *= 3;
+  if (ab === 'floor10' && v < 10) v = 10;
+  if (ab === 'face_bonus' && (c.rank === 'J' || c.rank === 'Q' || c.rank === 'K')) v += 4;
+  if (ab === 'pair_syn') {
+    let same = (laneCards || []).filter(x => x && x.rank === c.rank).length;
+    if (same >= 2) v += 3;
+  }
+  if (ab === 'ace_high' && (c.rank === 'A' || c.r === 1)) v = 14;
+  return v;
+}
+function caravanLaneSum(cards, enemyCards) {
+  cards = cards || [];
+  enemyCards = enemyCards || [];
+  let sum = 0;
+  let laneBonus = 0;
+  let enemyPenalty = 0;
+  cards.forEach(c => {
+    sum += cardEffectiveValue(c, cards, enemyCards);
+    let ab = c.ability || 'none';
+    if (ab === 'lane2') laneBonus += 2;
+    if (ab === 'lane3') laneBonus += 3;
+    if (ab === 'lane5') laneBonus += 5;
+    if (ab === 'legend_aura') laneBonus += 2 * cards.length;
+    if (ab === 'full_lane' && cards.length >= 4) laneBonus += 6;
+    if (ab === 'penal2') enemyPenalty += 2;
+    if (ab === 'penal4') enemyPenalty += 4;
+    if (ab === 'penal6') enemyPenalty += 6;
+    if (ab === 'drain') { enemyPenalty += 3; laneBonus += 3; }
+    if (ab === 'anti_red' && enemyCards.some(x => x.s === '♥' || x.s === '♦')) laneBonus += 5;
+    if (ab === 'anti_black' && enemyCards.some(x => x.s === '♠' || x.s === '♣')) laneBonus += 5;
+    if (ab === 'copy_high') {
+      let maxB = Math.max.apply(null, cards.map(x => x.r || 0).concat([0]));
+      sum += Math.max(0, maxB - (c.r || 0));
+    }
+  });
+  return { sum: sum + laneBonus, penalty: enemyPenalty };
+}
+function caravanLaneFinal(playerCards, enemyCards) {
+  let p = caravanLaneSum(playerCards || [], enemyCards || []);
+  let e = caravanLaneSum(enemyCards || [], playerCards || []);
+  if (typeof p === 'number') p = { sum: p || 0, penalty: 0 };
+  if (typeof e === 'number') e = { sum: e || 0, penalty: 0 };
+  let ps = (p && typeof p.sum === 'number' && !isNaN(p.sum)) ? p.sum : 0;
+  let es = (e && typeof e.sum === 'number' && !isNaN(e.sum)) ? e.sum : 0;
+  let pp = (p && typeof p.penalty === 'number' && !isNaN(p.penalty)) ? p.penalty : 0;
+  let ep = (e && typeof e.penalty === 'number' && !isNaN(e.penalty)) ? e.penalty : 0;
+  return { p: Math.max(0, ps - ep), e: Math.max(0, es - pp) };
+}
+
+function showCrimsonCardInfo(cardOrId, backFn) {
+  let c = typeof cardOrId === 'string' ? parseCardId(cardOrId) : cardOrId;
+  if (!c) return;
+  if (typeof backFn === 'function') window._crimsonInfoBack = backFn;
+  let rar = CRIMSON_RARITY[c.rarity] || CRIMSON_RARITY.common;
+  let red = (c.s === '♥' || c.s === '♦');
+  let hab = (c.ability && c.ability !== 'none' && c.abilityName)
+    ? ('<b style="color:' + rar.color + ';">' + c.abilityName + '</b><br><span style="font-size:12px;">' + (c.abilityDesc || '') + '</span>')
+    : '<span style="color:#8d9880;">Sin habilidad (carta común).</span>';
+  let backBtn = window._crimsonInfoBack
+    ? '<button style="width:100%;margin-top:10px;" onclick="(window._crimsonInfoBack||closeModal)()">← Atrás</button>'
+    : '<button style="width:100%;margin-top:10px;" onclick="closeModal();">← Atrás</button>';
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:#cc3333;text-align:center;margin-top:0;">Carta</h2>' +
+    '<div style="text-align:center;margin:8px 0;">' + crimsonCardHtml(c, false) + '</div>' +
+    '<div class="item" style="border-color:' + rar.border + ';">' +
+    '<b style="color:' + (red ? '#e05050' : '#d7dec9') + ';">' + (c.rank || c.r) + ' de ' + c.s + '</b><br>' +
+    '<span style="color:' + rar.color + ';">' + rar.name + '</span> · Valor base: <b>' + (c.r || CRIMSON_RANK_VAL[c.rank] || 1) + '</b><br>' +
+    '<div style="margin-top:8px;">' + hab + '</div></div>' + backBtn;
+  document.getElementById('modal').classList.add('show');
+}
+function ownedCardCount(id) {
+  ensureCrimson();
+  return P.crimsonCards.collection[id] || 0;
+}
+function addCrimsonCardToCollection(id, qty) {
+  ensureCrimson();
+  qty = qty || 1;
+  P.crimsonCards.collection[id] = (P.crimsonCards.collection[id] || 0) + qty;
+}
+function openCrimsonDeckUI(sub, rarFilter) {
+  ensureCrimson();
+  sub = sub || 'main';
+  if (rarFilter) P.crimsonRarFilter = rarFilter;
+  if (!P.crimsonRarFilter) P.crimsonRarFilter = 'common';
+  window._crimsonDeckSub = sub;
+  window._crimsonInfoBack = function() {
+    openCrimsonDeckUI(window._crimsonDeckSub || 'collection', P.crimsonRarFilter);
+  };
+  let fcol = '#cc3333';
+  let html = '';
+  function rarTabs(activeSub) {
+    let h = '<div class="subtabs" style="flex-wrap:wrap;margin:6px 0;">';
+    ['common','rare','epic','legendary'].forEach(function(rar) {
+      let info = CRIMSON_RARITY[rar];
+      let act = (P.crimsonRarFilter === rar);
+      h += '<button class="' + (act ? 'active' : '') + '" style="' +
+        (act ? 'border-color:' + info.color + ';color:' + info.color + ';' : '') +
+        '" onclick="openCrimsonDeckUI(\'' + activeSub + '\',\'' + rar + '\')">' + info.plural + '</button>';
+    });
+    h += '</div>';
+    return h;
+  }
+  if (sub === 'main') {
+    html = '<h2 style="color:' + fcol + ';text-align:center;margin-top:0;">🃏 Mazo Crimson</h2>' +
+      '<p style="font-size:12px;color:#8d9880;text-align:center;">Mazo de juego: ' + P.crimsonCards.deck.length + '/30</p>' +
+      '<button style="width:100%;margin:4px 0;background:' + fcol + ';color:#fff;" onclick="openCrimsonDeckUI(\'edit\')">Editar mazo</button>' +
+      '<button style="width:100%;margin:4px 0;" onclick="openCrimsonDeckUI(\'collection\')">Ver colección</button>' +
+      '<button style="width:100%;margin:4px 0;" onclick="openCrimsonDeckUI(\'packs\')">Abrir sobre</button>' +
+      '<button style="width:100%;margin-top:8px;" onclick="closeModal();">Cerrar</button>';
+  } else if (sub === 'edit') {
+    let rar = P.crimsonRarFilter || 'common';
+    let rarInfo = CRIMSON_RARITY[rar];
+    html = '<h2 style="color:' + fcol + ';text-align:center;margin-top:0;">Editar mazo (' + P.crimsonCards.deck.length + '/30)</h2>' +
+      '<p style="font-size:11px;color:#8d9880;">Mazo: toca para quitar. Abajo: info / + añadir.</p>' +
+      '<h3 style="font-size:12px;color:' + fcol + ';">Mazo actual</h3><div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;">';
+    html += '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;justify-items:center;width:100%;">';
+    P.crimsonCards.deck.forEach(function(id, i) {
+      html += '<span style="cursor:pointer;" onclick="removeFromCrimsonDeck(' + i + ')">' + crimsonCardHtml(id, true) + '</span>';
+    });
+    html += '</div></div>';
+    html += rarTabs('edit');
+    html += '<h3 style="font-size:12px;color:' + rarInfo.color + ';">' + rarInfo.plural + ' libres</h3>';
+    let freeCards = [];
+    allCrimsonCardIds().forEach(function(id) {
+      let c = parseCardId(id);
+      if (c.rarity !== rar) return;
+      let total = ownedCardCount(id);
+      let inDeck = P.crimsonCards.deck.filter(function(x){ return x === id; }).length;
+      let free = total - inDeck;
+      if (free > 0) freeCards.push({ id: id, c: c, free: free });
+    });
+    freeCards.sort(function(a, b) {
+      let sa = CRIMSON_SUITS.indexOf(a.c.s) - CRIMSON_SUITS.indexOf(b.c.s);
+      if (sa !== 0) return sa;
+      return CRIMSON_RANK_ORDER.indexOf(a.c.rank) - CRIMSON_RANK_ORDER.indexOf(b.c.rank);
+    });
+    if (!freeCards.length) {
+      html += '<p style="font-size:12px;color:#8d9880;">No hay cartas libres de esta rareza.</p>';
+    } else {
+      CRIMSON_SUITS.forEach(function(suit) {
+        let group = freeCards.filter(function(fc){ return fc.c.s === suit; });
+        if (!group.length) return;
+        html += '<div style="font-size:11px;color:#8d9880;margin:6px 0 2px;border-top:1px solid #333;padding-top:4px;">' + suit + ' · A→K</div>';
+        html += '<div style="display:flex;flex-wrap:wrap;justify-content:center;">';
+        group.forEach(function(fc) {
+          html += '<div style="text-align:center;margin:2px;">' +
+            '<span style="cursor:pointer;" onclick="showCrimsonCardInfo(\'' + fc.id + '\')">' + crimsonCardHtml(fc.c, true) + '</span>' +
+            '<button style="display:block;width:100%;font-size:10px;padding:2px;margin-top:2px;" onclick="addToCrimsonDeck(\'' + fc.id + '\')">+ (' + fc.free + ')</button></div>';
+        });
+        html += '</div>';
+      });
+    }
+    html += '<button style="width:100%;margin-top:8px;" onclick="openCrimsonDeckUI(\'main\')">← Atrás</button>';
+  } else if (sub === 'collection') {
+    let rar = P.crimsonRarFilter || 'common';
+    let rarInfo = CRIMSON_RARITY[rar];
+    let total = allCrimsonCardIds().filter(function(id){ return parseCardId(id).rarity === rar; }).length;
+    let owned = allCrimsonCardIds().filter(function(id){
+      let c = parseCardId(id);
+      return c.rarity === rar && ownedCardCount(id) > 0;
+    }).length;
+    html = '<h2 style="color:' + fcol + ';text-align:center;margin-top:0;">Colección</h2>' +
+      rarTabs('collection') +
+      '<p style="font-size:11px;color:#8d9880;">' + rarInfo.plural + ': ' + owned + '/' + total + ' · Orden A→K · Toca para info</p>';
+    CRIMSON_SUITS.forEach(function(suit) {
+      let list = allCrimsonCardIds().map(parseCardId).filter(function(c){ return c.rarity === rar && c.s === suit; });
+      list.sort(function(a, b) {
+        return CRIMSON_RANK_ORDER.indexOf(a.rank) - CRIMSON_RANK_ORDER.indexOf(b.rank);
+      });
+      if (!list.length) return;
+      html += '<div style="font-size:11px;color:#8d9880;margin:8px 0 4px;border-top:1px dashed #444;padding-top:6px;"><b style="color:#d7dec9;">' + suit + '</b> · A → K</div>';
+      CRIMSON_RANK_ORDER.forEach(function(rank) {
+        let rankCards = list.filter(function(c){ return c.rank === rank; });
+        if (!rankCards.length) return;
+        html += '<div style="display:flex;flex-wrap:wrap;align-items:center;margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid #1a1f16;">';
+        html += '<span style="font-size:10px;color:#65705a;width:22px;">' + rank + '</span>';
+        rankCards.forEach(function(c) {
+          let n = ownedCardCount(c.id);
+          if (n > 0) {
+            html += '<span style="cursor:pointer;margin:1px;" onclick="showCrimsonCardInfo(\'' + c.id + '\')">' + crimsonCardHtml(c, true) + '</span>';
+          } else {
+            html += '<span style="opacity:0.18;filter:grayscale(1);margin:1px;">' + crimsonCardHtml(c, true) + '</span>';
+          }
+        });
+        html += '</div>';
+      });
+    });
+    html += '<button style="width:100%;margin-top:8px;" onclick="openCrimsonDeckUI(\'main\')">← Atrás</button>';
+  } else if (sub === 'packs') {
+    let p1 = countItemsByBaseId(2860), p3 = countItemsByBaseId(2861), p5 = countItemsByBaseId(2862);
+    html = '<h2 style="color:' + fcol + ';text-align:center;margin-top:0;">Abrir sobres</h2>' +
+      '<p style="font-size:11px;color:#8d9880;">Inventario → Otros · 1c×' + p1 + ' · 3c×' + p3 + ' · 5c×' + p5 + '</p>' +
+      '<div class="item"><b>Sobre 1 carta</b><br><button style="margin-top:6px;" ' + (p1<1?'disabled':'') + ' onclick="openCrimsonPack(2860)">Abrir</button></div>' +
+      '<div class="item"><b>Sobre 3 cartas</b><br><button style="margin-top:6px;" ' + (p3<1?'disabled':'') + ' onclick="openCrimsonPack(2861)">Abrir</button></div>' +
+      '<div class="item"><b>Sobre 5 cartas</b><br><button style="margin-top:6px;" ' + (p5<1?'disabled':'') + ' onclick="openCrimsonPack(2862)">Abrir</button></div>' +
+      '<button style="width:100%;margin-top:8px;" onclick="openCrimsonDeckUI(\'main\')">← Atrás</button>';
+  }
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+function addToCrimsonDeck(id) {
+  ensureCrimson();
+  if (P.crimsonCards.deck.length >= 30) { logMsg('El mazo ya tiene 30 cartas.'); return; }
+  let total = ownedCardCount(id);
+  let inDeck = P.crimsonCards.deck.filter(x => x === id).length;
+  if (inDeck >= total) { logMsg('No tienes copias libres de esa carta.'); return; }
+  P.crimsonCards.deck.push(id);
+  openCrimsonDeckUI('edit');
+}
+function removeFromCrimsonDeck(idx) {
+  ensureCrimson();
+  if (idx < 0 || idx >= P.crimsonCards.deck.length) return;
+  P.crimsonCards.deck.splice(idx, 1);
+  openCrimsonDeckUI('edit');
+}
+function openCrimsonPack(itemId) {
+  ensureCrimson();
+  let base = getItemBase(itemId);
+  let n = (base && base.crimsonPack) || 1;
+  if (!removeItemsByBaseId(itemId, 1)) { logMsg('No tienes ese sobre.'); return; }
+  let db = buildCrimsonCardDB();
+  let got = [];
+  for (let i = 0; i < n; i++) {
+    let roll = Math.random();
+    let pool;
+    if (roll < 0.02) pool = db.filter(c => c.rarity === 'legendary');
+    else if (roll < 0.10) pool = db.filter(c => c.rarity === 'epic');
+    else if (roll < 0.35) pool = db.filter(c => c.rarity === 'rare');
+    else pool = db.filter(c => c.rarity === 'common');
+    if (!pool.length) pool = db;
+    let card = pool[Math.floor(Math.random() * pool.length)];
+    addCrimsonCardToCollection(card.id);
+    got.push(card);
+  }
+  window._lastPackGot = got;
+  renderCrimsonPackResult();
+  logMsg('Sobre Crimson: +' + n + ' carta(s).');
+}
+function renderCrimsonPackResult() {
+  let got = window._lastPackGot || [];
+  window._crimsonInfoBack = function() { renderCrimsonPackResult(); };
+  let cardsVis = got.map(function(c) {
+    let rar = CRIMSON_RARITY[c.rarity];
+    return '<div style="text-align:center;margin:4px;cursor:pointer;" onclick="showCrimsonCardInfo(\'' + c.id + '\')">' +
+      crimsonCardHtml(c, false) +
+      '<div style="font-size:10px;color:' + rar.color + ';">' + rar.name + '</div>' +
+      (c.abilityName ? '<div style="font-size:9px;color:#8d9880;max-width:70px;">' + c.abilityName + '</div>' : '') +
+      '</div>';
+  }).join('');
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:#cc3333;text-align:center;margin-top:0;">📦 Sobre abierto</h2>' +
+    '<p style="text-align:center;font-size:12px;color:#8d9880;">Toca una carta para ver su información.</p>' +
+    '<div style="display:flex;flex-wrap:wrap;justify-content:center;">' + cardsVis + '</div>' +
+    '<button style="width:100%;margin-top:10px;" onclick="openCrimsonDeckUI(\'packs\')">← Atrás</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+function crimsonShopLevel() {
+  let rep = getFactionRep('crimson');
+  let levels = (FACTIONS.crimson && FACTIONS.crimson.shopLevels) || [100,250,500,750,1000];
+  let lvl = 0;
+  for (let i = 0; i < levels.length; i++) if (rep >= levels[i]) lvl = i + 1;
+  return lvl;
+}
+function tickCrimsonEscort() {
+  ensureCrimson();
+  let a = P.crimsonEscort.active;
+  if (!a) return;
+  let hours = P.worldHours || 0;
+  if (hours > a.deadlineHour) {
+    logMsg('Escolta Crimson fallida: se acabó el tiempo hacia ' + (a.destName || 'destino') + '.');
+    P.crimsonEscort.active = null;
+  }
+}
+function refreshCrimsonBoard(force) {
+  ensureCrimson();
+  let hours = P.worldHours || 0;
+  if (!force && P.crimsonEscort.board.length && (hours - (P.crimsonEscort.lastBoardHour || 0)) < 48) {
+    return P.crimsonEscort.board;
+  }
+  let list = [];
+  let used = new Set();
+  let pool = (typeof UNIQUE_LOCATIONS !== 'undefined' ? UNIQUE_LOCATIONS.slice() : []);
+  // también asentamientos lejanos
+  SETTLEMENTS.forEach(s => {
+    if (s.faction === 'crimson') return;
+    pool.push({ id: 's_' + s.id, name: s.name, x: s.x, y: s.y });
+  });
+  for (let i = 0; i < 5; i++) {
+    let loc = pool[Math.floor(Math.random() * pool.length)];
+    if (!loc || used.has(loc.id)) { i--; continue; }
+    used.add(loc.id);
+    let dist = Math.abs((loc.x || 0) - (-6)) + Math.abs((loc.y || 0) - (-18));
+    if (dist < 4) dist = 4 + Math.floor(Math.random() * 6);
+    let hoursLimit = 12 + Math.floor(dist * 1.5) + Math.floor(Math.random() * 8);
+    let caps = 80 + dist * 25 + Math.floor(Math.random() * 60);
+    let rep = Math.min(30, Math.max(10, 8 + Math.floor(dist * 0.9)));
+    list.push({
+      id: 'esc_' + Date.now() + '_' + i,
+      destId: loc.id,
+      destName: loc.name,
+      destX: loc.x,
+      destY: loc.y,
+      dist: dist,
+      hoursLimit: hoursLimit,
+      caps: caps,
+      rep: rep
+    });
+  }
+  P.crimsonEscort.board = list;
+  P.crimsonEscort.lastBoardHour = hours;
+  return list;
+}
+function acceptCrimsonEscort(escId) {
+  ensureCrimson();
+  tickCrimsonEscort();
+  if (P.crimsonEscort.active) {
+    logMsg('Ya tienes una escolta activa. Termínala o espera a que expire.');
+    return;
+  }
+  let board = P.crimsonEscort.board || [];
+  let e = board.find(x => x.id === escId);
+  if (!e) return;
+  P.crimsonEscort.board = board.filter(x => x.id !== escId);
+  P.crimsonEscort.active = {
+    id: e.id,
+    destName: e.destName,
+    destX: e.destX,
+    destY: e.destY,
+    caps: e.caps,
+    rep: e.rep,
+    startHour: P.worldHours || 0,
+    deadlineHour: (P.worldHours || 0) + e.hoursLimit,
+    hoursLimit: e.hoursLimit
+  };
+  logMsg('Escolta aceptada → ' + e.destName + ' [' + (e.destX>=0?'+':'') + e.destX + ', ' + (e.destY>=0?'+':'') + e.destY + '] en ' + e.hoursLimit + ' h.');
+  renderSettlementUI('crimson_outpost', 'missions');
+}
+function finishCrimsonEscort() {
+  ensureCrimson();
+  tickCrimsonEscort();
+  let a = P.crimsonEscort.active;
+  if (!a) { logMsg('No hay escolta activa.'); return; }
+  if (P.x !== a.destX || P.y !== a.destY) {
+    logMsg('Debes estar en el destino: ' + a.destName + ' [' + (a.destX>=0?'+':'') + a.destX + ', ' + (a.destY>=0?'+':'') + a.destY + ']');
+    return;
+  }
+  if ((P.worldHours || 0) > a.deadlineHour) {
+    logMsg('El plazo ya expiró.');
+    P.crimsonEscort.active = null;
+    return;
+  }
+  P.crimsonEscort.pending.push({
+    id: a.id,
+    label: 'Escolta a ' + a.destName,
+    caps: a.caps,
+    rep: a.rep
+  });
+  logMsg('Escolta completada. Recompensa pendiente: ' + a.caps + ' chapas, +' + a.rep + ' rep. Reclámala en el Puesto Crimson.');
+  P.crimsonEscort.active = null;
+  updateStats();
+  if (P.location && P.location.settlementId === 'crimson_outpost') renderSettlementUI('crimson_outpost', 'missions');
+}
+function claimCrimsonPending(pid) {
+  ensureCrimson();
+  let idx = P.crimsonEscort.pending.findIndex(p => p.id === pid);
+  if (idx < 0) return;
+  // solo en el puesto
+  let sett = SETTLEMENTS.find(s => s.id === 'crimson_outpost');
+  if (!P.location || P.location.settlementId !== 'crimson_outpost') {
+    logMsg('Reclama las recompensas en el Puesto Crimson.');
+    return;
+  }
+  let p = P.crimsonEscort.pending[idx];
+  P.crimsonEscort.pending.splice(idx, 1);
+  P.caps += p.caps || 0;
+  addFactionRep('crimson', p.rep || 0);
+  playBuySound();
+  logMsg('Recompensa de escolta: +' + p.caps + ' chapas, +' + p.rep + ' rep.');
+  updateStats();
+  renderSettlementUI('crimson_outpost', 'missions');
+}
+function claimAllCrimsonPending() {
+  ensureCrimson();
+  if (!P.location || P.location.settlementId !== 'crimson_outpost') {
+    logMsg('Reclama en el Puesto Crimson.');
+    return;
+  }
+  let list = P.crimsonEscort.pending || [];
+  if (!list.length) return;
+  let caps = 0, rep = 0;
+  list.forEach(p => { caps += p.caps || 0; rep += p.rep || 0; });
+  P.crimsonEscort.pending = [];
+  P.caps += caps;
+  addFactionRep('crimson', rep);
+  playBuySound();
+  logMsg('Reclamadas todas las escoltas: +' + caps + ' chapas, +' + rep + ' rep.');
+  updateStats();
+  renderSettlementUI('crimson_outpost', 'missions');
+}
+function renderCrimsonEscortUI(sett, fcol) {
+  ensureCrimson();
+  tickCrimsonEscort();
+  refreshCrimsonBoard(false);
+  let hours = P.worldHours || 0;
+  let sub = P.crimsonEscortSub || 'board';
+  let html = '<div class="subtabs">';
+  html += '<button class="' + (sub==='board'?'active':'') + '" onclick="P.crimsonEscortSub=\'board\';renderSettlementUI(\'' + sett.id + '\',\'missions\')">Tablero</button>';
+  html += '<button class="' + (sub==='rewards'?'active':'') + '" onclick="P.crimsonEscortSub=\'rewards\';renderSettlementUI(\'' + sett.id + '\',\'missions\')">Recompensas</button>';
+  html += '</div>';
+
+  if (sub === 'rewards') {
+    let pend = P.crimsonEscort.pending || [];
+    html += '<h3 style="color:' + fcol + ';font-size:13px;">💰 Recompensas de escolta</h3>';
+    html += '<p style="font-size:11px;color:#8d9880;">Reclama aquí las escoltas completadas (puedes acumularlas).</p>';
+    if (!pend.length) {
+      html += '<p style="font-size:12px;color:#8d9880;">Ninguna recompensa pendiente.</p>';
+    } else {
+      let tc = 0, tr = 0;
+      pend.forEach(p => { tc += p.caps||0; tr += p.rep||0; });
+      html += '<div class="item" style="border-color:var(--gold);"><b>Total acumulado</b><br>' + tc + ' chapas · +' + tr + ' rep<br>';
+      html += '<button style="margin-top:6px;width:100%;background:var(--accent);color:#111;font-weight:bold;" onclick="claimAllCrimsonPending()">RECLAMAR TODAS</button></div>';
+      pend.forEach(p => {
+        html += '<div class="item"><b>' + p.label + '</b><br><span style="font-size:11px;">' + p.caps + ' chapas · +' + p.rep + ' rep</span><br>';
+        html += '<button style="margin-top:4px;" onclick="claimCrimsonPending(\'' + p.id + '\')">Reclamar</button></div>';
+      });
+    }
+    return html;
+  }
+
+  html += '<h3 style="color:' + fcol + ';font-size:13px;">🐪 Escoltar</h3>';
+  html += '<p style="font-size:11px;color:#8d9880;">Máx. 1 escolta activa. Llega al destino y pulsa Finalizar (también en Misiones o en el mapa).</p>';
+  let a = P.crimsonEscort.active;
+  if (a) {
+    let left = Math.max(0, a.deadlineHour - hours);
+    let here = (P.x === a.destX && P.y === a.destY);
+    html += '<div class="item" style="border-color:' + fcol + ';">';
+    html += '<b style="color:' + fcol + ';">En curso: ' + a.destName + '</b><br>';
+    html += '<span style="font-size:11px;">[' + (a.destX>=0?'+':'') + a.destX + ', ' + (a.destY>=0?'+':'') + a.destY + '] · Quedan <b>' + left + ' h</b></span><br>';
+    html += '<span style="font-size:11px;">Pago: ' + a.caps + ' chapas · +' + a.rep + ' rep</span><br>';
+    if (here) {
+      html += '<button style="margin-top:6px;width:100%;background:var(--accent);color:#111;font-weight:bold;" onclick="finishCrimsonEscort()">FINALIZAR ESCOLTA</button>';
+    } else {
+      html += '<span style="font-size:11px;color:#8d9880;">Viaja al destino para finalizar</span>';
+    }
+    html += '</div>';
+  } else {
+    (P.crimsonEscort.board || []).forEach(e => {
+      html += '<div class="item" style="border-color:' + fcol + ';">';
+      html += '<b style="color:' + fcol + ';">→ ' + e.destName + '</b><br>';
+      html += '<span style="font-size:11px;">[' + (e.destX>=0?'+':'') + e.destX + ', ' + (e.destY>=0?'+':'') + e.destY + '] · Dist ~' + e.dist + ' · ' + e.hoursLimit + ' h</span><br>';
+      html += '<span style="font-size:11px;">' + e.caps + ' chapas · +' + e.rep + ' rep</span><br>';
+      html += '<button style="margin-top:6px;" onclick="acceptCrimsonEscort(\'' + e.id + '\')">ACEPTAR ESCOLTA</button>';
+      html += '</div>';
+    });
+  }
+  return html;
+}
+
+function openCrimsonCaravanGame() {
+  ensureCrimson();
+  _caravanGame = null;
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#cc3333;text-align:center;margin-top:0;">🃏 Juego de la Caravana</h2>
+    <p style="font-size:12px;color:#8d9880;">Elige apuesta, luego cara o cruz. Si aciertas, empiezas tú.</p>
+    <div class="item">
+      <b>Apuesta (chapas)</b><br>
+      <button style="width:100%;margin-top:6px;background:#cc3333;color:#fff;" onclick="crimsonBetPad()">Introducir importe…</button>
+      <p style="font-size:11px;color:#8d9880;margin-top:6px;">Tienes: <b style="color:#e05050;">${P.caps}</b> · Mazo: ${P.crimsonCards.deck.length}/30</p>
+    </div>
+    <button style="width:100%;margin-top:8px;" onclick="closeModal();">Cerrar</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+function crimsonBetPad() {
+  if (typeof openQtyPad === 'function') {
+    openQtyPad(Math.max(1, P.caps), 'Apuesta Caravana (chapas)', function(qty) {
+      qty = Math.min(P.caps, Math.max(1, parseInt(qty, 10) || 0));
+      if (qty < 1 || P.caps < qty) { logMsg('Chapas insuficientes.'); return; }
+      crimsonCoinFlip(qty);
+    });
+  } else {
+    let q = prompt('Apuesta en chapas:', '50');
+    crimsonCoinFlip(parseInt(q, 10) || 50);
+  }
+}
+function crimsonCoinFlip(bet) {
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#cc3333;text-align:center;margin-top:0;">🪙 Cara o cruz</h2>
+    <p style="text-align:center;font-size:13px;">Apuesta: <b style="color:#e05050;">${bet}</b> chapas</p>
+    <p style="text-align:center;font-size:12px;color:#8d9880;">Si aciertas, empiezas primero.</p>
+    <button style="width:100%;margin:6px 0;background:var(--gold);color:#111;font-weight:bold;" onclick="resolveCrimsonCoin(${bet},'cara')">CARA</button>
+    <button style="width:100%;margin:6px 0;background:#888;color:#111;font-weight:bold;" onclick="resolveCrimsonCoin(${bet},'cruz')">CRUZ</button>
+    <button style="width:100%;margin-top:8px;" onclick="openCrimsonCaravanGame()">Cancelar</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+function resolveCrimsonCoin(bet, choice) {
+  bet = parseInt(bet, 10) || 0;
+  if (P.caps < bet) { logMsg('Chapas insuficientes.'); openCrimsonCaravanGame(); return; }
+  let result = Math.random() < 0.5 ? 'cara' : 'cruz';
+  let win = (choice === result);
+  startCrimsonCaravanGame(bet, win, choice, result);
+}
+function buildDeckFromPlayer() {
+  ensureCrimson();
+  let ids = (P.crimsonCards.deck && P.crimsonCards.deck.length) ? P.crimsonCards.deck.slice() : allCrimsonCardIds().slice(0, 30);
+  // shuffle
+  for (let i = ids.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let tmp = ids[i]; ids[i] = ids[j]; ids[j] = tmp;
+  }
+  return ids.map(parseCardId);
+}
+function startCrimsonCaravanGame(bet, playerFirst, choice, result) {
+  bet = parseInt(bet, 10) || 0;
+  if (P.caps < bet) { logMsg('Chapas insuficientes.'); return; }
+  P.caps -= bet;
+  playBuySound();
+  let deck = buildDeckFromPlayer();
+  // enemy deck: random 30 from full set
+  let db = buildCrimsonCardDB();
+  let ePool = db.filter(c => c.rarity === 'common' || c.rarity === 'rare');
+  for (let i = ePool.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let tmp = ePool[i]; ePool[i] = ePool[j]; ePool[j] = tmp;
+  }
+  let eDeck = ePool.slice(0, 30).map(c => Object.assign({}, c));
+  _caravanGame = {
+    bet: bet,
+    deck: deck,
+    eDeck: eDeck,
+    lanes: {
+      '♣': { p: [], e: [] },
+      '♠': { p: [], e: [] },
+      '♦': { p: [], e: [] },
+      '♥': { p: [], e: [] }
+    },
+    hand: [],
+    enemyHand: [],
+    playerFirst: !!playerFirst,
+    turn: playerFirst ? 'p' : 'e',
+    phase: 'play',
+    coinChoice: choice,
+    coinResult: result
+  };
+  for (let i = 0; i < 5; i++) {
+    if (_caravanGame.deck.length) _caravanGame.hand.push(_caravanGame.deck.pop());
+    if (_caravanGame.eDeck.length) _caravanGame.enemyHand.push(_caravanGame.eDeck.pop());
+  }
+  logMsg('Caravana: ' + bet + ' chapas · Moneda ' + result + ' (elegiste ' + choice + ') → ' + (playerFirst ? 'empiezas tú' : 'empieza el rival'));
+  updateStats();
+  renderCrimsonCaravanGameUI();
+}
+function renderCrimsonCaravanGameUI() {
+  if (!_caravanGame) return;
+  let g = _caravanGame;
+  let suits = ['♣','♠','♦','♥'];
+  let html = '<h2 style="color:#cc3333;text-align:center;margin-top:0;">🃏 Caravana</h2>';
+  html += '<p style="font-size:11px;color:#8d9880;text-align:center;">Apuesta ' + g.bet + ' · Moneda: ' + g.coinResult + ' · Turno: <b>' + (g.turn === 'p' ? 'Tú' : 'Rival') + '</b></p>';
+  html += '<div style="display:flex;gap:4px;justify-content:space-between;overflow-x:auto;padding-bottom:4px;">';
+  suits.forEach(s => {
+    let fin = caravanLaneFinal(g.lanes[s].p, g.lanes[s].e);
+    let dom = fin.p === fin.e ? '—' : (fin.p > fin.e ? 'Tú' : 'Rival');
+    let domCol = fin.p > fin.e ? '#a8c47a' : (fin.e > fin.p ? '#c87962' : '#8d9880');
+    html += '<div style="flex:1;min-width:78px;background:#0d100c;border:1px solid #cc3333;border-radius:6px;padding:4px;text-align:center;">';
+    html += '<div style="color:#cc3333;font-weight:bold;font-size:15px;">' + s + '</div>';
+    html += '<div style="font-size:10px;color:#8d9880;">Rival ' + fin.e + '</div>';
+    html += crimsonLaneGrid(g.lanes[s].e, true);
+    html += '<div style="border-top:1px dashed #65705a;margin:4px 0;"></div>';
+    html += crimsonLaneGrid(g.lanes[s].p, true);
+    html += '<div style="font-size:10px;color:' + domCol + ';">Tú ' + fin.p + ' · <b>' + dom + '</b></div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  if (g.turn === 'p' && g.phase !== 'done') {
+    html += '<h3 style="font-size:12px;color:#cc3333;margin-top:8px;">Tu mano</h3>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;">';
+    g.hand.forEach((c, idx) => {
+      let can = g.lanes[c.s] && g.lanes[c.s].p.length < 4;
+      html += '<div style="text-align:center;margin:2px;opacity:' + (can?1:0.45) + ';">' +
+        '<span style="cursor:pointer;" onclick="showCrimsonCardInfo(\'' + c.id + '\')">' + crimsonCardHtml(c, false) + '</span>' +
+        (can ? '<button style="display:block;width:100%;font-size:10px;padding:2px;margin-top:2px;" onclick="playCaravanCard(' + idx + ')">Jugar</button>' : '') +
+        '</div>';
+    });
+    html += '</div>';
+    html += '<button style="width:100%;margin-top:8px;" onclick="passCaravanTurn()">Pasar turno</button>';
+  } else if (g.phase !== 'done') {
+    html += '<p style="text-align:center;color:#8d9880;">Turno del rival…</p>';
+    setTimeout(function() { if (_caravanGame && _caravanGame.turn === 'e') enemyCaravanTurn(); }, 450);
+  }
+  if (g.phase === 'done') {
+    html += '<div class="item" style="border-color:var(--gold);"><b>' + g.resultMsg + '</b></div>';
+    html += '<button style="width:100%;margin-top:8px;" onclick="openCrimsonCaravanGame()">Jugar otra</button>';
+  }
+  html += '<button style="width:100%;margin-top:6px;" onclick="closeModal();_caravanGame=null;">Cerrar</button>';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+function playCaravanCard(idx) {
+  let g = _caravanGame;
+  if (!g || g.turn !== 'p') return;
+  let c = g.hand[idx];
+  if (!c) return;
+  if (g.lanes[c.s].p.length >= 4) { logMsg('Carril ' + c.s + ' lleno.'); return; }
+  g.lanes[c.s].p.push(c);
+  g.hand.splice(idx, 1);
+  if (g.deck.length) g.hand.push(g.deck.pop());
+  g.turn = 'e';
+  if (caravanGameShouldEnd()) endCaravanGame();
+  else renderCrimsonCaravanGameUI();
+}
+function passCaravanTurn() {
+  let g = _caravanGame;
+  if (!g || g.turn !== 'p') return;
+  g.turn = 'e';
+  if (caravanGameShouldEnd()) endCaravanGame();
+  else renderCrimsonCaravanGameUI();
+}
+function enemyCaravanTurn() {
+  let g = _caravanGame;
+  if (!g || g.turn !== 'e') return;
+  let hand = g.enemyHand.slice().sort((a,b) => b.r - a.r);
+  let played = false;
+  for (let c of hand) {
+    if (g.lanes[c.s].e.length >= 4) continue;
+    let idx = g.enemyHand.findIndex(x => x.id === c.id);
+    if (idx < 0) continue;
+    g.lanes[c.s].e.push(c);
+    g.enemyHand.splice(idx, 1);
+    if (g.eDeck.length) g.enemyHand.push(g.eDeck.pop());
+    played = true;
+    break;
+  }
+  g.turn = 'p';
+  if (caravanGameShouldEnd()) endCaravanGame();
+  else renderCrimsonCaravanGameUI();
+}
+function caravanGameShouldEnd() {
+  let g = _caravanGame;
+  if (!g) return true;
+  let allFull = ['♣','♠','♦','♥'].every(s => g.lanes[s].p.length >= 4 && g.lanes[s].e.length >= 4);
+  if (allFull) return true;
+  if (g.deck.length === 0 && g.eDeck.length === 0 && g.hand.length === 0 && g.enemyHand.length === 0) return true;
+  let pCan = g.hand.some(c => g.lanes[c.s].p.length < 4);
+  let eCan = g.enemyHand.some(c => g.lanes[c.s].e.length < 4);
+  if (!pCan && !eCan) return true;
+  return false;
+}
+function endCaravanGame() {
+  let g = _caravanGame;
+  if (!g) return;
+  g.phase = 'done';
+  let pLanes = 0, eLanes = 0;
+  ['♣','♠','♦','♥'].forEach(s => {
+    let fin = caravanLaneFinal(g.lanes[s].p, g.lanes[s].e);
+    if (fin.p > fin.e) pLanes++;
+    else if (fin.e > fin.p) eLanes++;
+  });
+  let msg;
+  if (pLanes > eLanes) {
+    let win = g.bet * 2;
+    P.caps += win;
+    playBuySound();
+    msg = '¡Victoria! Carriles ' + pLanes + '-' + eLanes + '. Ganas ' + win + ' chapas.';
+    logMsg('Caravana: ganas ' + win + ' chapas.');
+  } else if (eLanes > pLanes) {
+    msg = 'Derrota ' + pLanes + '-' + eLanes + '. Pierdes ' + g.bet + ' chapas.';
+    logMsg('Caravana: pierdes ' + g.bet + ' chapas.');
+  } else {
+    P.caps += g.bet;
+    msg = 'Empate ' + pLanes + '-' + eLanes + '. Apuesta devuelta.';
+    logMsg('Caravana: empate.');
+  }
+  g.resultMsg = msg;
+  updateStats();
+  renderCrimsonCaravanGameUI();
+}
+
+
 function enterSettlement(settlementId) {
   if (settlementId === 'player_vault') {
     P.location = { type: 'settlement', settlementId: 'player_vault' };
@@ -6837,6 +8141,25 @@ function enterSettlement(settlementId) {
     showAccessDeniedModal(d);
     logMsg(d.msg);
     return;
+  }
+  // Perks de acceso: Reguladores / Sicarios
+  let facDef = FACTIONS[sett.faction];
+  if (facDef && facDef.perkRequired) {
+    let need = facDef.perkRequired;
+    if (!(P.perks && P.perks[need])) {
+      let title = facDef.name || sett.name;
+      let perkName = need === 'p_autoritario' ? 'Autoritario' : (need === 'p_hitman' ? 'Asesino a sueldo' : need);
+      document.getElementById('modal-body').innerHTML = `
+        <h2 style="color:${facDef.color || '#ccc'};text-align:center;margin-top:0;">${sett.name || title}</h2>
+        <div class="item" style="border-color:${facDef.color || '#666'};">
+          <p style="font-size:13px;color:#d7dec9;text-align:center;margin:8px 0;">No te dejan pasar.</p>
+          <p style="font-size:12px;color:#8d9880;text-align:center;">Necesitas la perk <b>${perkName}</b> para unirte y acceder a este asentamiento.</p>
+        </div>
+        <button style="width:100%;margin-top:10px;" onclick="closeModal();">Cerrar</button>`;
+      document.getElementById('modal').classList.add('show');
+      logMsg(title + ': requiere perk ' + perkName + '.');
+      return;
+    }
   }
   if (sett.faction === 'nucleologos' && isNucleologosLocked()) {
     document.getElementById('modal-body').innerHTML = `
@@ -6902,7 +8225,7 @@ function renderSettlementUI(settlementId, tab) {
       <div style="font-size:12px; color:#8d9880;"><span style="color:${fcol};">${fac.name}</span> · Reputación: <b style="color:${fcol};">${rep}/1000</b></div>
     </div>
     <div class="subtabs" style="margin-top:8px;">
-      <button class="${tab === 'missions' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','missions')">Misiones</button>
+      <button class="${tab === 'missions' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','missions')">${(fac && fac.escortFaction) ? 'Escoltar' : ((fac && fac.trophyExchange) ? 'Intercambio' : ((fac && fac.contractsOnly) ? 'Contratos' : 'Misiones'))}</button>
       <button class="${(tab === 'shop' || tab === 'arsenal') ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','${sett.faction === 'slavers' ? 'arsenal' : 'shop'}')">Tienda</button>
       <button class="${tab === 'base' ? 'active' : ''}" onclick="renderSettlementUI('${sett.id}','base')">Base</button>
     </div>
@@ -6911,6 +8234,24 @@ function renderSettlementUI(settlementId, tab) {
   if (tab === 'missions') {
     if (sett.faction === 'followers') {
       html += renderFollowersMissionsUI();
+      html += `<button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
+      document.getElementById('main-view').innerHTML = html;
+      return;
+    }
+    if (sett.faction === 'bounty' || sett.faction === 'hunters' || (fac && fac.contractsOnly)) {
+      html += renderContractsUI(sett, fcol);
+      html += `<button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
+      document.getElementById('main-view').innerHTML = html;
+      return;
+    }
+    if (fac && fac.trophyExchange) {
+      html += renderTrophyExchangeUI(sett, fcol);
+      html += `<button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
+      document.getElementById('main-view').innerHTML = html;
+      return;
+    }
+    if (fac && fac.escortFaction) {
+      html += renderCrimsonEscortUI(sett, fcol);
       html += `<button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
       document.getElementById('main-view').innerHTML = html;
       return;
@@ -7036,6 +8377,55 @@ function renderSettlementUI(settlementId, tab) {
     // BASE
     let hasVoucher = P.fastTravelUnlocked && P.fastTravelUnlocked.includes(sett.id);
     let hasHouse = P.ownedHouses && P.ownedHouses.includes(sett.id);
+    // Reguladores / Sicarios: solo reputación + viaje rápido (comprable desde el inicio)
+    if (fac && fac.escortFaction && sett.faction === 'crimson') {
+      let shopLvl = crimsonShopLevel();
+      let hasVoucherC = P.fastTravelUnlocked && P.fastTravelUnlocked.includes(sett.id);
+      let hasHouseC = P.ownedHouses && P.ownedHouses.includes(sett.id);
+      html += `<div class="item fcol" style="border-color:${fcol} !important;">
+        <b style="color:${fcol} !important;">${fac.name}</b> · Rep <b style="color:${fcol};">${getFactionRep('crimson')}/1000</b> · Tienda nv.${shopLvl}<br>
+        <span style="font-size:11px;color:#8d9880;">Sin médico. Habitación a 500 rep · Vale de Ruta a 750 rep.</span>
+      </div>
+      <div class="item" style="border-color:#cc3333;">
+        <b style="color:#cc3333;">🃏 Juego de la Caravana</b><br>
+        <span style="font-size:12px;color:#8d9880;">Apuesta chapas. 4 carriles ♣♠♦♥. Domina más carriles que el rival.</span><br>
+        <div style="display:flex;gap:6px;margin-top:6px;">
+          <button style="flex:1;background:#cc3333;color:#fff;font-weight:bold;" onclick="openCrimsonCaravanGame()">JUGAR</button>
+          <button style="flex:1;" onclick="openCrimsonDeckUI('main')">MAZO</button>
+        </div>
+      </div>
+      <div class="item" style="border-color:var(--gold);">
+        <b>🏠 Habitación de caravaneros</b> ${shopLvl < 3 ? '(se desbloquea a 500 de reputación)' : (hasHouseC ? '— Disponible' : '— 2000 chapas')}<br>
+        ${shopLvl < 3 ? '<span style="font-size:11px;color:#8d9880;">Sube reputación escoltando.</span>' :
+          (hasHouseC ? `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHouseRestUI('${sett.id}')">Entrar y descansar</button>` :
+            `<button style="margin-top:6px;" ${P.caps < 2000 ? 'disabled' : ''} onclick="buySettlementHouse('${sett.id}')">Comprar habitación (2000)</button>`)}
+      </div>
+      <div class="item" style="border-color:#aa55ff;">
+        <b>⚡ Vale de Ruta</b> ${shopLvl < 4 ? '(se desbloquea a 750 de reputación)' : (hasVoucherC ? '— Ya adquirido' : '— 1000 chapas')}<br>
+        ${shopLvl < 4 ? '<span style="font-size:11px;color:#8d9880;">Sube reputación escoltando.</span>' :
+          (hasVoucherC ? '<button style="margin-top:6px;" disabled>Ya adquirido</button>' :
+            `<button style="margin-top:6px;" ${P.caps < 1000 ? 'disabled' : ''} onclick="buyRouteVoucher('${sett.id}')">Comprar vale (1000 chapas)</button>`)}
+      </div>
+      <button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
+      document.getElementById('main-view').innerHTML = html;
+      return;
+    }
+    if (fac && fac.travelOnlyBase) {
+      html += `<div class="item fcol" style="border-color:${fcol} !important;">
+        <b style="color:${fcol} !important;">${fac.name}</b> · Rep <b style="color:${fcol} !important;">${getFactionRep(sett.faction)}/1000</b><br>
+        <span style="font-size:11px;color:#8d9880;">Sin médico ni casa. Solo Intercambio, tienda y viaje rápido.</span>
+      </div>
+      <div class="item" style="border-color:#aa55ff !important;">
+        <b>⚡ Vale de Ruta</b> — 1000 chapas<br>
+        <span style="font-size:12px;color:#8d9880;">Desbloquea viaje rápido a este asentamiento (disponible desde el inicio).</span><br>
+        ${hasVoucher
+          ? '<button style="margin-top:6px;" disabled>Ya adquirido</button>'
+          : `<button style="margin-top:6px;" ${P.caps < 1000 ? 'disabled' : ''} onclick="buyRouteVoucher('${sett.id}')">Comprar vale (1000 chapas)</button>`}
+      </div>
+      <button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
+      document.getElementById('main-view').innerHTML = html;
+      return;
+    }
     let maxhp = getMaxHp();
     let needHp = Math.max(0, maxhp - P.hp);
     let needRad = P.rads || 0;
@@ -7560,6 +8950,18 @@ function buyCasinoModule(casinoId, cost) {
 }
 
 let _slotsBet = {};
+
+function getLuck() {
+  return (P.special && P.special.L) ? P.special.L : 1;
+}
+/** Bonus 0..0.20 según Suerte (L 1→0, L10→~0.18) */
+function getCasinoLuckBonus() {
+  return Math.max(0, (getLuck() - 1) * 0.02);
+}
+function luckChance(base) {
+  return Math.min(0.95, base + getCasinoLuckBonus());
+}
+
 function playSlotsUI(casinoId) {
   ensureChips();
   if (_slotsBet[casinoId] === undefined) _slotsBet[casinoId] = 5;
@@ -7617,9 +9019,12 @@ function spinSlots(casinoId) {
     return;
   }
   let syms = ['🍒','🍋','🔔','7️⃣','💎'];
-  let weights = [30, 25, 20, 15, 10];
+  let lb = getCasinoLuckBonus();
+  // Más suerte → más peso en 7️⃣ y 💎
+  let weights = [30 - lb*40, 25 - lb*20, 20, 15 + lb*30, 10 + lb*50];
+  weights = weights.map(w => Math.max(3, w));
   function pick() {
-    let t = weights.reduce((a,b)=>a+b,0), r = Math.random()*t, a=0;
+    let tot = weights.reduce((a,b)=>a+b,0), r = Math.random()*tot, a=0;
     for (let i=0;i<syms.length;i++) { a += weights[i]; if (r <= a) return syms[i]; }
     return syms[0];
   }
@@ -7728,6 +9133,11 @@ function startBlackjack(casinoId) {
   // Natural check
   let pNat = bjIsNatural(player);
   let dNat = bjIsNatural(dealer);
+  // Suerte: si el crupier tiene BJ y tú no, pequeña chance de "salvar" a empate
+  if (dNat && !pNat && Math.random() < getCasinoLuckBonus() * 0.5) {
+    dNat = false;
+    dealer[1] = { r: '5', s: '♣' }; // fuerza no-BJ visual
+  }
   if (pNat || dNat) {
     _bjState.phase = 'done';
     _bjState.reveal = true;
@@ -7956,6 +9366,10 @@ function spinAmericanRoulette(casinoId) {
   let wheel = [0, '00'];
   for (let i = 1; i <= 36; i++) wheel.push(i);
   let result = wheel[Math.floor(Math.random() * wheel.length)];
+  // Suerte: chance de re-tirar si el resultado no favorece ninguna apuesta de pleno/color
+  if (getCasinoLuckBonus() > 0 && Math.random() < getCasinoLuckBonus()) {
+    result = wheel[Math.floor(Math.random() * wheel.length)];
+  }
   let color = amRouColor(result);
   let num = (result === '00') ? '00' : result;
 
@@ -8637,6 +10051,10 @@ function drawPokerCards() {
   }
   st.phase = 'done';
   let res = evaluatePokerHand(st.hand);
+  // Suerte: pequeña chance de mejorar una mano perdedora a pareja de jotas
+  if (res.mult === 0 && Math.random() < getCasinoLuckBonus() * 0.8) {
+    res = { name: 'Pareja (J+) [Suerte]', mult: 1 };
+  }
   let win = st.bet * res.mult;
   if (win > 0) {
     addCasinoChips(st.casinoId, win);
@@ -10160,6 +11578,38 @@ function radioResolveSrc(src) {
   try { return new URL(src, window.location.href).href; }
   catch (e) { return src; }
 }
+const AUDIO_CACHE = 'wasteland-audio-v1';
+async function resolveAudioSrcCached(src) {
+  let abs = radioResolveSrc(src);
+  try {
+    if ('caches' in window) {
+      let cache = await caches.open(AUDIO_CACHE);
+      let hit = await cache.match(abs) || await cache.match(src) || await cache.match('./' + String(src).replace(/^\.\//, ''));
+      if (hit) {
+        let blob = await hit.blob();
+        if (blob && blob.size > 0) return URL.createObjectURL(blob);
+      }
+      // Intentar red y guardar para offline
+      try {
+        let res = await fetch(abs, { cache: 'force-cache' });
+        if (!res.ok) res = await fetch(abs);
+        if (res && res.ok) {
+          await cache.put(abs, res.clone());
+          return abs;
+        }
+      } catch (e) {}
+    }
+  } catch (e) {}
+  return abs;
+}
+function cacheAudioUrl(absUrl) {
+  if (!('caches' in window) || !absUrl || absUrl.indexOf('blob:') === 0) return;
+  caches.open(AUDIO_CACHE).then(function(cache) {
+    fetch(absUrl).then(function(res) {
+      if (res && res.ok) cache.put(absUrl, res.clone()).catch(function(){});
+    }).catch(function(){});
+  }).catch(function(){});
+}
 
 function updateRadioStatusUI(userGesture, st, trackIdx) {
   let stEl = document.getElementById('music-status');
@@ -10182,14 +11632,12 @@ function playCurrentRadioTrack(userGesture) {
   let gen = ++radioGen;
   let audio = getRadioAudio();
 
-  // Limpiar handlers previos
   audio.oncanplay = null;
   audio.oncanplaythrough = null;
   audio.onended = null;
   audio.onerror = null;
   try { audio.pause(); } catch (e) {}
 
-  let fullSrc = radioResolveSrc(st.tracks[trackIdx]);
   audio.loop = false;
   audio.volume = (P.volMusic !== undefined ? P.volMusic : 0.6);
   pauseAmbientMusic();
@@ -10197,8 +11645,9 @@ function playCurrentRadioTrack(userGesture) {
   if (cas && !cas.paused) { try { cas.pause(); } catch (e) {} }
 
   radioPlaying = true;
-
   let played = false;
+  let errorSkips = 0;
+
   const doPlay = () => {
     if (gen !== radioGen) return;
     if (played) return;
@@ -10213,9 +11662,10 @@ function playCurrentRadioTrack(userGesture) {
       radioPlaying = true;
       pauseAmbientMusic();
       updateRadioStatusUI(userGesture, st, trackIdx);
+      try { cacheAudioUrl(audio.src); } catch (e) {}
     }).catch((err) => {
       if (gen !== radioGen) return;
-      played = false; // permitir reintento
+      played = false;
       if (err && err.name === 'AbortError') {
         setTimeout(() => {
           if (gen !== radioGen) return;
@@ -10230,8 +11680,8 @@ function playCurrentRadioTrack(userGesture) {
       }
       console.warn('radio play', err);
       let stEl = document.getElementById('music-status');
-      if (stEl) stEl.textContent = 'No se pudo reproducir esta pista. Prueba Siguiente o otra emisora.';
-      logMsg('Error de radio en pista ' + (trackIdx + 1) + '. ¿Existe el MP3 en audio/?');
+      if (stEl) stEl.textContent = 'Sin audio offline. Abre online una vez con la carpeta audio/ completa.';
+      logMsg('Error de radio (pista ' + (trackIdx + 1) + '). ¿MP3 en audio/?');
     });
   };
 
@@ -10247,28 +11697,42 @@ function playCurrentRadioTrack(userGesture) {
   audio.onerror = function() {
     if (gen !== radioGen) return;
     console.warn('radio load error', st.tracks[trackIdx]);
-    logMsg('No se pudo cargar: ' + st.tracks[trackIdx]);
+    errorSkips++;
+    // Saltar a la siguiente pista si hay más; si no, avisar
+    if (errorSkips < st.tracks.length && st.tracks.length > 1) {
+      radioTrackIndex = (trackIdx + 1) % st.tracks.length;
+      playCurrentRadioTrack(false);
+      return;
+    }
+    logMsg('No se pudo cargar audio offline: ' + st.tracks[trackIdx] + ' (pon los MP3 en audio/)');
+    let stEl = document.getElementById('music-status');
+    if (stEl) stEl.textContent = 'Error offline: falta el archivo en audio/';
   };
 
-  // Un solo load → play cuando esté listo (sin doble disparo)
-  audio.oncanplay = function() {
+  // Resolver desde caché (offline) o red
+  resolveAudioSrcCached(st.tracks[trackIdx]).then(function(fullSrc) {
     if (gen !== radioGen) return;
-    audio.oncanplay = null;
-    doPlay();
-  };
-
-  try {
-    audio.src = fullSrc;
-    audio.load();
-  } catch (e) {
-    audio.src = fullSrc;
-  }
-
-  // Respaldo si oncanplay no dispara (algunos WebViews Android)
-  setTimeout(() => {
+    audio.oncanplay = function() {
+      if (gen !== radioGen) return;
+      audio.oncanplay = null;
+      doPlay();
+    };
+    try {
+      audio.src = fullSrc;
+      audio.load();
+    } catch (e) {
+      audio.src = fullSrc;
+    }
+    setTimeout(function() {
+      if (gen !== radioGen) return;
+      if (!played) doPlay();
+    }, 800);
+  }).catch(function() {
     if (gen !== radioGen) return;
-    if (!played) doPlay();
-  }, 700);
+    let fullSrc = radioResolveSrc(st.tracks[trackIdx]);
+    try { audio.src = fullSrc; audio.load(); } catch (e) {}
+    setTimeout(function() { if (gen === radioGen && !played) doPlay(); }, 800);
+  });
 }
 
 function startRadioStation(stationId) {
@@ -10338,16 +11802,21 @@ function pauseAmbientMusic() {
 }
 
 function startAmbientMusic() {
-  if (radioPlaying || casinoActive) return;
+  if (radioPlaying || (typeof casinoActive !== 'undefined' && casinoActive)) return;
   let amb = document.getElementById('ambient-audio');
   if (!amb) return;
-  if (!amb.src || amb.src.indexOf('AmbientMap') === -1) {
-    try { amb.src = new URL('./audio/AmbientMap.mp3', window.location.href).href; }
-    catch (e) { amb.src = './audio/AmbientMap.mp3'; }
-  }
   amb.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
   amb.loop = true;
-  amb.play().catch(() => {});
+  resolveAudioSrcCached('./audio/AmbientMap.mp3').then(function(src) {
+    if (radioPlaying) return;
+    if (!amb.src || amb.src.indexOf('AmbientMap') === -1 || amb.src.indexOf('blob:') === 0) {
+      try { amb.src = src; } catch (e) { amb.src = './audio/AmbientMap.mp3'; }
+    }
+    amb.play().then(function() { cacheAudioUrl(radioResolveSrc('./audio/AmbientMap.mp3')); }).catch(function() {});
+  }).catch(function() {
+    try { amb.src = radioResolveSrc('./audio/AmbientMap.mp3'); } catch (e) {}
+    amb.play().catch(function() {});
+  });
 }
 
 function startRadioMusic() {
@@ -10459,6 +11928,7 @@ function tryWastelandEvent(source) {
   // Stealth Boy: sin emboscadas ni eventos al moverse
   if (source === 'move' && hasStealthBoyActive()) return false;
   let chance = source === 'move' ? 0.14 : 0.22;
+  if (typeof isHitman === 'function' && isHitman()) chance += 0.06;
   if (Math.random() > chance) return false;
   return triggerRandomWastelandEvent(source);
 }
@@ -10468,6 +11938,7 @@ function triggerRandomWastelandEvent(source) {
     { id: 'refugee', w: 12 }, { id: 'cache', w: 12 }, { id: 'wanderer', w: 10 },
     { id: 'caravan', w: 10 }, { id: 'trap', w: 8 }
   ];
+  if (isHitman()) EVENTS.push({ id: 'civilian', w: 28 });
   let total = EVENTS.reduce((s, e) => s + e.w, 0);
   let roll = Math.random() * total, acc = 0, pick = EVENTS[0].id;
   for (let e of EVENTS) { acc += e.w; if (roll <= acc) { pick = e.id; break; } }
@@ -10479,8 +11950,88 @@ function triggerRandomWastelandEvent(source) {
   if (pick === 'wanderer') return eventWanderer();
   if (pick === 'caravan') return eventCaravan();
   if (pick === 'trap') return eventTrap();
+  if (pick === 'civilian') return eventGoodCivilian();
   return false;
 }
+
+function isHitman() {
+  return !!(P.perks && (P.perks.p_hitman > 0));
+}
+function hitmanAttackBtn(label) {
+  if (!isHitman()) return '';
+  return '<button style="width:100%;margin:6px 0;background:#aa4455;color:#fff;font-weight:bold;" onclick="closeModal();startHitmanTargetCombat(\'' + (label || 'Civil').replace(/'/g, '') + '\')">🗡 ATACAR (Oreja)</button>';
+}
+function startHitmanTargetCombat(name) {
+  name = name || window._civilianName || 'Civil del yermo';
+  let lvl = Math.max(1, (P.lvl || 1) - 1 + Math.floor(Math.random() * 3));
+  combatState = {
+    enemyName: name + ' (Nv.' + lvl + ')',
+    enemyHuman: true,
+    goodCivilian: true,
+    isZetan: false,
+    enemyMaxHp: 28 + lvl * 14,
+    enemyHp: 28 + lvl * 14,
+    enemyDmg: 5 + Math.floor(lvl * 1.2),
+    enemyLoot: [20, 21, 7],
+    enemyCaps: [8, 35],
+    enemyLevel: lvl,
+    isLegendary: false,
+    hasHealed: false,
+    poisonTurns: 0,
+    armorBroken: 0,
+    playerSecondChanceUsed: false,
+    contractId: null,
+    log: ['Atacas por la oreja…']
+  };
+  logMsg('Atacas a ' + name + ' (Asesino a sueldo).');
+  renderCombatUI();
+}
+
+function eventGoodCivilian() {
+  if (!isHitman()) return false;
+  let names = ['Comerciante solitario','Peregrino herido','Granjero del yermo','Mensajero civil','Refugiado desarmado','Curandero itinerante','Viajero desarmado','Colonos perdidos'];
+  let name = names[Math.floor(Math.random() * names.length)];
+  window._civilianName = name;
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:#aa4455;text-align:center;margin-top:0;">🗡 Civil a la vista</h2>' +
+    '<div class="item" style="border-color:#aa4455;">' +
+    '<p style="font-size:13px;color:#d7dec9;">Te cruzas con un <b>' + name + '</b>. No parece hostil… pero la perk <b>Asesino a sueldo</b> te recuerda que una oreja vale chapas.</p>' +
+    '<p style="font-size:12px;color:#8d9880;">Atacar inicia combate. Si ganas, obtienes 1× Oreja (Otros).</p></div>' +
+    hitmanAttackBtn(name) +
+    '<button style="width:100%;margin-top:6px;" onclick="closeModal();logMsg(\'Dejas marchar al civil.\');">Ignorar</button>';
+  document.getElementById('modal').classList.add('show');
+  return true;
+}
+function startGoodCivilianCombat() {
+  startHitmanTargetCombat(window._civilianName || 'Civil del yermo');
+}
+
+function packOfferBtn() {
+  let packs = [
+    { id: 2860, price: 80, label: 'Sobre 1 carta' },
+    { id: 2861, price: 200, label: 'Sobre 3 cartas' },
+    { id: 2862, price: 350, label: 'Sobre 5 cartas' }
+  ];
+  let p = packs[Math.floor(Math.random() * packs.length)];
+  window._packOffer = p;
+  return '<button style="width:100%;margin:4px 0;background:#cc3333;color:#fff;" onclick="buyCrimsonPackOffer()">' +
+    '📦 ' + p.label + ' — ' + p.price + ' chapas</button>';
+}
+function buyCrimsonPackOffer() {
+  let p = window._packOffer;
+  if (!p) return;
+  if (P.caps < p.price) { logMsg('Chapas insuficientes.'); return; }
+  let base = getItemBase(p.id);
+  if (!base) { logMsg('Error: sobre no registrado en la base de datos.'); return; }
+  P.caps -= p.price;
+  let uid = addItemToInv(p.id, 1);
+  playBuySound();
+  logMsg('Compras ' + base.name + ' por ' + p.price + ' chapas. → Inventario / Otros.');
+  if (!uid) logMsg('Aviso: no se pudo añadir (revisa peso).');
+  closeModal();
+  updateStats();
+}
+
 function eventMerchant() {
   let goods = [
     { id: 7, price: 45 }, { id: 8, price: 55 }, { id: 301, price: 35 },
@@ -10497,6 +12048,8 @@ function eventMerchant() {
     '<span style="font-size:11px;color:#8d9880;">Tienes: ' + P.caps + ' chapas</span></div>' +
     '<button style="width:100%;margin:6px 0;background:var(--accent);color:#111;font-weight:bold;" ' +
     (P.caps < price ? 'disabled' : '') + ' onclick="buyWastelandMerchant(' + g.id + ',' + price + ')">Comprar (' + price + ' chapas)</button>' +
+    (Math.random() < 0.35 ? packOfferBtn() : '') +
+    hitmanAttackBtn('Mercader ambulante') +
     '<button style="width:100%;" onclick="closeModal(); logMsg(\'Ignoras al mercader y sigues.\');">Ignorar</button>';
   document.getElementById('modal').classList.add('show');
   logMsg('Te cruzas con un mercader ambulante. Ofrece ' + (it ? it.name : 'objeto') + ' por ' + price + ' chapas.');
@@ -10572,6 +12125,7 @@ function eventRefugee() {
     '• Dar <b>1 estimulante</b></div>' +
     '<button style="width:100%;margin:4px 0;" ' + (P.caps < caps ? 'disabled' : '') + ' onclick="helpRefugeeCaps(' + caps + ')">Dar ' + caps + ' chapas</button>' +
     '<button style="width:100%;margin:4px 0;" onclick="helpRefugeeStim()">Dar 1 estimulante</button>' +
+    hitmanAttackBtn('Refugiado') +
     '<button style="width:100%;" onclick="closeModal(); logMsg(\'Ignoras a los refugiados.\');">Ignorar</button>';
   document.getElementById('modal').classList.add('show');
   logMsg('Te encuentras con refugiados. Piden ' + caps + ' chapas o un estimulante.');
@@ -10604,13 +12158,28 @@ function eventCache() {
   return true;
 }
 function eventWanderer() {
+  if (isHitman()) {
+    let name = 'Caminante del yermo';
+    window._civilianName = name;
+    document.getElementById('modal-body').innerHTML =
+      '<h2 style="color:#aa4455;">👤 CAMINANTE</h2>' +
+      '<p style="font-size:13px;">Un forastero cruza tu camino. Con <b>Asesino a sueldo</b> puedes atacarlo por una oreja… o aceptar su trato.</p>' +
+      hitmanAttackBtn(name) +
+      '<button style="width:100%;margin:4px 0;" onclick="closeModal();wandererFriendly();">Hablar / aceptar ayuda</button>' +
+      '<button style="width:100%;" onclick="closeModal();logMsg(\'Sigues de largo.\');">Ignorar</button>';
+    document.getElementById('modal').classList.add('show');
+    return true;
+  }
+  wandererFriendly();
+  return true;
+}
+function wandererFriendly() {
   let r = Math.random();
   if (r < 0.25) { let c = 20 + Math.floor(Math.random() * 50); P.caps += c; logMsg('Un caminante te regala ' + c + ' chapas.'); }
   else if (r < 0.5) { addItemToInv(7, 1); logMsg('Un médico de campo te deja un estimulante.'); }
   else if (r < 0.75) { addXP(15); logMsg('Compartes historias del Yermo. +15 XP.'); }
   else { addRads(10 + Math.floor(Math.random() * 15)); logMsg('El forastero tose sangre irradiada cerca de ti...'); }
   updateStats();
-  return true;
 }
 function eventCaravan() {
   let sampleId = [7, 8, 301, 20, 50][Math.floor(Math.random() * 5)];
@@ -10624,9 +12193,10 @@ function eventCaravan() {
     '<span style="color:#8d9880;">Tienes: ' + P.caps + ' chapas</span></div>' +
     '<button style="width:100%;margin:4px 0;" ' + (P.caps < price ? 'disabled' : '') + ' onclick="caravanTrade()">Comprar ' + it.name + ' (' + price + ' chapas)</button>' +
     '<button style="width:100%;margin:4px 0;" onclick="caravanEscort()">Escoltar (recompensa o combate)</button>' +
+    (Math.random() < 0.45 ? packOfferBtn() : '') +
+    hitmanAttackBtn('Caravanero') +
     '<button style="width:100%;" onclick="closeModal(); logMsg(\'Dejas pasar la caravana.\');">Ignorar</button>';
   document.getElementById('modal').classList.add('show');
-  // stash trade offer
   window._caravanOffer = { id: sampleId, price: price };
   logMsg('Caravana: ofrecen ' + it.name + ' por ' + price + ' chapas.');
   return true;
@@ -10759,15 +12329,47 @@ function startCombat(isLegendary = false, forceZetan = false) {
     if (available.length === 0) available = [pool[0]];
   }
   let e = available[Math.floor(Math.random() * available.length)];
+  let contractId = null;
+  let contractForced = false;
 
-  // Escalar un poco HP/DMG según diferencia de nivel (opcional, suave)
+  if (!onShip && typeof ensureContracts === 'function') {
+    ensureContracts();
+    let wx = (P.location && P.location.worldX != null) ? P.location.worldX : P.x;
+    let wy = (P.location && P.location.worldY != null) ? P.location.worldY : P.y;
+    let inUnique = !!(P.location && P.location.type === 'unique');
+    let bountyHits = (P.activeContracts || []).filter(c =>
+      c.faction === 'bounty' && !c.completed && !c.claimed &&
+      ((c.locX === wx && c.locY === wy) || (inUnique && P.location.uniqueId === c.locId))
+    );
+    if (bountyHits.length && (inUnique || Math.random() < 0.55)) {
+      let c = bountyHits[Math.floor(Math.random() * bountyHits.length)];
+      contractId = c.id;
+      contractForced = true;
+      let lvl = Math.max(1, c.level || P.lvl);
+      e = { name: c.targetName, level: lvl, hp: 40 + lvl * 18, dmg: 6 + Math.floor(lvl * 1.4), loot: e.loot || [20], caps: [10, 30], human: true };
+    } else {
+      let huntHits = (P.activeContracts || []).filter(c => c.faction === 'hunters' && !c.completed && !c.claimed);
+      if (huntHits.length) {
+        let near = huntHits.filter(c => c.locX != null && Math.abs(c.locX - wx) + Math.abs(c.locY - wy) <= 2);
+        let poolC = near.length ? near : huntHits;
+        if (Math.random() < (near.length ? 0.45 : 0.18)) {
+          let c = poolC[Math.floor(Math.random() * poolC.length)];
+          contractId = c.id;
+          contractForced = true;
+          let lvl = Math.max(1, c.level || P.lvl);
+          e = { name: c.targetName + ' (' + (c.targetKind || 'mutante') + ')', level: lvl, hp: 50 + lvl * 20, dmg: 8 + Math.floor(lvl * 1.6), loot: e.loot || [20], caps: [15, 40], human: false };
+        }
+      }
+    }
+  }
+
   let lvlDiff = Math.max(0, P.lvl - e.level);
   let hpScale = 1 + (lvlDiff * 0.03);
   let dmgScale = 1 + (lvlDiff * 0.02);
 
   combatState = {
     enemyName: e.name + " (Nv." + e.level + ")",
-    enemyHuman: !!(e.human || isHumanEnemy(e)),
+    enemyHuman: !!(e.human || (typeof isHumanEnemy === 'function' && isHumanEnemy(e))),
     isZetan: !!(e.zetan || onShip),
     enemyMaxHp: Math.floor(e.hp * hpScale),
     enemyHp: Math.floor(e.hp * hpScale),
@@ -10780,8 +12382,12 @@ function startCombat(isLegendary = false, forceZetan = false) {
     poisonTurns: 0,
     armorBroken: 0,
     playerSecondChanceUsed: false,
+    contractId: contractId,
     log: []
   };
+  if (contractForced) {
+    combatLog('¡Objetivo de contrato: ' + e.name + '!');
+  }
   if (isLegendary) {
     combatLog("¡Un enemigo LEGENDARIO aparece!");
   }
@@ -11457,6 +13063,19 @@ function endCombat(victory) {
     }
 updateQuestProgress('kill', 1);
     if (combatState.isLegendary) updateQuestProgress('kill_leg', 1);
+    if (combatState.contractId) markContractComplete(combatState.contractId);
+    // Reguladores: Dedo de justicia por humano
+    if ((P.perks && P.perks.p_autoritario) && (combatState.enemyHuman || (typeof isHumanEnemy === 'function' && isHumanEnemy(combatState.enemyName)))) {
+      if (!combatState.goodCivilian) {
+        addItemToInv(2820, 1);
+        logMsg('Autoritario: obtienes 1× Dedo de justicia (Otros).');
+      }
+    }
+    // Sicarios: Oreja por civil atacado
+    if ((typeof isHitman === 'function' ? isHitman() : (P.perks && P.perks.p_hitman)) && combatState.goodCivilian) {
+      addItemToInv(2821, 1);
+      logMsg('Asesino a sueldo: obtienes 1× Oreja (Otros).');
+    }
 
     let lootTxt = added ? " y " + formatItemGainName(itemObj, itemQty) : " (mochila llena para el objeto)";
 
@@ -11716,7 +13335,8 @@ function renderInv(sub = P.subtab, page) {
         if (it.heal) html += `<span style="font-size:12px; color:var(--accent);">Curación: +${it.heal}</span><br>`;
         if (it.effectDesc) html += `<span style="font-size:11px; color:var(--gold);">${it.effectDesc} (${it.effectActions || 0} acciones)</span><br>`;
       } else if (sub === 'other') {
-        if (it.id === 14) html += `<span style="font-size:12px; color:#55aaff;">Tartera Vault-Tec — abre en REFUGIO.</span><br>`;
+        if (it.crimsonPack) html += `<span style="font-size:12px; color:#cc3333;">📦 Sobre Crimson (${it.crimsonPack} carta/s) — ábrelo en Puesto Crimson → Mazo, o aquí.</span><br>`;
+        else if (it.id === 14) html += `<span style="font-size:12px; color:#55aaff;">Tartera Vault-Tec — abre en REFUGIO.</span><br>`;
         else if (it.id === 15) html += `<span style="font-size:12px; color:#e05050;">Tartera Nuka-Cola — abre en REFUGIO.</span><br>`;
         else if (it.id === 29) html += `<span style="font-size:12px; color:var(--gold);">Tartera Legendaria — abre en REFUGIO.</span><br>`;
         else if (it.robcoModule || it.id === 3500) html += `<span style="font-size:12px; color:var(--gold);">★ Módulo Legendario — úsalo en Fábrica RobCo para mejorar un robot.</span><br>`;
@@ -11757,7 +13377,10 @@ function renderInv(sub = P.subtab, page) {
         if (canSellHere) html += `<button onclick="sellItem(${inst.uid})">Vender 1</button>`;
         html += `</div>`;
       } else if (sub === 'junk' || sub === 'other' || sub === 'ingredient') {
-        if (canSellHere && !it.robcoModule && it.id !== 3500) {
+        if (it.crimsonPack) {
+          html += `<button style="margin-top:6px;background:#cc3333;color:#fff;" onclick="openCrimsonPack(${it.id})">Abrir sobre</button>`;
+        }
+        if (canSellHere && !it.robcoModule && it.id !== 3500 && !it.crimsonPack && !it.noCommerceSell) {
           html += `<button style="margin-top:6px;" onclick="sellItem(${inst.uid})">Vender 1</button>`;
         } else if (canSellHere && (it.robcoModule || it.id === 3500)) {
           html += `<span style="font-size:11px;color:#8d9880;">No se vende — solo para mejorar robots en RobCo.</span>`;
@@ -12320,6 +13943,8 @@ function loadGame() {
       if (parsed.reputation[k] === undefined) parsed.reputation[k] = 0;
     });
     if (!parsed.activeFactionQuests) parsed.activeFactionQuests = [];
+    if (!parsed.crimsonEscort) parsed.crimsonEscort = { active: null, pending: [], board: [], lastBoardHour: -9999 };
+    if (!parsed.crimsonCards) parsed.crimsonCards = null;
     if (!parsed.factionQuestPool) parsed.factionQuestPool = {};
     if (parsed.volMusic === undefined) parsed.volMusic = 0.6;
     if (parsed.chips === undefined) parsed.chips = 0;
