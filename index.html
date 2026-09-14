@@ -6428,7 +6428,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.7.7</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.7.8</div>
   `;
   m.classList.add('show');
 }
@@ -8384,7 +8384,7 @@ function renderSettlementUI(settlementId, tab) {
       let hasHouseC = P.ownedHouses && P.ownedHouses.includes(sett.id);
       html += `<div class="item fcol" style="border-color:${fcol} !important;">
         <b style="color:${fcol} !important;">${fac.name}</b> · Rep <b style="color:${fcol};">${getFactionRep('crimson')}/1000</b> · Tienda nv.${shopLvl}<br>
-        <span style="font-size:11px;color:#8d9880;">Sin médico. Habitación a 500 rep · Vale de Ruta a 750 rep.</span>
+        <span style="font-size:11px;color:#8d9880;">Sin médico. Habitación y vale de ruta disponibles desde el inicio (solo chapas).</span>
       </div>
       <div class="item" style="border-color:#cc3333;">
         <b style="color:#cc3333;">🃏 Juego de la Caravana</b><br>
@@ -8395,16 +8395,16 @@ function renderSettlementUI(settlementId, tab) {
         </div>
       </div>
       <div class="item" style="border-color:var(--gold);">
-        <b>🏠 Habitación de caravaneros</b> ${shopLvl < 3 ? '(se desbloquea a 500 de reputación)' : (hasHouseC ? '— Disponible' : '— 2000 chapas')}<br>
-        ${shopLvl < 3 ? '<span style="font-size:11px;color:#8d9880;">Sube reputación escoltando.</span>' :
-          (hasHouseC ? `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHouseRestUI('${sett.id}')">Entrar y descansar</button>` :
-            `<button style="margin-top:6px;" ${P.caps < 2000 ? 'disabled' : ''} onclick="buySettlementHouse('${sett.id}')">Comprar habitación (2000)</button>`)}
+        <b>🏠 Habitación de caravaneros</b> — 2000 chapas<br>
+        ${hasHouseC
+          ? `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHouseRestUI('${sett.id}')">Entrar y descansar</button>`
+          : `<button style="margin-top:6px;" ${P.caps < 2000 ? 'disabled' : ''} onclick="buySettlementHouse('${sett.id}')">Comprar habitación (2000)</button>`}
       </div>
       <div class="item" style="border-color:#aa55ff;">
-        <b>⚡ Vale de Ruta</b> ${shopLvl < 4 ? '(se desbloquea a 750 de reputación)' : (hasVoucherC ? '— Ya adquirido' : '— 1000 chapas')}<br>
-        ${shopLvl < 4 ? '<span style="font-size:11px;color:#8d9880;">Sube reputación escoltando.</span>' :
-          (hasVoucherC ? '<button style="margin-top:6px;" disabled>Ya adquirido</button>' :
-            `<button style="margin-top:6px;" ${P.caps < 1000 ? 'disabled' : ''} onclick="buyRouteVoucher('${sett.id}')">Comprar vale (1000 chapas)</button>`)}
+        <b>⚡ Vale de Ruta</b> — 1000 chapas<br>
+        ${hasVoucherC
+          ? '<button style="margin-top:6px;" disabled>Ya adquirido</button>'
+          : `<button style="margin-top:6px;" ${P.caps < 1000 ? 'disabled' : ''} onclick="buyRouteVoucher('${sett.id}')">Comprar vale (1000 chapas)</button>`}
       </div>
       <button style="width:100%;margin-top:10px;" onclick="exitSettlement()">← SALIR AL YERMO</button>`;
       document.getElementById('main-view').innerHTML = html;
