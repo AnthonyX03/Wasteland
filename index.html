@@ -6432,12 +6432,75 @@ function openSettings() {
     <button style="width:100%; margin:6px 0;" onclick="saveGame(); closeModal();">💾 Guardar partida</button>
     <button style="width:100%; margin:6px 0;" onclick="loadGame(); closeModal();">📂 Cargar partida</button>
     <button style="width:100%; margin:6px 0;" onclick="renameSurvivor(); closeModal();">✏ Renombrar</button>
-    <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
+    <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.3</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.4</div>
   `;
   m.classList.add('show');
+}
+
+function openSettingsOtros() {
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:var(--accent);text-align:center;margin-top:0;">📁 Otros</h2>' +
+    '<p style="font-size:12px;color:#8d9880;text-align:center;">Opciones irreversibles. Lee bien antes de aceptar.</p>' +
+    '<button style="width:100%;margin:8px 0;border-color:var(--danger);color:var(--danger);" onclick="confirmResetGame()">☠ Reiniciar partida</button>' +
+    '<button style="width:100%;margin:8px 0;border-color:#cc3333;color:#cc3333;" onclick="confirmResetCaravan()">🃏 Reinicio de Caravana</button>' +
+    '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+function confirmResetGame() {
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:var(--danger);text-align:center;margin-top:0;">☠ Reiniciar partida</h2>' +
+    '<div class="item" style="border-color:var(--danger);">' +
+    '<b>Se va a borrar por completo:</b><br>' +
+    '<span style="font-size:12px;color:#8d9880;">• Todo el progreso del superviviente<br>' +
+    '• Inventario, refugio, asentamientos y reputación<br>' +
+    '• Misiones, escoltas, cartas de Caravana y guardado<br>' +
+    '• Volverás al inicio como partida nueva</span></div>' +
+    '<p style="font-size:12px;color:var(--danger);text-align:center;"><b>Esta acción no se puede deshacer.</b></p>' +
+    '<button style="width:100%;margin:6px 0;background:var(--danger);color:#111;font-weight:bold;" onclick="resetGameConfirmed()">Aceptar — borrar todo</button>' +
+    '<button style="width:100%;margin:6px 0;" onclick="openSettingsOtros()">Cancelar</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+function resetGameConfirmed() {
+  stopRadioMusic();
+  try { localStorage.removeItem("wl_save_v16"); } catch (e) {}
+  location.reload();
+}
+
+function confirmResetCaravan() {
+  ensureCrimson();
+  let owned = 0;
+  Object.keys((P.crimsonCards && P.crimsonCards.collection) || {}).forEach(function(id) {
+    owned += P.crimsonCards.collection[id] || 0;
+  });
+  let deckN = (P.crimsonCards && P.crimsonCards.deck) ? P.crimsonCards.deck.length : 0;
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:#cc3333;text-align:center;margin-top:0;">🃏 Reinicio de Caravana</h2>' +
+    '<div class="item" style="border-color:#cc3333;">' +
+    '<b>Se va a reiniciar solo el sistema de cartas:</b><br>' +
+    '<span style="font-size:12px;color:#8d9880;">• Colección completa (descubrimiento incluido)<br>' +
+    '• Cartas libres y mazo actual (' + deckN + ' cartas en mazo · ' + owned + ' en colección)<br>' +
+    '• Volverás al mazo inicial de <b>30 Comunes</b><br>' +
+    '• No afecta al resto de la partida (chapas, nivel, escoltas, etc.)</span></div>' +
+    '<p style="font-size:12px;color:#cc3333;text-align:center;"><b>Las cartas de sobres se perderán.</b></p>' +
+    '<button style="width:100%;margin:6px 0;background:#cc3333;color:#fff;font-weight:bold;" onclick="resetCaravanCardsConfirmed()">Aceptar — reiniciar cartas</button>' +
+    '<button style="width:100%;margin:6px 0;" onclick="openSettingsOtros()">Cancelar</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
+function resetCaravanCardsConfirmed() {
+  ensureCrimson();
+  if (typeof _caravanGame !== 'undefined') _caravanGame = null;
+  P.crimsonCards = { collection: {}, deck: [], schema: 5 };
+  initStarterCrimsonDeck();
+  try { if (typeof saveGame === 'function') saveGame(); } catch (e) {}
+  logMsg('Caravana reiniciada: mazo de 30 comunes. Colección borrada.');
+  closeModal();
+  updateStats();
 }
 
 function setVolMusic(v) {
@@ -14070,10 +14133,7 @@ function loadGame() {
 }
 
 function resetGame() {
-  if (!confirm("¿Reiniciar partida? Se borrará el guardado actual.")) return;
-  stopRadioMusic();
-  localStorage.removeItem("wl_save_v16");
-  location.reload();
+  confirmResetGame();
 }
 
 // INICIALIZACIÓN
