@@ -6428,7 +6428,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.7.8</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.7.9</div>
   `;
   m.classList.add('show');
 }
@@ -7471,18 +7471,42 @@ function caravanLaneFinal(playerCards, enemyCards) {
   return { p: Math.max(0, ps - ep), e: Math.max(0, es - pp) };
 }
 
+function goBackCrimsonCardInfo() {
+  // Prioridad: partida en curso > sobre abierto > mazo/colección
+  if (typeof _caravanGame !== 'undefined' && _caravanGame && _caravanGame.phase !== 'done') {
+    renderCrimsonCaravanGameUI();
+    return;
+  }
+  if (window._crimsonInfoFrom === 'pack' && window._lastPackGot) {
+    renderCrimsonPackResult();
+    return;
+  }
+  if (window._crimsonInfoFrom === 'deck' || window._crimsonDeckSub) {
+    openCrimsonDeckUI(window._crimsonDeckSub || 'main', P.crimsonRarFilter);
+    return;
+  }
+  closeModal();
+}
+function showCrimsonCardInfoFromGame(cardOrId) {
+  window._crimsonInfoFrom = 'game';
+  showCrimsonCardInfo(cardOrId);
+}
 function showCrimsonCardInfo(cardOrId, backFn) {
   let c = typeof cardOrId === 'string' ? parseCardId(cardOrId) : cardOrId;
   if (!c) return;
-  if (typeof backFn === 'function') window._crimsonInfoBack = backFn;
+  if (typeof backFn === 'function') {
+    window._crimsonInfoBack = backFn;
+  }
+  // Si no se indicó origen, y hay partida activa, tratar como juego
+  if (!window._crimsonInfoFrom && typeof _caravanGame !== 'undefined' && _caravanGame && _caravanGame.phase !== 'done') {
+    window._crimsonInfoFrom = 'game';
+  }
   let rar = CRIMSON_RARITY[c.rarity] || CRIMSON_RARITY.common;
   let red = (c.s === '♥' || c.s === '♦');
   let hab = (c.ability && c.ability !== 'none' && c.abilityName)
     ? ('<b style="color:' + rar.color + ';">' + c.abilityName + '</b><br><span style="font-size:12px;">' + (c.abilityDesc || '') + '</span>')
     : '<span style="color:#8d9880;">Sin habilidad (carta común).</span>';
-  let backBtn = window._crimsonInfoBack
-    ? '<button style="width:100%;margin-top:10px;" onclick="(window._crimsonInfoBack||closeModal)()">← Atrás</button>'
-    : '<button style="width:100%;margin-top:10px;" onclick="closeModal();">← Atrás</button>';
+  let backBtn = '<button style="width:100%;margin-top:10px;" onclick="goBackCrimsonCardInfo()">← Atrás</button>';
   document.getElementById('modal-body').innerHTML =
     '<h2 style="color:#cc3333;text-align:center;margin-top:0;">Carta</h2>' +
     '<div style="text-align:center;margin:8px 0;">' + crimsonCardHtml(c, false) + '</div>' +
@@ -7507,9 +7531,7 @@ function openCrimsonDeckUI(sub, rarFilter) {
   if (rarFilter) P.crimsonRarFilter = rarFilter;
   if (!P.crimsonRarFilter) P.crimsonRarFilter = 'common';
   window._crimsonDeckSub = sub;
-  window._crimsonInfoBack = function() {
-    openCrimsonDeckUI(window._crimsonDeckSub || 'collection', P.crimsonRarFilter);
-  };
+  window._crimsonInfoFrom = 'deck';
   let fcol = '#cc3333';
   let html = '';
   function rarTabs(activeSub) {
@@ -7662,7 +7684,7 @@ function openCrimsonPack(itemId) {
 }
 function renderCrimsonPackResult() {
   let got = window._lastPackGot || [];
-  window._crimsonInfoBack = function() { renderCrimsonPackResult(); };
+  window._crimsonInfoFrom = 'pack';
   let cardsVis = got.map(function(c) {
     let rar = CRIMSON_RARITY[c.rarity];
     return '<div style="text-align:center;margin:4px;cursor:pointer;" onclick="showCrimsonCardInfo(\'' + c.id + '\')">' +
@@ -7978,6 +8000,7 @@ function startCrimsonCaravanGame(bet, playerFirst, choice, result) {
 }
 function renderCrimsonCaravanGameUI() {
   if (!_caravanGame) return;
+  window._crimsonInfoFrom = 'game';
   let g = _caravanGame;
   let suits = ['♣','♠','♦','♥'];
   let html = '<h2 style="color:#cc3333;text-align:center;margin-top:0;">🃏 Caravana</h2>';
@@ -8004,7 +8027,7 @@ function renderCrimsonCaravanGameUI() {
     g.hand.forEach((c, idx) => {
       let can = g.lanes[c.s] && g.lanes[c.s].p.length < 4;
       html += '<div style="text-align:center;margin:2px;opacity:' + (can?1:0.45) + ';">' +
-        '<span style="cursor:pointer;" onclick="showCrimsonCardInfo(\'' + c.id + '\')">' + crimsonCardHtml(c, false) + '</span>' +
+        '<span style="cursor:pointer;" onclick="showCrimsonCardInfoFromGame(\'' + c.id + '\')">' + crimsonCardHtml(c, false) + '</span>' +
         (can ? '<button style="display:block;width:100%;font-size:10px;padding:2px;margin-top:2px;" onclick="playCaravanCard(' + idx + ')">Jugar</button>' : '') +
         '</div>';
     });
@@ -8384,7 +8407,8 @@ function renderSettlementUI(settlementId, tab) {
       let hasHouseC = P.ownedHouses && P.ownedHouses.includes(sett.id);
       html += `<div class="item fcol" style="border-color:${fcol} !important;">
         <b style="color:${fcol} !important;">${fac.name}</b> · Rep <b style="color:${fcol};">${getFactionRep('crimson')}/1000</b> · Tienda nv.${shopLvl}<br>
-        <span style="font-size:11px;color:#8d9880;">Sin médico. Habitación y vale de ruta disponibles desde el inicio (solo chapas).</span>
+        <span style="font-size:11px;color:#8d9880;">Tienda: <span style="color:${fcol};">Nv1@100 · Nv2@250 · Nv3@500 · Nv4@750 · Nv5@1000</span></span><br>
+        <span style="font-size:11px;color:#8d9880;">Sin médico. Habitación y vale de ruta disponibles desde el inicio.</span>
       </div>
       <div class="item" style="border-color:#cc3333;">
         <b style="color:#cc3333;">🃏 Juego de la Caravana</b><br>
@@ -8396,12 +8420,14 @@ function renderSettlementUI(settlementId, tab) {
       </div>
       <div class="item" style="border-color:var(--gold);">
         <b>🏠 Habitación de caravaneros</b> — 2000 chapas<br>
+        <span style="font-size:12px;color:#8d9880;">Descansa 1–24 h. Recuperas salud según tu nivel. El compañero NO se cura aquí.</span><br>
         ${hasHouseC
           ? `<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHouseRestUI('${sett.id}')">Entrar y descansar</button>`
           : `<button style="margin-top:6px;" ${P.caps < 2000 ? 'disabled' : ''} onclick="buySettlementHouse('${sett.id}')">Comprar habitación (2000)</button>`}
       </div>
       <div class="item" style="border-color:#aa55ff;">
         <b>⚡ Vale de Ruta</b> — 1000 chapas<br>
+        <span style="font-size:12px;color:#8d9880;">Desbloquea viaje rápido a este asentamiento.</span><br>
         ${hasVoucherC
           ? '<button style="margin-top:6px;" disabled>Ya adquirido</button>'
           : `<button style="margin-top:6px;" ${P.caps < 1000 ? 'disabled' : ''} onclick="buyRouteVoucher('${sett.id}')">Comprar vale (1000 chapas)</button>`}
