@@ -235,7 +235,7 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   white-space: nowrap;
 }
 .map-compact .map-top { margin: 0 0 2px 0; font-size: 13px; }
-.map-compact .map-signal-hint { min-height: 12px; font-size: 10px; margin: 0; }
+.map-compact .map-signal-hint { min-height: 14px; font-size: 10px; margin: 1px 0; height: auto; max-height: none; overflow: visible; white-space: normal; }
 .map-compact .world-grid {
   display: grid;
   gap: 2px;
@@ -262,14 +262,16 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   font-size: 11px;
 }
 .map-compact .map-signal-hint {
-  height: 18px;
-  min-height: 18px;
-  max-height: 18px;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-height: 14px;
+  max-height: none;
+  height: auto;
+  margin: 1px 0;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
   text-align: center;
+  line-height: 1.25;
+  font-size: 10px;
 }
 .map-compact {
   display: flex;
@@ -774,11 +776,14 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 }
 .map-compact .map-signal-hint {
   flex-shrink: 0 !important;
-  height: 12px !important;
-  max-height: 12px !important;
+  height: auto !important;
+  min-height: 14px !important;
+  max-height: none !important;
   font-size: 10px !important;
-  margin: 0 !important;
-  overflow: hidden !important;
+  margin: 1px 0 !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  line-height: 1.25 !important;
 }
 .map-compact .world-grid {
   flex: 0 0 auto !important;
@@ -5594,7 +5599,9 @@ function renderMap() {
     let ae = P.crimsonEscort.active;
     let sx = (ae.destX >= 0 ? '+' : '') + ae.destX, sy = (ae.destY >= 0 ? '+' : '') + ae.destY;
     let hereE = (P.x === ae.destX && P.y === ae.destY);
-    signalHint += `<div class="map-signal-hint" style="color:${hereE ? 'var(--gold)' : '#cc3333'};">🐪 Escolta → [${sx}, ${sy}]${hereE ? ' — ¡AQUÍ!' : ''}</div>`;
+    let leftH = Math.max(0, (ae.deadlineHour || 0) - (P.worldHours || 0));
+    let destLabel = ae.destName ? (ae.destName + ' ') : '';
+    signalHint += `<div class="map-signal-hint" style="color:${hereE ? 'var(--gold)' : '#cc3333'};font-weight:bold;">🐪 Escolta → ${destLabel}[${sx}, ${sy}] · ${leftH}h${hereE ? ' — ¡AQUÍ!' : ''}</div>`;
   }
   }
 
@@ -6428,7 +6435,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.2</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.3</div>
   `;
   m.classList.add('show');
 }
@@ -7249,29 +7256,27 @@ function ensureCrimson() {
   if (!Array.isArray(P.crimsonEscort.pending)) P.crimsonEscort.pending = [];
   if (!Array.isArray(P.crimsonEscort.board)) P.crimsonEscort.board = [];
   if (!P.crimsonCards) {
-    P.crimsonCards = { collection: {}, deck: [], schema: 4 };
+    P.crimsonCards = { collection: {}, deck: [], schema: 5 };
     initStarterCrimsonDeck();
   }
   if (!P.crimsonCards.collection) P.crimsonCards.collection = {};
   if (!Array.isArray(P.crimsonCards.deck)) P.crimsonCards.deck = [];
-  window._CRIMSON_CARD_DB = null;
+  // No regenerar colección al actualizar DB: respeta cartas obtenidas.
+  // Solo reconstruye el mazo inicial si está vacío o las ids ya no existen.
   buildCrimsonCardDB();
-  // schema 3: mazo inicial = 30 comunes. Conserva cartas no-comunes de sobres.
-  if (P.crimsonCards.schema !== 4) {
-    let kept = {};
-    Object.keys(P.crimsonCards.collection || {}).forEach(function(id) {
-      let c = getCrimsonCard(id);
-      if (c && c.rarity && c.rarity !== 'common') kept[id] = P.crimsonCards.collection[id];
-    });
-    P.crimsonCards.collection = kept;
-    P.crimsonCards.deck = [];
-    P.crimsonCards.schema = 4;
-    initStarterCrimsonDeck();
-  }
   let first = P.crimsonCards.deck[0];
-  if (!P.crimsonCards.deck.length || !getCrimsonCard(first)) {
+  if (!P.crimsonCards.deck.length || (first && !getCrimsonCard(first))) {
+    // mazo roto/vacío → 30 comunes sin tocar colección de sobres
+    let kept = Object.assign({}, P.crimsonCards.collection || {});
     P.crimsonCards.deck = [];
     initStarterCrimsonDeck();
+    // merge: starter ya metió 30 comunes; conservar extras previos
+    Object.keys(kept).forEach(function(id) {
+      if (!getCrimsonCard(id)) return;
+      let q = kept[id] || 0;
+      if (q > (P.crimsonCards.collection[id] || 0)) P.crimsonCards.collection[id] = q;
+    });
+    P.crimsonCards.schema = 5;
   }
 }
 
@@ -7388,17 +7393,18 @@ function parseCardId(id) {
 function cardId(s, r) { return s + r; } // legacy
 
 function initStarterCrimsonDeck() {
-  if (!P.crimsonCards) P.crimsonCards = { collection: {}, deck: [], schema: 4 };
-  P.crimsonCards.schema = 4;
+  if (!P.crimsonCards) P.crimsonCards = { collection: {}, deck: [], schema: 5 };
+  if (!P.crimsonCards.collection) P.crimsonCards.collection = {};
+  P.crimsonCards.schema = 5;
   let db = buildCrimsonCardDB();
-  // starter: 30 COMUNES (sin habilidad)
+  // starter: exactamente 30 COMUNES
   let commons = db.filter(c => c.rarity === 'common').map(c => c.id);
   for (let i = commons.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     let tmp = commons[i]; commons[i] = commons[j]; commons[j] = tmp;
   }
   let deck = commons.slice(0, 30);
-  deck.forEach(id => {
+  deck.forEach(function(id) {
     P.crimsonCards.collection[id] = (P.crimsonCards.collection[id] || 0) + 1;
   });
   P.crimsonCards.deck = deck.slice();
