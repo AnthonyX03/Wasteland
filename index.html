@@ -1339,9 +1339,9 @@ const DB_ITEMS = [
   { id: 2852, name: "Pistola de caravana", type: "weapon", damage: 28, ammoType: "Cartucho 10mm", weight: 2.5, value: 280, stackable: false, factionOnly: true, faction: "crimson" },
   { id: 2853, name: "Sombrero de caravanero", type: "armor", def: 6, weight: 0.8, value: 90, stackable: false, factionOnly: true, faction: "crimson", radRes: 0 },
   { id: 2854, name: "Raciones de caravana", type: "food", heal: 35, weight: 0.5, value: 40, stackable: true, factionOnly: true, faction: "crimson", useDesc: "Cura 35 HP." },
-    { id: 2860, name: "Sobre Crimson (1 carta)", type: "other", weight: 0.1, value: 50, stackable: true, crimsonPack: 1, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (1 carta). Ábrelo en el Puesto Crimson → Mazo → Abrir sobre." },
-  { id: 2861, name: "Sobre Crimson (3 cartas)", type: "other", weight: 0.15, value: 120, stackable: true, crimsonPack: 3, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (3 cartas). Ábrelo en el Puesto Crimson → Mazo → Abrir sobre." },
-  { id: 2862, name: "Sobre Crimson (5 cartas)", type: "other", weight: 0.2, value: 200, stackable: true, crimsonPack: 5, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (5 cartas). Ábrelo en el Puesto Crimson → Mazo → Abrir sobre." },
+    { id: 2860, name: "Sobre Crimson (1 carta)", type: "other", weight: 0.1, value: 50, stackable: true, crimsonPack: 1, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (1 carta). Solo se abre en el Puesto Crimson → Mazo → Abrir sobres." },
+  { id: 2861, name: "Sobre Crimson (3 cartas)", type: "other", weight: 0.15, value: 120, stackable: true, crimsonPack: 3, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (3 cartas). Solo se abre en el Puesto Crimson → Mazo → Abrir sobres." },
+  { id: 2862, name: "Sobre Crimson (5 cartas)", type: "other", weight: 0.2, value: 200, stackable: true, crimsonPack: 5, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (5 cartas). Solo se abre en el Puesto Crimson → Mazo → Abrir sobres." },
   { id: 2500, name: "Morador", type: "special", weight: 0, value: 0, stackable: true, dweller: true, noCommerceSell: true, effectDesc: "Sujeto experimental atraído por la antena del Refugio. Peso 0 kg. Úsalo en Laboratorio → Experimentar (gasear, irradiar, FEV). Los supervivientes van a Criogenización. No se vende en Comercio." },
   { id: 2501, name: "Documentos del experimento", type: "other", weight: 0.1, value: 0, stackable: true, experimentDocs: true, noCommerceSell: true, effectDesc: "Informes clasificados de Vaul-Tec. Véndelos en la Oficina de Vaul-Tec por Dinero de antes de la guerra." },
   { id: 2305, name: "Esclavo", type: "special", weight: 0, value: 500, stackable: true, slave: true, noCommerceSell: true, effectDesc: "Mercancía viva. Véndela en Paradise Falls (Base → Vender Esclavos) por 500 chapas y reputación. No se vende en Comercio." },
@@ -5544,7 +5544,7 @@ function renderMap() {
   if (isOnZetanShip && isOnZetanShip()) { renderZetanShipMap(); return; }
   if (P.location && P.location.type === 'settlement') {
     if (P.location.settlementId === 'player_home') {
-      renderPlayerSettlementUI('base');
+      renderPlayerSettlementUI('farm');
     } else if (P.location.settlementId === 'sierra_madre') {
       renderSierraCasinoUI('casino');
     } else if (P.location.settlementId === 'robco_factory') {
@@ -6434,7 +6434,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.5</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.7</div>
   `;
   m.classList.add('show');
 }
@@ -7796,6 +7796,11 @@ function removeFromCrimsonDeck(idx) {
   openCrimsonDeckUI('edit');
 }
 function openCrimsonPack(itemId) {
+  let atCrimson = P.location && P.location.settlementId === 'crimson_outpost';
+  if (!atCrimson) {
+    logMsg('Los sobres Crimson solo se abren en el Puesto Crimson → Mazo → Abrir sobres.');
+    return;
+  }
   ensureCrimson();
   let base = getItemBase(itemId);
   let n = (base && base.crimsonPack) || 1;
@@ -9683,7 +9688,7 @@ function enterPlayerSettlement() {
   if (!ps.claimed) {
     renderPlayerClaimUI();
   } else {
-    renderPlayerSettlementUI('base');
+    renderPlayerSettlementUI('farm');
   }
   updateStats();
 }
@@ -9710,14 +9715,14 @@ function claimPlayerSettlement() {
   ps.level = 1;
   logMsg("Has fundado el asentamiento \"" + name + "\".");
   // Update SETTLEMENTS display name dynamically via getSettlementAt
-  renderPlayerSettlementUI('base');
+  renderPlayerSettlementUI('farm');
   updateStats();
 }
 
 function renderPlayerSettlementUI(tab) {
   let ps = ensurePlayerSettlement();
   if (!ps.claimed) { renderPlayerClaimUI(); return; }
-  tab = tab || 'base';
+  tab = tab || 'farm';
   let html = `<div style="text-align:center;">
     <h2 style="color:#44ddaa;margin:4px 0;">🏕 ${ps.name}</h2>
     <div style="font-size:12px;color:#8d9880;">Tu asentamiento · Nivel <b style="color:#44ddaa;">${ps.level}/10</b> · Colonos granja: ${ps.settlers}/10</div>
@@ -9846,7 +9851,7 @@ function upgradePlayerSettlement() {
   payReqs(costs);
   ps.level++;
   logMsg(ps.name + " sube a nivel " + ps.level + ".");
-  renderPlayerSettlementUI('base');
+  renderPlayerSettlementUI('farm');
   updateStats();
 }
 
@@ -9874,7 +9879,7 @@ function buildPlayerFacility(which) {
     ps.medicBuilt = true;
     logMsg("Enfermería construida. Curación gratuita disponible.");
   }
-  renderPlayerSettlementUI('base');
+  renderPlayerSettlementUI('farm');
   updateStats();
 }
 
@@ -9883,7 +9888,7 @@ function playerMedicHeal() {
   P.hp = maxhp;
   P.rads = 0;
   logMsg("El médico de tu asentamiento te cura por completo (gratis).");
-  renderPlayerSettlementUI('base');
+  renderPlayerSettlementUI('farm');
   updateStats();
 }
 
@@ -10014,8 +10019,10 @@ function renderSierraCasinoUI(tab) {
       <b style="color:#e8d48b;">🏢 Oficina del Casino</b> ${lvl < 10 ? '(se desbloquea en Nv.10)' : '— Disponible'}<br>
       <span style="font-size:11px;color:#8d9880;">1 ficha Sierra Madre = 1 ficha de cualquier casino del Strip</span><br>`;
     if (lvl >= 10) {
+      let smHave = getCasinoChips('sierra');
+      html += `<p style="font-size:11px;color:#e8d48b;">Tienes: <b>${smHave}</b> fichas Sierra Madre</p>`;
       STRIP_CASINOS.forEach(c => {
-        html += `<button style="margin:2px;border-color:${c.color};color:${c.color};" onclick="sierraExchangeTo('${c.id}',10)">10 SM → 10 ${c.name}</button>`;
+        html += `<button style="margin:2px;border-color:${c.color};color:${c.color};" onclick="openSierraExchangePad('${c.id}')">SM → ${c.name}</button>`;
       });
     }
     html += `</div>`;
@@ -10301,7 +10308,18 @@ function sierraHeal(kind) {
   updateStats();
 }
 
+function openSierraExchangePad(casinoId) {
+  ensureChips();
+  let maxQ = getCasinoChips('sierra') || 0;
+  if (maxQ < 1) { logMsg("No tienes fichas Sierra Madre."); return; }
+  let cname = ((getCasinoDef(casinoId) || {}).name) || casinoId;
+  openQtyPad(maxQ, 'SM → ' + cname, function(n) {
+    sierraExchangeTo(casinoId, n);
+  });
+}
 function sierraExchangeTo(casinoId, amount) {
+  amount = Math.floor(Number(amount) || 0);
+  if (amount < 1) return;
   if (!spendCasinoChips('sierra', amount)) { logMsg("Fichas Sierra Madre insuficientes."); return; }
   addCasinoChips(casinoId, amount);
   logMsg("Cambias " + amount + " SM por " + amount + " de " + ((getCasinoDef(casinoId)||{}).name||casinoId) + ".");
@@ -11586,7 +11604,7 @@ function doHouseRest(settlementId) {
   }
   logMsg("Descansas " + hours + " h en tu casa. Recuperas " + (P.hp - before) + " HP.");
   closeModal();
-  if (settlementId === 'player_home') renderPlayerSettlementUI('base');
+  if (settlementId === 'player_home') renderPlayerSettlementUI('farm');
   else renderSettlementUI(settlementId, 'base');
   updateStats();
 }
@@ -13498,7 +13516,7 @@ function renderInv(sub = P.subtab, page) {
         if (it.heal) html += `<span style="font-size:12px; color:var(--accent);">Curación: +${it.heal}</span><br>`;
         if (it.effectDesc) html += `<span style="font-size:11px; color:var(--gold);">${it.effectDesc} (${it.effectActions || 0} acciones)</span><br>`;
       } else if (sub === 'other') {
-        if (it.crimsonPack) html += `<span style="font-size:12px; color:#cc3333;">📦 Sobre Crimson (${it.crimsonPack} carta/s) — ábrelo en Puesto Crimson → Mazo, o aquí.</span><br>`;
+        if (it.crimsonPack) html += `<span style="font-size:12px; color:#cc3333;">📦 Sobre Crimson (${it.crimsonPack} carta/s) — solo en Puesto Crimson → Mazo → Abrir sobres.</span><br>`;
         else if (it.id === 14) html += `<span style="font-size:12px; color:#55aaff;">Tartera Vault-Tec — abre en REFUGIO.</span><br>`;
         else if (it.id === 15) html += `<span style="font-size:12px; color:#e05050;">Tartera Nuka-Cola — abre en REFUGIO.</span><br>`;
         else if (it.id === 29) html += `<span style="font-size:12px; color:var(--gold);">Tartera Legendaria — abre en REFUGIO.</span><br>`;
@@ -13537,14 +13555,14 @@ function renderInv(sub = P.subtab, page) {
         if (it.type === 'med' || it.type === 'food' || it.type === 'drink' || it.useDesc || it.useEffect || it.heal || it.radRemove) {
           html += `<button onclick="useMedItem(${inst.uid})">Usar 1</button>`;
         }
-        if (canSellHere) html += `<button onclick="sellItem(${inst.uid})">Vender 1</button>`;
+        if (canSellHere) html += `<button onclick="sellItem(${inst.uid})">Vender…</button>`;
         html += `</div>`;
       } else if (sub === 'junk' || sub === 'other' || sub === 'ingredient') {
         if (it.crimsonPack) {
-          html += `<button style="margin-top:6px;background:#cc3333;color:#fff;" onclick="openCrimsonPack(${it.id})">Abrir sobre</button>`;
+          html += `<span style="font-size:11px;color:#8d9880;">Solo se abre en Puesto Crimson → Mazo → Abrir sobres.</span><br>`;
         }
         if (canSellHere && !it.robcoModule && it.id !== 3500 && !it.crimsonPack && !it.noCommerceSell) {
-          html += `<button style="margin-top:6px;" onclick="sellItem(${inst.uid})">Vender 1</button>`;
+          html += `<button style="margin-top:6px;" onclick="sellItem(${inst.uid})">Vender…</button>`;
         } else if (canSellHere && (it.robcoModule || it.id === 3500)) {
           html += `<span style="font-size:11px;color:#8d9880;">No se vende — solo para mejorar robots en RobCo.</span>`;
         }
@@ -13597,22 +13615,55 @@ function sellItem(uid) {
     return;
   }
 
+  let maxQ = Math.max(1, inst.qty || 1);
+  if (maxQ > 1) {
+    openQtyPad(maxQ, 'Vender ' + (inst.legendary ? '★ ' : '') + it.name, function(n) {
+      doSellItem(uid, n);
+    });
+    return;
+  }
+  doSellItem(uid, 1);
+}
+
+function doSellItem(uid, qty) {
+  if (!isAtCommerce()) {
+    logMsg("Solo puedes vender en la Zona de Comercio [+3, -3].");
+    return;
+  }
+  let inst = P.inv.find(i => i.uid === uid);
+  if (!inst) return;
+  let it = getItemBase(inst.id);
+  if (!it) return;
+  if (it.robcoModule || it.id === 3500) {
+    logMsg("El Módulo Legendario RobCo no se puede vender.");
+    return;
+  }
+  if (it.slave || it.noCommerceSell || it.id === 2305) {
+    logMsg("Los esclavos solo se venden en Paradise Falls (Negreros).");
+    return;
+  }
+  qty = Math.floor(Number(qty) || 0);
+  let have = Math.max(1, inst.qty || 1);
+  if (qty < 1) return;
+  if (qty > have) qty = have;
+
   let sellBonus = 1 + (((P.perks && P.perks.p_barter) || 0) * 0.15);
   let aAb = getArmorAbility();
   if (aAb && aAb.id === 'a_barter') sellBonus += 0.25;
   let baseVal = inst.legendary ? it.value * 3 : (it.value || 1);
-  let finalValue = Math.max(1, Math.floor(baseVal * sellBonus));
+  let unitValue = Math.max(1, Math.floor(baseVal * sellBonus));
+  let totalValue = unitValue * qty;
 
-  P.caps += finalValue;
+  P.caps += totalValue;
   playBuySound();
 
-  if (inst.qty && inst.qty > 1) {
-    inst.qty--;
+  if ((inst.qty || 1) > qty) {
+    inst.qty = (inst.qty || 1) - qty;
   } else {
     P.inv = P.inv.filter(i => i.uid !== uid);
   }
 
-  logMsg("Vendiste 1x " + (inst.legendary ? "★ " : "") + it.name + " por " + finalValue + " chapas.");
+  logMsg("Vendiste " + qty + "x " + (inst.legendary ? "★ " : "") + it.name + " por " + totalValue + " chapas.");
   renderInv(P.subtab);
   updateStats();
 }
