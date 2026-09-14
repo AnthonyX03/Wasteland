@@ -5594,7 +5594,7 @@ function renderMap() {
     let ly = fmtCoord(P.lootTip.y);
     let hereLoot = (P.x === P.lootTip.x && P.y === P.lootTip.y);
     signalHint += `<div class="map-signal-hint" style="color:${hereLoot ? 'var(--gold)' : '#d5bd69'};">💰 Botín señalado [${lx}, ${ly}]${hereLoot ? ' — ¡AQUÍ!' : ''}</div>`;
-
+  }
   if (P.crimsonEscort && P.crimsonEscort.active) {
     let ae = P.crimsonEscort.active;
     let sx = (ae.destX >= 0 ? '+' : '') + ae.destX, sy = (ae.destY >= 0 ? '+' : '') + ae.destY;
@@ -5602,7 +5602,6 @@ function renderMap() {
     let leftH = Math.max(0, (ae.deadlineHour || 0) - (P.worldHours || 0));
     let destLabel = ae.destName ? (ae.destName + ' ') : '';
     signalHint += `<div class="map-signal-hint" style="color:${hereE ? 'var(--gold)' : '#cc3333'};font-weight:bold;">🐪 Escolta → ${destLabel}[${sx}, ${sy}] · ${leftH}h${hereE ? ' — ¡AQUÍ!' : ''}</div>`;
-  }
   }
 
   let actBtns = '';
@@ -6435,7 +6434,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.4</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.5</div>
   `;
   m.classList.add('show');
 }
