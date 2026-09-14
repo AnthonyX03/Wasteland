@@ -4267,7 +4267,7 @@ function renderQuests(tab) {
         <span style="font-size:11px;">Destino [${a.destX >= 0 ? '+' : ''}${a.destX}, ${a.destY >= 0 ? '+' : ''}${a.destY}] · Quedan <b>${left} h</b></span><br>
         <span style="font-size:11px;">Recompensa: ${a.caps} chapas · +${a.rep} rep</span><br>`;
       if (here) {
-        html += `<button style="margin-top:6px;width:100%;background:var(--accent);color:#111;font-weight:bold;" onclick="finishCrimsonEscort();renderQuests('escorts');">FINALIZAR ESCOLTA</button>`;
+        html += `<button style="margin-top:4px;padding:4px 10px;font-size:11px;background:var(--accent);color:#111;font-weight:bold;" onclick="finishCrimsonEscort();renderQuests('escorts');">🐪 Finalizar escolta</button>`;
       } else {
         html += `<span style="font-size:11px;color:#8d9880;">Viaja al destino para poder finalizar.</span>`;
       }
@@ -5693,7 +5693,7 @@ function renderMap() {
     </div>
     ${signalHint || '<div class="map-signal-hint">&nbsp;</div>'}
     ${(P.crimsonEscort && P.crimsonEscort.active && P.x === P.crimsonEscort.active.destX && P.y === P.crimsonEscort.active.destY)
-      ? '<button style="width:100%;margin:4px 0;background:var(--accent);color:#111;font-weight:bold;" onclick="finishCrimsonEscort();renderMap();">🐪 FINALIZAR ESCOLTA</button>'
+      ? '<button style="width:auto;max-width:100%;margin:2px auto;padding:3px 10px;font-size:11px;display:block;background:var(--accent);color:#111;font-weight:bold;border-radius:3px;" onclick="finishCrimsonEscort();renderMap();">🐪 Finalizar escolta</button>'
       : ''}
     ${renderWorldGrid()}
     <div class="map-actions">
@@ -6428,7 +6428,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="resetGame();">☠ Reiniciar partida</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.7.9</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.0</div>
   `;
   m.classList.add('show');
 }
@@ -7255,7 +7255,7 @@ function ensureCrimson() {
   }
   if (!P.crimsonCards.collection) P.crimsonCards.collection = {};
   if (!Array.isArray(P.crimsonCards.deck)) P.crimsonCards.deck = [];
-  if (window._CRIMSON_CARD_DB && !window._CRIMSON_CARD_DB._balanced) window._CRIMSON_CARD_DB = null;
+  if (window._CRIMSON_CARD_DB && !window._CRIMSON_CARD_DB._balanced2) window._CRIMSON_CARD_DB = null;
   buildCrimsonCardDB();
   window._CRIMSON_CARD_DB = null; // regenerar DB (1000 cartas)
   buildCrimsonCardDB();
@@ -7273,10 +7273,13 @@ const CRIMSON_RANK_ORDER = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'
 const CRIMSON_RANK_VAL = { A:1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, J:11, Q:12, K:13 };
 const CRIMSON_RARITY = {
   common:    { name: 'Común',      plural: 'Comunes',      color: '#9aa0a6', border: '#666' },
+  special:   { name: 'Especial',   plural: 'Especiales',   color: '#5ecfb0', border: '#2a9d7a' },
   rare:      { name: 'Rara',       plural: 'Raras',        color: '#4ea1ff', border: '#2a7fd4' },
   epic:      { name: 'Épica',      plural: 'Épicas',       color: '#b388ff', border: '#7c4dff' },
-  legendary: { name: 'Legendaria', plural: 'Legendarias',  color: '#ffd54f', border: '#c9a227' }
+  legendary: { name: 'Legendaria', plural: 'Legendarias',  color: '#ffd54f', border: '#c9a227' },
+  mythic:    { name: 'Mítica',     plural: 'Míticas',      color: '#ff4d6d', border: '#c9184a' }
 };
+const CRIMSON_RARITY_ORDER = ['common','special','rare','epic','legendary','mythic'];
 // Habilidades: se aplican al calcular el valor del carril
 const CRIMSON_ABILITIES = {
   none:        { name: '', desc: '' },
@@ -7301,22 +7304,34 @@ const CRIMSON_ABILITIES = {
   anti_black:  { name: 'Anti-negro', desc: '+5 si el carril rival tiene cartas negras' },
   legend_aura: { name: 'Aura', desc: '+2 a cada carta tuya del carril' },
   thrice:      { name: 'Triple', desc: 'Esta carta vale el triple' },
-  drain:       { name: 'Drenar', desc: '-3 al rival y +3 a ti en este carril' }
+  drain:       { name: 'Drenar', desc: '-3 al rival y +3 a ti en este carril' },
+  // Especiales
+  boost1:      { name: 'Toque', desc: '+1 al valor de esta carta' },
+  suit_syn:    { name: 'Afinidad', desc: '+2 si hay otra carta del mismo palo en el carril' },
+  low_boost:   { name: 'Bajo peso', desc: '+3 si el valor base es 5 o menos' },
+  soft_penal:  { name: 'Roce', desc: '-1 al carril rival' },
+  // Míticas
+  mythic_x4:   { name: 'Cuádruple', desc: 'Esta carta vale ×4' },
+  mythic_lane: { name: 'Supremacía', desc: '+8 a todo tu carril' },
+  mythic_crush:{ name: 'Aplastar', desc: '-10 al carril rival' },
+  mythic_steal:{ name: 'Saqueo', desc: 'Roba 5 puntos del rival hacia tu carril' },
+  mythic_all:  { name: 'Omnipotencia', desc: '+3 a cada carta tuya del carril y -3 al rival' }
 };
 
 function buildCrimsonCardDB() {
-  if (window._CRIMSON_CARD_DB && window._CRIMSON_CARD_DB.length >= 1000 && window._CRIMSON_CARD_DB._balanced) {
+  if (window._CRIMSON_CARD_DB && window._CRIMSON_CARD_DB.length >= 1000 && window._CRIMSON_CARD_DB._balanced2) {
     return window._CRIMSON_CARD_DB;
   }
   let db = [];
   let n = 0;
+  const specialAbs = ['boost1','boost2','suit_syn','low_boost','soft_penal','face_bonus','pair_syn'];
   const rareAbs = ['boost2','boost3','lane2','penal2','face_bonus','pair_syn','floor10'];
   const epicAbs = ['boost5','double','lane3','penal4','ace_high','full_lane','anti_red','anti_black','copy_high'];
   const legAbs = ['boost8','thrice','lane5','penal6','legend_aura','drain'];
-  // Por cada palo+rango: 1 común + mismas variantes de habilidad
-  // 10 raras + 6 épicas + 3 legendarias = 19 habilidades por cara
-  // 52 + 52*19 = 1040 cartas (equilibrado)
-  const RARE_N = 10, EPIC_N = 6, LEG_N = 3;
+  const mythAbs = ['mythic_x4','mythic_lane','mythic_crush','mythic_steal','mythic_all'];
+  // Por cara: 1 común + 4 especial + 8 rara + 5 épica + 3 leg + 1 mítica = 22
+  // 52×22 = 1144
+  const SPEC_N = 4, RARE_N = 8, EPIC_N = 5, LEG_N = 3, MYTH_N = 1;
   function add(s, rank, rarity, ability) {
     n++;
     let id = 'cc' + String(n).padStart(4, '0');
@@ -7332,12 +7347,14 @@ function buildCrimsonCardDB() {
   CRIMSON_SUITS.forEach(function(s) {
     CRIMSON_RANK_ORDER.forEach(function(rank) {
       add(s, rank, 'common', 'none');
+      for (let i = 0; i < SPEC_N; i++) add(s, rank, 'special', specialAbs[i % specialAbs.length]);
       for (let i = 0; i < RARE_N; i++) add(s, rank, 'rare', rareAbs[i % rareAbs.length]);
       for (let i = 0; i < EPIC_N; i++) add(s, rank, 'epic', epicAbs[i % epicAbs.length]);
       for (let i = 0; i < LEG_N; i++) add(s, rank, 'legendary', legAbs[i % legAbs.length]);
+      for (let i = 0; i < MYTH_N; i++) add(s, rank, 'mythic', mythAbs[(n + i) % mythAbs.length]);
     });
   });
-  db._balanced = true;
+  db._balanced2 = true;
   window._CRIMSON_CARD_DB = db;
   return db;
 }
@@ -7389,7 +7406,7 @@ function crimsonCardHtml(c, small) {
   let h = small ? '46px' : '62px';
   let fs = small ? '11px' : '14px';
   let fs2 = small ? '13px' : '17px';
-  let star = c.rarity === 'legendary' ? '★' : (c.rarity === 'epic' ? '◆' : (c.rarity === 'rare' ? '●' : ''));
+  let star = c.rarity === 'mythic' ? '✦' : (c.rarity === 'legendary' ? '★' : (c.rarity === 'epic' ? '◆' : (c.rarity === 'rare' ? '●' : (c.rarity === 'special' ? '◇' : ''))));
   return '<div title="' + (c.abilityName ? (c.abilityName + ': ' + c.abilityDesc) : rar.name) +
     '" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;' +
     'width:' + w + ';height:' + h + ';min-width:' + w + ';background:#fff;color:' + ink +
@@ -7403,9 +7420,13 @@ function crimsonCardHtml(c, small) {
 }
 
 function crimsonLaneGrid(cards, small) {
-  // rejilla 2x2
+  // rejilla 2x2 — tocables para ver info
   let cells = [0,1,2,3].map(i => {
-    if (cards[i]) return crimsonCardHtml(cards[i], small);
+    if (cards[i]) {
+      let c = cards[i];
+      let id = c.id || '';
+      return '<span style="cursor:pointer;" onclick="showCrimsonCardInfoFromGame(\'' + id + '\')">' + crimsonCardHtml(c, small) + '</span>';
+    }
     return '<div style="width:' + (small?'34px':'46px') + ';height:' + (small?'46px':'62px') +
       ';margin:1px;border:1px dashed #333;border-radius:4px;opacity:0.35;"></div>';
   });
@@ -7417,18 +7438,25 @@ function cardEffectiveValue(c, laneCards, enemyLane) {
   if (!c) return 0;
   let v = c.r || CRIMSON_RANK_VAL[c.rank] || 1;
   let ab = c.ability || 'none';
+  if (ab === 'boost1') v += 1;
   if (ab === 'boost2') v += 2;
   if (ab === 'boost3') v += 3;
   if (ab === 'boost5') v += 5;
   if (ab === 'boost8') v += 8;
   if (ab === 'double') v *= 2;
   if (ab === 'thrice') v *= 3;
+  if (ab === 'mythic_x4') v *= 4;
   if (ab === 'floor10' && v < 10) v = 10;
   if (ab === 'face_bonus' && (c.rank === 'J' || c.rank === 'Q' || c.rank === 'K')) v += 4;
   if (ab === 'pair_syn') {
     let same = (laneCards || []).filter(x => x && x.rank === c.rank).length;
     if (same >= 2) v += 3;
   }
+  if (ab === 'suit_syn') {
+    let sameS = (laneCards || []).filter(x => x && x.s === c.s).length;
+    if (sameS >= 2) v += 2;
+  }
+  if (ab === 'low_boost' && (c.r || 0) <= 5) v += 3;
   if (ab === 'ace_high' && (c.rank === 'A' || c.r === 1)) v = 14;
   return v;
 }
@@ -7450,6 +7478,11 @@ function caravanLaneSum(cards, enemyCards) {
     if (ab === 'penal4') enemyPenalty += 4;
     if (ab === 'penal6') enemyPenalty += 6;
     if (ab === 'drain') { enemyPenalty += 3; laneBonus += 3; }
+    if (ab === 'soft_penal') enemyPenalty += 1;
+    if (ab === 'mythic_lane') laneBonus += 8;
+    if (ab === 'mythic_crush') enemyPenalty += 10;
+    if (ab === 'mythic_steal') { enemyPenalty += 5; laneBonus += 5; }
+    if (ab === 'mythic_all') { laneBonus += 3 * cards.length; enemyPenalty += 3; }
     if (ab === 'anti_red' && enemyCards.some(x => x.s === '♥' || x.s === '♦')) laneBonus += 5;
     if (ab === 'anti_black' && enemyCards.some(x => x.s === '♠' || x.s === '♣')) laneBonus += 5;
     if (ab === 'copy_high') {
@@ -7535,11 +7568,12 @@ function openCrimsonDeckUI(sub, rarFilter) {
   let fcol = '#cc3333';
   let html = '';
   function rarTabs(activeSub) {
-    let h = '<div class="subtabs" style="flex-wrap:wrap;margin:6px 0;">';
-    ['common','rare','epic','legendary'].forEach(function(rar) {
+    let h = '<div class="subtabs" style="flex-wrap:wrap;margin:4px 0;gap:3px;">';
+    (CRIMSON_RARITY_ORDER || ['common','special','rare','epic','legendary','mythic']).forEach(function(rar) {
       let info = CRIMSON_RARITY[rar];
+      if (!info) return;
       let act = (P.crimsonRarFilter === rar);
-      h += '<button class="' + (act ? 'active' : '') + '" style="' +
+      h += '<button class="' + (act ? 'active' : '') + '" style="font-size:11px;padding:4px 6px;' +
         (act ? 'border-color:' + info.color + ';color:' + info.color + ';' : '') +
         '" onclick="openCrimsonDeckUI(\'' + activeSub + '\',\'' + rar + '\')">' + info.plural + '</button>';
     });
@@ -7551,21 +7585,25 @@ function openCrimsonDeckUI(sub, rarFilter) {
       '<p style="font-size:12px;color:#8d9880;text-align:center;">Mazo de juego: ' + P.crimsonCards.deck.length + '/30</p>' +
       '<button style="width:100%;margin:4px 0;background:' + fcol + ';color:#fff;" onclick="openCrimsonDeckUI(\'edit\')">Editar mazo</button>' +
       '<button style="width:100%;margin:4px 0;" onclick="openCrimsonDeckUI(\'collection\')">Ver colección</button>' +
-      '<button style="width:100%;margin:4px 0;" onclick="openCrimsonDeckUI(\'packs\')">Abrir sobre</button>' +
+      '<button style="width:100%;margin:4px 0;" onclick="openCrimsonDeckUI(\'packs\')">Abrir sobres</button>' +
       '<button style="width:100%;margin-top:8px;" onclick="closeModal();">Cerrar</button>';
   } else if (sub === 'edit') {
     let rar = P.crimsonRarFilter || 'common';
     let rarInfo = CRIMSON_RARITY[rar];
-    html = '<h2 style="color:' + fcol + ';text-align:center;margin-top:0;">Editar mazo (' + P.crimsonCards.deck.length + '/30)</h2>' +
-      '<p style="font-size:11px;color:#8d9880;">Mazo: toca para quitar. Abajo: info / + añadir.</p>' +
-      '<h3 style="font-size:12px;color:' + fcol + ';">Mazo actual</h3><div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;">';
-    html += '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3px;justify-items:center;width:100%;">';
+    html = '<div style="display:flex;flex-direction:column;max-height:78vh;">';
+    html += '<div style="flex-shrink:0;">';
+    html += '<h2 style="color:' + fcol + ';text-align:center;margin:0 0 4px 0;font-size:18px;">Editar mazo (' + P.crimsonCards.deck.length + '/30)</h2>';
+    html += '<p style="font-size:10px;color:#8d9880;margin:0 0 4px 0;text-align:center;">Mazo fijo arriba · Toca carta del mazo para quitar</p>';
+    html += '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:2px;justify-items:center;padding:4px;background:#0d100c;border:1px solid #3e4737;border-radius:4px;margin-bottom:6px;">';
     P.crimsonCards.deck.forEach(function(id, i) {
       html += '<span style="cursor:pointer;" onclick="removeFromCrimsonDeck(' + i + ')">' + crimsonCardHtml(id, true) + '</span>';
     });
-    html += '</div></div>';
+    html += '</div>';
     html += rarTabs('edit');
-    html += '<h3 style="font-size:12px;color:' + rarInfo.color + ';">' + rarInfo.plural + ' libres</h3>';
+    html += '<h3 style="font-size:12px;color:' + rarInfo.color + ';margin:4px 0;">' + rarInfo.plural + ' libres</h3>';
+    html += '</div>';
+    // scrollable free cards
+    html += '<div style="flex:1;overflow-y:auto;min-height:80px;-webkit-overflow-scrolling:touch;">';
     let freeCards = [];
     allCrimsonCardIds().forEach(function(id) {
       let c = parseCardId(id);
@@ -7596,7 +7634,9 @@ function openCrimsonDeckUI(sub, rarFilter) {
         html += '</div>';
       });
     }
-    html += '<button style="width:100%;margin-top:8px;" onclick="openCrimsonDeckUI(\'main\')">← Atrás</button>';
+    html += '</div>';
+    html += '<div style="flex-shrink:0;padding-top:6px;border-top:1px solid #3e4737;"><button style="width:100%;" onclick="openCrimsonDeckUI(\'main\')">← Atrás</button></div>';
+    html += '</div>';
   } else if (sub === 'collection') {
     let rar = P.crimsonRarFilter || 'common';
     let rarInfo = CRIMSON_RARITY[rar];
@@ -7605,9 +7645,13 @@ function openCrimsonDeckUI(sub, rarFilter) {
       let c = parseCardId(id);
       return c.rarity === rar && ownedCardCount(id) > 0;
     }).length;
-    html = '<h2 style="color:' + fcol + ';text-align:center;margin-top:0;">Colección</h2>' +
-      rarTabs('collection') +
-      '<p style="font-size:11px;color:#8d9880;">' + rarInfo.plural + ': ' + owned + '/' + total + ' · Orden A→K · Toca para info</p>';
+    html = '<div style="display:flex;flex-direction:column;max-height:78vh;">';
+    html += '<div style="flex-shrink:0;">';
+    html += '<h2 style="color:' + fcol + ';text-align:center;margin:0 0 4px 0;">Colección</h2>';
+    html += rarTabs('collection');
+    html += '<p style="font-size:11px;color:#8d9880;margin:2px 0 6px 0;">' + rarInfo.plural + ': ' + owned + '/' + total + ' · A→K · Toca para info</p>';
+    html += '</div>';
+    html += '<div style="flex:1;overflow-y:auto;min-height:80px;-webkit-overflow-scrolling:touch;">';
     CRIMSON_SUITS.forEach(function(suit) {
       let list = allCrimsonCardIds().map(parseCardId).filter(function(c){ return c.rarity === rar && c.s === suit; });
       list.sort(function(a, b) {
@@ -7631,15 +7675,30 @@ function openCrimsonDeckUI(sub, rarFilter) {
         html += '</div>';
       });
     });
-    html += '<button style="width:100%;margin-top:8px;" onclick="openCrimsonDeckUI(\'main\')">← Atrás</button>';
+    html += '</div>';
+    html += '<div style="flex-shrink:0;padding-top:6px;border-top:1px solid #3e4737;"><button style="width:100%;" onclick="openCrimsonDeckUI(\'main\')">← Atrás</button></div>';
+    html += '</div>';
   } else if (sub === 'packs') {
     let p1 = countItemsByBaseId(2860), p3 = countItemsByBaseId(2861), p5 = countItemsByBaseId(2862);
-    html = '<h2 style="color:' + fcol + ';text-align:center;margin-top:0;">Abrir sobres</h2>' +
-      '<p style="font-size:11px;color:#8d9880;">Inventario → Otros · 1c×' + p1 + ' · 3c×' + p3 + ' · 5c×' + p5 + '</p>' +
-      '<div class="item"><b>Sobre 1 carta</b><br><button style="margin-top:6px;" ' + (p1<1?'disabled':'') + ' onclick="openCrimsonPack(2860)">Abrir</button></div>' +
-      '<div class="item"><b>Sobre 3 cartas</b><br><button style="margin-top:6px;" ' + (p3<1?'disabled':'') + ' onclick="openCrimsonPack(2861)">Abrir</button></div>' +
-      '<div class="item"><b>Sobre 5 cartas</b><br><button style="margin-top:6px;" ' + (p5<1?'disabled':'') + ' onclick="openCrimsonPack(2862)">Abrir</button></div>' +
-      '<button style="width:100%;margin-top:8px;" onclick="openCrimsonDeckUI(\'main\')">← Atrás</button>';
+    html = '<h2 style="color:' + fcol + ';text-align:center;margin-top:0;">📦 Abrir sobres</h2>' +
+      '<p style="font-size:11px;color:#8d9880;text-align:center;">Los sobres se compran a mercaderes del Yermo<br>y se guardan en <b>Inventario → Otros</b>.</p>' +
+      '<div class="item" style="border-color:#65705a;background:#0d100c;">' +
+      '<div style="display:flex;align-items:center;gap:8px;"><span style="font-size:28px;">📄</span><div style="flex:1;">' +
+      '<b>Sobre básico</b> · 1 carta<br><span style="font-size:10px;color:#8d9880;">Común / Especial frecuente</span><br>' +
+      '<span style="font-size:11px;">Tienes: <b>' + p1 + '</b></span></div>' +
+      '<button style="padding:8px 12px;" ' + (p1<1?'disabled':'') + ' onclick="openCrimsonPack(2860)">Abrir</button></div></div>' +
+      '<div class="item" style="border-color:#4ea1ff;background:#0d100c;">' +
+      '<div style="display:flex;align-items:center;gap:8px;"><span style="font-size:28px;">🎴</span><div style="flex:1;">' +
+      '<b style="color:#4ea1ff;">Sobre raro</b> · 3 cartas<br><span style="font-size:10px;color:#8d9880;">Mejores odds de Rara / Épica</span><br>' +
+      '<span style="font-size:11px;">Tienes: <b>' + p3 + '</b></span></div>' +
+      '<button style="padding:8px 12px;border-color:#4ea1ff;" ' + (p3<1?'disabled':'') + ' onclick="openCrimsonPack(2861)">Abrir</button></div></div>' +
+      '<div class="item" style="border-color:#ffd54f;background:#0d100c;">' +
+      '<div style="display:flex;align-items:center;gap:8px;"><span style="font-size:28px;">💎</span><div style="flex:1;">' +
+      '<b style="color:#ffd54f;">Sobre premium</b> · 5 cartas<br><span style="font-size:10px;color:#8d9880;">Posible Legendaria / Mítica</span><br>' +
+      '<span style="font-size:11px;">Tienes: <b>' + p5 + '</b></span></div>' +
+      '<button style="padding:8px 12px;border-color:#ffd54f;" ' + (p5<1?'disabled':'') + ' onclick="openCrimsonPack(2862)">Abrir</button></div></div>' +
+      '<p style="font-size:10px;color:#65705a;text-align:center;margin-top:8px;">Prob. aprox: Común 45% · Especial 25% · Rara 18% · Épica 8% · Leg. 3% · Mítica 1%</p>' +
+      '<button style="width:100%;margin-top:6px;" onclick="openCrimsonDeckUI(\'main\')">← Atrás</button>';
   }
   document.getElementById('modal-body').innerHTML = html;
   document.getElementById('modal').classList.add('show');
@@ -7669,9 +7728,11 @@ function openCrimsonPack(itemId) {
   for (let i = 0; i < n; i++) {
     let roll = Math.random();
     let pool;
-    if (roll < 0.02) pool = db.filter(c => c.rarity === 'legendary');
-    else if (roll < 0.10) pool = db.filter(c => c.rarity === 'epic');
-    else if (roll < 0.35) pool = db.filter(c => c.rarity === 'rare');
+    if (roll < 0.01) pool = db.filter(c => c.rarity === 'mythic');
+    else if (roll < 0.04) pool = db.filter(c => c.rarity === 'legendary');
+    else if (roll < 0.12) pool = db.filter(c => c.rarity === 'epic');
+    else if (roll < 0.30) pool = db.filter(c => c.rarity === 'rare');
+    else if (roll < 0.55) pool = db.filter(c => c.rarity === 'special');
     else pool = db.filter(c => c.rarity === 'common');
     if (!pool.length) pool = db;
     let card = pool[Math.floor(Math.random() * pool.length)];
@@ -7885,7 +7946,7 @@ function renderCrimsonEscortUI(sett, fcol) {
     html += '<span style="font-size:11px;">[' + (a.destX>=0?'+':'') + a.destX + ', ' + (a.destY>=0?'+':'') + a.destY + '] · Quedan <b>' + left + ' h</b></span><br>';
     html += '<span style="font-size:11px;">Pago: ' + a.caps + ' chapas · +' + a.rep + ' rep</span><br>';
     if (here) {
-      html += '<button style="margin-top:6px;width:100%;background:var(--accent);color:#111;font-weight:bold;" onclick="finishCrimsonEscort()">FINALIZAR ESCOLTA</button>';
+      html += '<button style="margin-top:4px;padding:4px 10px;font-size:11px;background:var(--accent);color:#111;font-weight:bold;" onclick="finishCrimsonEscort()">🐪 Finalizar escolta</button>';
     } else {
       html += '<span style="font-size:11px;color:#8d9880;">Viaja al destino para finalizar</span>';
     }
