@@ -1361,7 +1361,7 @@ const DB_ITEMS = [
   { id: 2914, name: "Casco de bandido", type: "armor", def: 12, radRes: 0, weight: 3, value: 120, stackable: false, factionExclusive: "powder", shopTier: 2 },
   { id: 2915, name: "Armadura de voladura", type: "armor", def: 32, radRes: 10, weight: 14, value: 450, stackable: false, factionExclusive: "powder", shopTier: 4 },
 
-  { id: 2500, name: "Morador", type: "special", weight: 0, value: 0, stackable: true, dweller: true, noCommerceSell: true, effectDesc: "Sujeto experimental atraído por la antena del Refugio. Peso 0 kg. Úsalo en Laboratorio → Experimentar (gasear, irradiar, FEV). Los supervivientes van a Criogenización. No se vende en Comercio." },
+  { id: 2500, name: "Morador", type: "special", weight: 0, value: 0, stackable: true, dweller: true, noCommerceSell: true, effectDesc: "Sujeto del Refugio experimental (Vaul-Tec). Se reclama en Puerta tras reparar la antena (máx. 3 en espera). En Laboratorio → Experimentar se consume 1× Morador por prueba (gas, radiación, FEV…). Si sobrevive, pasa a Criogenización (compañero o Documentos del experimento). Peso 0 kg. No se vende en Comercio." },
   { id: 2501, name: "Documentos del experimento", type: "other", weight: 0.1, value: 0, stackable: true, experimentDocs: true, noCommerceSell: true, effectDesc: "Informes clasificados de Vaul-Tec. Véndelos en la Oficina de Vaul-Tec por Dinero de antes de la guerra." },
   { id: 2305, name: "Esclavo", type: "special", weight: 0, value: 500, stackable: true, slave: true, noCommerceSell: true, effectDesc: "Mercancía viva. Véndela en Paradise Falls (Base → Vender Esclavos) por 500 chapas y reputación. No se vende en Comercio." },
   { id: 2311, name: "Látigo de negrero", type: "weapon", damage: 22, ammoType: "Ninguna (Cuerpo a cuerpo)", weight: 2, value: 180, stackable: false, factionOnly: true, faction: "slavers" },
@@ -2260,7 +2260,7 @@ function getArmorAbility() {
   return null;
 }
 
-function getItemBase(id) { return DB_ITEMS.find(i => i.id === id); }
+function getItemBase(id) { return DB_ITEMS.find(i => i.id == id); }
 function getRequiredXP() { return P.lvl * 100; }
 
 function getCumulativeBonus(n) {
@@ -2419,22 +2419,29 @@ function addItemToInv(baseId, count = 1) {
     return false;
   }
 
+  // Granadas y stackables: apilar (no crear entradas sueltas)
+  if (it.grenade || it.stackable || isStackableType(it)) {
+    let existing = P.inv.find(i => i.id === baseId && !i.legendary);
+    if (existing) {
+      existing.qty = (existing.qty || 1) + count;
+      if (it.grenade) existing.itemLevel = Math.max(existing.itemLevel || 1, P.lvl || 1);
+      return existing.uid;
+    }
+    let newUid = Date.now() + Math.floor(Math.random() * 100000);
+    let row = { uid: newUid, id: baseId, qty: count, mods: [] };
+    if (it.grenade || it.type === 'weapon' || it.type === 'armor') row.itemLevel = P.lvl || 1;
+    P.inv.push(row);
+    return newUid;
+  }
+
   if (it.type === 'weapon' || it.type === 'armor') {
-    // Armas y armaduras siempre al nivel del personaje
+    // Armas y armaduras (no granadas) siempre al nivel del personaje
     let lastUid = null;
     for (let n = 0; n < count; n++) {
       lastUid = addLeveledGearToInv(baseId);
       if (!lastUid) break;
     }
     return lastUid;
-  }
-
-  if (it.stackable) {
-    let existing = P.inv.find(i => i.id === baseId);
-    if (existing) {
-      existing.qty = (existing.qty || 1) + count;
-      return existing.uid;
-    }
   }
 
   let newUid = Date.now() + Math.floor(Math.random() * 100000);
@@ -3792,12 +3799,11 @@ function renderStorageUI() {
 }
 
 function isStackableType(it) {
-  if (!it) if (it && it.grenade) return true;
-  return false;
-  if (it.stackable) if (it && it.grenade) return true;
-  return true;
-  if (it && it.grenade) return true;
-  return ['junk', 'med', 'chem', 'ingredient', 'other', 'food', 'drink', 'quest', 'ammo'].includes(it.type);
+  if (!it) return false;
+  if (it.grenade) return true;
+  if (it.stackable) return true;
+  if (it.dweller || it.slave) return true;
+  return ['junk', 'med', 'chem', 'ingredient', 'other', 'food', 'drink', 'quest', 'ammo', 'special'].includes(it.type);
 }
 
 function promptQty(max, actionLabel) {
@@ -3839,13 +3845,17 @@ function consolidateStacks(list) {
   for (let inst of list) {
     let base = getItemBase(inst.id);
     if (isStackableType(base) && !inst.legendary) {
-      let key = inst.id;
+      let key = String(inst.id);
       if (map[key] !== undefined) {
-        out[map[key]].qty = (out[map[key]].qty || 1) + (inst.qty || 1);
+        let row = out[map[key]];
+        row.qty = (row.qty || 1) + (inst.qty || 1);
+        if (inst.itemLevel) row.itemLevel = Math.max(row.itemLevel || 1, inst.itemLevel || 1);
         continue;
       }
       map[key] = out.length;
-      out.push({ uid: inst.uid || (Date.now() + Math.floor(Math.random()*1e5)), id: inst.id, qty: inst.qty || 1, mods: [] });
+      let row = { uid: inst.uid || (Date.now() + Math.floor(Math.random()*1e5)), id: inst.id, qty: inst.qty || 1, mods: [] };
+      if (inst.itemLevel) row.itemLevel = inst.itemLevel;
+      out.push(row);
     } else {
       out.push(inst);
     }
@@ -6513,7 +6523,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.9.1</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.9.3</div>
   `;
   m.classList.add('show');
 }
@@ -13584,6 +13594,16 @@ function renderInv(sub = P.subtab, page) {
   if (sub === 'weapon' || sub === 'grenade') {
     if (!P.weaponInvSub) P.weaponInvSub = 'guns';
     if (sub === 'grenade') P.weaponInvSub = 'grenades';
+    // Fusionar granadas duplicadas del inventario
+    if (typeof consolidateStacks === 'function') consolidateStacks(P.inv);
+    // refiltrar tras consolidar
+    list = P.inv.filter(inst => {
+      let it = getItemBase(inst.id);
+      if (!it) return false;
+      let wsub = P.weaponInvSub || 'guns';
+      if (wsub === 'grenades') return it.type === 'weapon' && !!it.grenade;
+      return it.type === 'weapon' && !it.grenade;
+    });
     let ws = P.weaponInvSub;
     html += `<div class="subtabs" style="margin:6px 0 8px 0;">
       <button class="${ws==='guns'?'active':''}" style="font-size:11px;padding:4px 10px;" onclick="P.weaponInvSub='guns';P.invPage=0;renderInv('weapon')">Armas</button>
@@ -13631,6 +13651,14 @@ function renderInv(sub = P.subtab, page) {
             </span>
           </div>
       `;
+      // Descripción de uso (Morador, esclavos, especiales…)
+      if (it.dweller || it.id == 2500) {
+        html += `<span style="font-size:12px;color:#88aadd;">⌂ ${it.effectDesc || 'Sujeto del Refugio experimental. Se usa en Laboratorio → Experimentar (1 por prueba). Si sobrevive va a Criogenización. No se vende en Comercio.'}</span><br>`;
+      } else if (it.slave || it.id == 2305) {
+        html += `<span style="font-size:12px;color:#aa6644;">⛓ ${it.effectDesc || 'Véndelo en Paradise Falls por 500 chapas + reputación.'}</span><br>`;
+      } else if (it.type === 'special' && it.effectDesc) {
+        html += `<span style="font-size:12px;color:#8d9880;">${it.effectDesc}</span><br>`;
+      }
 
       let scale = getItemLevelBonus(ilvl);
       let modScale = getModLevelScale(ilvl);
@@ -13665,17 +13693,17 @@ function renderInv(sub = P.subtab, page) {
       } else if (sub === 'food') {
         if (it.heal) html += `<span style="font-size:12px; color:var(--accent);">Curación: +${it.heal}</span><br>`;
         if (it.effectDesc) html += `<span style="font-size:11px; color:var(--gold);">${it.effectDesc} (${it.effectActions || 0} acciones)</span><br>`;
-      } else if (sub === 'other') {
+      } else if (sub === 'other' || sub === 'special') {
         if (it.crimsonPack) html += `<span style="font-size:12px; color:#cc3333;">📦 Sobre Crimson (${it.crimsonPack} carta/s) — solo en Puesto Crimson → Mazo → Abrir sobres.</span><br>`;
         else if (it.id === 14) html += `<span style="font-size:12px; color:#55aaff;">Tartera Vault-Tec — abre en REFUGIO.</span><br>`;
         else if (it.id === 15) html += `<span style="font-size:12px; color:#e05050;">Tartera Nuka-Cola — abre en REFUGIO.</span><br>`;
         else if (it.id === 29) html += `<span style="font-size:12px; color:var(--gold);">Tartera Legendaria — abre en REFUGIO.</span><br>`;
         else if (it.robcoModule || it.id === 3500) html += `<span style="font-size:12px; color:var(--gold);">★ Módulo Legendario — úsalo en Fábrica RobCo para mejorar un robot.</span><br>`;
         else if (it.slave || it.id === 2305) html += `<span style="font-size:12px; color:#aa6644;">⛓ ${it.effectDesc || 'Véndelo en Paradise Falls por 500 chapas + reputación.'}</span><br>`;
-        else if (it.dweller || it.id === 2500) html += `<span style="font-size:12px; color:#88aadd;">⌂ ${it.effectDesc || 'Morador del Refugio. Úsalo en el Laboratorio de experimentos Vaul-Tec.'}</span><br>`;
-        else if (it.type === 'special' && it.effectDesc) html += `<span style="font-size:12px; color:#8d9880;">${it.effectDesc}</span><br>`;
+        else if (it.dweller || it.id === 2500) html += `<span style="font-size:12px; color:#88aadd;">⌂ ${it.effectDesc || 'Morador del Refugio experimental. Laboratorio → Experimentar.'}</span><br>`;
         else if (it.zetanBlood || it.id === 2400) html += `<span style="font-size:12px; color:#66ffaa;">🧬 ${it.effectDesc || 'Véndela a los Nucleólogos: 100 chapas + 5 rep.'}</span><br>`;
-        else if (it.effectDesc) html += `<span style="font-size:12px; color:var(--gold);">${it.effectDesc}</span><br>`;
+        else if (it.effectDesc) html += `<span style="font-size:12px; color:#8d9880;">${it.effectDesc}</span><br>`;
+        else if (it.type === 'special') html += `<span style="font-size:12px; color:#8d9880;">Objeto especial del Yermo.</span><br>`;
         else html += `<span style="font-size:12px; color:var(--gold);">Objeto especial.</span><br>`;
       }
 
@@ -14139,7 +14167,7 @@ function buyItem(id, price) {
   if (success) {
     P.caps -= price;
     playBuySound();
-    logMsg("Compraste 1x " + (base?.name || id) + (base && (base.type === 'weapon' || base.type === 'armor') ? (" (Nv." + (P.lvl || 1) + ")") : "") + ".");
+    logMsg("Compraste 1x " + (base?.name || id) + (base && base.grenade ? (" (Nv." + (P.lvl || 1) + ")") : (base && (base.type === 'weapon' || base.type === 'armor') ? (" (Nv." + (P.lvl || 1) + ")") : "")) + ".");
   }
   renderShop(P.shopSubtab);
   updateStats();
