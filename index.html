@@ -1342,6 +1342,25 @@ const DB_ITEMS = [
     { id: 2860, name: "Sobre Crimson (1 carta)", type: "other", weight: 0.1, value: 50, stackable: true, crimsonPack: 1, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (1 carta). Solo se abre en el Puesto Crimson → Mazo → Abrir sobres." },
   { id: 2861, name: "Sobre Crimson (3 cartas)", type: "other", weight: 0.15, value: 120, stackable: true, crimsonPack: 3, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (3 cartas). Solo se abre en el Puesto Crimson → Mazo → Abrir sobres." },
   { id: 2862, name: "Sobre Crimson (5 cartas)", type: "other", weight: 0.2, value: 200, stackable: true, crimsonPack: 5, noCommerceSell: true, effectDesc: "Sobre de cartas de Caravana (5 cartas). Solo se abre en el Puesto Crimson → Mazo → Abrir sobres." },
+  // --- GRANADAS (apilables, escalan con nivel del personaje) ---
+  { id: 2900, name: "Granada de fragmentación", type: "weapon", damage: 45, ammoType: "Granada (consumible)", weight: 0.5, value: 80, stackable: true, grenade: true, shopTier: 2 },
+  { id: 2901, name: "Granada de plasma", type: "weapon", damage: 70, ammoType: "Granada (consumible)", weight: 0.6, value: 180, stackable: true, grenade: true, shopTier: 4 },
+  { id: 2902, name: "Granada de pulso", type: "weapon", damage: 55, ammoType: "Granada (consumible)", weight: 0.5, value: 140, stackable: true, grenade: true, shopTier: 3 },
+  { id: 2903, name: "Cóctel Molotov", type: "weapon", damage: 35, ammoType: "Granada (consumible)", weight: 0.4, value: 40, stackable: true, grenade: true, shopTier: 1 },
+  { id: 2904, name: "Granada aturdidora", type: "weapon", damage: 20, ammoType: "Granada (consumible)", weight: 0.4, value: 60, stackable: true, grenade: true, shopTier: 2 },
+  { id: 2905, name: "Dinamita", type: "weapon", damage: 90, ammoType: "Granada (consumible)", weight: 0.8, value: 250, stackable: true, grenade: true, factionExclusive: "powder", shopTier: 3 },
+  { id: 2906, name: "Granada de clavos", type: "weapon", damage: 50, ammoType: "Granada (consumible)", weight: 0.55, value: 95, stackable: true, grenade: true, shopTier: 2 },
+  { id: 2907, name: "Carga de C4 improvisada", type: "weapon", damage: 110, ammoType: "Granada (consumible)", weight: 1.2, value: 320, stackable: true, grenade: true, shopTier: 5 },
+  { id: 2908, name: "Granada de gas", type: "weapon", damage: 40, ammoType: "Granada (consumible)", weight: 0.5, value: 110, stackable: true, grenade: true, shopTier: 3 },
+  { id: 2909, name: "Mina de proximidad", type: "weapon", damage: 65, ammoType: "Granada (consumible)", weight: 0.9, value: 160, stackable: true, grenade: true, shopTier: 4 },
+  // Exclusivos Bandidos de la Pólvora
+  { id: 2910, name: "Pistola de la Pólvora", type: "weapon", damage: 28, ammoType: ".38", weight: 3.2, value: 160, stackable: false, factionExclusive: "powder", shopTier: 1 },
+  { id: 2911, name: "Escopeta del Bandido", type: "weapon", damage: 48, ammoType: "Cartucho de escopeta", weight: 6, value: 280, stackable: false, factionExclusive: "powder", shopTier: 2 },
+  { id: 2912, name: "Rifle de dinamitero", type: "weapon", damage: 55, ammoType: ".308", weight: 7, value: 380, stackable: false, factionExclusive: "powder", shopTier: 3 },
+  { id: 2913, name: "Chaleco de la Pólvora", type: "armor", def: 18, radRes: 5, weight: 8, value: 200, stackable: false, factionExclusive: "powder", shopTier: 1 },
+  { id: 2914, name: "Casco de bandido", type: "armor", def: 12, radRes: 0, weight: 3, value: 120, stackable: false, factionExclusive: "powder", shopTier: 2 },
+  { id: 2915, name: "Armadura de voladura", type: "armor", def: 32, radRes: 10, weight: 14, value: 450, stackable: false, factionExclusive: "powder", shopTier: 4 },
+
   { id: 2500, name: "Morador", type: "special", weight: 0, value: 0, stackable: true, dweller: true, noCommerceSell: true, effectDesc: "Sujeto experimental atraído por la antena del Refugio. Peso 0 kg. Úsalo en Laboratorio → Experimentar (gasear, irradiar, FEV). Los supervivientes van a Criogenización. No se vende en Comercio." },
   { id: 2501, name: "Documentos del experimento", type: "other", weight: 0.1, value: 0, stackable: true, experimentDocs: true, noCommerceSell: true, effectDesc: "Informes clasificados de Vaul-Tec. Véndelos en la Oficina de Vaul-Tec por Dinero de antes de la guerra." },
   { id: 2305, name: "Esclavo", type: "special", weight: 0, value: 500, stackable: true, slave: true, noCommerceSell: true, effectDesc: "Mercancía viva. Véndela en Paradise Falls (Base → Vender Esclavos) por 500 chapas y reputación. No se vende en Comercio." },
@@ -1846,7 +1865,7 @@ let P = {
   weather: 'day',
   volMusic: 0.6,
   volSfx: 0.7,
-  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0, slavers: 0, nucleologos: 0, vaulttec: 0, kings: 0, followers: 0, necropolis: 0 },
+  reputation: { bos: 0, enclave: 0, outcasts: 0, settlers: 0, railroad: 0, rnc: 0, strip: 0, institute: 0, atom: 0, minutemen: 0, legion: 0, slavers: 0, nucleologos: 0, vaulttec: 0, kings: 0, followers: 0, necropolis: 0, powder: 0 },
   chips: 0,
   playerSettlement: {
     claimed: false,
@@ -1894,6 +1913,7 @@ let P = {
   storage: [],
   activeEffects: [],
   equippedWeaponUid: 101,
+  equippedGrenadeUid: null,
   equippedArmorUid: 102,
   subtab: 'weapon',
   vaultSubtab: 'lunchboxes',
@@ -2495,7 +2515,31 @@ function getEquippedWeapon() {
     mods: inst.mods || [],
     legendary: !!inst.legendary,
     abilityId: inst.abilityId || null,
-    abilityName: inst.abilityName || null
+    abilityName: inst.abilityName || null,
+    grenade: !!(base && base.grenade),
+    _uid: inst.uid,
+    _qty: inst.qty || 1
+  };
+}
+
+function getEquippedGrenade() {
+  if (!P.equippedGrenadeUid) return null;
+  let inst = P.inv.find(i => i.uid === P.equippedGrenadeUid);
+  if (!inst) { P.equippedGrenadeUid = null; return null; }
+  let base = getItemBase(inst.id);
+  if (!base || !base.grenade) { P.equippedGrenadeUid = null; return null; }
+  let pl = P.lvl || 1;
+  if ((inst.itemLevel || 1) < pl) inst.itemLevel = pl;
+  let ilvl = inst.itemLevel || 1;
+  let scale = getItemLevelBonus(ilvl);
+  let dmg = Math.max(1, Math.floor(base.damage * scale));
+  return {
+    ...base,
+    damage: dmg,
+    itemLevel: ilvl,
+    _uid: inst.uid,
+    _qty: inst.qty || 1,
+    grenade: true
   };
 }
 
@@ -2743,6 +2787,7 @@ function renderCharacter(sub) {
       <div class="row"><span>Res. Radiación</span><b>${getRadResistance()}%</b></div>
       <div class="row"><span>Armadura Res.RAD</span><b>${(a.radRes||0)}%</b></div>
       <div class="row"><span>Arma equipada</span><b style="${w.legendary?'color:var(--gold);':''}">${w.legendary?'★ ':''}${w.name} <span style="font-size:10px;color:#8d9880;">Lv:${w.itemLevel||1}</span></b></div>
+      ${(() => { let g = getEquippedGrenade(); if (!g) return ''; return '<div class="row"><span>Granada</span><b style="color:#c4a35a;">💣 ' + g.name + ' x' + g._qty + ' <span style="font-size:10px;color:#8d9880;">Lv:' + (g.itemLevel||1) + '</span></b></div>'; })()}
       <div class="row"><span>Armadura</span><b style="${a.legendary?'color:var(--gold);':''}">${a.legendary?'★ ':''}${a.name} <span style="font-size:10px;color:#8d9880;">Lv:${a.itemLevel||1}</span></b></div>
       <div class="row"><span>Compañero</span><b>${(function(){ let c = (typeof getEquippedCompanion==='function') ? getEquippedCompanion() : null; if (!c) return '<span style="color:#8d9880;">Ninguno</span>'; return (c.isLegendary?'★ ':'') + c.name + ' <span style="font-size:10px;color:#8d9880;">Nv.' + (c.level||1) + '</span>'; })()}</b></div>
       <div class="row"><span>Carga máxima</span><b>${maxw} kg</b></div>
@@ -3747,8 +3792,11 @@ function renderStorageUI() {
 }
 
 function isStackableType(it) {
-  if (!it) return false;
-  if (it.stackable) return true;
+  if (!it) if (it && it.grenade) return true;
+  return false;
+  if (it.stackable) if (it && it.grenade) return true;
+  return true;
+  if (it && it.grenade) return true;
   return ['junk', 'med', 'chem', 'ingredient', 'other', 'food', 'drink', 'quest', 'ammo'].includes(it.type);
 }
 
@@ -4399,6 +4447,7 @@ const FACTIONS = {
   regulators: { id: 'regulators', name: 'Los Reguladores', color: '#5577cc', shopLevels: [100, 250, 500, 750, 1000], trophyExchange: true, perkRequired: 'p_autoritario', noMedic: true, travelOnlyBase: true },
   hitmen: { id: 'hitmen', name: 'Los Sicarios', color: '#aa4455', shopLevels: [100, 250, 500, 750, 1000], trophyExchange: true, perkRequired: 'p_hitman', noMedic: true, travelOnlyBase: true },
   crimson: { id: 'crimson', name: 'Caravanas Crimson', color: '#cc3333', shopLevels: [100, 250, 500, 750, 1000], escortFaction: true, noMedic: true },
+  powder: { id: 'powder', name: 'Los Bandidos de la Pólvora', color: '#c4a35a', shopLevels: [100, 250, 500, 750, 1000] },
   player: { id: 'player', name: 'Tu Asentamiento', color: '#44ddaa', shopLevels: [0, 0, 0, 0, 0] },
   sierra: { id: 'sierra', name: 'Sierra Madre', color: '#e8d48b', shopLevels: [0,0,0,0,0] },
   robco: { id: 'robco', name: 'RobCo Industries', color: '#a0a0a0', shopLevels: [0,0,0,0,0] }
@@ -4510,7 +4559,8 @@ const SETTLEMENTS = [
   { id: 'player_vault', name: 'Refugio experimental', faction: 'vaulttec', x: -22, y: 18, playerVault: true },
   { id: 'vaulttec_hq', name: 'Sede de Vaul-Tec', faction: 'vaulttec', x: -18, y: 14 },
   { id: 'followers_hub', name: 'Clínica de los Seguidores', faction: 'followers', x: -20, y: -8 },
-  { id: 'necropolis_city', name: 'Necrópolis', faction: 'necropolis', x: 16, y: -12 }
+  { id: 'necropolis_city', name: 'Necrópolis', faction: 'necropolis', x: 16, y: -12 },
+  { id: 'powder_camp', name: 'Campamento de la Pólvora', faction: 'powder', x: -15, y: 11 }
 ];
 
 const PREWAR_ICON_SRC = 'data:image/webp;base64,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';
@@ -4725,6 +4775,20 @@ const FACTION_QUEST_POOL = {
     { id: 'kng_q9', title: "Leyenda del Strip", desc: "Derrota a 2 enemigos legendarios.", type: 'kill_leg', target: 2, reward: { caps: 220, xp: 150, rep: 20 }, minRep: 500 },
     { id: 'kng_q10', title: "Viva el Rey", desc: "Derrota a 15 enemigos en nombre de Los Reyes.", type: 'kill', target: 15, reward: { caps: 260, xp: 170, rep: 22 }, minRep: 750 }
   ],
+
+  powder: [
+    { id: 'pwd_q1', title: "Polvora y plomo", desc: "Derrota a 5 enemigos del Yermo.", type: 'kill', target: 5, reward: { caps: 120, xp: 70, rep: 12 }, minRep: 0 },
+    { id: 'pwd_q2', title: "Suministros del polvorín", desc: "Consigue 4 botines explorando.", type: 'loot', target: 4, reward: { caps: 100, xp: 60, rep: 10 }, minRep: 0 },
+    { id: 'pwd_q3', title: "Exploración del desierto", desc: "Explora 8 zonas del Yermo.", type: 'explore', target: 8, reward: { caps: 110, xp: 65, rep: 11 }, minRep: 0 },
+    { id: 'pwd_q4', title: "Demostración de fuerza", desc: "Derrota a 10 enemigos.", type: 'kill', target: 10, reward: { caps: 180, xp: 100, rep: 15 }, minRep: 100 },
+    { id: 'pwd_q5', title: "Carga explosiva", desc: "Consigue 6 botines explorando.", type: 'loot', target: 6, reward: { caps: 150, xp: 90, rep: 14 }, minRep: 150 },
+    { id: 'pwd_q6', title: "Rutas de contrabando", desc: "Explora 12 zonas.", type: 'explore', target: 12, reward: { caps: 160, xp: 95, rep: 14 }, minRep: 250 },
+    { id: 'pwd_q7', title: "Bandidos contra el mundo", desc: "Derrota a 12 enemigos.", type: 'kill', target: 12, reward: { caps: 200, xp: 120, rep: 16 }, minRep: 350 },
+    { id: 'pwd_q8', title: "El botín de la Pólvora", desc: "Consigue 8 botines explorando.", type: 'loot', target: 8, reward: { caps: 220, xp: 130, rep: 18 }, minRep: 450 },
+    { id: 'pwd_q9', title: "Leyenda del polvorín", desc: "Derrota a 2 enemigos legendarios.", type: 'kill_leg', target: 2, reward: { caps: 280, xp: 160, rep: 20 }, minRep: 600 },
+    { id: 'pwd_q10', title: "Rey de la dinamita", desc: "Derrota a 3 enemigos legendarios.", type: 'kill_leg', target: 3, reward: { caps: 350, xp: 200, rep: 22 }, minRep: 800 }
+  ],
+
   followers: [],
 
   vaulttec: [
@@ -4846,9 +4910,15 @@ const FACTION_SHOP_ITEMS = {
     { id: 112, shopLevel: 4 }, { id: 29, shopLevel: 4 }, { id: 15, shopLevel: 4 },
     { id: 210, shopLevel: 5 }, { id: 77, shopLevel: 5 }, { id: 52, shopLevel: 5 }
   ],
+  powder: [
+    { id: 7, shopLevel: 1 }, { id: 2900, shopLevel: 1 }, { id: 2903, shopLevel: 1 },
+    { id: 28, shopLevel: 2 }, { id: 2906, shopLevel: 2 },
+    { id: 14, shopLevel: 3 }, { id: 2902, shopLevel: 3 },
+    { id: 15, shopLevel: 4 }, { id: 2901, shopLevel: 4 },
+    { id: 29, shopLevel: 5 }, { id: 2907, shopLevel: 5 }
+  ]
 };
 
-// Extra: armas/armaduras de facción por nivel de tienda
 const FACTION_UNIQUE_SHOP = {
   bos: [
     { id: 2001, shopLevel: 1 }, { id: 2103, shopLevel: 1 }, { id: 2102, shopLevel: 2 },
@@ -4936,6 +5006,15 @@ const FACTION_UNIQUE_SHOP = {
   hitmen: [
     { id: 2840, shopLevel: 1 }, { id: 2841, shopLevel: 1 }, { id: 2842, shopLevel: 2 },
     { id: 2843, shopLevel: 2 }, { id: 2841, shopLevel: 4 }, { id: 2840, shopLevel: 5 }
+  ],
+
+  powder: [
+    { id: 2905, shopLevel: 1 }, { id: 2910, shopLevel: 1 }, { id: 2913, shopLevel: 1 },
+    { id: 2900, shopLevel: 1 }, { id: 2903, shopLevel: 1 },
+    { id: 2911, shopLevel: 2 }, { id: 2914, shopLevel: 2 }, { id: 2906, shopLevel: 2 },
+    { id: 2912, shopLevel: 3 }, { id: 2901, shopLevel: 3 }, { id: 2902, shopLevel: 3 },
+    { id: 2915, shopLevel: 4 }, { id: 2907, shopLevel: 4 }, { id: 2909, shopLevel: 4 },
+    { id: 2908, shopLevel: 5 }, { id: 2905, shopLevel: 5 }
   ],
 
   crimson: [
@@ -6434,7 +6513,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.8.7</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.9.1</div>
   `;
   m.classList.add('show');
 }
@@ -6518,7 +6597,7 @@ function setVolSfx(v) {
 
 function ensureFactionDefaults() {
   if (!P.reputation) P.reputation = {};
-  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute','atom','minutemen','legion','slavers','nucleologos','vaulttec','followers','necropolis','kings'].forEach(k => {
+  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute','atom','minutemen','legion','slavers','nucleologos','vaulttec','followers','necropolis','kings','powder','bounty','hunters','regulators','hitmen','crimson'].forEach(k => {
     if (P.reputation[k] === undefined || P.reputation[k] === null) P.reputation[k] = 0;
   });
   try { ensureZetanDefaults(); } catch(e) {}
@@ -12640,7 +12719,17 @@ function renderCombatUI() {
 
     <div class="combat-buttons">
       <button class="combat-btn-attack" onclick="combatAttack()">Atacar (${w.name})</button>
-      ${comp && !comp.resting && comp.hp > 0 ? '<button class="combat-btn-attack" style="background:#224466;" onclick="companionAttack()">Compañero ataca</button>' : ''}
+      ${comp && !comp.resting && comp.hp > 0
+        ? '<button class="combat-btn-attack" style="background:#224466;" onclick="companionAttack()">Compañero ataca</button>'
+        : '<button class="combat-btn-attack" style="visibility:hidden;pointer-events:none;" disabled aria-hidden="true">—</button>'}
+      ${(() => {
+        let g = getEquippedGrenade();
+        if (!g) return '';
+        return '<div style="grid-column:1 / -1;padding:6px 8px;border:1px solid #c4a35a;border-radius:4px;background:#1a1508;box-sizing:border-box;">' +
+          '<div style="font-size:10px;color:#c4a35a;margin-bottom:4px;text-align:center;">💣 Granada equipada</div>' +
+          '<button class="combat-btn-attack" style="background:#5a4020;border-color:#c4a35a;width:100%;padding:10px 6px;font-size:12px;" onclick="combatThrowGrenade()">' +
+          'Lanzar ' + g.name + ' (x' + g._qty + ') · Daño ~' + g.damage + '</button></div>';
+      })()}
       ${(hasPendant && !(combatState && (combatState.combatZone || combatState.noCapture))) ? '<button style="border-color:var(--gold);color:var(--gold);" onclick="openCaptureUI()">Capturar</button>' : ''}
       <button class="combat-btn-flee" onclick="combatFlee()">Huir</button>
     </div>
@@ -12887,13 +12976,51 @@ function combatLog(msg) {
   }
 }
 
+
+function combatThrowGrenade() {
+  if (!combatState) return;
+  let g = getEquippedGrenade();
+  if (!g) { combatLog("No tienes granada equipada."); return; }
+  let gInst = P.inv.find(i => i.uid === P.equippedGrenadeUid);
+  if (!gInst || (gInst.qty || 1) < 1) {
+    combatLog("¡Sin granadas!");
+    P.equippedGrenadeUid = null;
+    renderCombatUI();
+    return;
+  }
+  playWeaponSound(g);
+  let hit = Math.max(1, g.damage + Math.floor(Math.random() * 6));
+  let critChance = (P.special.L || 1) * 0.02;
+  if (Math.random() < critChance) {
+    hit = Math.floor(hit * 1.5);
+    combatLog("¡Granada crítica!");
+  }
+  combatState.enemyHp -= hit;
+  combatLog("💣 Lanzas " + g.name + " e infliges " + hit + " de daño.");
+  if ((gInst.qty || 1) > 1) gInst.qty--;
+  else {
+    P.inv = P.inv.filter(i => i.uid !== gInst.uid);
+    P.equippedGrenadeUid = null;
+    combatLog("Has gastado la última " + g.name + ".");
+  }
+  if (combatState.enemyHp <= 0) {
+    combatState.enemyHp = 0;
+    endCombat(true);
+    return;
+  }
+  updateStats();
+  renderCombatUI();
+  setTimeout(function() { if (combatState) enemyTurn(); }, 400);
+}
+
 function combatAttack() {
   if (!combatState) return;
 
   let w = getEquippedWeapon();
   let a = getEquippedArmor();
-  let ammoKey = w.ammoType;
-  let isMelee = ammoKey.includes("Ninguna");
+  let ammoKey = w.ammoType || '';
+  let isGrenade = false; // las granadas se lanzan con combatThrowGrenade()
+  let isMelee = String(ammoKey).includes("Ninguna");
   let wAb = getWeaponAbility();
   let aAb = getArmorAbility();
 
@@ -12981,8 +13108,8 @@ function combatAttack() {
 
   for (let atk = 0; atk < attacks; atk++) {
     // Cada disparo a distancia consume 1 bala
-    let canShoot = isMelee || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] > 0);
-    if (!isMelee && aAb && aAb.id === 'a_ammo' && Math.random() < 0.10) canShoot = true;
+    let canShoot = isMelee || isGrenade || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] > 0);
+    if (!isMelee && !isGrenade && aAb && aAb.id === 'a_ammo' && Math.random() < 0.10) canShoot = true;
     if (canShoot || isMelee) {
       playWeaponSound(w);
       hit = Math.max(1, baseDmg + Math.floor(Math.random() * 4));
@@ -13413,7 +13540,7 @@ function renderInv(sub = P.subtab, page) {
   let html = `
     <h2>INVENTARIO</h2>
     <div class="subtabs" >
-      <button class="${sub === 'weapon' ? 'active' : ''}" onclick="renderInv('weapon')">Armas</button>
+      <button class="${sub === 'weapon' || sub === 'grenade' ? 'active' : ''}" onclick="P.weaponInvSub='guns'; renderInv('weapon')">Armas</button>
       <button class="${sub === 'armor' ? 'active' : ''}" onclick="renderInv('armor')">Armaduras</button>
       <button class="${sub === 'med' ? 'active' : ''}" onclick="renderInv('med')">Ayuda</button>
       <button class="${sub === 'food' ? 'active' : ''}" onclick="renderInv('food')">Comida/Bebida</button>
@@ -13438,7 +13565,12 @@ function renderInv(sub = P.subtab, page) {
   let list = P.inv.filter(inst => {
     let it = getItemBase(inst.id);
     if (!it) return false;
-    if (sub === 'weapon') return it.type === 'weapon';
+    if (sub === 'weapon') {
+      let wsub = P.weaponInvSub || 'guns';
+      if (wsub === 'grenades') return it.type === 'weapon' && !!it.grenade;
+      return it.type === 'weapon' && !it.grenade;
+    }
+    if (sub === 'grenade') return it.type === 'weapon' && !!it.grenade;
     if (sub === 'armor') return it.type === 'armor';
     if (sub === 'med') return it.type === 'med' || it.type === 'chem';
     if (sub === 'junk') return it.type === 'junk';
@@ -13448,6 +13580,16 @@ function renderInv(sub = P.subtab, page) {
     if (sub === 'special') return it.type === 'special';
     return false;
   });
+
+  if (sub === 'weapon' || sub === 'grenade') {
+    if (!P.weaponInvSub) P.weaponInvSub = 'guns';
+    if (sub === 'grenade') P.weaponInvSub = 'grenades';
+    let ws = P.weaponInvSub;
+    html += `<div class="subtabs" style="margin:6px 0 8px 0;">
+      <button class="${ws==='guns'?'active':''}" style="font-size:11px;padding:4px 10px;" onclick="P.weaponInvSub='guns';P.invPage=0;renderInv('weapon')">Armas</button>
+      <button class="${ws==='grenades'?'active':''}" style="font-size:11px;padding:4px 10px;" onclick="P.weaponInvSub='grenades';P.invPage=0;renderInv('weapon')">Granadas</button>
+    </div>`;
+  }
 
   if (list.length === 0) {
     html += `<p style="font-size:12px; color:#8d9880;">No hay elementos en esta categoría.</p>`;
@@ -13461,7 +13603,7 @@ function renderInv(sub = P.subtab, page) {
 
     pageItems.forEach(inst => {
       let it = getItemBase(inst.id);
-      let isEquipped = (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid);
+      let isEquipped = (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid || inst.uid === P.equippedGrenadeUid);
       let itemQty = inst.qty || 1;
       let isLeg = !!inst.legendary;
       let ilvl = inst.itemLevel || 1;
@@ -13496,7 +13638,15 @@ function renderInv(sub = P.subtab, page) {
       let scaledModDef = Math.floor(modDef * modScale);
       if (sub === 'weapon') {
         let scaledDmg = Math.max(1, Math.floor(it.damage * scale) + scaledModDmg);
-        html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Daño: +${scaledDmg} | Munición: ${it.ammoType || 'Cuerpo a cuerpo'}</span><br>`;
+        if (it.grenade) {
+          let gLvl = Math.max(ilvl, P.lvl || 1);
+          let gScale = getItemLevelBonus(gLvl);
+          scaledDmg = Math.max(1, Math.floor(it.damage * gScale));
+          html += `<span style="font-size:12px; color:var(--accent);">💣 Granada · Lv:${gLvl} (iguala al tuyo) · Daño: +${scaledDmg}</span><br>`;
+          html += `<span style="font-size:11px; color:#8d9880;">Equipar y usar en combate gasta 1 unidad.</span><br>`;
+        } else {
+          html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Daño: +${scaledDmg} | Munición: ${it.ammoType || 'Cuerpo a cuerpo'}</span><br>`;
+        }
         if (it.hypno || it.hypnoChance !== undefined) {
           let pct = Math.round((it.hypnoChance || 0.2) * 100);
           html += `<span style="font-size:11px; color:#aa6644;">⚡ Hipnosis ${pct}% en humanos → captura Esclavo (sin XP/loot/chapas). Ineficaz vs no humanos.</span><br>`;
@@ -13543,12 +13693,16 @@ function renderInv(sub = P.subtab, page) {
       html += `<span style="font-size:11px; color:#8d9880;">Peso Total: ${unitWeight}kg | Valor Unitario: ${sellVal} chapas</span><br>`;
 
       let canSellHere = typeof isAtCommerce === 'function' && isAtCommerce();
-      if (sub === 'weapon' || sub === 'armor') {
+      if (sub === 'weapon' || sub === 'armor' || sub === 'grenade') {
+        let isGrenadeRow = !!(it.grenade) || sub === 'grenade' || (P.weaponInvSub === 'grenades');
         if (!isEquipped) {
           html += `<div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;">`;
-          html += `<button onclick="equipItem(${inst.uid})">Equipar</button>`;
-          if (canSellHere) html += `<button onclick="sellItem(${inst.uid})">Vender</button>`;
+          html += `<button onclick="equipItem(${inst.uid})">${isGrenadeRow ? 'Equipar granada' : 'Equipar'}</button>`;
+          if (canSellHere) html += `<button onclick="sellItem(${inst.uid})">Vender…</button>`;
           html += `</div>`;
+        } else if (isGrenadeRow) {
+          html += `<div style="margin-top:6px;"><span style="color:var(--accent);font-size:11px;">✓ Granada lista (no sustituye el arma)</span>
+          <button style="margin-left:6px;" onclick="unequipGrenade()">Quitar</button></div>`;
         }
       } else if (sub === 'med' || sub === 'food') {
         html += `<div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;">`;
@@ -13584,16 +13738,29 @@ function renderInv(sub = P.subtab, page) {
   document.getElementById('main-view').innerHTML = html;
 }
 
+function unequipGrenade() {
+  P.equippedGrenadeUid = null;
+  logMsg("Granada desequipada.");
+  renderInv(P.subtab || 'grenade');
+  updateStats();
+}
 function equipItem(uid) {
   let inst = P.inv.find(i => i.uid === uid);
   if (!inst) return;
   let it = getItemBase(inst.id);
-  
-  if (it.type === 'weapon') P.equippedWeaponUid = uid;
-  if (it.type === 'armor') P.equippedArmorUid = uid;
-  
-  logMsg("Equipaste " + it.name + ".");
-  renderInv();
+  if (!it) return;
+  if (it.type === 'weapon' && it.grenade) {
+    P.equippedGrenadeUid = uid;
+    logMsg("Granada equipada: " + it.name + " (x" + (inst.qty || 1) + "). Usable en combate sin soltar el arma.");
+  } else if (it.type === 'weapon') {
+    P.equippedWeaponUid = uid;
+    logMsg("Arma equipada: " + it.name);
+  }
+  if (it.type === 'armor') {
+    P.equippedArmorUid = uid;
+    logMsg("Armadura equipada: " + it.name);
+  }
+  renderInv(P.subtab);
   updateStats();
 }
 
@@ -13809,7 +13976,7 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
   let html = `
     <h2>COMERCIANTE</h2>
     <div class="subtabs">
-      <button class="${sub === 'weapon' ? 'active' : ''}" onclick="renderShop('weapon')">Armas</button>
+      <button class="${sub === 'weapon' || sub === 'grenade' ? 'active' : ''}" onclick="P.weaponShopSub='guns'; renderShop('weapon')">Armas</button>
       <button class="${sub === 'armor' ? 'active' : ''}" onclick="renderShop('armor')">Armaduras</button>
       <button class="${sub === 'med' ? 'active' : ''}" onclick="renderShop('med')">Ayuda</button>
       <button class="${sub === 'junk' ? 'active' : ''}" onclick="renderShop('junk')">Chatarra</button>
@@ -13845,7 +14012,13 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
     if (it.shopTier === 99) return false;
     if (it.shopTier === undefined || it.shopTier === null) return false;
     if (it.shopTier > P.shopLevel) return false;
-    if (sub === 'weapon') return it.type === 'weapon';
+    if (it.factionExclusive) return false;
+    if (sub === 'weapon') {
+      let wsub = P.weaponShopSub || 'guns';
+      if (wsub === 'grenades') return it.type === 'weapon' && !!it.grenade;
+      return it.type === 'weapon' && !it.grenade;
+    }
+    if (sub === 'grenade') return it.type === 'weapon' && !!it.grenade;
     if (sub === 'armor') return it.type === 'armor';
     if (sub === 'med') return it.type === 'med' || it.type === 'chem';
     if (sub === 'ammo') return it.type === 'ammo';
@@ -13853,6 +14026,16 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
     if (sub === 'other') return it.type === 'other';
     return false;
   });
+
+  if (sub === 'weapon' || sub === 'grenade') {
+    if (!P.weaponShopSub) P.weaponShopSub = 'guns';
+    if (sub === 'grenade') P.weaponShopSub = 'grenades';
+    let ws = P.weaponShopSub;
+    html += `<div class="subtabs" style="margin:6px 0 8px 0;">
+      <button class="${ws==='guns'?'active':''}" style="font-size:11px;padding:4px 10px;" onclick="P.weaponShopSub='guns';P.shopPage=0;renderShop('weapon')">Armas</button>
+      <button class="${ws==='grenades'?'active':''}" style="font-size:11px;padding:4px 10px;" onclick="P.weaponShopSub='grenades';P.shopPage=0;renderShop('weapon')">Granadas</button>
+    </div>`;
+  }
 
   if (list.length === 0) {
     html += `<p style="font-size:12px; color:#8d9880;">El comerciante no tiene artículos de esta categoría a la venta en este nivel de tienda.</p>`;
@@ -13872,7 +14055,7 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
         <div class="item">
           <b>${it.name}</b> — <span style="color:#e05050;">${capsPriceHtml(price)}</span><br>
           <span style="font-size:11px; color:#8d9880;">
-            ${it.damage ? 'Daño: ' + it.damage + ' · ' : ''}
+            ${it.damage ? (it.grenade ? '💣 Granada · Daño base: ' + it.damage + ' (escala con tu nivel) · ' : 'Daño: ' + it.damage + ' · ') : ''}
             ${it.def ? 'Defensa: ' + it.def + ' · ' : ''}
             ${it.heal ? 'Cura: ' + it.heal + ' · ' : ''}
             ${it.radRemove ? 'Quita ' + it.radRemove + ' RAD · ' : ''}
@@ -13942,9 +14125,17 @@ function buyItem(id, price) {
     return;
   }
   let base = getItemBase(id);
-  let success = (base && (base.type === 'weapon' || base.type === 'armor'))
-    ? addLeveledGearToInv(id)
-    : addItemToInv(id, 1);
+  let success;
+  if (base && base.grenade) {
+    success = addItemToInv(id, 1);
+    // nivel de granada al del personaje
+    let g = P.inv.find(i => i.id === id && !i.legendary);
+    if (g) g.itemLevel = P.lvl || 1;
+  } else if (base && (base.type === 'weapon' || base.type === 'armor')) {
+    success = addLeveledGearToInv(id);
+  } else {
+    success = addItemToInv(id, 1);
+  }
   if (success) {
     P.caps -= price;
     playBuySound();
@@ -14074,6 +14265,19 @@ function playBuySound() {
 })();
 
 function playWeaponSound(weapon) {
+  if (weapon && weapon.grenade) {
+    // reutilizar sonido fuerte tipo escopeta / explosión
+    try {
+      let ctx = window._sfxCtx || (window._sfxCtx = new (window.AudioContext || window.webkitAudioContext)());
+      let o = ctx.createOscillator(); let g = ctx.createGain();
+      o.type = 'square'; o.frequency.value = 80;
+      g.gain.setValueAtTime(0.15 * (P.volSfx || 0.7), ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+      o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 0.25);
+    } catch (e) {}
+    return;
+  }
+
   try {
     let ctx = getAudioCtx();
     let vol = (P.volSfx !== undefined ? P.volSfx : 0.7) * 0.35;
@@ -14195,6 +14399,7 @@ if (savedData) {
     if (!parsed.perks) parsed.perks = {};
     if (parsed.specialPts === undefined) parsed.specialPts = 0;
     if (parsed.perkPts === undefined) parsed.perkPts = 0;
+    if (parsed.equippedGrenadeUid === undefined) parsed.equippedGrenadeUid = null;
     if (parsed.shopLevel === undefined) parsed.shopLevel = 1;
     if (parsed.craftLevel === undefined) parsed.craftLevel = 1;
     if (parsed.modLevel === undefined) parsed.modLevel = 1;
