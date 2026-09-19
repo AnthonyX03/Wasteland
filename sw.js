@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v135';
+const CACHE = 'wasteland-v136';
 const AUDIO_CACHE = 'wasteland-audio-v1';
 const ASSETS = [
   './',
@@ -54,7 +54,7 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   const isAudio = /\.(mp3|ogg|wav|m4a)(\?|$)/i.test(url.pathname) || url.pathname.indexOf('/audio/') !== -1;
-  const isHTML = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
+  const isHTML = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/') || url.pathname.endsWith('index.html', 'nuka-cap.png');
 
   if (isAudio) {
     event.respondWith((async () => {
