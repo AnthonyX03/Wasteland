@@ -1,1 +1,88 @@
+WASTELAND — Consola de comandos (trucos)
+========================================
+Acceso: Ajustes → 💻 Consola de comandos
 
+Formato general: /Comando argumentos
+
+REPUTACIÓN
+----------
+[/Reputacion XXX NombreFaccion]
+  Fija la reputación de una facción entre 0 y 1000.
+  Ejemplos:
+    /Reputacion 500 Hermandad
+    /Reputacion 1000 Enclave
+    /Rep 250 Strip
+
+[/Reputacion Maxima]
+  Pone TODAS las reputaciones de facción a 1000.
+
+[/ListaFacciones]
+  Lista los ids y nombres de facción reconocidos.
+
+NIVEL Y EXPERIENCIA
+-------------------
+[/Subir Nivel +N]
+  Sube N niveles (también otorga puntos S.P.E.C.I.A.L./perks si aplica).
+  Ejemplo: /Subir Nivel +5
+
+[/Nivel N]
+  Fija el nivel del personaje a N.
+  Ejemplo: /Nivel 30
+
+[/XP +N]
+  Añade N puntos de experiencia.
+  Ejemplo: /XP +500
+
+ECONOMÍA
+--------
+[/Chapas +N]
+  Suma (o resta si N es negativo) chapas.
+  Ejemplo: /Chapas +10000
+
+[/Tickets +N]
+  Añade tickets de Combat Zone.
+  Ejemplo: /Tickets +50
+
+[/FichasSierra +N]
+  Añade fichas del Casino Sierra Madre.
+  Ejemplo: /FichasSierra +500
+
+SALUD Y RADIACIÓN
+-----------------
+[/HP]
+  Restaura la salud al máximo.
+
+[/RAD0]
+  Pone la radiación a 0.
+
+MAPA Y DESBLOQUEOS
+------------------
+[/TP X Y]
+  Teletransporte a coordenadas del mapa.
+  Ejemplo: /TP 0 0   (Refugio)
+           /TP 3 -3  (Zona de Comercio)
+
+[/Desbloquear Comercio]
+  Desbloquea la Zona de Comercio y su viaje rápido.
+
+OBJETOS
+-------
+[/Item ID cantidad]
+  Añade objetos por ID de la base de datos.
+  Ejemplo: /Item 2900 5   (granadas, según ID)
+
+[/Moradores +N]
+  Añade N Moradores (Especiales) para el Refugio experimental.
+  Ejemplo: /Moradores +3
+
+OTROS
+-----
+[/God]
+  Activa/desactiva modo dios (flag interno).
+
+[/ayuda]
+  Muestra un resumen de comandos en la propia consola.
+
+Notas:
+- Los cambios se guardan automáticamente al ejecutar un comando.
+- Los nombres de facción admiten alias en español (Hermandad, Enclave, RNC…).
