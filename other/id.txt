@@ -1,0 +1,655 @@
+WASTELAND — Catálogo de IDs de objetos
+=====================================
+Total de objetos únicos: 590
+
+RESUMEN POR CATEGORÍA
+---------------------
+  Armas: 228
+  Granadas: 10
+  Armaduras: 151
+  Ayuda / Químicos: 41
+  Comida / Bebida: 34
+  Ingredientes: 10
+  Chatarra: 21
+  Munición: 27
+  Otros: 65
+  Especiales: 2
+  Sin categoría (aid): 1
+
+Usa en consola: /Item ID cantidad
+Ejemplo: /Item 1 1
+
+============================================================
+ARMAS (228)
+============================================================
+      1  Pistola oxidada
+      2  Escopeta recortada
+      3  Rifle de energía
+      4  Tubería con púas
+     16  Rifle de Asalto Casero
+     17  Machete Reforzado
+    101  Pistola 10mm
+    102  Pistola del 44
+    103  Pistola de Bengalas
+    104  Pistola de Plasma
+    105  Pistola Láser
+    106  Pistola Gamma
+    107  Pistola Lanzadardos
+    108  Pistola de Clavos
+    109  Subfusil 10mm
+    110  Subfusil Thompson
+    111  Rifle de Caza
+    112  Rifle de Asalto Militar
+    113  Rifle de Combate
+    114  Rifle de Francotirador
+    115  Rifle Gauss
+    116  Rifle de Plasma avanzado
+    117  Rifle Láser militar
+    118  Fusil de Asalto Incursor
+    119  Carabina de Palanca
+    120  Rifle Radiactivo del Descendiente
+    121  Escopeta de Bombeo
+    122  Escopeta de Doble Cañón
+    123  Escopeta de Combate
+    124  Ametralladora Ligera
+    125  Minigun
+    126  Lanzamisiles
+    127  Lanzallamas
+    128  Fat Man (Lanzanukes)
+    129  Cañón de Brondes
+    130  Chatarrero automático
+    131  Pistola Western
+    132  Rifle de Infantería
+    133  Rifle de Asalto Pesado
+    134  Ametralladora de Tambor
+    135  Pistola de Pulsos
+    136  Rifle de Conversión Láser
+    137  Pistola Incursora
+    138  Rifle de Francotirador Experimental
+    139  Pistola de Plasma pesada
+    140  Rifle Laser-Gatling
+    141  Bate de béisbol
+    142  Bate con pinchos
+    143  Tubo de plomo
+    144  Llave inglesa
+    145  Destornillador modificado
+    146  Cuchillo de combate
+    147  Puño americano
+    148  Puño de hierro
+    149  Espada china
+    150  Wakizashi
+    151  Machete de kook
+    152  Hacha de mano
+    153  Hacha de bombero
+    154  Sartenazo
+    155  Porra de policía
+    156  Porra electrificada
+    157  Supermartillo
+    158  Martillo de Supermutante
+    159  Motosierra
+    160  Ripper (Cuchilla a motor)
+    161  Espada de Revolución
+    162  Puño Asistido (Power Fist)
+    163  Guantelete de Garra de Sanguinario
+    164  Cuchillo de Carnicero
+    165  Bate de Diamantes en Bruto
+    166  Lanza de cazador
+    167  Pica de Robot
+    168  Hacha de incursor
+    169  Espada corta oxidada
+    170  Maza pesada
+    171  Pistola de Ciberdelincuente
+    172  Subfusil de Incursor
+    173  Rifle de Asalto Vault-Tec
+    174  Pistola Magnética
+    175  Lanzamisiles Cuádruple
+    176  Carabina Láser
+    177  Pistola de Clavos neumática
+    178  Rifle Antidisturbios
+    179  Pistola de Precisión
+    180  Escopeta Recortada Táctica
+    181  Rifle de Cerrojo Pesado
+    182  Pistola Silenciada
+    183  Rifle de Asalto Silenciado
+    184  Pistola de Emergencia
+    185  Rifle de Explorador
+    186  Cañón de Plasma Pesado
+    187  Lanzadardos Venenosos
+    188  Pistola Criogénica
+    189  Rifle Criogénico
+    190  Lanzallamas Pesado
+    191  Ametralladora rotativa pesada
+    192  Fusil de Pulso EMP
+    193  Rifle de Precisión Láser
+    194  Pistola de Abolladuras
+    195  Rifle Casero Doble
+    196  Pistola Láser de Incursor
+    197  Escopeta Industrial
+    198  Rifle de Asalto Táctico
+    199  Lanzanukes Experimental (Fat Man MKII)
+    200  El Destructor del Yermo (Arma Legendaria)
+   2001  Laserista de la Hermandad [facción]
+   2003  Rifle Gauss de la Hermandad [facción]
+   2011  Pistola de plasma del Enclave [facción]
+   2013  Rifle Tesla del Enclave [facción]
+   2021  Rifle de los Proscritos [facción]
+   2031  Rifle de milicia colona [facción]
+   2041  Pistola del Ferrocarril [facción]
+   2051  Servicio Rifle RNC [facción]
+   2053  Carabina de élite RNC [facción]
+   2061  Pistola de la casa (Strip) [facción]
+   2063  Escopeta de seguridad del Strip [facción]
+   2071  Rifle de pulsos del Instituto [facción]
+   2073  Pistola sintética experimental [facción]
+   2081  Lanzallamas de Átomo [facción]
+   2083  Pistola Gamma de Átomo [facción]
+   2091  Mosquete láser de Minuteman [facción]
+   2093  Rifle de artillería Minuteman [facción]
+   2101  Espada láser de la Hermandad [facción]
+   2103  Pistola 10mm de la Hermandad [facción]
+   2112  Rifle de asalto del Enclave [facción]
+   2121  Espada de los Proscritos [facción]
+   2131  Escopeta de colono [facción]
+   2141  Rifle de francotirador del Ferrocarril [facción]
+   2151  Pistola de servicio RNC [facción]
+   2161  Revólver de la casa (Strip) [facción]
+   2171  Rifle de relé del Instituto [facción]
+   2181  Báculo de Átomo [facción]
+   2191  Pistola de Minuteman [facción]
+   2201  Machete de la Legión [facción]
+   2203  Lanza de centurión [facción]
+   2205  Rifle de francotirador de la Legión [facción]
+   2301  Hipnotron MK1 [facción, hipnotron]
+   2302  Hipnotron MK2 [facción, hipnotron]
+   2303  Hipnotron MK3 [facción, hipnotron]
+   2311  Látigo de negrero [facción]
+   2313  Escopeta de Paradise Falls [facción]
+   2315  Rifle de caza de esclavos [facción]
+   2401  Blaster alienígena
+   2402  Blaster alienígena mejorado
+   2410  Blaster alienígena de élite
+   2411  Blaster de destello Zetan
+   2412  Pistola de rayos Zetan
+   2413  Rifle de disrupción Zetan
+   2414  Cañón de iones Zetan
+   2415  Lanzador de plasma alienígena
+   2416  Rifle de haz concentrado
+   2417  Desintegrador Zetan
+   2418  Pistola de pulso alienígena
+   2419  Arma de contención Zetan
+   2620  Rifle de necrópolis [facción]
+   2621  Pistola ósea [facción]
+   2622  Cuchilla de necrófago [facción]
+   2701  Pistola del Rey [facción]
+   2703  Micrófono blindado [facción]
+   2705  Guitarra eléctrica del Rey [facción]
+   2707  Revólver de Freeside [facción]
+   2709  Rifle de rockabilly [facción]
+   2801  Rifle de francotirador de cazarrecompensas [facción]
+   2802  Pistola de ejecutor [facción]
+   2811  Lanza de cazador [facción]
+   2812  Rifle de caza reforzado [facción]
+   2831  Revólver de la ley [facción]
+   2833  Porra de la ley [facción]
+   2841  Pistola silenciada [facción]
+   2842  Cuchillo de carnicero [facción]
+   2851  Rifle de escolta Crimson [facción]
+   2852  Pistola de caravana [facción]
+   2910  Pistola de la Pólvora [facción]
+   2911  Escopeta del Bandido [facción]
+   2912  Rifle de dinamitero [facción]
+   3110  Pistola gemela Vikki [casino]
+   3113  Escopeta de mesa barata [casino]
+   3120  Láser de bar Atomic [casino]
+   3123  Revólver de neón [casino]
+   3140  Cuchillo de Omerta [casino]
+   3142  Subfusil de casino [casino]
+   3150  Rifle de caza Ultra-Luxe [casino]
+   3152  Cuchillo de carnicero fino [casino]
+   3201  Pistola V&V reforzada [casino]
+   3206  Navaja de baraja [casino]
+   3211  Rifle de plasma de bar [casino]
+   3215  Pistola láser de mostrador [casino]
+   3221  Subfusil Omerta silenciado [casino]
+   3224  Cuchillo ceremonial Omerta [casino]
+   3227  Escopeta de escolta [casino]
+   3241  Rifle de caza White Glove [casino]
+   3245  Pistola de elegancia [casino]
+   3301  Pistola de mesa V&V [casino]
+   3302  Revólver de crupier V&V [casino]
+   3303  Escopeta de salón V&V [casino]
+   3304  Rifle de carretera V&V [casino]
+   3305  Navaja de la casa V&V [casino]
+   3331  Pistola láser Atomic [casino]
+   3332  Rifle de plasma Atomic [casino]
+   3333  Subfusil de bar Atomic [casino]
+   3334  Escopeta irradiada Atomic [casino]
+   3335  Porra electrificada Atomic [casino]
+   3361  Subfusil Omerta [casino]
+   3362  Escopeta de escolta Omerta [casino]
+   3363  Cuchillo ceremonial Omerta+ [casino]
+   3364  Rifle de francotirador Omerta [casino]
+   3365  Pistola silenciada Omerta [casino]
+   3391  Revólver Lucky 38 élite [casino]
+   3392  Escopeta de seguridad Tops+ [casino]
+   3393  Pistola de la suerte Tops [casino]
+   3394  Rifle de escenario Tops [casino]
+   3395  Navaja de farándula Tops [casino]
+   3421  Rifle de caza White Glove+ [casino]
+   3422  Pistola de elegancia+ [casino]
+   3423  Escopeta de banquete Ultra [casino]
+   3424  Sable ceremonial Ultra [casino]
+   3425  Rifle láser Ultra-Luxe [casino]
+   3451  Carabina de escenario Tops [casino]
+   3452  Pistola de presentador Tops [casino]
+   3453  Maza de seguridad Tops [casino]
+   3454  Rifle de precisión Tops [casino]
+   3455  Escopeta de sala VIP Tops [casino]
+   3601  Cuchilla de la arena [Combat Zone]
+   3602  Pistola de gladiador [Combat Zone]
+   3603  Escopeta de combate CZ [Combat Zone]
+   3604  Rifle de francotirador CZ [Combat Zone]
+   3605  Guanteletes de titanio [Combat Zone]
+
+============================================================
+GRANADAS (10)
+============================================================
+   2900  Granada de fragmentación [apilable]
+   2901  Granada de plasma [apilable]
+   2902  Granada de pulso [apilable]
+   2903  Cóctel Molotov [apilable]
+   2904  Granada aturdidora [apilable]
+   2905  Dinamita [facción, apilable]
+   2906  Granada de clavos [apilable]
+   2907  Carga de C4 improvisada [apilable]
+   2908  Granada de gas [apilable]
+   2909  Mina de proximidad [apilable]
+
+============================================================
+ARMADURAS (151)
+============================================================
+      5  Ropa de superviviente
+      6  Chaqueta blindada
+     18  Chaleco Táctico
+     19  Cuero Reforzado
+    201  Armadura de cuero completa
+    202  Armadura de cuero robusta
+    203  Armadura de cuero pesada
+    204  Armadura de saqueador
+    205  Armadura de saqueador destrozada
+    206  Armadura metálica ligera
+    207  Armadura metálica robusta
+    208  Armadura metálica pesada
+    209  Armadura de combate ligera
+    210  Armadura de combate robusta
+    211  Armadura de combate pesada
+    212  Armadura de sintetizador ligera
+    213  Armadura de sintetizador robusta
+    214  Armadura de sintetizador pesada
+    215  Mono del Refugio 111
+    216  Mono del Refugio blindado
+    217  Uniforme militar de fatiga
+    218  Traje de la Hermandad del Acero
+    219  Traje de hazmat (Antirradiación)
+    220  Traje espacial de la Vault-Tec
+    221  Abrigo de cuero de vagabundo
+    222  Gabardina de detective
+    223  Chaqueta de motorista del Yermo
+    224  Traje de cientifico loco
+    225  Uniforme de artillero
+    226  Armadura de artillero pesada
+    227  Camisa a cuadros y tirantes
+    228  Ropa de granjero
+    229  Vestido elegante
+    230  Esmoquin
+    231  Armadura de merodeador
+    232  Armadura de explorador
+    233  Armadura antidisturbios
+    234  Armadura de explorador de élite
+    235  Servoarmadura T-45 (Completa)
+    236  Servoarmadura T-51 (Completa)
+    237  Servoarmadura T-60 (Completa)
+    238  Servoarmadura X-01 (Avanzada del Enclave)
+    239  Servoarmadura de Incursor (Chatarra)
+    240  Servoarmadura de la Hermandad del Acero
+    241  Armadura de cuero tachonado
+    242  Armadura metálica pintada
+    243  Armadura de combate sombría
+    244  Traje de aislamiento avanzado
+    245  Armadura pesada de Operador
+    246  Servoarmadura Nuka-Cola Quantum (Única)
+   2002  Servoarmadura T-45 (BoS) [facción]
+   2012  Armadura avanzada del Enclave [facción]
+   2022  Armadura de combate proscrita [facción]
+   2032  Chaleco de colonos reforzado [facción]
+   2042  Abrigo de agente del Ferrocarril [facción]
+   2052  Armadura de patrulla RNC [facción]
+   2062  Traje de casino blindado [facción]
+   2072  Traje de científico reforzado [facción]
+   2082  Túnica irradiada de Átomo [facción]
+   2084  Casco de culto de Átomo [facción]
+   2092  Uniforme de Minuteman [facción]
+   2094  Chaleco de milicia Minuteman [facción]
+   2102  Casco T-45 BoS [facción]
+   2111  Servoarmadura X-01 Enclave [facción]
+   2113  Casco de oficial del Enclave [facción]
+   2122  Casco de combate proscrito [facción]
+   2132  Casco de granjero reforzado [facción]
+   2142  Máscara de agente del Ferrocarril [facción]
+   2152  Casco de patrulla RNC [facción]
+   2162  Chaqueta de crupier blindada [facción]
+   2172  Casco de synth gen-2 [facción]
+   2182  Armadura de acólito de Átomo [facción]
+   2192  Casco de artillero Minuteman [facción]
+   2202  Armadura de recluta de la Legión [facción]
+   2204  Armadura de centurión [facción]
+   2206  Casco de legionario [facción]
+   2312  Chaleco de negrero [facción]
+   2314  Armadura de capturador [facción]
+   2403  Traje espacial Zetan [facción]
+   2404  Casco de sonda Zetan [facción]
+   2613  Bata de médico de campo [facción]
+   2614  Traje de archivero [facción]
+   2615  Chaleco sanitario reforzado [facción]
+   2623  Armadura de piel curtida [facción]
+   2624  Harapos de élite de Necrópolis [facción]
+   2625  Máscara de necrófago [facción]
+   2702  Chaqueta de terciopelo del Rey [facción]
+   2704  Traje de escenario de Los Reyes [facción]
+   2706  Botas de baile reforzadas [facción]
+   2708  Armadura de guardaespaldas del Rey [facción]
+   2710  Gafas de sol del Rey [facción]
+   2803  Chaleco de cazarrecompensas [facción]
+   2804  Sombrero de cazarrecompensas [facción]
+   2813  Peletería de cazador [facción]
+   2814  Máscara de bestia [facción]
+   2830  Placa de regulador [facción]
+   2832  Chaleco antidisturbios de regulador [facción]
+   2840  Chaqueta de sicario [facción]
+   2843  Máscara de sicario [facción]
+   2850  Chaleco de caravanero Crimson [facción]
+   2853  Sombrero de caravanero [facción]
+   2913  Chaleco de la Pólvora [facción]
+   2914  Casco de bandido [facción]
+   2915  Armadura de voladura [facción]
+   3111  Chaqueta de crupier Vance [casino]
+   3121  Armadura de camarero blindada [casino]
+   3125  Chaleco anti-rad de bar [casino]
+   3141  Traje de familia Omerta [casino]
+   3145  Guantes de matón [casino]
+   3151  Esmoquin reforzado White Glove [casino]
+   3202  Chaleco de crupier V&V [casino]
+   3212  Armadura anti-rad Atomic [casino]
+   3216  Casco de jugador Atomic [casino]
+   3222  Traje de matón reforzado [casino]
+   3242  Esmoquin blindado Ultra-Luxe [casino]
+   3246  Guantes de seda reforzados [casino]
+   3311  Chaqueta de crupier V&V [casino]
+   3312  Chaleco acolchado V&V [casino]
+   3313  Traje de carretera V&V [casino]
+   3314  Botas reforzadas V&V [casino]
+   3315  Gorra de seguridad V&V [casino]
+   3341  Chaleco anti-rad Atomic [casino]
+   3342  Traje de bar Atomic [casino]
+   3343  Armadura ligera Atomic [casino]
+   3344  Casco de jugador Atomic [casino]
+   3345  Botas aislantes Atomic [casino]
+   3371  Traje de familia Omerta+ [casino]
+   3372  Chaleco de matón Omerta [casino]
+   3373  Abrigo de escolta Omerta [casino]
+   3374  Guantes de matón Omerta [casino]
+   3375  Máscara de familia Omerta [casino]
+   3401  Traje de show Tops+ [casino]
+   3402  Chaqueta Lucky 38 [casino]
+   3403  Armadura de seguridad Tops [casino]
+   3404  Chaleco de crupier Tops [casino]
+   3405  Sombrero de presentador Tops [casino]
+   3431  Esmoquin blindado Ultra+ [casino]
+   3432  Traje White Glove [casino]
+   3433  Armadura de gala Ultra [casino]
+   3434  Guantes de seda Ultra+ [casino]
+   3435  Máscara de gala Ultra [casino]
+   3461  Traje de presentador Tops [casino]
+   3462  Chaleco antibalas Tops [casino]
+   3463  Botas de escenario Tops [casino]
+   3464  Guantes de crupier Tops [casino]
+   3465  Abrigo de la suerte Tops [casino]
+   3611  Armadura de gladiador [Combat Zone]
+   3612  Chaleco de la arena [Combat Zone]
+   3613  Casco de luchador CZ [Combat Zone]
+   3614  Armadura reforzada CZ [Combat Zone]
+   3615  Traje de campeón [Combat Zone]
+
+============================================================
+AYUDA / QUÍMICOS (41)
+============================================================
+      7  Estimulante [apilable]
+      8  Superestimulante [apilable]
+     70  Mentats [apilable]
+     71  Buffout [apilable]
+     72  Psycho [apilable]
+     73  Jet [apilable]
+     74  RadAway [apilable]
+     75  Rad-X [apilable]
+     76  Med-X [apilable]
+     77  Overdrive [apilable]
+   2602  Stealth Boy [facción, apilable]
+   2610  Estimulante de los Seguidores [facción, apilable]
+   2611  Antídotos compuestos [facción, apilable]
+   2612  Suero regenerativo [facción, apilable]
+   3203  Estimulante de la casa V&V [casino, apilable]
+   3204  RadAway de mostrador [casino, apilable]
+   3207  Botiquín de mesa [casino, apilable]
+   3214  Inyección de adrenalina Atomic [casino, apilable]
+   3217  Superestimulante Atomic [casino, apilable]
+   3225  Inyección de fuerza Omerta [casino, apilable]
+   3226  Botiquín de familia [casino, apilable]
+   3247  Inyección de fortuna Ultra [casino, apilable]
+   3321  Superestimulante V&V [casino, apilable]
+   3322  RadAway premium V&V [casino, apilable]
+   3325  Inyección de suerte V&V [casino, apilable]
+   3351  Superestimulante Atomic [casino, apilable]
+   3352  RadAway Atomic [casino, apilable]
+   3354  Inyección de agilidad Atomic [casino, apilable]
+   3381  Botiquín de familia Omerta [casino, apilable]
+   3382  Inyección de fuerza Omerta+ [casino, apilable]
+   3411  Estimulante de escenario+ [casino, apilable]
+   3443  Inyección de fortuna Ultra+ [casino, apilable]
+   3445  Estimulante de gala Ultra [casino, apilable]
+   3471  Superestimulante Tops [casino, apilable]
+   3472  RadAway de camerino Tops [casino, apilable]
+   3474  Inyección de suerte Tops [casino, apilable]
+   3483  Estimulante de familia Omerta [casino, apilable]
+   3621  Estimulante de arena [Combat Zone, apilable]
+   3622  Superestimulante CZ [Combat Zone, apilable]
+   3623  Inyección de furia [Combat Zone, apilable]
+   3624  Buffout de gladiador [Combat Zone, apilable]
+
+============================================================
+COMIDA / BEBIDA (34)
+============================================================
+     50  Nuka-Cola [apilable]
+     51  Nuka-Cola Quantum [apilable]
+     52  Nuka-Cola Cherry [apilable]
+     53  Nuka-Cola Dark [apilable]
+     54  Nuka-Cola Victory [apilable]
+     55  Cerveza [apilable]
+     56  Whiskey [apilable]
+     57  Vodka [apilable]
+     58  Ron del Yermo [apilable]
+     80  Estofado de rata [apilable]
+     81  Filete de perro [apilable]
+     82  Guiso mutante [apilable]
+     83  Asado de brahmán [apilable]
+     84  Sopa de verduras [apilable]
+     85  Tortilla del Yermo [apilable]
+     86  Estofado del superviviente [apilable]
+   2854  Raciones de caravana [facción, apilable]
+   3115  Bebida del crupier [casino, apilable]
+   3122  Cóctel radiactivo [casino, apilable]
+   3144  Cóctel Omerta [casino, apilable]
+   3153  Filete de Ultra-Luxe [casino, apilable]
+   3154  Champán Ultra-Luxe [casino, apilable]
+   3213  Cóctel atómico puro [casino, apilable]
+   3243  Banquete White Glove [casino, apilable]
+   3244  Champán de reserva [casino, apilable]
+   3323  Nuka-Cola V&V [casino, apilable]
+   3353  Cóctel atómico doble [casino, apilable]
+   3383  Cóctel Omerta premium [casino, apilable]
+   3412  Nuka-Cola Victory Tops+ [casino, apilable]
+   3441  Banquete White Glove+ [casino, apilable]
+   3442  Champán de reserva+ [casino, apilable]
+   3473  Cóctel de la casa Tops [casino, apilable]
+   3482  Bebida energizante Atomic [casino, apilable]
+   3484  Postre White Glove [casino, apilable]
+
+============================================================
+INGREDIENTES (10)
+============================================================
+     40  Carne de rata [apilable]
+     41  Carne de perro [apilable]
+     42  Carne mutada [apilable]
+     43  Carne de brahmán [apilable]
+     44  Maíz [apilable]
+     45  Zanahorias [apilable]
+     46  Patatas [apilable]
+     47  Setas del Yermo [apilable]
+     48  Agua purificada [apilable]
+     49  Harina irradiada [apilable]
+
+============================================================
+CHATARRA (21)
+============================================================
+     13  Chatarra electrónica [apilable]
+     20  Tornillos y tuercas [apilable]
+     21  Placas de hierro [apilable]
+     22  Cables de cobre [apilable]
+     23  Engranajes de acero [apilable]
+     24  Retales de cuero [apilable]
+     25  Fibra de vidrio [apilable]
+     26  Muelle industrial [apilable]
+     27  Tubo de aluminio [apilable]
+     28  Placa de titanio [apilable]
+     30  Plástico [apilable]
+     31  Vidrio [apilable]
+     32  Caucho [apilable]
+     33  Aceite [apilable]
+     34  Ácido [apilable]
+     35  Antiséptico [apilable]
+     36  Circuito impreso [apilable]
+     37  Polvo de cerámica [apilable]
+     38  Fibra óptica [apilable]
+     39  Adhesivo industrial [apilable]
+   2406  Cristal de energía alienígena [apilable]
+
+============================================================
+MUNICIÓN (27)
+============================================================
+      9  Calibre .38 [apilable]
+     10  Cartuchos de escopeta [apilable]
+     11  Células de microfusión [apilable]
+     12  Munición 5.56mm [apilable]
+    301  Munición 10mm [apilable]
+    302  Munición .44 Magnum [apilable]
+    303  Bengala [apilable]
+    304  Cartucho de plasma [apilable]
+    305  Célula de energía [apilable]
+    306  Onda Gamma [apilable]
+    307  Dardo [apilable]
+    308  Clavo [apilable]
+    309  Munición .45 ACP [apilable]
+    310  Munición .308 [apilable]
+    311  Cartucho de 2mm [apilable]
+    312  Munición .45-70 [apilable]
+    313  Munición 5mm [apilable]
+    314  Misil [apilable]
+    315  Combustible de lanzallamas [apilable]
+    316  Mini Nukes [apilable]
+    317  Bala de cañón [apilable]
+    318  Munición 7.62mm [apilable]
+    319  Núcleo de fusión [apilable]
+    320  Célula criogénica [apilable]
+   2304  Célula de Hipnotron [facción, apilable]
+   2420  Célula energética alienígena [apilable]
+   2421  Módulo de alimentación alienígena [apilable]
+
+============================================================
+OTROS (65)
+============================================================
+     14  Tartera de Vault-Tec [apilable]
+     15  Tartera Nuka-Cola [apilable]
+     29  Tartera Legendaria [apilable]
+    901  Núcleo de fusión antiguo [apilable]
+    902  Holocinta de la Hermandad [apilable]
+    903  Chip genético del Enclave [apilable]
+    904  Código de acceso del Enclave [apilable]
+    905  Placa de servoarmadura marcada [apilable]
+    906  Emblema de los Proscritos [apilable]
+    907  Bolsa de semillas de cultivo [apilable]
+    908  Caja de medicinas de colono [apilable]
+    909  Paquete cifrado del Ferrocarril [apilable]
+    910  Tarjeta de agente del Ferrocarril [apilable]
+    913  Águila de bronce de César [apilable]
+    914  Collar de negrero marcado [apilable]
+    915  Chip de navegación Zetan [apilable]
+    916  Registro de abducción [apilable]
+    917  Muestra de tejido Zetan [apilable]
+    918  Emisor de frecuencia alienígena [apilable]
+    919  Diario de un abducido [apilable]
+    920  Colgante para Prisioneros MK1 [apilable]
+    921  Colgante para Prisioneros MK2 [apilable]
+    922  Colgante para Prisioneros MK3 [apilable]
+    923  Colgante para Prisioneros MK4 [apilable]
+    924  Colgante para Prisioneros MK5 [apilable]
+    930  Insignia de la RNC [apilable]
+    931  Ficha de casino marcada [apilable]
+    932  Chip de síntesis del Instituto [apilable]
+    933  Informe de campo Vaul-Tec [apilable]
+   2400  Sangre de Zetan [apilable]
+   2405  Dispositivo de abducción [apilable]
+   2407  Implante neural Zetan [apilable]
+   2501  Documentos del experimento [apilable]
+   2600  Libro antiguo [apilable]
+   2601  Documento antiguo [apilable]
+   2805  Cartel de se busca (souvenir) [facción, apilable]
+   2815  Cebo de mutantes [facción, apilable]
+   2820  Dedo de justicia [apilable]
+   2821  Oreja [apilable]
+   2860  Sobre Crimson (1 carta) [sobre Crimson, apilable]
+   2861  Sobre Crimson (3 cartas) [sobre Crimson, apilable]
+   2862  Sobre Crimson (5 cartas) [sobre Crimson, apilable]
+   3100  Módulo de Mejora para Casino [apilable]
+   3112  Ficha de la suerte (V&V) [casino, apilable]
+   3114  Amuleto de la casa V&V [casino, apilable]
+   3124  Ficha atómica cargada [casino, apilable]
+   3155  Reloj de bolsillo White Glove [casino, apilable]
+   3205  Sobre de suerte V&V [casino, apilable]
+   3208  Ficha de prestigio V&V [casino, apilable]
+   3218  Token de energía [casino, apilable]
+   3223  Veneno de mesa refinado [casino, apilable]
+   3228  Ficha de la familia [casino, apilable]
+   3248  Ficha de platino Ultra-Luxe [casino, apilable]
+   3324  Bolsa de chapas V&V [casino, apilable]
+   3355  Token de energía premium [casino, apilable]
+   3384  Veneno de mesa Omerta [casino, apilable]
+   3385  Ficha de la familia premium [casino, apilable]
+   3413  Gafas de farándula+ [casino, apilable]
+   3414  Anillo de jackpot+ [casino, apilable]
+   3415  Maletín VIP Tops [casino, apilable]
+   3444  Ficha de platino Ultra+ [casino, apilable]
+   3475  Bolsa de fichas Tops [casino, apilable]
+   3481  Munición de cortesía V&V [casino, apilable]
+   3500  ★ Módulo Legendario RobCo [apilable]
+   3625  Ticket dorado CZ [Combat Zone, apilable]
+
+============================================================
+ESPECIALES (2)
+============================================================
+   2305  Esclavo [apilable]
+   2500  Morador [apilable]
+
+============================================================
+SIN CATEGORÍA (AID) (1)
+============================================================
+   3143  Veneno de mesa [casino, apilable]
+
