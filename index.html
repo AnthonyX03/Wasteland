@@ -6921,7 +6921,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.3</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.4</div>
   `;
   m.classList.add('show');
 }
@@ -11842,16 +11842,16 @@ function unlockNukaWorld() {
 }
 
 const NUKA_MINIGAMES = [
-  { id: 'diana', name: 'Diana Nuka', cost: 1, desc: 'Dispara al centro. Suerte decide.' },
-  { id: 'ratas', name: 'Carrera de ratas', cost: 1, desc: 'Elige un carril 1-3.' },
-  { id: 'martillo', name: 'Golpea el fuerte', cost: 1, desc: 'Prueba de fuerza.' },
-  { id: 'anillos', name: 'Lanza anillos', cost: 1, desc: 'Encesta en botellas.' },
-  { id: 'ruleta', name: 'Ruleta Nuka', cost: 1, desc: 'Rojo, negro o Quantum.' },
-  { id: 'botella', name: 'Adivina la botella', cost: 1, desc: 'Classic, Quantum o Dark.' },
-  { id: 'slots', name: 'Tragaperras Nuka', cost: 1, desc: 'Tres símbolos.' },
-  { id: 'memoria', name: 'Memoria de sabores', cost: 1, desc: 'Recuerda la secuencia.' },
-  { id: 'dardos', name: 'Dardos del yermo', cost: 1, desc: 'Puntos al azar.' },
-  { id: 'agua', name: 'Bombas de agua', cost: 1, desc: 'Llena el depósito primero.' }
+  { id: 'diana', name: 'Diana Nuka', cost: 1, desc: 'Apunta y dispara. Cuanto más cerca del centro, más puntos.' },
+  { id: 'ratas', name: 'Carrera de ratas', cost: 1, desc: 'Elige un carril. Las ratas corren: acierta la ganadora.' },
+  { id: 'martillo', name: 'Golpea el fuerte', cost: 1, desc: 'Pulsa en el momento justo para maximizar la fuerza.' },
+  { id: 'anillos', name: 'Lanza anillos', cost: 1, desc: '3 lanzamientos. Encesta en las botellas.' },
+  { id: 'ruleta', name: 'Ruleta Nuka', cost: 1, desc: 'Elige color o Quantum. La ruleta gira.' },
+  { id: 'botella', name: 'Adivina la botella', cost: 1, desc: 'Memoriza y elige la botella correcta.' },
+  { id: 'slots', name: 'Tragaperras Nuka', cost: 1, desc: 'Gira 3 rodillos. Combos dan más score.' },
+  { id: 'memoria', name: 'Memoria de sabores', cost: 1, desc: 'Repite la secuencia de sabores Nuka.' },
+  { id: 'dardos', name: 'Dardos del yermo', cost: 1, desc: '3 dardos. Elige zona de la diana.' },
+  { id: 'agua', name: 'Bombas de agua', cost: 1, desc: 'Rellena el depósito antes de que se acabe el tiempo.' }
 ];
 
 function renderNukaWorldUI(tab) {
@@ -11950,31 +11950,484 @@ function renderNukaWorldUI(tab) {
   document.getElementById('main-view').innerHTML = html;
 }
 
+
+let _nwGame = null;
+
 function playNukaMinigame(id) {
   ensureNukaWorld();
   let g = NUKA_MINIGAMES.find(x => x.id === id);
   if (!g) return;
-  if ((P.nukaTokens || 0) < g.cost) { logMsg('Fichas Nuka insuficientes. Cómpralas en Taquilla (100 $ preguerra = 1 ficha).'); return; }
-  P.nukaTokens -= g.cost;
-  let win = Math.random();
-  let luck = (P.special && P.special.L) ? P.special.L : 5;
-  let chance = 0.35 + luck * 0.03;
-  let reward = 0;
-  let msg = '';
-  if (win < chance) {
-    reward = 3 + Math.floor(Math.random() * 8) + (g.cost > 1 ? g.cost : 0);
-    P.nukaTickets = (P.nukaTickets || 0) + reward;
-    msg = '¡Ganaste en ' + g.name + '! −' + g.cost + ' ficha(s), +' + reward + ' tickets Nuka.';
-  } else if (win < chance + 0.15) {
-    reward = 1 + Math.floor(Math.random() * 3);
-    P.nukaTickets = (P.nukaTickets || 0) + reward;
-    msg = 'Casi... ' + g.name + ': −' + g.cost + ' ficha(s), +' + reward + ' tickets de consolación.';
-  } else {
-    msg = 'Perdiste en ' + g.name + '. −' + g.cost + ' ficha(s).';
+  if ((P.nukaTokens || 0) < g.cost) {
+    logMsg('Fichas Nuka insuficientes. Cómpralas en Taquilla (100 $ preguerra = 1 ficha).');
+    return;
   }
-  logMsg(msg);
-  renderNukaWorldUI('games');
+  P.nukaTokens -= g.cost;
   updateStats();
+  _nwGame = { id: id, name: g.name, score: 0, phase: 'play', data: {} };
+  if (id === 'diana') openNwDiana();
+  else if (id === 'ratas') openNwRatas();
+  else if (id === 'martillo') openNwMartillo();
+  else if (id === 'anillos') openNwAnillos();
+  else if (id === 'ruleta') openNwRuleta();
+  else if (id === 'botella') openNwBotella();
+  else if (id === 'slots') openNwSlots();
+  else if (id === 'memoria') openNwMemoria();
+  else if (id === 'dardos') openNwDardos();
+  else if (id === 'agua') openNwAgua();
+  else finishNwGame(1, 'Juego desconocido');
+}
+
+function nwLuckBonus() {
+  let L = (P.special && P.special.L) ? P.special.L : 5;
+  return Math.min(0.25, L * 0.02);
+}
+
+function scoreToTickets(score) {
+  // Always at least 1 ticket; scales with score
+  score = Math.max(0, Math.floor(score));
+  if (score <= 0) return 1;
+  if (score < 20) return 1 + Math.floor(score / 10);
+  if (score < 50) return 2 + Math.floor(score / 12);
+  if (score < 80) return 4 + Math.floor(score / 15);
+  if (score < 120) return 6 + Math.floor(score / 18);
+  return Math.min(40, 8 + Math.floor(score / 12));
+}
+
+function finishNwGame(score, detail) {
+  let tickets = scoreToTickets(score);
+  P.nukaTickets = (P.nukaTickets || 0) + tickets;
+  let name = (_nwGame && _nwGame.name) || 'Minijuego';
+  logMsg(name + ': SCORE ' + score + (detail ? ' · ' + detail : '') + ' → +' + tickets + ' tickets Nuka.');
+  _nwGame = null;
+  updateStats();
+  let RED = '#e05050';
+  let tix = ticketIconHtml('nuka', 18);
+  let html = `<h2 style="color:${RED};">🎪 Resultado</h2>
+    <div class="item" style="border-color:${RED};text-align:center;">
+      <div style="font-size:28px;color:var(--gold);margin:8px 0;">SCORE: ${score}</div>
+      <p style="font-size:13px;color:#8d9880;">${detail || ''}</p>
+      <p style="font-size:16px;color:${RED};display:flex;align-items:center;justify-content:center;gap:6px;">${tix} <b>+${tickets} tickets</b></p>
+    </div>
+    <button style="width:100%;margin-top:10px;background:var(--accent);color:#111;font-weight:bold;" onclick="renderNukaWorldUI('games')">← Minijuegos</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function nwShell(title, bodyHtml) {
+  const RED = '#e05050';
+  let tok = nukaTokenIconHtml(16);
+  let tix = ticketIconHtml('nuka', 16);
+  return `<h2 style="color:${RED};margin-top:0;">${title}</h2>
+    <p style="font-size:11px;color:#8d9880;display:flex;gap:10px;flex-wrap:wrap;">
+      <span>${tok} Fichas: <b>${P.nukaTokens||0}</b></span>
+      <span>${tix} Tickets: <b>${P.nukaTickets||0}</b></span>
+    </p>
+    ${bodyHtml}
+    <button style="width:100%;margin-top:10px;" onclick="if(_nwGame){finishNwGame(Math.max(1,_nwGame.score||1),'Abandonado');}else{renderNukaWorldUI('games');}">← Salir (score actual)</button>`;
+}
+
+// ===== DIANA =====
+function openNwDiana() {
+  _nwGame.data = { shots: 0, max: 5, score: 0 };
+  renderNwDiana();
+}
+function renderNwDiana() {
+  let d = _nwGame.data;
+  let rings = [
+    { pts: 50, label: 'Centro ☢', color: '#e05050', size: '28%' },
+    { pts: 30, label: 'Rojo', color: '#c87820', size: '48%' },
+    { pts: 15, label: 'Amarillo', color: '#d5bd69', size: '68%' },
+    { pts: 5, label: 'Exterior', color: '#4a6a4a', size: '88%' }
+  ];
+  let body = `<div class="item" style="border-color:#e05050;">
+    <b>Disparo ${d.shots + 1}/${d.max}</b> · Score: <b style="color:var(--gold);">${d.score}</b>
+    <p style="font-size:11px;color:#8d9880;">Elige zona de impacto. El centro da más puntos (hay un poco de azar).</p>
+    <div style="position:relative;width:180px;height:180px;margin:12px auto;border-radius:50%;background:#1a1a12;border:2px solid #65705a;">`;
+  // visual rings only
+  body += `<div style="position:absolute;inset:6%;border-radius:50%;border:2px solid #4a6a4a;"></div>
+    <div style="position:absolute;inset:18%;border-radius:50%;border:2px solid #d5bd69;"></div>
+    <div style="position:absolute;inset:32%;border-radius:50%;border:2px solid #c87820;"></div>
+    <div style="position:absolute;inset:44%;border-radius:50%;background:#e05050;opacity:0.85;"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">`;
+  rings.forEach((r, i) => {
+    body += `<button style="border-color:${r.color};color:${r.color};padding:12px;" onclick="nwDianaShot(${i})">${r.label}<br><span style="font-size:11px;">~${r.pts} pts</span></button>`;
+  });
+  body += `</div></div>`;
+  document.getElementById('main-view').innerHTML = nwShell('🎯 Diana Nuka', body);
+}
+function nwDianaShot(ringIdx) {
+  let d = _nwGame.data;
+  let base = [50, 30, 15, 5][ringIdx];
+  // slight miss chance toward outer
+  let roll = Math.random() - nwLuckBonus();
+  let pts = base;
+  if (roll > 0.75) pts = Math.max(0, base - 15);
+  else if (roll > 0.5) pts = Math.max(5, base - 8);
+  else if (roll < 0.15) pts = base + 10;
+  d.score += pts;
+  d.shots++;
+  logMsg('Disparo: +' + pts + ' pts');
+  if (d.shots >= d.max) {
+    _nwGame.score = d.score;
+    finishNwGame(d.score, d.shots + ' disparos');
+  } else renderNwDiana();
+}
+
+// ===== RATAS =====
+function openNwRatas() {
+  _nwGame.data = { picked: null, racing: false };
+  let body = `<div class="item" style="border-color:#e05050;">
+    <p style="font-size:12px;">Elige qué rata crees que ganará. Luego corre la carrera.</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin:10px 0;">
+      <button style="padding:14px;border-color:#e05050;" onclick="nwRatasPick(0)">🐀 Carril 1 — Rata Roja</button>
+      <button style="padding:14px;border-color:#4a9eff;" onclick="nwRatasPick(1)">🐀 Carril 2 — Rata Azul</button>
+      <button style="padding:14px;border-color:#a8c47a;" onclick="nwRatasPick(2)">🐀 Carril 3 — Rata Verde</button>
+    </div>
+    <div id="nw-ratas-track" style="font-family:monospace;font-size:13px;line-height:1.6;min-height:80px;color:#8d9880;">Elige un carril...</div>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('🐀 Carrera de ratas', body);
+}
+function nwRatasPick(lane) {
+  if (_nwGame.data.racing) return;
+  _nwGame.data.picked = lane;
+  _nwGame.data.racing = true;
+  let winner = Math.floor(Math.random() * 3);
+  if (Math.random() < nwLuckBonus()) winner = lane; // luck helps
+  let names = ['Roja', 'Azul', 'Verde'];
+  let pos = [0, 0, 0];
+  let el = document.getElementById('nw-ratas-track');
+  let step = 0;
+  let iv = setInterval(() => {
+    step++;
+    for (let i = 0; i < 3; i++) pos[i] = Math.min(10, pos[i] + (i === winner ? 1.4 : 0.6 + Math.random()));
+    let lines = pos.map((p, i) => {
+      let bar = '─'.repeat(Math.floor(p)) + '🐀' + '·'.repeat(Math.max(0, 10 - Math.floor(p)));
+      return (i === _nwGame.data.picked ? '▶' : ' ') + ' ' + names[i] + ' |' + bar + '|';
+    });
+    if (el) el.innerHTML = lines.join('<br>');
+    if (step >= 8) {
+      clearInterval(iv);
+      let score = (winner === lane) ? 80 + Math.floor(Math.random() * 30) : 15 + Math.floor(Math.random() * 15);
+      setTimeout(() => finishNwGame(score, winner === lane ? '¡Tu rata ganó!' : 'Ganó la ' + names[winner]), 400);
+    }
+  }, 180);
+}
+
+// ===== MARTILLO =====
+function openNwMartillo() {
+  _nwGame.data = { phase: 'ready', power: 0 };
+  renderNwMartillo();
+}
+function renderNwMartillo() {
+  let d = _nwGame.data;
+  let body = `<div class="item" style="border-color:#e05050;">
+    <p style="font-size:12px;">Cuando la barra esté en la zona dorada, pulsa <b>¡GOLPE!</b></p>
+    <div style="height:24px;background:#1a1a12;border:1px solid #65705a;border-radius:4px;position:relative;overflow:hidden;margin:12px 0;">
+      <div style="position:absolute;left:62%;width:16%;height:100%;background:rgba(213,189,105,0.45);"></div>
+      <div id="nw-hammer-bar" style="position:absolute;left:0;top:0;width:4px;height:100%;background:#e05050;"></div>
+    </div>
+    <div id="nw-hammer-msg" style="text-align:center;min-height:24px;color:#8d9880;">Pulsa Iniciar</div>
+    <button id="nw-hammer-btn" style="width:100%;padding:16px;font-size:18px;font-weight:bold;background:var(--accent);color:#111;" onclick="nwHammerAction()">${d.phase==='ready'?'INICIAR':'¡GOLPE!'}</button>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('🔨 Golpea el fuerte', body);
+  if (d.phase === 'running') nwHammerRun();
+}
+function nwHammerAction() {
+  let d = _nwGame.data;
+  if (d.phase === 'ready') {
+    d.phase = 'running';
+    d.t0 = Date.now();
+    renderNwMartillo();
+  } else if (d.phase === 'running') {
+    d.phase = 'done';
+    let elapsed = (Date.now() - d.t0) % 1600;
+    // ideal around 1000ms (62% of 1600)
+    let ideal = 1000;
+    let dist = Math.abs(elapsed - ideal);
+    let score = Math.max(5, Math.round(100 - dist / 8));
+    if (Math.random() < nwLuckBonus()) score = Math.min(120, score + 15);
+    finishNwGame(score, score >= 80 ? '¡Fuerza legendaria!' : (score >= 50 ? 'Buen golpe' : 'Flojo...'));
+  }
+}
+function nwHammerRun() {
+  let bar = document.getElementById('nw-hammer-bar');
+  if (!bar || !_nwGame || _nwGame.data.phase !== 'running') return;
+  let start = Date.now();
+  function frame() {
+    if (!_nwGame || _nwGame.data.phase !== 'running') return;
+    let t = ((Date.now() - start) % 1600) / 1600;
+    bar.style.left = (t * 96) + '%';
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ===== ANILLOS =====
+function openNwAnillos() {
+  _nwGame.data = { throws: 0, max: 3, score: 0 };
+  renderNwAnillos();
+}
+function renderNwAnillos() {
+  let d = _nwGame.data;
+  let body = `<div class="item" style="border-color:#e05050;">
+    <b>Lanzamiento ${d.throws + 1}/${d.max}</b> · Score: <b style="color:var(--gold);">${d.score}</b>
+    <p style="font-size:11px;color:#8d9880;">Elige distancia. Más lejos = más puntos si encestas, más riesgo de fallo.</p>
+    <div style="display:flex;gap:8px;justify-content:center;margin:12px 0;font-size:28px;">🍾 🍾 🍾</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+      <button onclick="nwAnilloThrow(0.7,15)">Cerca<br><span style="font-size:10px;">fácil · 15pts</span></button>
+      <button onclick="nwAnilloThrow(0.45,35)">Media<br><span style="font-size:10px;">35pts</span></button>
+      <button onclick="nwAnilloThrow(0.22,60)">Lejos<br><span style="font-size:10px;">difícil · 60pts</span></button>
+    </div>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('💍 Lanza anillos', body);
+}
+function nwAnilloThrow(chance, pts) {
+  let d = _nwGame.data;
+  chance = Math.min(0.95, chance + nwLuckBonus());
+  let hit = Math.random() < chance;
+  if (hit) d.score += pts;
+  d.throws++;
+  logMsg(hit ? ('¡Enceste! +' + pts) : 'Fallaste el anillo...');
+  if (d.throws >= d.max) finishNwGame(d.score, d.score >= 60 ? '¡Campeón de anillos!' : 'Fin de lanzamientos');
+  else renderNwAnillos();
+}
+
+// ===== RULETA =====
+function openNwRuleta() {
+  let body = `<div class="item" style="border-color:#e05050;">
+    <p style="font-size:12px;">Elige dónde apostar. La ruleta Nuka gira (rojo / negro / Quantum).</p>
+    <div id="nw-ruleta-spin" style="text-align:center;font-size:42px;margin:16px 0;min-height:50px;">🎡</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button style="padding:16px;background:#5a1010;border-color:#e05050;color:#ff8888;" onclick="nwRuletaPick('rojo')">ROJO<br><span style="font-size:10px;">x2 score</span></button>
+      <button style="padding:16px;background:#111;border-color:#888;color:#ccc;" onclick="nwRuletaPick('negro')">NEGRO<br><span style="font-size:10px;">x2 score</span></button>
+      <button style="padding:16px;grid-column:1/-1;background:#102a4a;border-color:#4a9eff;color:#6eb5ff;" onclick="nwRuletaPick('quantum')">☢ QUANTUM<br><span style="font-size:10px;">x5 score si aciertas</span></button>
+    </div>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('🎡 Ruleta Nuka', body);
+}
+function nwRuletaPick(choice) {
+  let results = ['rojo','rojo','negro','negro','rojo','negro','quantum'];
+  let spinEl = document.getElementById('nw-ruleta-spin');
+  let frames = 0;
+  let iv = setInterval(() => {
+    frames++;
+    if (spinEl) spinEl.textContent = ['🔴','⚫','🔵'][frames % 3];
+    if (frames >= 12) {
+      clearInterval(iv);
+      let result = results[Math.floor(Math.random() * results.length)];
+      if (Math.random() < nwLuckBonus() * 0.5 && choice !== 'quantum') result = choice;
+      if (spinEl) spinEl.textContent = result === 'rojo' ? '🔴' : (result === 'negro' ? '⚫' : '☢');
+      let score = 10;
+      if (result === choice) score = choice === 'quantum' ? 100 + Math.floor(Math.random()*20) : 45 + Math.floor(Math.random()*20);
+      else score = 8 + Math.floor(Math.random()*8);
+      setTimeout(() => finishNwGame(score, 'Salió ' + result.toUpperCase() + (result===choice?' · ¡Acierto!':'')), 500);
+    }
+  }, 100);
+}
+
+// ===== BOTELLA =====
+function openNwBotella() {
+  let order = ['Classic','Quantum','Dark','Cherry','Victory'];
+  // shuffle show 3
+  let show = order.slice().sort(() => Math.random()-0.5).slice(0, 3);
+  let secret = show[Math.floor(Math.random() * show.length)];
+  _nwGame.data = { secret: secret, options: show, revealed: false };
+  let body = `<div class="item" style="border-color:#e05050;">
+    <p style="font-size:12px;">Observa las botellas... luego elige la que recuerdes que brilló.</p>
+    <div id="nw-bot-display" style="display:flex;justify-content:center;gap:10px;margin:14px 0;font-size:32px;">
+      ${show.map(b => `<span title="${b}">🥤</span>`).join('')}
+    </div>
+    <p id="nw-bot-hint" style="text-align:center;color:var(--gold);font-size:13px;">Memoriza: <b>${secret}</b></p>
+    <button style="width:100%;margin-top:8px;" onclick="nwBotellaHide()">Listo — ocultar y elegir</button>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('🥤 Adivina la botella', body);
+}
+function nwBotellaHide() {
+  let d = _nwGame.data;
+  let body = `<div class="item" style="border-color:#e05050;">
+    <p style="font-size:12px;">¿Cuál brilló?</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+      ${d.options.map(b => `<button style="padding:14px;" onclick="nwBotellaPick('${b}')">🥤 ${b}</button>`).join('')}
+    </div>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('🥤 Adivina la botella', body);
+}
+function nwBotellaPick(b) {
+  let ok = b === _nwGame.data.secret;
+  let score = ok ? 70 + Math.floor(Math.random()*25) : 12 + Math.floor(Math.random()*10);
+  finishNwGame(score, ok ? '¡Correcto! Era ' + b : 'Era ' + _nwGame.data.secret);
+}
+
+// ===== SLOTS NUKA =====
+function openNwSlots() {
+  let body = `<div class="item" style="border-color:#e05050;">
+    <div style="font-size:11px;color:#8d9880;margin-bottom:8px;">
+      🍒🍒🍒 80pts · 🍋🍋🍋 60 · ☢☢☢ 100 · dos iguales 25 · nada 8
+    </div>
+    <div style="display:flex;justify-content:center;gap:8px;margin:16px 0;">
+      <div id="nw-s0" style="width:56px;height:56px;font-size:28px;display:flex;align-items:center;justify-content:center;border:2px solid #65705a;background:#0d100c;border-radius:6px;">?</div>
+      <div id="nw-s1" style="width:56px;height:56px;font-size:28px;display:flex;align-items:center;justify-content:center;border:2px solid #65705a;background:#0d100c;border-radius:6px;">?</div>
+      <div id="nw-s2" style="width:56px;height:56px;font-size:28px;display:flex;align-items:center;justify-content:center;border:2px solid #65705a;background:#0d100c;border-radius:6px;">?</div>
+    </div>
+    <div id="nw-slots-msg" style="text-align:center;min-height:22px;color:#8d9880;">Pulsa GIRAR</div>
+    <button style="width:100%;padding:14px;font-weight:bold;background:var(--accent);color:#111;" onclick="nwSlotsSpin()">▶ GIRAR</button>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('🎰 Tragaperras Nuka', body);
+}
+function nwSlotsSpin() {
+  let syms = ['🍒','🍋','🔔','☢','💎','7️⃣'];
+  let frames = 0;
+  let iv = setInterval(() => {
+    frames++;
+    for (let i = 0; i < 3; i++) {
+      let el = document.getElementById('nw-s' + i);
+      if (el) el.textContent = syms[Math.floor(Math.random()*syms.length)];
+    }
+    if (frames >= 10) {
+      clearInterval(iv);
+      let a = syms[Math.floor(Math.random()*syms.length)];
+      let b = syms[Math.floor(Math.random()*syms.length)];
+      let c = syms[Math.floor(Math.random()*syms.length)];
+      if (Math.random() < nwLuckBonus()) { b = a; if (Math.random() < 0.3) c = a; }
+      document.getElementById('nw-s0').textContent = a;
+      document.getElementById('nw-s1').textContent = b;
+      document.getElementById('nw-s2').textContent = c;
+      let score = 8;
+      if (a === b && b === c) {
+        if (a === '☢') score = 100;
+        else if (a === '💎' || a === '7️⃣') score = 90;
+        else if (a === '🍒') score = 80;
+        else score = 60;
+      } else if (a === b || b === c || a === c) score = 25 + Math.floor(Math.random()*10);
+      else score = 8 + Math.floor(Math.random()*6);
+      let msg = document.getElementById('nw-slots-msg');
+      if (msg) msg.textContent = 'Score: ' + score;
+      setTimeout(() => finishNwGame(score, a+b+c), 600);
+    }
+  }, 80);
+}
+
+// ===== MEMORIA =====
+function openNwMemoria() {
+  let flavors = ['🔴','🟠','🟡','🟢','🔵'];
+  let seq = [];
+  let len = 3 + Math.floor(Math.random() * 2);
+  for (let i = 0; i < len; i++) seq.push(flavors[Math.floor(Math.random()*flavors.length)]);
+  _nwGame.data = { seq: seq, input: [], showing: true, step: 0 };
+  let body = `<div class="item" style="border-color:#e05050;">
+    <p style="font-size:12px;">Memoriza la secuencia de sabores.</p>
+    <div id="nw-mem-seq" style="text-align:center;font-size:36px;letter-spacing:8px;margin:16px 0;min-height:48px;">...</div>
+    <div id="nw-mem-btns" style="display:none;justify-content:center;gap:8px;flex-wrap:wrap;">
+      ${flavors.map(f => `<button style="font-size:24px;padding:12px 16px;" onclick="nwMemoriaTap('${f}')">${f}</button>`).join('')}
+    </div>
+    <p id="nw-mem-msg" style="text-align:center;color:#8d9880;font-size:12px;">Observa...</p>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('🧠 Memoria de sabores', body);
+  setTimeout(() => nwMemoriaShow(0), 400);
+}
+function nwMemoriaShow(i) {
+  let d = _nwGame.data;
+  let el = document.getElementById('nw-mem-seq');
+  if (!el) return;
+  if (i >= d.seq.length) {
+    el.textContent = '¿?';
+    document.getElementById('nw-mem-btns').style.display = 'flex';
+    document.getElementById('nw-mem-msg').textContent = 'Repite la secuencia';
+    d.showing = false;
+    return;
+  }
+  el.textContent = d.seq[i];
+  setTimeout(() => {
+    el.textContent = '·';
+    setTimeout(() => nwMemoriaShow(i + 1), 280);
+  }, 550);
+}
+function nwMemoriaTap(f) {
+  let d = _nwGame.data;
+  if (d.showing) return;
+  d.input.push(f);
+  let idx = d.input.length - 1;
+  if (d.input[idx] !== d.seq[idx]) {
+    let score = 10 + idx * 12;
+    finishNwGame(score, 'Fallaste en el paso ' + (idx+1));
+    return;
+  }
+  if (d.input.length === d.seq.length) {
+    let score = 50 + d.seq.length * 20 + Math.floor(Math.random()*15);
+    finishNwGame(score, '¡Secuencia perfecta!');
+  } else {
+    document.getElementById('nw-mem-msg').textContent = 'Bien... ' + d.input.length + '/' + d.seq.length;
+  }
+}
+
+// ===== DARDOS =====
+function openNwDardos() {
+  _nwGame.data = { darts: 0, max: 3, score: 0 };
+  renderNwDardos();
+}
+function renderNwDardos() {
+  let d = _nwGame.data;
+  let body = `<div class="item" style="border-color:#e05050;">
+    <b>Dardo ${d.darts + 1}/${d.max}</b> · Score: <b style="color:var(--gold);">${d.score}</b>
+    <p style="font-size:11px;color:#8d9880;">Elige zona. Más difícil = más puntos si aciertas.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+      <button style="padding:14px;" onclick="nwDardoThrow(0.75,12)">Anillo externo<br>12 pts</button>
+      <button style="padding:14px;" onclick="nwDardoThrow(0.5,28)">Anillo medio<br>28 pts</button>
+      <button style="padding:14px;" onclick="nwDardoThrow(0.3,45)">Anillo interno<br>45 pts</button>
+      <button style="padding:14px;border-color:var(--gold);color:var(--gold);" onclick="nwDardoThrow(0.15,70)">Diana<br>70 pts</button>
+    </div>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('🎯 Dardos del yermo', body);
+}
+function nwDardoThrow(chance, pts) {
+  let d = _nwGame.data;
+  chance = Math.min(0.92, chance + nwLuckBonus());
+  let hit = Math.random() < chance;
+  let got = hit ? pts : Math.floor(pts * 0.15);
+  d.score += got;
+  d.darts++;
+  logMsg(hit ? ('¡Al blanco! +' + got) : ('Rozó el tablero +' + got));
+  if (d.darts >= d.max) finishNwGame(d.score, 'Fin de dardos');
+  else renderNwDardos();
+}
+
+// ===== AGUA =====
+function openNwAgua() {
+  _nwGame.data = { fill: 0, target: 100, left: 0, active: false };
+  let body = `<div class="item" style="border-color:#e05050;">
+    <p style="font-size:12px;">Pulsa rápido para llenar el depósito antes de 5 segundos.</p>
+    <div style="height:28px;background:#0d100c;border:1px solid #4a9eff;border-radius:4px;overflow:hidden;margin:12px 0;">
+      <div id="nw-water-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#1a4a8a,#4a9eff);transition:width 0.05s;"></div>
+    </div>
+    <div id="nw-water-msg" style="text-align:center;color:#8d9880;">Pulsa EMPEZAR</div>
+    <button id="nw-water-btn" style="width:100%;padding:18px;font-size:16px;font-weight:bold;background:#1a4a8a;color:#fff;border-color:#4a9eff;" onclick="nwWaterTap()">EMPEZAR</button>
+  </div>`;
+  document.getElementById('main-view').innerHTML = nwShell('💧 Bombas de agua', body);
+}
+function nwWaterTap() {
+  let d = _nwGame.data;
+  if (!d.active) {
+    d.active = true;
+    d.t0 = Date.now();
+    document.getElementById('nw-water-btn').textContent = '¡BOMBEAR!';
+    document.getElementById('nw-water-msg').textContent = '¡Rápido!';
+    d.timer = setTimeout(() => {
+      if (!_nwGame || _nwGame.id !== 'agua') return;
+      let score = Math.max(8, Math.round(d.fill * 0.95));
+      finishNwGame(score, d.fill >= 100 ? '¡Depósito lleno!' : 'Tiempo agotado (' + Math.floor(d.fill) + '%)');
+    }, 5000);
+    return;
+  }
+  d.fill = Math.min(100, d.fill + 4 + Math.random() * 3 + nwLuckBonus() * 10);
+  let bar = document.getElementById('nw-water-bar');
+  if (bar) bar.style.width = d.fill + '%';
+  document.getElementById('nw-water-msg').textContent = Math.floor(d.fill) + '%';
+  if (d.fill >= 100) {
+    clearTimeout(d.timer);
+    let elapsed = Date.now() - d.t0;
+    let score = 90 + Math.max(0, Math.floor((5000 - elapsed) / 50));
+    finishNwGame(score, '¡Lleno en ' + (elapsed/1000).toFixed(1) + 's!');
+  }
 }
 
 function buyNukaTokens(qty) {
