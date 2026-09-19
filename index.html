@@ -143,14 +143,8 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   text-align: right;
   color: #6eb5ff;
 }
-.ticket-icon {
-  width: 18px;
-  height: 18px;
-  vertical-align: middle;
-  filter: none !important;
-  border: none !important;
-  background: transparent !important;
-}
+.ticket-icon { width: 22px; height: 14px; vertical-align: middle; object-fit: contain; display: inline-block; }
+.ticket-icon-nuka { width: 22px; height: 14px; vertical-align: middle; object-fit: contain; }
 .stats #st-weight {
   display: inline-block;
   min-width: 3.5ch;
@@ -430,9 +424,14 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   border-color: #ccaa00 !important;
 }
 .world-cell.combatzone {
-  background: #1a0505 !important;
-  color: #ff6666 !important;
-  border-color: #cc3333 !important;
+  background: #0a1a2a;
+  border-color: #4a9eff;
+  color: #6eb5ff;
+}
+.world-cell.nukaworld {
+  background: #2a0a0a;
+  border-color: #e05050;
+  color: #ff6666;
 }
 .world-cell.settlement {
   background: #1a0030;
@@ -1458,21 +1457,62 @@ const DB_ITEMS = [
   { id: 910, name: "Tarjeta de agente del Ferrocarril", type: "quest", weight: 0.1, value: 0, stackable: true, shopTier: 99, questOnly: true },
 
   // --- Combat Zone exclusivos (solo tickets) ---
-  { id: 3601, name: "Cuchilla de la arena", type: "weapon", damage: 38, ammoType: null, weight: 2.5, value: 0, stackable: false, combatZone: true, ticketCost: 80 },
-  { id: 3602, name: "Pistola de gladiador", type: "weapon", damage: 42, ammoType: "10mm", weight: 3, value: 0, stackable: false, combatZone: true, ticketCost: 120 },
-  { id: 3603, name: "Escopeta de combate CZ", type: "weapon", damage: 58, ammoType: "Cartucho de escopeta", weight: 5.5, value: 0, stackable: false, combatZone: true, ticketCost: 180 },
-  { id: 3604, name: "Rifle de francotirador CZ", type: "weapon", damage: 72, ammoType: ".308", weight: 7, value: 0, stackable: false, combatZone: true, ticketCost: 280 },
-  { id: 3605, name: "Guanteletes de titanio", type: "weapon", damage: 48, ammoType: null, weight: 4, value: 0, stackable: false, combatZone: true, ticketCost: 220 },
-  { id: 3611, name: "Armadura de gladiador", type: "armor", def: 28, weight: 10, value: 0, stackable: false, combatZone: true, ticketCost: 150, radRes: 8 },
-  { id: 3612, name: "Chaleco de la arena", type: "armor", def: 22, weight: 6, value: 0, stackable: false, combatZone: true, ticketCost: 110, radRes: 5 },
-  { id: 3613, name: "Casco de luchador CZ", type: "armor", def: 18, weight: 3, value: 0, stackable: false, combatZone: true, ticketCost: 95, radRes: 4 },
-  { id: 3614, name: "Armadura reforzada CZ", type: "armor", def: 40, weight: 14, value: 0, stackable: false, combatZone: true, ticketCost: 250, radRes: 12 },
-  { id: 3615, name: "Traje de campeón", type: "armor", def: 50, weight: 12, value: 0, stackable: false, combatZone: true, ticketCost: 350, radRes: 15 },
-  { id: 3621, name: "Estimulante de arena", type: "med", heal: 80, weight: 0.3, value: 0, stackable: true, combatZone: true, ticketCost: 45, useDesc: "Cura 80 HP." },
-  { id: 3622, name: "Superestimulante CZ", type: "med", heal: 150, weight: 0.4, value: 0, stackable: true, combatZone: true, ticketCost: 90, useDesc: "Cura 150 HP." },
-  { id: 3623, name: "Inyección de furia", type: "chem", weight: 0.2, value: 0, stackable: true, combatZone: true, ticketCost: 80, useEffect: "dmg", useDesc: "+8 daño 12 acciones." },
-  { id: 3624, name: "Buffout de gladiador", type: "chem", weight: 0.2, value: 0, stackable: true, combatZone: true, ticketCost: 70, useEffect: "def", useDesc: "+6 defensa 12 acciones." },
-  { id: 3625, name: "Ticket dorado CZ", type: "other", weight: 0.1, value: 0, stackable: true, combatZone: true, ticketCost: 300, useDesc: "Al usar: +25 tickets." },
+  { id: 3601, name: "Cuchilla de la arena", type: "weapon", damage: 38, ammoType: null, weight: 2.5, value: 0, stackable: false, combatZone: true, ticketCost: 80, shopTier: 1 },
+  { id: 3602, name: "Pistola de gladiador", type: "weapon", damage: 42, ammoType: "10mm", weight: 3, value: 0, stackable: false, combatZone: true, ticketCost: 120, shopTier: 1 },
+  { id: 3603, name: "Escopeta de combate CZ", type: "weapon", damage: 58, ammoType: "Cartucho de escopeta", weight: 5.5, value: 0, stackable: false, combatZone: true, ticketCost: 180, shopTier: 1 },
+  { id: 3604, name: "Rifle de francotirador CZ", type: "weapon", damage: 72, ammoType: ".308", weight: 7, value: 0, stackable: false, combatZone: true, ticketCost: 280, shopTier: 1 },
+  { id: 3605, name: "Guanteletes de titanio", type: "weapon", damage: 48, ammoType: null, weight: 4, value: 0, stackable: false, combatZone: true, ticketCost: 220, shopTier: 1 },
+  { id: 3611, name: "Armadura de gladiador", type: "armor", def: 28, weight: 10, value: 0, stackable: false, combatZone: true, ticketCost: 150, shopTier: 1, radRes: 8 },
+  { id: 3612, name: "Chaleco de la arena", type: "armor", def: 22, weight: 6, value: 0, stackable: false, combatZone: true, ticketCost: 110, shopTier: 1, radRes: 5 },
+  { id: 3613, name: "Casco de luchador CZ", type: "armor", def: 18, weight: 3, value: 0, stackable: false, combatZone: true, ticketCost: 95, shopTier: 1, radRes: 4 },
+  { id: 3614, name: "Armadura reforzada CZ", type: "armor", def: 40, weight: 14, value: 0, stackable: false, combatZone: true, ticketCost: 250, shopTier: 1, radRes: 12 },
+  { id: 3615, name: "Traje de campeón", type: "armor", def: 50, weight: 12, value: 0, stackable: false, combatZone: true, ticketCost: 350, shopTier: 1, radRes: 15 },
+  { id: 3621, name: "Estimulante de arena", type: "med", heal: 80, weight: 0.3, value: 0, stackable: true, combatZone: true, ticketCost: 45, shopTier: 1, useDesc: "Cura 80 HP." },
+  { id: 3622, name: "Superestimulante CZ", type: "med", heal: 150, weight: 0.4, value: 0, stackable: true, combatZone: true, ticketCost: 90, shopTier: 1, useDesc: "Cura 150 HP." },
+  { id: 3623, name: "Inyección de furia", type: "chem", weight: 0.2, value: 0, stackable: true, combatZone: true, ticketCost: 80, shopTier: 1, useEffect: "dmg", useDesc: "+8 daño 12 acciones." },
+  { id: 3624, name: "Buffout de gladiador", type: "chem", weight: 0.2, value: 0, stackable: true, combatZone: true, ticketCost: 70, shopTier: 1, useEffect: "def", useDesc: "+6 defensa 12 acciones." },
+  { id: 3625, name: "Ticket dorado CZ", type: "other", weight: 0.1, value: 0, stackable: true, combatZone: true, ticketCost: 300, shopTier: 1, useDesc: "Al usar: +25 tickets." },
+
+  // --- Combat Zone extra (tienda niveles) ---
+  { id: 3630, name: "Maza de la arena", type: "weapon", damage: 52, ammoType: null, weight: 6, value: 0, stackable: false, combatZone: true, ticketCost: 200, shopTier: 2 },
+  { id: 3631, name: "Subfusil CZ", type: "weapon", damage: 55, ammoType: "10mm", weight: 5, value: 0, stackable: false, combatZone: true, ticketCost: 240, shopTier: 2 },
+  { id: 3632, name: "Lanza de gladiador", type: "weapon", damage: 60, ammoType: null, weight: 5, value: 0, stackable: false, combatZone: true, ticketCost: 260, shopTier: 3 },
+  { id: 3633, name: "Rifle automático CZ", type: "weapon", damage: 68, ammoType: "5.56mm", weight: 7, value: 0, stackable: false, combatZone: true, ticketCost: 320, shopTier: 3 },
+  { id: 3634, name: "Martillo del campeón", type: "weapon", damage: 85, ammoType: null, weight: 9, value: 0, stackable: false, combatZone: true, ticketCost: 450, shopTier: 4 },
+  { id: 3635, name: "Ametralladora de la arena", type: "weapon", damage: 90, ammoType: "5.56mm", weight: 12, value: 0, stackable: false, combatZone: true, ticketCost: 520, shopTier: 5 },
+  { id: 3640, name: "Grebas de combatiente", type: "armor", def: 24, weight: 5, value: 0, stackable: false, combatZone: true, ticketCost: 130, radRes: 6, shopTier: 2 },
+  { id: 3641, name: "Peto de hierro CZ", type: "armor", def: 35, weight: 12, value: 0, stackable: false, combatZone: true, ticketCost: 200, radRes: 10, shopTier: 3 },
+  { id: 3642, name: "Armadura de veterano", type: "armor", def: 45, weight: 15, value: 0, stackable: false, combatZone: true, ticketCost: 300, radRes: 14, shopTier: 4 },
+  { id: 3643, name: "Servo parcial de la arena", type: "armor", def: 60, weight: 22, value: 0, stackable: false, combatZone: true, ticketCost: 500, radRes: 20, shopTier: 5 },
+  { id: 3650, name: "Kit médico de arena", type: "med", heal: 100, weight: 0.4, value: 0, stackable: true, combatZone: true, ticketCost: 55, shopTier: 2, useDesc: "Cura 100 HP." },
+  { id: 3651, name: "Adrenalina CZ", type: "chem", weight: 0.2, value: 0, stackable: true, combatZone: true, ticketCost: 100, shopTier: 3, useDesc: "+10 daño 15 acciones." },
+  { id: 3652, name: "Med-X de la arena", type: "chem", weight: 0.2, value: 0, stackable: true, combatZone: true, ticketCost: 95, shopTier: 3, useDesc: "+12 defensa 12 acciones." },
+  { id: 3653, name: "Paquete de tickets CZ", type: "other", weight: 0.1, value: 0, stackable: true, combatZone: true, ticketCost: 200, shopTier: 4, useDesc: "Al usar: +40 tickets CZ." },
+  // --- Nuka-World Circo (tickets Nuka) ---
+  { id: 3701, name: "Pistola Nuka-World", type: "weapon", damage: 40, ammoType: "10mm", weight: 3, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 100, shopTier: 1 },
+  { id: 3702, name: "Rifle de feria", type: "weapon", damage: 48, ammoType: ".38", weight: 4, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 140, shopTier: 1 },
+  { id: 3703, name: "Lanzador de confeti letal", type: "weapon", damage: 55, ammoType: "Cartucho de escopeta", weight: 5, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 200, shopTier: 2 },
+  { id: 3704, name: "Cuchillo de acróbata", type: "weapon", damage: 36, ammoType: null, weight: 1.5, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 90, shopTier: 1 },
+  { id: 3705, name: "Bazuca de fuegos Nuka", type: "weapon", damage: 95, ammoType: "Misil", weight: 10, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 600, shopTier: 5 },
+  { id: 3706, name: "Rifle láser de atracción", type: "weapon", damage: 70, ammoType: "Célula de energía", weight: 6, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 380, shopTier: 4 },
+  { id: 3707, name: "Maza de payaso", type: "weapon", damage: 50, ammoType: null, weight: 4, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 160, shopTier: 2 },
+  { id: 3708, name: "Ametralladora del circo", type: "weapon", damage: 80, ammoType: "5.56mm", weight: 11, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 480, shopTier: 5 },
+  { id: 3711, name: "Disfraz de feriante", type: "armor", def: 16, weight: 3, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 80, radRes: 2, shopTier: 1 },
+  { id: 3712, name: "Chaleco Nuka-World", type: "armor", def: 25, weight: 5, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 150, radRes: 5, shopTier: 2 },
+  { id: 3713, name: "Casco de montaña rusa", type: "armor", def: 20, weight: 2.5, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 120, radRes: 3, shopTier: 2 },
+  { id: 3714, name: "Armadura de atracción", type: "armor", def: 38, weight: 10, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 280, radRes: 10, shopTier: 3 },
+  { id: 3715, name: "Traje de maestro de ceremonias", type: "armor", def: 45, weight: 8, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 350, radRes: 8, shopTier: 4 },
+  { id: 3716, name: "Servo Nuka festivo", type: "armor", def: 65, weight: 20, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 700, radRes: 25, shopTier: 6 },
+  { id: 3721, name: "Nuka-Cola Quantum (circo)", type: "drink", heal: 50, weight: 0.5, value: 0, stackable: true, nukaWorld: true, nukaTicketCost: 40, shopTier: 1, useDesc: "Cura 50 HP y -10 RAD." },
+  { id: 3722, name: "Algodón de azúcar irradiado", type: "food", heal: 25, weight: 0.2, value: 0, stackable: true, nukaWorld: true, nukaTicketCost: 25, shopTier: 1, useDesc: "Cura 25 HP." },
+  { id: 3723, name: "Caramelo Jet", type: "chem", weight: 0.1, value: 0, stackable: true, nukaWorld: true, nukaTicketCost: 60, shopTier: 2, useDesc: "+2 Agilidad 10 acciones." },
+  { id: 3724, name: "Estimulante festivo", type: "med", heal: 90, weight: 0.3, value: 0, stackable: true, nukaWorld: true, nukaTicketCost: 55, shopTier: 2, useDesc: "Cura 90 HP." },
+  { id: 3725, name: "Nuka-Cola Dark", type: "drink", heal: 40, weight: 0.5, value: 0, stackable: true, nukaWorld: true, nukaTicketCost: 70, shopTier: 3, useDesc: "Cura 40 HP, +2 Suerte 8 acciones." },
+  { id: 3726, name: "Pack de tickets Nuka", type: "other", weight: 0.1, value: 0, stackable: true, nukaWorld: true, nukaTicketCost: 250, shopTier: 4, useDesc: "Al usar: +50 tickets Nuka-World." },
+  { id: 3727, name: "Máscara de payaso blindada", type: "armor", def: 30, weight: 2, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 220, radRes: 6, shopTier: 3 },
+  { id: 3728, name: "Botella-explosivo Nuka", type: "weapon", damage: 75, ammoType: null, weight: 1, value: 0, stackable: true, grenade: true, nukaWorld: true, nukaTicketCost: 90, shopTier: 3 },
+  { id: 3729, name: "Rifle Gauss de feria", type: "weapon", damage: 100, ammoType: "Cartucho de 2mm", weight: 12, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 800, shopTier: 8 },
+  { id: 3730, name: "Capa del director del circo", type: "armor", def: 55, weight: 7, value: 0, stackable: false, nukaWorld: true, nukaTicketCost: 550, radRes: 12, shopTier: 7 },
   // Colgantes de prisioneros (captura de compañeros)
   { id: 920, name: "Colgante para Prisioneros MK1", type: "other", weight: 0.2, value: 400, stackable: true, shopTier: 3, captureChance: 0.20 },
   { id: 921, name: "Colgante para Prisioneros MK2", type: "other", weight: 0.2, value: 900, stackable: true, shopTier: 5, captureChance: 0.40 },
@@ -1958,6 +1998,10 @@ let P = {
   commerceUnlocked: false,
   combatZoneUnlocked: false,
   tickets: 0,
+  nukaTickets: 0,
+  nukaTokens: 0,
+  czShopLevel: 1,
+  nwShopLevel: 1,
   ownedHouses: [],
   prison: [],
   equippedCompanionId: null,
@@ -2997,7 +3041,9 @@ function renderCharacter(sub) {
       <div class="item" style="border-color:var(--gold);">
         <div class="row"><span style="color:#e05050;"><img class="cap-icon chip-icon-caps" src="${(document.querySelector('header .cap-icon:not(.chip-icon)')||{}).src||''}" alt="chapas" style="width:18px;height:18px;vertical-align:middle;filter:none;"> Chapas</span><b style="color:#e05050;">${P.caps}</b></div>
         <div class="row"><span style="color:#88aadd;display:inline-flex;align-items:center;gap:4px;"><img src="${PREWAR_ICON_SRC}" alt="$" style="width:20px;height:20px;object-fit:contain;"> Dinero de antes de la guerra</span><b style="color:#88aadd;">${P.prewarMoney||0}</b></div>
-        <div class="row"><span style="color:#6eb5ff;display:inline-flex;align-items:center;gap:4px;"><img class="ticket-icon" src="${typeof TICKET_ICON_SRC!=='undefined'?TICKET_ICON_SRC:((document.querySelector('header .ticket-icon')||{}).src||'')}" alt="tickets" style="width:18px;height:18px;vertical-align:middle;filter:none;"> Tickets Combat Zone</span><b style="color:#6eb5ff;">${P.tickets||0}</b></div>
+        <div class="row"><span style="color:#4a9eff;display:inline-flex;align-items:center;gap:4px;"><img class="ticket-icon" src="ticket-cz.png" alt="tickets" style="width:22px;height:14px;object-fit:contain;"> Tickets Combat Zone</span><b style="color:#4a9eff;">${P.tickets||0}</b></div>
+        <div class="row"><span style="color:#e05050;display:inline-flex;align-items:center;gap:4px;"><img class="ticket-icon" src="${typeof NUKA_TICKET_ICON_B64!=='undefined'?NUKA_TICKET_ICON_B64:'ticket-nuka.png'}" alt="nuka" style="width:22px;height:14px;object-fit:contain;"> Tickets Nuka-World</span><b style="color:#e05050;">${P.nukaTickets||0}</b></div>
+        <div class="row"><span style="color:#e8d48b;display:inline-flex;align-items:center;gap:4px;"><img src="${typeof NUKA_TOKEN_ICON_B64!=='undefined'?NUKA_TOKEN_ICON_B64:'nuka-token.png'}" alt="ficha" style="width:18px;height:18px;object-fit:contain;"> Fichas Nuka-World</span><b style="color:#e8d48b;">${P.nukaTokens||0}</b></div>
         <div class="row"><span style="color:#e8d48b;">${chipIconHtml('sierra')} Sierra Madre</span><b style="color:#e8d48b;">${getCasinoChips('sierra')}</b></div>
         ${STRIP_CASINOS.map(c => {
           let col = c.color;
@@ -4459,7 +4505,8 @@ const ZONE_DEFS = {
   vault: { icon: '⌂', label: 'El Refugio', cls: 'vault', enterable: false, radChance: 0.0, exploreBias: 'nothing' },
   home: { icon: '🏠', label: 'Hogar', cls: 'home', enterable: false, radChance: 0.0, exploreBias: 'nothing' },
   commerce: { icon: '⚖', label: 'Zona de Comercio', cls: 'commerce', enterable: false, radChance: 0.05, exploreBias: 'nothing' },
-  combatzone: { icon: '⚔', label: 'Combat Zone', cls: 'combatzone', enterable: false, radChance: 0.1, exploreBias: 'nothing' },
+  combatzone: { icon: '🥊', label: 'Combat Zone', cls: 'combatzone', enterable: false, radChance: 0.1, exploreBias: 'nothing' },
+  nukaworld: { icon: '🎪', label: 'Circo Nuka-World', cls: 'nukaworld', enterable: false, radChance: 0.05, exploreBias: 'nothing' },
   unique: { icon: '◆', label: 'Localidad única', cls: 'unique', enterable: true, radChance: 0.22, exploreBias: 'loot' }
 };
 
@@ -4584,7 +4631,7 @@ const SETTLEMENTS = [
   { id: 'kings_theater', name: '👑 Teatro de Los Reyes', faction: 'kings', x: 12, y: 0 },
   { id: 'bounty_hq', name: '🎯 Gremio de Cazarrecompensas', faction: 'bounty', x: -9, y: -14 },
   { id: 'hunters_lodge', name: '🏹 Logia de los Cazadores', faction: 'hunters', x: 17, y: -14 },
-  { id: 'regulators_hq', name: '⚖ Cuartel General de los Reguladores', faction: 'regulators', x: -17, y: -1 },
+  { id: 'regulators_hq', name: '⚖️ Cuartel de los Reguladores', faction: 'regulators', x: -17, y: -1 },
   { id: 'hitmen_yard', name: '🗡 El Desguace', faction: 'hitmen', x: 12, y: 9 },
   { id: 'crimson_outpost', name: '🐪 Puesto Crimson', faction: 'crimson', x: -6, y: -18 },
   { id: 'institute_relay', name: '🔬 Relé del Instituto', faction: 'institute', x: 1, y: 14 },
@@ -4604,12 +4651,18 @@ const SETTLEMENTS = [
 ];
 
 const PREWAR_ICON_SRC = 'data:image/webp;base64,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';
-const TICKET_ICON_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAv0lEQVR4nO2VMQ7DIAxFv6OcLQsMOUmmDj1Ch06cJEOy5HJ0qEyNVdGSulFV8TaQ8ZNsMECj8euQ3piWGK0lwVPy9Fq2zau1D9MSI0u7b8sAYJvXVLnuVbA1hwuzHg6jA3AvAXM9u+qkp8vjPOdkCMibymuLfg6jg85LWmYl1TKmfxYs+bSk1cLS4T10wRPp6WLRQ/n2ZN6soTKYeaekpSrIWxo82d/Mkjh4ov+fNEkYPJGeClbIN3n4f9hoVHMDA89mtC8SUbYAAAAASUVORK5CYII=';
+const TICKET_ICON_SRC = 'ticket-cz.png';
+const TICKET_ICON_B64 = 'data:image/png;base64,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';
+const NUKA_TICKET_ICON_SRC = 'ticket-nuka.png';
+const NUKA_TICKET_ICON_B64 = 'data:image/png;base64,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';
+const NUKA_TOKEN_ICON_SRC = 'nuka-token.png';
+const NUKA_TOKEN_ICON_B64 = 'data:image/png;base64,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';
 const IMPORTANT_LOCS = [
   { id: 'vault_home', name: '🏠 El Refugio', x: 0, y: 0, kind: 'vault' },
   { id: 'player_house', name: 'Hogar del Superviviente', x: 2, y: -1, kind: 'home' },
   { id: 'commerce_hub', name: '⚖️ Zona de Comercio', x: 3, y: -3, kind: 'commerce' },
-  { id: 'combat_zone', name: '⚔️ Combat Zone', x: -5, y: 4, kind: 'combatzone' }
+  { id: 'combat_zone', name: '🥊 Combat Zone', x: -5, y: 4, kind: 'combatzone' },
+  { id: 'nuka_world', name: '🎪 Circo de Nuka-World', x: 20, y: -8, kind: 'nukaworld' }
 ];
 function getPlayerHomeName() {
   let n = (P && P.playerName) ? String(P.playerName).trim() : '';
@@ -5551,6 +5604,9 @@ function getZoneAt(x, y) {
   if (x === -5 && y === 4) {
     return { type: 'combatzone', ...ZONE_DEFS.combatzone, name: 'Combat Zone', importantId: 'combat_zone', enterable: false };
   }
+  if (x === 20 && y === -8) {
+    return { type: 'nukaworld', ...ZONE_DEFS.nukaworld, name: 'Circo de Nuka-World', importantId: 'nuka_world', enterable: false };
+  }
   if (x === ABDUCTION_SITE.x && y === ABDUCTION_SITE.y) {
     return { type: 'abduction', icon: '🛸', name: 'Zona de abducción Zetan', cls: 'poi', radChance: 0.1, enterable: false, abduction: true };
   }
@@ -5683,6 +5739,10 @@ function renderMap() {
     renderCommerceHubUI();
     return;
   }
+  if (P.location && P.location.type === 'nukaworld') {
+    enterNukaWorld();
+    return;
+  }
   if (P.location && P.location.type === 'combatzone') {
     renderCombatZoneUI(P.czTab || 'combat');
     return;
@@ -5742,11 +5802,16 @@ function renderMap() {
     actHint = P.commerceUnlocked
       ? `<span style="color:#ffcc44;">⚖ Comercio desbloqueado — pestaña COMERCIO</span>`
       : `<span style="color:#ffcc44;">⚖ Entra para desbloquear Comercio / misiones</span>`;
+  } else if (zone.type === 'nukaworld') {
+    actBtns = `<button style="background:#8a1a1a;color:#fff;border-color:#e05050;" onclick="enterNukaWorld()">ENTRAR</button>`;
+    actHint = P.nukaWorldUnlocked
+      ? `<span style="color:#e05050;">🎪 Circo de Nuka-World — minijuegos y tienda</span>`
+      : `<span style="color:#e05050;">🎪 Entra para desbloquear el Circo de Nuka-World</span>`;
   } else if (zone.type === 'combatzone') {
-    actBtns = `<button style="background:#cc3333;color:#fff;" onclick="enterCombatZone()">ENTRAR</button>`;
+    actBtns = `<button style="background:#1a4a8a;color:#fff;border-color:#4a9eff;" onclick="enterCombatZone()">ENTRAR</button>`;
     actHint = P.combatZoneUnlocked
-      ? `<span style="color:#ff6666;">⚔ Combat Zone desbloqueada — arena y tienda</span>`
-      : `<span style="color:#ff6666;">⚔ Entra para desbloquear Combat Zone</span>`;
+      ? `<span style="color:#4a9eff;">🥊 Combat Zone desbloqueada — arena y tienda</span>`
+      : `<span style="color:#4a9eff;">🥊 Entra para desbloquear Combat Zone</span>`;
   } else if (zone.type === 'abduction' || zone.abduction) {
     actBtns = `<button style="background:#66ffaa;color:#111;font-weight:bold;" onclick="startZetanAbduction()">🛸 DEJARSE ABDUCIR</button>`;
     actHint = `<span style="color:#66ffaa;">Señal Zetan — te llevarán a una nave (mapa limitado)</span>`;
@@ -6418,12 +6483,28 @@ function openAdditionalContentUI() {
     <button style="width:100%;margin:8px 0;border-color:#88aadd;color:#88aadd;font-weight:bold;" onclick="openVaultTecDlcInfo()">🧪 DLC: El experimento de Vaul-Tec</button>
     <button style="width:100%;margin:8px 0;border-color:#66cc99;color:#66cc99;font-weight:bold;" onclick="openSpiesDlcInfo()">🕵 DLC: Espías entre nosotros</button>
     <button style="width:100%;margin:8px 0;border-color:#dd8844;color:#dd8844;font-weight:bold;" onclick="openTemiblesDlcInfo()">☠️ DLC: Los Temibles del Yermo</button>
+    <button style="width:100%;margin:8px 0;border-color:#e05050;color:#e05050;font-weight:bold;" onclick="openNukaWorldDlcInfo()">🎪 DLC: El Circo de Nuka-World</button>
     <button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>
     <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
   `;
   document.getElementById('modal').classList.add('show');
 }
 
+function openNukaWorldDlcInfo() {
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#e05050;text-align:center;margin-top:0;">🎪 El Circo de Nuka-World</h2>
+    <p style="text-align:center;font-size:11px;color:#8d9880;margin:0 0 8px 0;">Expansión · Wasteland</p>
+    <div class="item" style="border-color:#e05050;font-size:12px;color:#8d9880;line-height:1.45;">
+      <p style="color:var(--txt);">Antes de la Gran Guerra, <b style="color:#e05050;">Nuka-World</b> prometía “diversión radiante para toda la familia”. Tras las bombas, el parque quedó medio enterrado… hasta que alguien volvió a encender las luces del <b>circo ambulante</b> y del <b>NukaCade</b>.</p>
+      <p>En las afueras del Yermo [<b>+20, -8</b>] aún funcionan atracciones, puestos de premios y máquinas de arcade. No es una facción ni un ejército: es un negocio de feriantes que solo habla el idioma de las fichas y los tickets.</p>
+      <p><b style="color:#e8d48b;">Fichas Nuka-World</b> — Las máquinas del NukaCade son tecnología de antes de la guerra. Solo aceptan <b>Dinero de antes de la guerra</b> (el mismo que usa Vaul-Tec): <b>100 billetes = 1 ficha</b>, en la Taquilla. Cada minijuego cuesta <b>1 ficha</b>.</p>
+      <p><b style="color:#e05050;">Tickets</b> — Se ganan en los minijuegos. Sirven para la tienda exclusiva y para canjear por chapas o mejorar la tienda (hasta nivel 10) en la Taquilla.</p>
+      <p style="color:#e05050;margin-bottom:0;">Mapa: Circo de Nuka-World <b>[+20, -8]</b> · Viaje rápido en Ubicaciones importantes tras desbloquear.</p>
+    </div>
+    <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
+    <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>`;
+  document.getElementById('modal').classList.add('show');
+}
 function openTemiblesDlcInfo() {
   document.getElementById('modal-body').innerHTML = `
     <h2 style="color:#dd8844;text-align:center;margin-top:0;">☠️ Los Temibles del Yermo</h2>
@@ -6454,6 +6535,8 @@ function openSpiesDlcInfo() {
       <p style="color:#66cc99;margin-bottom:0;">Mapa: Clínica de los Seguidores <b>[-20, -8]</b> · Necrópolis <b>[+16, -12]</b></p>
     </div>
     <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
+  
+    <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
   `;
   document.getElementById('modal').classList.add('show');
 }
@@ -6746,12 +6829,30 @@ function executeCheat(raw) {
     return { ok: true, msg: 'Zona de Comercio desbloqueada.' };
   }
 
-  // /Tickets +N
+  // /Tickets +N  (Combat Zone)
   let mT = cmd.match(/^tickets?\s+\+?(-?\d+)$/i);
   if (mT) {
     let n = parseInt(mT[1], 10);
     P.tickets = Math.max(0, (P.tickets || 0) + n);
-    return { ok: true, msg: 'Tickets: ' + P.tickets };
+    return { ok: true, msg: 'Tickets CZ: ' + P.tickets };
+  }
+  let mNT = cmd.match(/^nuka\s*tickets?\s+\+?(-?\d+)$/i) || cmd.match(/^tickets?\s*nuka\s+\+?(-?\d+)$/i);
+  if (mNT) {
+    let n = parseInt(mNT[1], 10);
+    P.nukaTickets = Math.max(0, (P.nukaTickets || 0) + n);
+    return { ok: true, msg: 'Tickets Nuka: ' + P.nukaTickets };
+  }
+  let mTok = cmd.match(/^fichas?\s*nuka\s+\+?(-?\d+)$/i) || cmd.match(/^nuka\s*fichas?\s+\+?(-?\d+)$/i) || cmd.match(/^nuka\s*tokens?\s+\+?(-?\d+)$/i);
+  if (mTok) {
+    let n = parseInt(mTok[1], 10);
+    P.nukaTokens = Math.max(0, (P.nukaTokens || 0) + n);
+    return { ok: true, msg: 'Fichas Nuka: ' + P.nukaTokens };
+  }
+  let mPw = cmd.match(/^preguerra\s+\+?(-?\d+)$/i) || cmd.match(/^prewar\s+\+?(-?\d+)$/i);
+  if (mPw) {
+    let n = parseInt(mPw[1], 10);
+    P.prewarMoney = Math.max(0, (P.prewarMoney || 0) + n);
+    return { ok: true, msg: 'Dinero preguerra: ' + P.prewarMoney };
   }
 
   // /FichasSierra +N
@@ -6820,7 +6921,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.9.7</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.3</div>
   `;
   m.classList.add('show');
 }
@@ -11560,11 +11661,20 @@ function quickUseRadAway() {
 
 
 
+function ticketIconHtml(kind, size) {
+  let s = size || 16;
+  let src = kind === 'nuka'
+    ? (typeof NUKA_TICKET_ICON_B64 !== 'undefined' ? NUKA_TICKET_ICON_B64 : 'ticket-nuka.png')
+    : (typeof TICKET_ICON_B64 !== 'undefined' ? TICKET_ICON_B64 : 'ticket-cz.png');
+  return '<img class="ticket-icon" src="' + src + '" alt="ticket" style="width:' + s + 'px;height:' + Math.round(s*0.65) + 'px;vertical-align:middle;object-fit:contain;">';
+}
+
 function ensureCombatZone() {
   if (P.combatZoneUnlocked === undefined) P.combatZoneUnlocked = false;
   if (P.tickets === undefined) P.tickets = 0;
   if (P.czTab === undefined) P.czTab = 'combat';
   if (P.czShopPage === undefined) P.czShopPage = 0;
+  if (P.czShopLevel === undefined) P.czShopLevel = 1;
 }
 
 function enterCombatZone() {
@@ -11585,48 +11695,66 @@ function unlockCombatZone() {
 
 function renderCombatZoneUI(tab) {
   ensureCombatZone();
+  const BLUE = '#4a9eff';
   if (!P.combatZoneUnlocked) {
-    let html = `<h2 style="color:#ff6666;">⚔ COMBAT ZONE</h2>
-      <div class="item" style="border-color:#ff6666;">
+    let html = `<h2 style="color:${BLUE};">🥊 COMBAT ZONE</h2>
+      <div class="item" style="border-color:${BLUE};">
         <p style="font-size:13px;">Arena de combates del yermo. Pulsa <b>DESBLOQUEAR</b> para acceder a combates de pago y la tienda exclusiva de tickets.</p>
-        <button style="width:100%;background:#cc3333;color:#fff;font-weight:bold;margin-top:8px;" onclick="unlockCombatZone()">DESBLOQUEAR</button>
+        <button style="width:100%;background:#1a4a8a;color:#fff;font-weight:bold;margin-top:8px;border-color:${BLUE};" onclick="unlockCombatZone()">DESBLOQUEAR</button>
       </div>
       <button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← SALIR AL YERMO</button>`;
     document.getElementById('main-view').innerHTML = html;
     return;
   }
   P.czTab = tab || 'combat';
-  let html = `<h2 style="color:#ff6666;">⚔ COMBAT ZONE</h2>
+  let tix = ticketIconHtml('cz', 18);
+  let html = `<h2 style="color:${BLUE};">🥊 COMBAT ZONE</h2>
     <div class="subtabs">
       <button class="${P.czTab==='combat'?'active':''}" onclick="renderCombatZoneUI('combat')">Combate</button>
       <button class="${P.czTab==='shop'?'active':''}" onclick="renderCombatZoneUI('shop')">Tienda</button>
+      <button class="${P.czTab==='booth'?'active':''}" onclick="renderCombatZoneUI('booth')">Taquilla</button>
     </div>
-    <p style="font-size:12px;color:#6eb5ff;">Tickets: <b>${P.tickets||0}</b></p>`;
+    <p style="font-size:12px;color:${BLUE};display:flex;align-items:center;gap:6px;">${tix} Tickets: <b>${P.tickets||0}</b> · Tienda Nv.${P.czShopLevel||1}/5</p>`;
 
   if (P.czTab === 'combat') {
-    html += `<div class="item" style="border-color:#ff6666;">
-      <b style="color:#ff6666;">Combate de arena</b><br>
-      <span style="font-size:12px;">Coste: <b style="color:#e05050;">1000 chapas</b>. Recompensa: <b style="color:#6eb5ff;">solo tickets</b> (sin loot, sin legendarios, sin captura).</span><br>
-      <button style="width:100%;margin-top:8px;background:#cc3333;color:#fff;font-weight:bold;" ${P.caps < 1000 ? 'disabled' : ''} onclick="startCombatZoneFight()">PAGAR 1000 Y COMBATIR</button>
+    html += `<div class="item" style="border-color:${BLUE};">
+      <b style="color:${BLUE};">Combate de arena</b><br>
+      <span style="font-size:12px;">Coste: <b style="color:#e05050;">1000 chapas</b>. Recompensa: <b style="color:${BLUE};">solo tickets</b> (sin loot, sin legendarios, sin captura).</span><br>
+      <button style="width:100%;margin-top:8px;background:#1a4a8a;color:#fff;font-weight:bold;border-color:${BLUE};" ${P.caps < 1000 ? 'disabled' : ''} onclick="startCombatZoneFight()">PAGAR 1000 Y COMBATIR</button>
     </div>`;
+  } else if (P.czTab === 'booth') {
+    let lvl = P.czShopLevel || 1;
+    let cost = lvl >= 5 ? 0 : (lvl * 80 + 50);
+    html += `<div class="item" style="border-color:${BLUE};">
+      <b style="color:${BLUE};">🎫 Taquilla Combat Zone</b><br>
+      <span style="font-size:12px;">Mejora la tienda con tickets (máx. nivel 5). Más nivel = más objetos.</span><br>
+      <span style="font-size:12px;">Nivel actual: <b>${lvl}/5</b></span><br>`;
+    if (lvl >= 5) {
+      html += `<p style="color:#8d9880;font-size:12px;">Tienda al máximo.</p>`;
+    } else {
+      html += `<button style="width:100%;margin-top:8px;border-color:${BLUE};color:${BLUE};" ${(P.tickets||0) < cost ? 'disabled' : ''} onclick="upgradeCzShop()">${tix} Mejorar tienda (−${cost} tickets)</button>`;
+    }
+    html += `</div>`;
   } else {
-    let items = DB_ITEMS.filter(i => i.combatZone && i.ticketCost);
+    let maxTier = P.czShopLevel || 1;
+    let items = DB_ITEMS.filter(i => i.combatZone && i.ticketCost && (i.shopTier || 1) <= maxTier);
     const PER = 5;
     if (P.czShopPage === undefined) P.czShopPage = 0;
     let pages = Math.max(1, Math.ceil(items.length / PER));
     if (P.czShopPage >= pages) P.czShopPage = pages - 1;
     let start = P.czShopPage * PER;
     let slice = items.slice(start, start + PER);
+    if (!slice.length) html += `<p style="font-size:12px;color:#8d9880;">No hay objetos a este nivel de tienda.</p>`;
     slice.forEach(it => {
       let info = '';
       if (it.type === 'weapon') info = `Daño base ${it.damage} · Lv. = tu nivel`;
       else if (it.type === 'armor') info = `Def ${it.def} · Res.RAD ${it.radRes||0}% · Lv. = tu nivel`;
       else if (it.heal) info = it.useDesc || ('Cura ' + it.heal);
       else info = it.useDesc || 'Objeto exclusivo CZ';
-      html += `<div class="item" style="border-color:#6eb5ff;">
+      html += `<div class="item" style="border-color:${BLUE};">
         <b>${it.name}</b><br>
         <span style="font-size:11px;color:#8d9880;">${info}</span><br>
-        <span style="color:#6eb5ff;font-size:12px;">${it.ticketCost} tickets</span>
+        <span style="color:${BLUE};font-size:12px;display:inline-flex;align-items:center;gap:4px;">${it.ticketCost} ${tix} Tickets</span>
         <button style="margin-top:4px;" ${ (P.tickets||0) < it.ticketCost ? 'disabled' : '' } onclick="buyCombatZoneItem(${it.id})">Comprar</button>
       </div>`;
     });
@@ -11638,6 +11766,19 @@ function renderCombatZoneUI(tab) {
   }
   html += `<button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← SALIR AL YERMO</button>`;
   document.getElementById('main-view').innerHTML = html;
+}
+
+function upgradeCzShop() {
+  ensureCombatZone();
+  let lvl = P.czShopLevel || 1;
+  if (lvl >= 5) { logMsg('Tienda CZ ya está al máximo.'); return; }
+  let cost = lvl * 80 + 50;
+  if ((P.tickets || 0) < cost) { logMsg('Tickets insuficientes.'); return; }
+  P.tickets -= cost;
+  P.czShopLevel = lvl + 1;
+  logMsg('Tienda Combat Zone → nivel ' + P.czShopLevel);
+  renderCombatZoneUI('booth');
+  updateStats();
 }
 
 function startCombatZoneFight() {
@@ -11654,18 +11795,238 @@ function startCombatZoneFight() {
   updateStats();
 }
 
+
 function buyCombatZoneItem(id) {
   let it = getItemBase(id);
   if (!it || !it.combatZone) return;
   if ((P.tickets || 0) < it.ticketCost) { logMsg("Tickets insuficientes."); return; }
   P.tickets -= it.ticketCost;
-  if (it.id === 3625) {
-    // ticket dorado - handled on use, just add to inv
-  }
-  addItemToInv(id, 1);
+  if (it.type === 'weapon' || it.type === 'armor') addLeveledGearToInv(id);
+  else addItemToInv(id, 1);
   playBuySound();
   logMsg("Comprado: " + it.name + " (−" + it.ticketCost + " tickets).");
   renderCombatZoneUI('shop');
+  updateStats();
+}
+
+
+function ensureNukaWorld() {
+  if (P.nukaWorldUnlocked === undefined) P.nukaWorldUnlocked = false;
+  if (P.nukaTickets === undefined) P.nukaTickets = 0;
+  if (P.nukaTokens === undefined) P.nukaTokens = 0;
+  if (P.prewarMoney === undefined) P.prewarMoney = 0;
+  if (P.nwTab === undefined) P.nwTab = 'games';
+  if (P.nwShopPage === undefined) P.nwShopPage = 0;
+  if (P.nwShopLevel === undefined) P.nwShopLevel = 1;
+}
+function nukaTokenIconHtml(size) {
+  let s = size || 18;
+  let src = (typeof NUKA_TOKEN_ICON_B64 !== 'undefined') ? NUKA_TOKEN_ICON_B64 : 'nuka-token.png';
+  return '<img src="' + src + '" alt="ficha" style="width:' + s + 'px;height:' + s + 'px;vertical-align:middle;object-fit:contain;">';
+}
+
+function enterNukaWorld() {
+  ensureNukaWorld();
+  P.location = { type: 'nukaworld', name: 'Circo de Nuka-World' };
+  renderNukaWorldUI(P.nukaWorldUnlocked ? (P.nwTab || 'games') : 'unlock');
+}
+
+function unlockNukaWorld() {
+  ensureNukaWorld();
+  P.nukaWorldUnlocked = true;
+  if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+  if (!P.fastTravelUnlocked.includes('nuka_world')) P.fastTravelUnlocked.push('nuka_world');
+  logMsg('Circo de Nuka-World desbloqueado.');
+  renderNukaWorldUI('games');
+  updateStats();
+}
+
+const NUKA_MINIGAMES = [
+  { id: 'diana', name: 'Diana Nuka', cost: 1, desc: 'Dispara al centro. Suerte decide.' },
+  { id: 'ratas', name: 'Carrera de ratas', cost: 1, desc: 'Elige un carril 1-3.' },
+  { id: 'martillo', name: 'Golpea el fuerte', cost: 1, desc: 'Prueba de fuerza.' },
+  { id: 'anillos', name: 'Lanza anillos', cost: 1, desc: 'Encesta en botellas.' },
+  { id: 'ruleta', name: 'Ruleta Nuka', cost: 1, desc: 'Rojo, negro o Quantum.' },
+  { id: 'botella', name: 'Adivina la botella', cost: 1, desc: 'Classic, Quantum o Dark.' },
+  { id: 'slots', name: 'Tragaperras Nuka', cost: 1, desc: 'Tres símbolos.' },
+  { id: 'memoria', name: 'Memoria de sabores', cost: 1, desc: 'Recuerda la secuencia.' },
+  { id: 'dardos', name: 'Dardos del yermo', cost: 1, desc: 'Puntos al azar.' },
+  { id: 'agua', name: 'Bombas de agua', cost: 1, desc: 'Llena el depósito primero.' }
+];
+
+function renderNukaWorldUI(tab) {
+  ensureNukaWorld();
+  const RED = '#e05050';
+  let tix = ticketIconHtml('nuka', 18);
+  if (!P.nukaWorldUnlocked) {
+    let html = `<h2 style="color:${RED};">🎪 CIRCO DE NUKA-WORLD</h2>
+      <div class="item" style="border-color:${RED};">
+        <p style="font-size:13px;">Parque de atracciones y minijuegos. Gana <b>tickets Nuka-World</b> y canjéalos en la tienda o la taquilla.</p>
+        <button style="width:100%;background:#8a1a1a;color:#fff;font-weight:bold;margin-top:8px;border-color:${RED};" onclick="unlockNukaWorld()">DESBLOQUEAR</button>
+      </div>
+      <button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← SALIR AL YERMO</button>`;
+    document.getElementById('main-view').innerHTML = html;
+    return;
+  }
+  P.nwTab = tab || 'games';
+  let tok = nukaTokenIconHtml(18);
+  let html = `<h2 style="color:${RED};">🎪 CIRCO DE NUKA-WORLD</h2>
+    <div class="subtabs">
+      <button class="${P.nwTab==='games'?'active':''}" onclick="renderNukaWorldUI('games')">Minijuegos</button>
+      <button class="${P.nwTab==='shop'?'active':''}" onclick="renderNukaWorldUI('shop')">Tienda</button>
+      <button class="${P.nwTab==='booth'?'active':''}" onclick="renderNukaWorldUI('booth')">Taquilla</button>
+    </div>
+    <p style="font-size:12px;color:${RED};display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+      <span style="display:inline-flex;align-items:center;gap:4px;">${tok} Fichas: <b>${P.nukaTokens||0}</b></span>
+      <span style="display:inline-flex;align-items:center;gap:4px;">${tix} Tickets: <b>${P.nukaTickets||0}</b></span>
+      <span>Tienda Nv.${P.nwShopLevel||1}/10</span>
+    </p>`;
+
+  if (P.nwTab === 'games') {
+    html += `<p style="font-size:11px;color:#8d9880;">Las atracciones del NukaCade solo aceptan <b style="color:#e8d48b;">Fichas Nuka-World</b> (cómpralas en Taquilla con dinero de antes de la guerra).</p>`;
+    NUKA_MINIGAMES.forEach(g => {
+      html += `<div class="item" style="border-color:${RED};">
+        <b style="color:${RED};">${g.name}</b><br>
+        <span style="font-size:11px;color:#8d9880;">${g.desc}</span><br>
+        <span style="font-size:12px;color:#e8d48b;display:inline-flex;align-items:center;gap:4px;">Coste: ${g.cost} ${tok} Ficha(s)</span>
+        <button style="margin-top:4px;border-color:${RED};" ${(P.nukaTokens||0) < g.cost ? 'disabled' : ''} onclick="playNukaMinigame('${g.id}')">Jugar</button>
+      </div>`;
+    });
+  } else if (P.nwTab === 'booth') {
+    let pm = P.prewarMoney || 0;
+    let lvl = P.nwShopLevel || 1;
+    let cost = lvl >= 10 ? 0 : (lvl * 60 + 40);
+    html += `<div class="item" style="border-color:#e8d48b;">
+      <b style="color:#e8d48b;display:inline-flex;align-items:center;gap:6px;">${tok} Canje: Dinero → Fichas</b><br>
+      <span style="font-size:11px;color:#8d9880;">Las máquinas del NukaCade solo aceptan dinero de antes de la guerra. <b>100 $ = 1 ficha</b>.</span><br>
+      <span style="font-size:12px;">Tienes: <b style="color:#88aadd;">${pm}</b> $ preguerra · ${tok} <b>${P.nukaTokens||0}</b> fichas</span><br>
+      <button style="width:100%;margin:6px 0;border-color:#e8d48b;color:#e8d48b;" ${pm < 100 ? 'disabled' : ''} onclick="buyNukaTokens(1)">1 ficha (−100 $)</button>
+      <button style="width:100%;margin:4px 0;border-color:#e8d48b;color:#e8d48b;" ${pm < 500 ? 'disabled' : ''} onclick="buyNukaTokens(5)">5 fichas (−500 $)</button>
+      <button style="width:100%;margin:4px 0;border-color:#e8d48b;color:#e8d48b;" ${pm < 1000 ? 'disabled' : ''} onclick="buyNukaTokens(10)">10 fichas (−1000 $)</button>
+    </div>
+    <div class="item" style="border-color:${RED};">
+      <b style="color:${RED};display:inline-flex;align-items:center;gap:6px;">${tix} Canje: Tickets → Chapas</b><br>
+      <span style="font-size:11px;color:#8d9880;">Cambia tickets ganados en minijuegos por chapas del Yermo.</span><br>
+      <span style="font-size:12px;">Tickets: <b>${P.nukaTickets||0}</b></span><br>
+      <button style="width:100%;margin:6px 0;border-color:${RED};" ${(P.nukaTickets||0) < 10 ? 'disabled' : ''} onclick="nukaTicketsToCaps(10)">10 tickets → 50 chapas</button>
+      <button style="width:100%;margin:4px 0;border-color:${RED};" ${(P.nukaTickets||0) < 50 ? 'disabled' : ''} onclick="nukaTicketsToCaps(50)">50 tickets → 300 chapas</button>
+      <button style="width:100%;margin:4px 0;border-color:${RED};" ${(P.nukaTickets||0) < 100 ? 'disabled' : ''} onclick="nukaTicketsToCaps(100)">100 tickets → 700 chapas</button>
+    </div>
+    <div class="item" style="border-color:#a8c47a;">
+      <b style="color:#a8c47a;">⬆ Mejora de tienda</b><br>
+      <span style="font-size:11px;color:#8d9880;">Gasta tickets para desbloquear más objetos exclusivos. Nivel actual: <b>${lvl}/10</b>.</span><br>`;
+    if (lvl >= 10) {
+      html += `<p style="color:#8d9880;font-size:12px;margin:6px 0 0;">Tienda al máximo.</p></div>`;
+    } else {
+      html += `<button style="width:100%;margin-top:8px;border-color:#a8c47a;color:#a8c47a;" ${(P.nukaTickets||0) < cost ? 'disabled' : ''} onclick="upgradeNwShop()">Mejorar a Nv.${lvl+1} (−${cost} tickets)</button></div>`;
+    }
+  } else {
+
+
+    let maxTier = P.nwShopLevel || 1;
+    let items = DB_ITEMS.filter(i => i.nukaWorld && i.nukaTicketCost && (i.shopTier || 1) <= maxTier);
+    const PER = 5;
+    if (P.nwShopPage === undefined) P.nwShopPage = 0;
+    let pages = Math.max(1, Math.ceil(items.length / PER));
+    if (P.nwShopPage >= pages) P.nwShopPage = pages - 1;
+    let slice = items.slice(P.nwShopPage * PER, P.nwShopPage * PER + PER);
+    if (!slice.length) html += `<p style="font-size:12px;color:#8d9880;">Mejora la tienda en Taquilla para ver más objetos.</p>`;
+    slice.forEach(it => {
+      let info = it.type === 'weapon' ? ('Daño ' + it.damage + ' · Lv. = tuyo') : (it.type === 'armor' ? ('Def ' + it.def + ' · RAD ' + (it.radRes||0) + '%') : (it.useDesc || ''));
+      html += `<div class="item" style="border-color:${RED};">
+        <b>${it.name}</b><br>
+        <span style="font-size:11px;color:#8d9880;">${info}</span><br>
+        <span style="color:${RED};font-size:12px;display:inline-flex;align-items:center;gap:4px;">${it.nukaTicketCost} ${tix} Tickets</span>
+        <button style="margin-top:4px;" ${(P.nukaTickets||0) < it.nukaTicketCost ? 'disabled' : ''} onclick="buyNukaWorldItem(${it.id})">Comprar</button>
+      </div>`;
+    });
+    html += `<div style="display:flex;justify-content:space-between;margin-top:8px;">
+      <button ${P.nwShopPage<=0?'disabled':''} onclick="P.nwShopPage--;renderNukaWorldUI('shop')">◀</button>
+      <span style="font-size:11px;">Pág. ${P.nwShopPage+1}/${pages}</span>
+      <button ${P.nwShopPage>=pages-1?'disabled':''} onclick="P.nwShopPage++;renderNukaWorldUI('shop')">▶</button>
+    </div>`;
+  }
+  html += `<button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← SALIR AL YERMO</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function playNukaMinigame(id) {
+  ensureNukaWorld();
+  let g = NUKA_MINIGAMES.find(x => x.id === id);
+  if (!g) return;
+  if ((P.nukaTokens || 0) < g.cost) { logMsg('Fichas Nuka insuficientes. Cómpralas en Taquilla (100 $ preguerra = 1 ficha).'); return; }
+  P.nukaTokens -= g.cost;
+  let win = Math.random();
+  let luck = (P.special && P.special.L) ? P.special.L : 5;
+  let chance = 0.35 + luck * 0.03;
+  let reward = 0;
+  let msg = '';
+  if (win < chance) {
+    reward = 3 + Math.floor(Math.random() * 8) + (g.cost > 1 ? g.cost : 0);
+    P.nukaTickets = (P.nukaTickets || 0) + reward;
+    msg = '¡Ganaste en ' + g.name + '! −' + g.cost + ' ficha(s), +' + reward + ' tickets Nuka.';
+  } else if (win < chance + 0.15) {
+    reward = 1 + Math.floor(Math.random() * 3);
+    P.nukaTickets = (P.nukaTickets || 0) + reward;
+    msg = 'Casi... ' + g.name + ': −' + g.cost + ' ficha(s), +' + reward + ' tickets de consolación.';
+  } else {
+    msg = 'Perdiste en ' + g.name + '. −' + g.cost + ' ficha(s).';
+  }
+  logMsg(msg);
+  renderNukaWorldUI('games');
+  updateStats();
+}
+
+function buyNukaTokens(qty) {
+  ensureNukaWorld();
+  qty = Math.max(1, Math.floor(Number(qty) || 1));
+  let cost = qty * 100;
+  if ((P.prewarMoney || 0) < cost) { logMsg('No tienes suficiente dinero de antes de la guerra (' + cost + ' $).'); return; }
+  P.prewarMoney -= cost;
+  P.nukaTokens = (P.nukaTokens || 0) + qty;
+  playBuySound();
+  logMsg('Taquilla NukaCade: −' + cost + ' $ preguerra → +' + qty + ' ficha(s). Total fichas: ' + P.nukaTokens);
+  renderNukaWorldUI('booth');
+  updateStats();
+}
+
+function nukaTicketsToCaps(n) {
+  ensureNukaWorld();
+  if ((P.nukaTickets || 0) < n) { logMsg('Tickets insuficientes.'); return; }
+  let rates = { 10: 50, 50: 300, 100: 700 };
+  let caps = rates[n] || Math.floor(n * 5);
+  P.nukaTickets -= n;
+  P.caps += caps;
+  playBuySound();
+  logMsg('Taquilla: −' + n + ' tickets Nuka → +' + caps + ' chapas.');
+  renderNukaWorldUI('booth');
+  updateStats();
+}
+
+function upgradeNwShop() {
+  ensureNukaWorld();
+  let lvl = P.nwShopLevel || 1;
+  if (lvl >= 10) return;
+  let cost = lvl * 60 + 40;
+  if ((P.nukaTickets || 0) < cost) { logMsg('Tickets insuficientes.'); return; }
+  P.nukaTickets -= cost;
+  P.nwShopLevel = lvl + 1;
+  logMsg('Tienda Nuka-World → nivel ' + P.nwShopLevel);
+  renderNukaWorldUI('booth');
+  updateStats();
+}
+
+function buyNukaWorldItem(id) {
+  let it = getItemBase(id);
+  if (!it || !it.nukaWorld) return;
+  if ((P.nukaTickets || 0) < it.nukaTicketCost) { logMsg('Tickets Nuka insuficientes.'); return; }
+  P.nukaTickets -= it.nukaTicketCost;
+  if (it.grenade || it.stackable) addItemToInv(id, 1);
+  else if (it.type === 'weapon' || it.type === 'armor') addLeveledGearToInv(id);
+  else addItemToInv(id, 1);
+  playBuySound();
+  logMsg('Comprado: ' + it.name + ' (−' + it.nukaTicketCost + ' tickets Nuka).');
+  renderNukaWorldUI('shop');
   updateStats();
 }
 
@@ -11678,20 +12039,36 @@ function openFastTravelUI(section) {
   P.travelSection = section;
   if (P.travelPage === undefined) P.travelPage = 0;
 
+  function ensureEmoji(name, emoji) {
+    let n = String(name || '').trim();
+    if (!n) return emoji;
+    let first = n.charCodeAt(0);
+    // BMP symbols / emoji-ish / already has space after emoji prefix
+    if (first > 0x2000 || /[\u2600-\u27BF]/.test(n.charAt(0)) || n.indexOf(' ') > 0 && n.charCodeAt(0) > 255) {
+      // if starts with latin letter, still needs emoji
+      if (/^[A-Za-zÁÉÍÓÚáéíóúÑñ]/.test(n)) return emoji + ' ' + n;
+      return n;
+    }
+    if (/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9]/.test(n)) return emoji + ' ' + n;
+    return n;
+  }
+
   let important = IMPORTANT_LOCS.filter(l => P.fastTravelUnlocked.includes(l.id)).map(l => {
     let color = '#ffcc44', tag = 'Importante';
     let name = l.name;
-    if (l.kind === 'vault') { color = '#66b3ff'; tag = 'Refugio'; }
-    else if (l.kind === 'home') { color = '#66ddaa'; tag = 'Hogar'; name = getPlayerHomeName(); }
-    else if (l.kind === 'commerce') { color = '#ffcc44'; tag = 'Comercio'; }
-    else if (l.kind === 'combatzone') { color = '#ff6666'; tag = 'Arena'; }
+    if (l.kind === 'vault') { color = '#66b3ff'; tag = 'Refugio'; name = ensureEmoji(l.name, '🏠'); }
+    else if (l.kind === 'home') { color = '#66ddaa'; tag = 'Hogar'; name = ensureEmoji(getPlayerHomeName(), '🏠'); }
+    else if (l.kind === 'commerce') { color = '#ffcc44'; tag = 'Comercio'; name = ensureEmoji(l.name, '⚖'); }
+    else if (l.kind === 'combatzone') { color = '#4a9eff'; tag = 'Arena'; name = ensureEmoji(l.name, '🥊'); }
+    else if (l.kind === 'nukaworld') { color = '#e05050'; tag = 'Circo'; name = ensureEmoji(l.name, '🎪'); }
     return { id: l.id, name: name, x: l.x, y: l.y, color, tag };
   });
 
   let yours = [];
   let ph = SETTLEMENTS.find(s => s.id === 'player_home');
   if (ph && P.fastTravelUnlocked.includes('player_home') && P.playerSettlement && P.playerSettlement.claimed) {
-    yours.push({ id: 'player_home', name: P.playerSettlement.name || 'Tu Asentamiento', x: ph.x, y: ph.y, color: '#44ddaa', tag: 'Propio' });
+    let pn = P.playerSettlement.name || 'Tu Asentamiento';
+    yours.push({ id: 'player_home', name: ensureEmoji(pn, '🏕'), x: ph.x, y: ph.y, color: '#44ddaa', tag: 'Propio' });
   }
   if (P.sierraCasino && P.sierraCasino.claimed) {
     let sm = SETTLEMENTS.find(s => s.id === 'sierra_madre');
@@ -11718,7 +12095,7 @@ function openFastTravelUI(section) {
       let num = P.playerVault.number;
       yours.push({
         id: 'player_vault',
-        name: num ? ('Refugio ' + num) : 'Refugio experimental',
+        name: num ? ('🧪 Refugio ' + num) : '🧪 Refugio experimental',
         x: pv.x, y: pv.y,
         color: '#88aadd',
         tag: 'Supervisor'
@@ -11737,7 +12114,9 @@ function openFastTravelUI(section) {
     P.fastTravelUnlocked.includes(s.id)
   ).map(s => {
     let fac = FACTIONS[s.faction];
-    return { id: s.id, name: s.name, x: s.x, y: s.y, color: (fac && fac.color) || '#cc88ff', tag: (fac && fac.name) || s.faction };
+    let nm = s.name || '';
+    if (nm && /^[A-Za-zÁÉÍÓÚáéíóúÑñ]/.test(nm)) nm = '⚑ ' + nm;
+    return { id: s.id, name: nm, x: s.x, y: s.y, color: (fac && fac.color) || '#cc88ff', tag: 'Facción' };
   });
 
   let lists = {
@@ -11765,9 +12144,12 @@ function openFastTravelUI(section) {
   } else {
     slice.forEach(s => {
       html += `<div class="item" style="border-color:${s.color} !important;">
-        <b style="color:${s.color};">${s.name}</b> <span style="font-size:10px;color:#8d9880;">${s.tag || ''}</span><br>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+          <b style="color:${s.color};font-size:13px;line-height:1.35;flex:1;word-break:break-word;">${s.name}</b>
+          <span style="font-size:10px;color:#8d9880;white-space:nowrap;flex-shrink:0;margin-top:2px;">${s.tag || ''}</span>
+        </div>
         <span style="font-size:11px;color:#8d9880;">[${s.x >= 0 ? '+' : ''}${s.x}, ${s.y >= 0 ? '+' : ''}${s.y}]</span><br>
-        <button style="margin-top:4px;border-color:${s.color};" onclick="doFastTravel('${s.id}')">Viajar aquí</button>
+        <button style="margin-top:6px;border-color:${s.color};" onclick="doFastTravel('${s.id}')">Viajar aquí</button>
       </div>`;
     });
   }
@@ -14324,7 +14706,8 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
     if (it.casino) return false;
     if (it.casinoModule) return false;
     if (it.robcoModule) return false; // solo desguace robots legendarios
-    if (it.combatZone) return false; // solo Combat Zone
+    if (it.combatZone) return false;
+    if (it.nukaWorld) return false; // solo Combat Zone
     if (it.shopTier === 99) return false;
     if (it.shopTier === undefined || it.shopTier === null) return false;
     if (it.shopTier > P.shopLevel) return false;
