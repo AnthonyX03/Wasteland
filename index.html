@@ -897,6 +897,36 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 
 
 
+
+.console-boot {
+  font-family: monospace;
+  color: #33ff66;
+  background: #001100;
+  border: 2px solid #00aa44;
+  padding: 12px;
+  min-height: 280px;
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 1.4;
+  text-shadow: 0 0 4px #00ff66;
+  animation: consoleFlicker 0.08s infinite alternate;
+}
+@keyframes consoleFlicker {
+  from { opacity: 0.92; }
+  to { opacity: 1; }
+}
+.console-input-row {
+  display: flex; gap: 6px; margin-top: 8px; align-items: center;
+}
+.console-input-row input {
+  flex: 1; background: #001a00; border: 1px solid #00aa44; color: #33ff66;
+  font-family: monospace; padding: 8px; font-size: 13px;
+}
+.console-log-line { margin: 2px 0; }
+.console-log-line.err { color: #ff6666; }
+.console-log-line.ok { color: #66ffaa; }
+.console-log-line.sys { color: #88aa88; }
+
 </style>
 </head>
 <body>
@@ -4544,42 +4574,42 @@ function getFactionShopLevel(fid) {
 }
 
 const SETTLEMENTS = [
-  { id: 'citadel', name: 'La Ciudadela', faction: 'bos', x: 5, y: 4 },
-  { id: 'enclave_base', name: 'Base del Enclave', faction: 'enclave', x: -8, y: 7 },
-  { id: 'outcast_outpost', name: 'Puesto de Proscritos', faction: 'outcasts', x: 10, y: -6 },
-  { id: 'sanctuary', name: 'Santuario de Colonos', faction: 'settlers', x: -5, y: -8 },
-  { id: 'rail_hq', name: 'Cuartel del Ferrocarril', faction: 'railroad', x: 9, y: 10 },
-  { id: 'rnc_camp', name: 'Campamento RNC', faction: 'rnc', x: -12, y: 3 },
-  { id: 'strip_gate', name: 'Puerta del Strip', faction: 'strip', x: 14, y: 2 },
-  { id: 'kings_theater', name: 'Teatro de Los Reyes', faction: 'kings', x: 12, y: 0 },
+  { id: 'citadel', name: '🛡️ La Ciudadela', faction: 'bos', x: 5, y: 4 },
+  { id: 'enclave_base', name: '🦅 Base del Enclave', faction: 'enclave', x: -8, y: 7 },
+  { id: 'outcast_outpost', name: '⚔️ Puesto de Proscritos', faction: 'outcasts', x: 10, y: -6 },
+  { id: 'sanctuary', name: '🏡 Santuario de Colonos', faction: 'settlers', x: -5, y: -8 },
+  { id: 'rail_hq', name: '🚂 Cuartel del Ferrocarril', faction: 'railroad', x: 9, y: 10 },
+  { id: 'rnc_camp', name: '⭐ Campamento RNC', faction: 'rnc', x: -12, y: 3 },
+  { id: 'strip_gate', name: '🎰 Puerta del Strip', faction: 'strip', x: 14, y: 2 },
+  { id: 'kings_theater', name: '👑 Teatro de Los Reyes', faction: 'kings', x: 12, y: 0 },
   { id: 'bounty_hq', name: '🎯 Gremio de Cazarrecompensas', faction: 'bounty', x: -9, y: -14 },
   { id: 'hunters_lodge', name: '🏹 Logia de los Cazadores', faction: 'hunters', x: 17, y: -14 },
   { id: 'regulators_hq', name: '⚖ Cuartel General de los Reguladores', faction: 'regulators', x: -17, y: -1 },
   { id: 'hitmen_yard', name: '🗡 El Desguace', faction: 'hitmen', x: 12, y: 9 },
   { id: 'crimson_outpost', name: '🐪 Puesto Crimson', faction: 'crimson', x: -6, y: -18 },
-  { id: 'institute_relay', name: 'Relé del Instituto', faction: 'institute', x: 1, y: 14 },
-  { id: 'atom_crater', name: 'Cráter del Átomo', faction: 'atom', x: -16, y: -5 },
-  { id: 'minutemen_fort', name: 'Fuerte Independencia', faction: 'minutemen', x: 6, y: -14 },
-  { id: 'legion_camp', name: 'Campamento de la Legión', faction: 'legion', x: -7, y: 12 },
-  { id: 'paradise_falls', name: 'Paradise Falls', faction: 'slavers', x: 11, y: -3 },
-  { id: 'nucleo_lab', name: 'Laboratorio Nucleólogo', faction: 'nucleologos', x: 18, y: 15 },
-  { id: 'player_home', name: 'Tu Asentamiento', faction: 'player', x: -10, y: -12, playerOwned: true },
-  { id: 'sierra_madre', name: 'Casino Sierra Madre', faction: 'sierra', x: -14, y: 8, sierraCasino: true },
-  { id: 'robco_factory', name: 'Fábrica RobCo Industries', faction: 'robco', x: 8, y: -10, robcoFactory: true },
-  { id: 'player_vault', name: 'Refugio experimental', faction: 'vaulttec', x: -22, y: 18, playerVault: true },
-  { id: 'vaulttec_hq', name: 'Sede de Vaul-Tec', faction: 'vaulttec', x: -18, y: 14 },
-  { id: 'followers_hub', name: 'Clínica de los Seguidores', faction: 'followers', x: -20, y: -8 },
-  { id: 'necropolis_city', name: 'Necrópolis', faction: 'necropolis', x: 16, y: -12 },
-  { id: 'powder_camp', name: 'Campamento de la Pólvora', faction: 'powder', x: -15, y: 11 }
+  { id: 'institute_relay', name: '🔬 Relé del Instituto', faction: 'institute', x: 1, y: 14 },
+  { id: 'atom_crater', name: '☢️ Cráter del Átomo', faction: 'atom', x: -16, y: -5 },
+  { id: 'minutemen_fort', name: '🦅 Fuerte Independencia', faction: 'minutemen', x: 6, y: -14 },
+  { id: 'legion_camp', name: '🏛️ Campamento de la Legión', faction: 'legion', x: -7, y: 12 },
+  { id: 'paradise_falls', name: '⛓️ Paradise Falls', faction: 'slavers', x: 11, y: -3 },
+  { id: 'nucleo_lab', name: '🧬 Laboratorio Nucleólogo', faction: 'nucleologos', x: 18, y: 15 },
+  { id: 'player_home', name: '🏕️ Tu Asentamiento', faction: 'player', x: -10, y: -12, playerOwned: true },
+  { id: 'sierra_madre', name: '💎 Casino Sierra Madre', faction: 'sierra', x: -14, y: 8, sierraCasino: true },
+  { id: 'robco_factory', name: '🤖 Fábrica RobCo Industries', faction: 'robco', x: 8, y: -10, robcoFactory: true },
+  { id: 'player_vault', name: '🧪 Refugio experimental', faction: 'vaulttec', x: -22, y: 18, playerVault: true },
+  { id: 'vaulttec_hq', name: '🏢 Sede de Vaul-Tec', faction: 'vaulttec', x: -18, y: 14 },
+  { id: 'followers_hub', name: '📚 Clínica de los Seguidores', faction: 'followers', x: -20, y: -8 },
+  { id: 'necropolis_city', name: '💀 Necrópolis', faction: 'necropolis', x: 16, y: -12 },
+  { id: 'powder_camp', name: '💥 Campamento de la Pólvora', faction: 'powder', x: -15, y: 11 }
 ];
 
 const PREWAR_ICON_SRC = 'data:image/webp;base64,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';
 const TICKET_ICON_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAv0lEQVR4nO2VMQ7DIAxFv6OcLQsMOUmmDj1Ch06cJEOy5HJ0qEyNVdGSulFV8TaQ8ZNsMECj8euQ3piWGK0lwVPy9Fq2zau1D9MSI0u7b8sAYJvXVLnuVbA1hwuzHg6jA3AvAXM9u+qkp8vjPOdkCMibymuLfg6jg85LWmYl1TKmfxYs+bSk1cLS4T10wRPp6WLRQ/n2ZN6soTKYeaekpSrIWxo82d/Mkjh4ov+fNEkYPJGeClbIN3n4f9hoVHMDA89mtC8SUbYAAAAASUVORK5CYII=';
 const IMPORTANT_LOCS = [
-  { id: 'vault_home', name: 'El Refugio', x: 0, y: 0, kind: 'vault' },
+  { id: 'vault_home', name: '🏠 El Refugio', x: 0, y: 0, kind: 'vault' },
   { id: 'player_house', name: 'Hogar del Superviviente', x: 2, y: -1, kind: 'home' },
-  { id: 'commerce_hub', name: 'Zona de Comercio', x: 3, y: -3, kind: 'commerce' },
-  { id: 'combat_zone', name: 'Combat Zone', x: -5, y: 4, kind: 'combatzone' }
+  { id: 'commerce_hub', name: '⚖️ Zona de Comercio', x: 3, y: -3, kind: 'commerce' },
+  { id: 'combat_zone', name: '⚔️ Combat Zone', x: -5, y: 4, kind: 'combatzone' }
 ];
 function getPlayerHomeName() {
   let n = (P && P.playerName) ? String(P.playerName).trim() : '';
@@ -6502,6 +6532,272 @@ function confirmSellZetanBlood(qty) {
 }
 
 
+
+const CHEAT_FACTION_ALIASES = {
+  'hermandad': 'bos', 'bos': 'bos', 'hermandad del acero': 'bos',
+  'enclave': 'enclave', 'el enclave': 'enclave',
+  'proscritos': 'outcasts', 'outcasts': 'outcasts',
+  'colonos': 'settlers', 'settlers': 'settlers',
+  'ferrocarril': 'railroad', 'railroad': 'railroad',
+  'rnc': 'rnc', 'republica': 'rnc',
+  'strip': 'strip', 'new vegas': 'strip',
+  'instituto': 'institute', 'institute': 'institute',
+  'atomo': 'atom', 'hijos del atomo': 'atom', 'atom': 'atom',
+  'minutemen': 'minutemen', 'minuteman': 'minutemen',
+  'legion': 'legion', 'legión': 'legion', 'cesar': 'legion',
+  'negreros': 'slavers', 'slavers': 'slavers', 'paradise': 'slavers',
+  'nucleologos': 'nucleologos', 'nucleólogos': 'nucleologos',
+  'vault-tec': 'vaulttec', 'vaulttec': 'vaulttec', 'vaul-tec': 'vaulttec',
+  'seguidores': 'followers', 'followers': 'followers',
+  'necropolis': 'necropolis', 'necrópolis': 'necropolis',
+  'reyes': 'kings', 'kings': 'kings',
+  'cazarrecompensas': 'bounty', 'bounty': 'bounty',
+  'cazadores': 'hunters', 'hunters': 'hunters',
+  'reguladores': 'regulators', 'regulators': 'regulators',
+  'sicarios': 'hitmen', 'hitmen': 'hitmen',
+  'crimson': 'crimson', 'caravanas': 'crimson',
+  'polvora': 'powder', 'pólvora': 'powder', 'powder': 'powder', 'bandidos': 'powder'
+};
+
+let _consoleBootTimer = null;
+let _consoleLines = [];
+
+function openCheatConsole() {
+  _consoleLines = [];
+  let m = document.getElementById('modal');
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#33ff66;text-align:center;margin-top:0;font-family:monospace;">💻 TERMINAL ROBCO</h2>
+    <div id="console-boot" class="console-boot">Iniciando BIOS RobCo...\n</div>
+    <div class="console-input-row" id="console-input-wrap" style="display:none;">
+      <span style="color:#33ff66;font-family:monospace;">&gt;</span>
+      <input id="console-cmd" type="text" autocomplete="off" placeholder="/ayuda" onkeydown="if(event.key==='Enter'){runCheatCommand();}">
+      <button onclick="runCheatCommand()" style="border-color:#33ff66;color:#33ff66;">OK</button>
+    </div>
+    <button style="width:100%;margin-top:10px;" onclick="openSettings()">◀ Volver a Ajustes</button>
+  `;
+  m.classList.add('show');
+  playConsoleBoot();
+}
+
+function consolePrint(msg, cls) {
+  _consoleLines.push({ msg: String(msg), cls: cls || 'sys' });
+  let el = document.getElementById('console-boot');
+  if (!el) return;
+  el.innerHTML = _consoleLines.map(l => '<div class="console-log-line ' + l.cls + '">' + l.msg.replace(/</g,'&lt;') + '</div>').join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+function playConsoleBoot() {
+  let steps = [
+    'ROBCO INDUSTRIES UNIFIED OPERATING SYSTEM',
+    'COPYRIGHT 2075-2077 ROBCO INDUSTRIES',
+    '-Server 6-',
+    '',
+    'Memoria: 64K OK',
+    'Cargando módulo de autenticación...',
+    'Acceso CONCEDIDO — modo supervisor',
+    '',
+    'Escribe /ayuda para ver comandos.',
+    'Formato: /comando argumentos'
+  ];
+  let i = 0;
+  if (_consoleBootTimer) clearInterval(_consoleBootTimer);
+  _consoleBootTimer = setInterval(function() {
+    if (i >= steps.length) {
+      clearInterval(_consoleBootTimer);
+      _consoleBootTimer = null;
+      let wrap = document.getElementById('console-input-wrap');
+      if (wrap) wrap.style.display = 'flex';
+      let inp = document.getElementById('console-cmd');
+      if (inp) inp.focus();
+      return;
+    }
+    consolePrint(steps[i], 'sys');
+    i++;
+  }, 120);
+}
+
+function resolveFactionKey(name) {
+  if (!name) return null;
+  let n = String(name).toLowerCase().trim();
+  if (CHEAT_FACTION_ALIASES[n]) return CHEAT_FACTION_ALIASES[n];
+  // partial
+  for (let k in CHEAT_FACTION_ALIASES) {
+    if (n.includes(k) || k.includes(n)) return CHEAT_FACTION_ALIASES[k];
+  }
+  if (typeof FACTIONS !== 'undefined' && FACTIONS[n]) return n;
+  return null;
+}
+
+function runCheatCommand() {
+  let inp = document.getElementById('console-cmd');
+  if (!inp) return;
+  let raw = (inp.value || '').trim();
+  inp.value = '';
+  if (!raw) return;
+  consolePrint('> ' + raw, 'sys');
+  let res = executeCheat(raw);
+  if (res.ok) consolePrint(res.msg, 'ok');
+  else consolePrint(res.msg, 'err');
+  try { updateStats(); } catch(e) {}
+  try { if (typeof saveGame === 'function') saveGame(); } catch(e) {}
+}
+
+function executeCheat(raw) {
+  let cmd = raw.replace(/^\/+/, '').trim();
+  let low = cmd.toLowerCase();
+  let parts = cmd.split(/\s+/);
+
+  if (low === 'ayuda' || low === 'help' || low === '?') {
+    return { ok: true, msg: 'Comandos: /Reputacion XXX Facción | /Reputacion Maxima | /Subir Nivel +N | /Chapas +N | /HP | /RAD0 | /TP X Y | /Desbloquear Comercio | /Tickets +N | /FichasSierra +N | /XP +N | /ListaFacciones' };
+  }
+
+  // /Reputacion Maxima
+  if (/^reputaci[oó]n\s+m[aá]xima$/i.test(cmd) || low === 'reputacion maxima' || low === 'rep max') {
+    ensureFactionDefaults();
+    Object.keys(FACTIONS).forEach(fid => {
+      if (fid === 'player' || fid === 'sierra' || fid === 'robco') return;
+      P.reputation[fid] = 1000;
+    });
+    return { ok: true, msg: 'Todas las reputaciones de facción → 1000.' };
+  }
+
+  // /Reputacion 500 Hermandad
+  let mRep = cmd.match(/^reputaci[oó]n\s+(-?\d+)\s+(.+)$/i) || cmd.match(/^rep\s+(-?\d+)\s+(.+)$/i);
+  if (mRep) {
+    let val = Math.max(0, Math.min(1000, parseInt(mRep[1], 10)));
+    let fk = resolveFactionKey(mRep[2]);
+    if (!fk) return { ok: false, msg: 'Facción no reconocida: ' + mRep[2] + '. Usa /ListaFacciones' };
+    ensureFactionDefaults();
+    P.reputation[fk] = val;
+    let nm = (FACTIONS[fk] && FACTIONS[fk].name) || fk;
+    return { ok: true, msg: 'Reputación ' + nm + ' = ' + val };
+  }
+
+  // /Subir Nivel +5 or /Nivel 30
+  let mLvl = cmd.match(/^subir\s+nivel\s+\+?(\d+)$/i) || cmd.match(/^nivel\s+\+?(\d+)$/i) || cmd.match(/^level\s+\+?(\d+)$/i);
+  if (mLvl) {
+    let n = parseInt(mLvl[1], 10);
+    if (low.startsWith('subir')) {
+      for (let i = 0; i < n; i++) {
+        P.lvl = (P.lvl || 1) + 1;
+        P.xp = 0;
+        if (typeof onLevelUp === 'function') try { onLevelUp(); } catch(e) {}
+        else {
+          P.specialPts = (P.specialPts || 0) + 1;
+          P.perkPts = (P.perkPts || 0) + 1;
+        }
+      }
+      return { ok: true, msg: 'Subiste ' + n + ' nivel(es). Nivel actual: ' + P.lvl };
+    } else {
+      P.lvl = Math.max(1, n);
+      P.xp = 0;
+      return { ok: true, msg: 'Nivel fijado a ' + P.lvl };
+    }
+  }
+
+  // /Chapas +1000
+  let mCaps = cmd.match(/^chapas\s+\+?(-?\d+)$/i) || cmd.match(/^caps\s+\+?(-?\d+)$/i);
+  if (mCaps) {
+    let n = parseInt(mCaps[1], 10);
+    P.caps = Math.max(0, (P.caps || 0) + n);
+    return { ok: true, msg: (n >= 0 ? '+' : '') + n + ' chapas. Total: ' + P.caps };
+  }
+
+  // /XP +500
+  let mXp = cmd.match(/^xp\s+\+?(\d+)$/i);
+  if (mXp) {
+    let n = parseInt(mXp[1], 10);
+    if (typeof addXP === 'function') addXP(n);
+    else P.xp = (P.xp || 0) + n;
+    return { ok: true, msg: '+' + n + ' XP' };
+  }
+
+  // /HP
+  if (low === 'hp' || low === 'curar' || low === 'heal') {
+    let maxhp = typeof getMaxHp === 'function' ? getMaxHp() : 100;
+    P.hp = maxhp;
+    return { ok: true, msg: 'HP al máximo: ' + P.hp };
+  }
+
+  // /RAD0
+  if (low === 'rad0' || low === 'rads0' || low === 'limpiar rad' || low === 'radaway') {
+    P.rads = 0;
+    return { ok: true, msg: 'Radiación a 0.' };
+  }
+
+  // /TP x y
+  let mTp = cmd.match(/^tp\s+(-?\d+)\s+(-?\d+)$/i) || cmd.match(/^viaje\s+(-?\d+)\s+(-?\d+)$/i);
+  if (mTp) {
+    let x = parseInt(mTp[1], 10), y = parseInt(mTp[2], 10);
+    if (!P.location) P.location = {};
+    P.location.x = x; P.location.y = y;
+    P.location.type = 'wasteland';
+    delete P.location.settlementId;
+    if (typeof renderMap === 'function') renderMap();
+    return { ok: true, msg: 'Teletransporte a [' + x + ', ' + y + ']' };
+  }
+
+  // /Desbloquear Comercio
+  if (/desbloquear\s+comercio/i.test(cmd) || low === 'unlock commerce') {
+    P.commerceUnlocked = true;
+    if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+    if (!P.fastTravelUnlocked.includes('commerce_hub')) P.fastTravelUnlocked.push('commerce_hub');
+    return { ok: true, msg: 'Zona de Comercio desbloqueada.' };
+  }
+
+  // /Tickets +N
+  let mT = cmd.match(/^tickets?\s+\+?(-?\d+)$/i);
+  if (mT) {
+    let n = parseInt(mT[1], 10);
+    P.tickets = Math.max(0, (P.tickets || 0) + n);
+    return { ok: true, msg: 'Tickets: ' + P.tickets };
+  }
+
+  // /FichasSierra +N
+  let mFs = cmd.match(/^fichas?\s*sierra\s+\+?(-?\d+)$/i) || cmd.match(/^sierra\s+\+?(-?\d+)$/i);
+  if (mFs) {
+    ensureChips();
+    let n = parseInt(mFs[1], 10);
+    P.chips.sierra = Math.max(0, (P.chips.sierra || 0) + n);
+    return { ok: true, msg: 'Fichas Sierra Madre: ' + P.chips.sierra };
+  }
+
+  // /ListaFacciones
+  if (low === 'listafacciones' || low === 'facciones') {
+    let names = Object.keys(FACTIONS).filter(f => f !== 'player' && f !== 'sierra' && f !== 'robco').map(f => f + '=' + (FACTIONS[f].name||f)).join(', ');
+    return { ok: true, msg: names };
+  }
+
+  // /Item ID qty
+  let mItem = cmd.match(/^item\s+(\d+)\s+(\d+)$/i);
+  if (mItem) {
+    let id = parseInt(mItem[1], 10), q = parseInt(mItem[2], 10);
+    let base = getItemBase(id);
+    if (!base) return { ok: false, msg: 'ID de objeto desconocido: ' + id };
+    if (typeof addItemToInv === 'function') addItemToInv(id, q);
+    else return { ok: false, msg: 'No se pudo añadir.' };
+    return { ok: true, msg: 'Añadido ' + q + 'x ' + base.name };
+  }
+
+  // /Moradores +N
+  let mMor = cmd.match(/^moradores?\s+\+?(\d+)$/i);
+  if (mMor) {
+    let q = parseInt(mMor[1], 10);
+    addItemToInv(2500, q);
+    return { ok: true, msg: '+' + q + ' Morador(es)' };
+  }
+
+  // /God
+  if (low === 'god') {
+    P._godMode = !P._godMode;
+    return { ok: true, msg: 'God mode: ' + (P._godMode ? 'ON' : 'OFF') };
+  }
+
+  return { ok: false, msg: 'Comando desconocido. Escribe /ayuda' };
+}
+
+
 function openSettings() {
   let vm = P.volMusic !== undefined ? P.volMusic : 0.6;
   let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
@@ -6521,9 +6817,10 @@ function openSettings() {
     <button style="width:100%; margin:6px 0;" onclick="loadGame(); closeModal();">📂 Cargar partida</button>
     <button style="width:100%; margin:6px 0;" onclick="renameSurvivor(); closeModal();">✏ Renombrar</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
+    <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.9.5</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.9.6</div>
   `;
   m.classList.add('show');
 }
@@ -11402,7 +11699,7 @@ function openFastTravelUI(section) {
       if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
       if (!P.fastTravelUnlocked.includes('sierra_madre') && P.sierraCasino.travelBuilt) P.fastTravelUnlocked.push('sierra_madre');
       if (P.fastTravelUnlocked.includes('sierra_madre'))
-        yours.push({ id: 'sierra_madre', name: 'Casino Sierra Madre', x: sm.x, y: sm.y, color: '#e8d48b', tag: 'Casino' });
+        yours.push({ id: 'sierra_madre', name: '💎 Casino Sierra Madre', x: sm.x, y: sm.y, color: '#e8d48b', tag: 'Casino' });
     }
   }
   if (P.robcoFactory && P.robcoFactory.claimed) {
@@ -11411,7 +11708,7 @@ function openFastTravelUI(section) {
       if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
       if (!P.fastTravelUnlocked.includes('robco_factory') && P.robcoFactory.travelBuilt) P.fastTravelUnlocked.push('robco_factory');
       if (P.fastTravelUnlocked.includes('robco_factory'))
-        yours.push({ id: 'robco_factory', name: 'Fábrica RobCo', x: rc.x, y: rc.y, color: '#a0a0a0', tag: 'Fábrica' });
+        yours.push({ id: 'robco_factory', name: '🤖 Fábrica RobCo Industries', x: rc.x, y: rc.y, color: '#a0a0a0', tag: 'Fábrica' });
     }
   }
   // Refugio experimental (Vaul-Tec) — asentamiento propio del jugador
