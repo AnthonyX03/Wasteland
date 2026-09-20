@@ -433,7 +433,25 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   border-color: #e05050;
   color: #ff6666;
 }
+@keyframes slot-reel-blur {
+  0% { transform: translateY(-8px); opacity: 0.4; filter: blur(2px); }
+  50% { transform: translateY(8px); opacity: 0.7; filter: blur(1px); }
+  100% { transform: translateY(0); opacity: 1; filter: blur(0); }
+}
+@keyframes slot-win-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(213,189,105,0.6); transform: scale(1); }
+  50% { box-shadow: 0 0 12px 4px rgba(213,189,105,0.8); transform: scale(1.08); }
+}
+.slot-cell-spin {
+  animation: slot-reel-blur 0.12s linear infinite;
+}
+.slot-cell-win {
+  animation: slot-win-pulse 0.5s ease-in-out 3;
+  border-color: var(--gold) !important;
+  background: #2a280a !important;
+}
 .world-cell.bank {
+
   background: #1a1a08;
   border-color: #d5bd69;
   color: #e8d48b;
@@ -6990,7 +7008,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.1</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.2</div>
   `;
   m.classList.add('show');
 }
@@ -9732,7 +9750,7 @@ function playSlotsUI(casinoId) {
       <button onclick="addSlotsBet('${casinoId}',100)">+100</button>
       <button onclick="_slotsBet['${casinoId}']=0;document.getElementById('slots-bet-val').textContent=0;">Reset</button>
     </div>
-    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="spinSlots('${casinoId}')">▶ JUGAR</button>
+    <button style="width:100%;background:var(--accent);color:#111;font-weight:bold;padding:12px;" id="slots-spin-btn" onclick="spinSlots('${casinoId}')">▶ JUGAR</button>
     <button style="width:100%;margin-top:8px;" onclick="${back}">Volver</button>`;
   document.getElementById('main-view').innerHTML = html;
 }
@@ -9742,9 +9760,12 @@ function addSlotsBet(casinoId, n) {
   let el = document.getElementById('slots-bet-val');
   if (el) el.textContent = _slotsBet[casinoId];
 }
+let _slotsSpinning = false;
+
 function spinSlots(casinoId) {
   ensureChips();
   casinoId = String(casinoId || '');
+  if (_slotsSpinning) return;
   let bet = _slotsBet[casinoId] || 0;
   if (bet < 1) { logMsg('Añade fichas a la apuesta (+1 / +5 / …).'); return; }
   if (!spendCasinoChips(casinoId, bet)) {
@@ -9753,7 +9774,6 @@ function spinSlots(casinoId) {
   }
   let syms = ['🍒','🍋','🔔','7️⃣','💎'];
   let lb = getCasinoLuckBonus();
-  // Más suerte → más peso en 7️⃣ y 💎
   let weights = [30 - lb*40, 25 - lb*20, 20, 15 + lb*30, 10 + lb*50];
   weights = weights.map(w => Math.max(3, w));
   function pick() {
@@ -9761,37 +9781,91 @@ function spinSlots(casinoId) {
     for (let i=0;i<syms.length;i++) { a += weights[i]; if (r <= a) return syms[i]; }
     return syms[0];
   }
-  let grid = [];
+  // Resultado final (se revela al parar cada columna)
+  let finalGrid = [];
   for (let r = 0; r < 3; r++) {
-    grid[r] = [];
+    finalGrid[r] = [];
+    for (let c = 0; c < 3; c++) finalGrid[r][c] = pick();
+  }
+  _slotsSpinning = true;
+  let spinBtn = document.getElementById('slots-spin-btn');
+  if (spinBtn) spinBtn.disabled = true;
+  let resEl = document.getElementById('slots-result');
+  if (resEl) resEl.innerHTML = '<span style="color:var(--gold);">Girando…</span>';
+
+  // Limpiar win class
+  for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 3; c++) {
-      grid[r][c] = pick();
       let cell = document.getElementById('slot-c' + r + c);
-      if (cell) cell.textContent = grid[r][c];
+      if (cell) {
+        cell.classList.remove('slot-cell-win');
+        cell.classList.add('slot-cell-spin');
+      }
     }
   }
-  let a = grid[1][0], b = grid[1][1], c = grid[1][2];
-  let win = 0;
-  if (a === b && b === c) {
-    if (a === '💎') win = bet * 25;
-    else if (a === '7️⃣') win = bet * 10;
-    else if (a === '🔔') win = bet * 5;
-    else if (a === '🍋') win = bet * 4;
-    else win = bet * 3;
+
+  // Animación: columnas se detienen una a una (izq → der)
+  let colDelays = [700, 1200, 1800]; // ms hasta parar cada columna
+  let tickMs = 70;
+  let intervals = [null, null, null];
+
+  for (let col = 0; col < 3; col++) {
+    intervals[col] = setInterval(function(c) {
+      return function() {
+        for (let r = 0; r < 3; r++) {
+          let cell = document.getElementById('slot-c' + r + c);
+          if (cell) cell.textContent = syms[Math.floor(Math.random() * syms.length)];
+        }
+      };
+    }(col), tickMs);
+
+    setTimeout(function(c) {
+      return function() {
+        if (intervals[c]) { clearInterval(intervals[c]); intervals[c] = null; }
+        for (let r = 0; r < 3; r++) {
+          let cell = document.getElementById('slot-c' + r + c);
+          if (cell) {
+            cell.classList.remove('slot-cell-spin');
+            cell.textContent = finalGrid[r][c];
+          }
+        }
+      };
+    }(col), colDelays[col]);
   }
-  if (win) addCasinoChips(casinoId, win);
-  let el = document.getElementById('slots-result');
-  if (el) el.innerHTML = win
-    ? '<span style="color:var(--gold);font-weight:bold;">¡' + a + b + c + '! +' + win + ' fichas</span>'
-    : '<span style="color:#8d9880;">Línea: ' + a + ' ' + b + ' ' + c + ' — sin premio</span>';
-  logMsg(win ? ('Tragaperras: +' + win + ' fichas') : 'Tragaperras: sin premio');
-  updateStats();
-  // Actualizar contador de fichas sin destruir la rejilla
-  let hdr = document.querySelector('#main-view p');
-  if (hdr) {
-    let col = getCasinoColor(casinoId);
-    hdr.innerHTML = 'Fichas: <b style="color:' + col + ';">' + getCasinoChips(casinoId) + '</b>';
-  }
+
+  // Resolver premio cuando para la última columna
+  setTimeout(function() {
+    let a = finalGrid[1][0], b = finalGrid[1][1], c = finalGrid[1][2];
+    let win = 0;
+    if (a === b && b === c) {
+      if (a === '💎') win = bet * 25;
+      else if (a === '7️⃣') win = bet * 10;
+      else if (a === '🔔') win = bet * 5;
+      else if (a === '🍋') win = bet * 4;
+      else win = bet * 3;
+    }
+    if (win) {
+      addCasinoChips(casinoId, win);
+      // Resaltar fila central ganadora
+      for (let col = 0; col < 3; col++) {
+        let cell = document.getElementById('slot-c1' + col);
+        if (cell) cell.classList.add('slot-cell-win');
+      }
+    }
+    let el = document.getElementById('slots-result');
+    if (el) el.innerHTML = win
+      ? '<span style="color:var(--gold);font-weight:bold;">¡' + a + b + c + '! +' + win + ' fichas</span>'
+      : '<span style="color:#8d9880;">Línea: ' + a + ' ' + b + ' ' + c + ' — sin premio</span>';
+    logMsg(win ? ('Tragaperras: +' + win + ' fichas') : 'Tragaperras: sin premio');
+    updateStats();
+    let hdr = document.querySelector('#main-view p');
+    if (hdr) {
+      let col = getCasinoColor(casinoId);
+      hdr.innerHTML = 'Fichas: <b style="color:' + col + ';">' + getCasinoChips(casinoId) + '</b>';
+    }
+    _slotsSpinning = false;
+    if (spinBtn) spinBtn.disabled = false;
+  }, colDelays[2] + 80);
 }
 
 let _bjBet = {};
