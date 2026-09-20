@@ -6944,7 +6944,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.8</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.9</div>
   `;
   m.classList.add('show');
 }
@@ -7485,6 +7485,8 @@ function startVaultExperimentCombat(label, lvl) {
     vaultExperiment: true,
     noCapture: true,
     noLoot: true,
+    enemyCaps: [0, 0],
+    enemyLoot: [],
     hasHealed: false,
     poisonTurns: 0,
     armorBroken: 0
@@ -14107,7 +14109,14 @@ function companionAttack() {
 
   if (combatState.enemyHp <= 0) {
     combatState.enemyHp = 0;
-    endCombat(true);
+    try { endCombat(true); } catch (e) {
+      console.error('endCombat after companion', e);
+      combatState = null;
+      try { closeModal(); } catch (e2) {}
+      updateStats();
+      if (typeof renderPlayerVaultUI === 'function') renderPlayerVaultUI('lab');
+      else renderMap();
+    }
     return;
   }
 
@@ -14140,8 +14149,8 @@ function enemyCombatTurn() {
 
   // daño preferente al compañero activo
   if (comp && !comp.resting && comp.hp > 0) {
-    let st = getCompanionCombatStats(comp);
-    let cdmg = Math.max(1, Math.floor(combatState.enemyDmg * enemyDmgMult) - st.def);
+    let st = getCompanionCombatStats(comp) || { dmg: 8, def: 5 };
+    let cdmg = Math.max(1, Math.floor((combatState.enemyDmg || 5) * enemyDmgMult) - (st.def || 0));
     if (comp.ability && comp.ability.id === 'c_hard' && !comp.hardSkinUsed) {
       comp.hardSkinUsed = true;
       combatLog(comp.name + " absorbe el golpe (Caparazón Endurecido).");
@@ -14158,11 +14167,13 @@ function enemyCombatTurn() {
     return;
   }
 
-  let totalDef = a.def + (((P.perks && P.perks.p_skin) || 0) * 2) + getDefenseBonusFromEndurance() + getEffectBonus('def');
+  let totalDef = ((a && a.def) || 0) + (((P.perks && P.perks.p_skin) || 0) * 2);
+  try { totalDef += getDefenseBonusFromEndurance(); } catch (e) {}
+  try { totalDef += getEffectBonus('def'); } catch (e) {}
   if (aAb && aAb.id === 'a_tank') totalDef += 15;
-  let dmgTaken = Math.max(1, Math.floor(combatState.enemyDmg * enemyDmgMult) - totalDef);
+  let dmgTaken = Math.max(1, Math.floor((combatState.enemyDmg || 5) * enemyDmgMult) - totalDef);
   P.hp -= dmgTaken;
-  combatLog(combatState.enemyName + " te golpea por " + dmgTaken + ".");
+  combatLog((combatState.enemyName || 'Enemigo') + " te golpea por " + dmgTaken + ".");
 }
 
 
@@ -14529,8 +14540,23 @@ function endCombat(victory) {
       if (comp && !comp.resting) addCompanionXP(comp, 10 + Math.floor((combatState.enemyLevel || 1) * 2));
       updateQuestProgress('kill', 1);
       logMsg("Victoria en Combat Zone vs " + combatState.enemyName + ". +" + tix + " tickets · +" + xpGain + " XP.");
+    } else if (combatState.vaultExperiment || combatState.noLoot) {
+      // Combate del laboratorio Vaul-Tec: XP, sin botín ni chapas
+      let xpGain = 40 + Math.floor((combatState.enemyLevel || P.lvl || 1) * 3);
+      addXP(xpGain);
+      let comp = getEquippedCompanion();
+      if (comp && !comp.resting) addCompanionXP(comp, 12 + Math.floor((combatState.enemyLevel || 1) * 2));
+      updateQuestProgress('kill', 1);
+      logMsg("Contienes al sujeto enloquecido. +" + xpGain + " XP. (Sin botín de combate)");
     } else {
-    let baseReward = combatState.enemyCaps[0] + Math.floor(Math.random() * (combatState.enemyCaps[1] - combatState.enemyCaps[0]));
+    let capsRange = combatState.enemyCaps;
+    if (!capsRange || !Array.isArray(capsRange) || capsRange.length < 2) {
+      capsRange = [5, 15 + Math.floor((combatState.enemyLevel || 1) * 2)];
+    }
+    let lo = Number(capsRange[0]) || 5;
+    let hi = Number(capsRange[1]) || lo + 10;
+    if (hi < lo) hi = lo;
+    let baseReward = lo + Math.floor(Math.random() * (hi - lo + 1));
     let bonusMult = 1 + (((P.perks && P.perks.p_scav) || 0) * 0.25);
     if (wAb && wAb.id === 'w_caps') bonusMult += 0.50;
     if (aAb && aAb.id === 'a_caps') bonusMult += 0.30;
@@ -14538,11 +14564,15 @@ function endCombat(victory) {
 
     P.caps += reward;
 
-    // Drop normal
-    let itemDrop = combatState.enemyLoot[Math.floor(Math.random() * combatState.enemyLoot.length)];
+    // Drop normal (seguro si no hay loot)
+    let lootPool = combatState.enemyLoot;
+    if (!lootPool || !Array.isArray(lootPool) || lootPool.length < 1) {
+      lootPool = [20]; // chatarra genérica si falta
+    }
+    let itemDrop = lootPool[Math.floor(Math.random() * lootPool.length)];
     let itemObj = getItemBase(itemDrop);
     let itemQty = (itemObj && (itemObj.type === 'junk' || itemObj.type === 'med')) ? (1 + Math.floor(Math.random() * 2)) : 1;
-    let added = addItemToInv(itemDrop, itemQty);
+    let added = itemDrop != null ? addItemToInv(itemDrop, itemQty) : false;
 
     // XP
     let xpGain = combatState.isLegendary ? 90 : 35;
@@ -14607,12 +14637,17 @@ updateQuestProgress('kill', 1);
 
   let wasCZ = combatState && combatState.combatZone;
   let wasShip = combatState && combatState.isZetan && isOnZetanShip();
+  let wasVault = combatState && combatState.vaultExperiment;
   combatState = null;
   closeModal();
   if (wasShip) { renderZetanShipMap(); updateStats(); return; }
   if (wasCZ) {
     P.location = { type: 'combatzone', name: 'Combat Zone' };
     renderCombatZoneUI('combat');
+  } else if (wasVault) {
+    P.location = { type: 'settlement', settlementId: 'player_vault', name: 'Refugio experimental' };
+    if (typeof renderPlayerVaultUI === 'function') renderPlayerVaultUI('lab');
+    else renderMap();
   } else {
     renderMap();
   }
