@@ -926,6 +926,12 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
 .console-log-line.ok { color: #66ffaa; }
 .console-log-line.sys { color: #88aa88; }
 
+
+@keyframes nwPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+}
+.nw-spin { animation: nwPulse 0.35s ease-in-out infinite; }
 </style>
 </head>
 <body>
@@ -6886,7 +6892,22 @@ function executeCheat(raw) {
   if (mMor) {
     let q = parseInt(mMor[1], 10);
     addItemToInv(2500, q);
-    return { ok: true, msg: '+' + q + ' Morador(es)' };
+    return { ok: true, msg: '+' + q + ' Morador(es)' }
+
+  // /Esclavos +N
+  let mEsc = cmd.match(/^esclavos?\s+\+?(\d+)$/i);
+  if (mEsc) {
+    let n = Math.min(999, parseInt(mEsc[1], 10) || 0);
+    if (n < 1) return { ok: false, msg: 'Cantidad inválida' };
+    if (typeof addItemToInv === 'function') addItemToInv(2305, n);
+    else {
+      let it = (P.inv || []).find(x => x.id === 2305);
+      if (it) it.qty = (it.qty || 0) + n;
+      else (P.inv = P.inv || []).push({ id: 2305, qty: n, uid: 'esc_' + Date.now() });
+    }
+    return { ok: true, msg: 'Esclavos +' + n + ' (Otros/Especiales)' };
+  }
+;
   }
 
   // /God
@@ -6921,7 +6942,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.4</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.6</div>
   `;
   m.classList.add('show');
 }
@@ -7398,7 +7419,7 @@ function showVaultExperimentResult(kind, label, msg) {
   let nextTab = (kind === 'success' || kind === 'mutant' || kind === 'ghoul') ? 'cryo' : 'lab';
   logMsg(msg);
   let btnAction = kind === 'mad'
-    ? "closeModal();if(window._pendingVaultCombat){startVaultExperimentCombat(window._pendingVaultCombat.label,window._pendingVaultCombat.lvl);window._pendingVaultCombat=null;}"
+    ? "if(window._pendingVaultCombat){let p=window._pendingVaultCombat;window._pendingVaultCombat=null;startVaultExperimentCombat(p.label,p.lvl);}else{closeModal();}"
     : "closeModal();renderPlayerVaultUI('" + nextTab + "');";
   document.getElementById('modal-body').innerHTML = `
     <h2 style="color:${col};text-align:center;margin-top:0;">${title}</h2>
@@ -7446,6 +7467,7 @@ function makeVaultExperiment(label, kind, lvl, strong) {
 }
 
 function startVaultExperimentCombat(label, lvl) {
+  lvl = Math.max(1, lvl || P.lvl || 1);
   let hp = 40 + lvl * 8 + Math.floor(Math.random() * 20);
   let dmg = 8 + lvl * 2 + Math.floor(Math.random() * 6);
   combatState = {
@@ -7454,15 +7476,25 @@ function startVaultExperimentCombat(label, lvl) {
     enemyHp: hp,
     enemyMaxHp: hp,
     enemyDmg: dmg,
+    enemyHuman: true,
     isLegendary: false,
     log: ['El sujeto ha enloquecido y te ataca.'],
     turn: 'player',
     vaultExperiment: true,
     noCapture: true,
-    noLoot: true
+    noLoot: true,
+    hasHealed: false,
+    poisonTurns: 0,
+    armorBroken: 0
   };
   P.location = P.location || { type: 'settlement', settlementId: 'player_vault' };
-  renderCombatUI();
+  // Cerrar modal de resultado antes de pintar combate
+  try { closeModal(); } catch (e) {}
+  setTimeout(function() {
+    if (!combatState) return;
+    renderCombatUI();
+    updateStats();
+  }, 50);
 }
 
 function showVaultExperimentStats(idx) {
@@ -11884,12 +11916,19 @@ function renderNukaWorldUI(tab) {
 
   if (P.nwTab === 'games') {
     html += `<p style="font-size:11px;color:#8d9880;">Las atracciones del NukaCade solo aceptan <b style="color:#e8d48b;">Fichas Nuka-World</b> (cómpralas en Taquilla con dinero de antes de la guerra).</p>`;
+    html += `<div class="item" style="border-color:#d5bd69;font-size:11px;color:#8d9880;">
+      <b style="color:#d5bd69;">NukaCade</b> — Cada partida cuesta <b>1 ficha</b>. Siempre ganas tickets según tu <b>SCORE</b> (nunca sales a cero).
+    </div>`;
     NUKA_MINIGAMES.forEach(g => {
-      html += `<div class="item" style="border-color:${RED};">
-        <b style="color:${RED};">${g.name}</b><br>
-        <span style="font-size:11px;color:#8d9880;">${g.desc}</span><br>
-        <span style="font-size:12px;color:#e8d48b;display:inline-flex;align-items:center;gap:4px;">Coste: ${g.cost} ${tok} Ficha(s)</span>
-        <button style="margin-top:4px;border-color:${RED};" ${(P.nukaTokens||0) < g.cost ? 'disabled' : ''} onclick="playNukaMinigame('${g.id}')">Jugar</button>
+      let icons = { diana:'🎯', ratas:'🐀', martillo:'🔨', anillos:'💍', ruleta:'🎡', botella:'🥤', slots:'🎰', memoria:'🧠', dardos:'🎯', agua:'💧' };
+      let ic = icons[g.id] || '🎪';
+      html += `<div class="item" style="border-color:${RED};display:flex;flex-direction:column;gap:4px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <b style="color:${RED};font-size:14px;">${ic} ${g.name}</b>
+          <span style="font-size:11px;color:#e8d48b;white-space:nowrap;">${tok}×${g.cost}</span>
+        </div>
+        <span style="font-size:11px;color:#8d9880;">${g.desc}</span>
+        <button style="width:100%;margin-top:4px;padding:10px;border-color:${RED};background:#1a0808;color:#ffaaaa;font-weight:bold;" ${(P.nukaTokens||0) < g.cost ? 'disabled' : ''} onclick="playNukaMinigame('${g.id}')">▶ JUGAR</button>
       </div>`;
     });
   } else if (P.nwTab === 'booth') {
@@ -11994,6 +12033,7 @@ function scoreToTickets(score) {
 }
 
 function finishNwGame(score, detail) {
+  score = Math.max(0, Math.floor(score || 0));
   let tickets = scoreToTickets(score);
   P.nukaTickets = (P.nukaTickets || 0) + tickets;
   let name = (_nwGame && _nwGame.name) || 'Minijuego';
@@ -12001,28 +12041,39 @@ function finishNwGame(score, detail) {
   _nwGame = null;
   updateStats();
   let RED = '#e05050';
-  let tix = ticketIconHtml('nuka', 18);
-  let html = `<h2 style="color:${RED};">🎪 Resultado</h2>
-    <div class="item" style="border-color:${RED};text-align:center;">
-      <div style="font-size:28px;color:var(--gold);margin:8px 0;">SCORE: ${score}</div>
-      <p style="font-size:13px;color:#8d9880;">${detail || ''}</p>
-      <p style="font-size:16px;color:${RED};display:flex;align-items:center;justify-content:center;gap:6px;">${tix} <b>+${tickets} tickets</b></p>
+  let tix = ticketIconHtml('nuka', 20);
+  let rank = score >= 120 ? '★ LEGENDARIO' : score >= 80 ? '✦ EXCELENTE' : score >= 50 ? 'Buen trabajo' : score >= 20 ? 'Correcto' : 'Premio mínimo';
+  let rankCol = score >= 80 ? 'var(--gold)' : score >= 50 ? '#a8c47a' : '#8d9880';
+  let html = `<h2 style="color:${RED};margin-top:0;">🎪 Resultado — ${name}</h2>
+    <div class="item" style="border-color:${RED};text-align:center;padding:16px;">
+      <div style="font-size:12px;color:${rankCol};letter-spacing:1px;margin-bottom:6px;">${rank}</div>
+      <div style="font-size:36px;color:var(--gold);font-weight:bold;text-shadow:0 0 12px rgba(213,189,105,0.4);">SCORE ${score}</div>
+      <p style="font-size:13px;color:#8d9880;margin:10px 0;">${detail || ''}</p>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:#1a0a0a;border:1px solid ${RED};padding:10px 18px;border-radius:6px;margin-top:6px;">
+        ${tix} <span style="font-size:18px;color:${RED};font-weight:bold;">+${tickets} tickets</span>
+      </div>
     </div>
-    <button style="width:100%;margin-top:10px;background:var(--accent);color:#111;font-weight:bold;" onclick="renderNukaWorldUI('games')">← Minijuegos</button>`;
+    <button style="width:100%;margin-top:10px;background:var(--accent);color:#111;font-weight:bold;padding:12px;" onclick="renderNukaWorldUI('games')">← Volver a Minijuegos</button>
+    <button style="width:100%;margin-top:6px;" onclick="P.location=null;renderMap();">Salir al Yermo</button>`;
   document.getElementById('main-view').innerHTML = html;
 }
 
-function nwShell(title, bodyHtml) {
+function nwShell(title, bodyHtml, prizeHtml) {
   const RED = '#e05050';
   let tok = nukaTokenIconHtml(16);
   let tix = ticketIconHtml('nuka', 16);
+  let prize = prizeHtml || `<div class="item" style="border-color:#d5bd69;font-size:11px;color:#8d9880;">
+      <b style="color:#d5bd69;">Tabla de tickets por SCORE</b><br>
+      0–19 → 1–2 · 20–49 → 2–5 · 50–79 → 4–8 · 80–119 → 6–12 · 120+ → hasta 40
+    </div>`;
   return `<h2 style="color:${RED};margin-top:0;">${title}</h2>
-    <p style="font-size:11px;color:#8d9880;display:flex;gap:10px;flex-wrap:wrap;">
-      <span>${tok} Fichas: <b>${P.nukaTokens||0}</b></span>
-      <span>${tix} Tickets: <b>${P.nukaTickets||0}</b></span>
+    <p style="font-size:11px;color:#8d9880;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <span style="display:inline-flex;align-items:center;gap:4px;">${tok} Fichas: <b>${P.nukaTokens||0}</b></span>
+      <span style="display:inline-flex;align-items:center;gap:4px;">${tix} Tickets: <b>${P.nukaTickets||0}</b></span>
     </p>
+    ${prize}
     ${bodyHtml}
-    <button style="width:100%;margin-top:10px;" onclick="if(_nwGame){finishNwGame(Math.max(1,_nwGame.score||1),'Abandonado');}else{renderNukaWorldUI('games');}">← Salir (score actual)</button>`;
+    <button style="width:100%;margin-top:10px;" onclick="if(_nwGame){finishNwGame(Math.max(1,_nwGame.score||0),'Abandonado');}else{renderNukaWorldUI('games');}">← Salir (conserva score)</button>`;
 }
 
 // ===== DIANA =====
@@ -13712,7 +13763,7 @@ function isHumanEnemy(nameOrEnemy) {
   let n = String(nameOrEnemy).toLowerCase();
   // No humanos: robots, mutantes, animales, necrófagos, synths...
   if (/robot|protectron|handy|sentry|assaultron|synth|supermutante|sanguinario|bestia|rata|perro|mosca|topo|necr[oó]fago|behemoth|devorador|coloso|courser/.test(n)) return false;
-  if (/saqueador|mercenario|cazador|asesino|centinela del enclave|negrero|colono|patrulla|minuteman|hermandad|oficial|agente|francotirador humano/.test(n)) return true;
+  if (/saqueador|mercenario|cazador|asesino|centinela del enclave|negrero|colono|patrulla|minuteman|hermandad|oficial|agente|francotirador humano|experimento|sujeto|morador|superviviente|humano/.test(n)) return true;
   return false;
 }
 
@@ -13831,6 +13882,7 @@ function renderCombatUI() {
 
   let m = document.getElementById('modal');
   let titleText = combatState.isLegendary ? "★ COMBATE LEGENDARIO ★" : "COMBATE DETECTADO";
+  if (m) m.classList.add('show');
   document.getElementById('modal-body').innerHTML = `
     <div class="combat-title">${titleText}</div>
 
@@ -14190,15 +14242,16 @@ function combatAttack() {
   let baseDmg = w.damage + ironBonus + gunsBonus + brawlerBonus + furyBonus + legDmgBonus;
 
 
-  // --- HIPNOTRON: captura de esclavos ---
+  // --- HIPNOTRON: captura de esclavos (sin daño real; solo hipnosis o 1 de daño residual) ---
   if (w.hypno || (w.hypnoChance !== undefined)) {
     let ammoKeyH = w.ammoType;
     let isMeleeH = !ammoKeyH || String(ammoKeyH).includes("Ninguna");
     if (!isMeleeH && !(P.ammoBox[ammoKeyH] && P.ammoBox[ammoKeyH] > 0)) {
       combatLog("¡Sin Células de Hipnotron!");
-      // puñetazo mínimo
       combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
+      combatLog("El haz apenas roza al objetivo (1 de daño).");
       renderCombatUI();
+      updateStats();
       if (combatState.enemyHp <= 0) endCombat(true);
       else setTimeout(() => { if (combatState) enemyTurn(); }, 400);
       return;
@@ -14206,7 +14259,8 @@ function combatAttack() {
     if (!isMeleeH) P.ammoBox[ammoKeyH] = (P.ammoBox[ammoKeyH] || 1) - 1;
     playWeaponSound(w);
     let chance = w.hypnoChance || 0.2;
-    let human = combatState.enemyHuman || isHumanEnemy(combatState.enemyName);
+    let human = combatState.enemyHuman === true || isHumanEnemy(combatState.enemyName);
+    if (combatState.vaultExperiment) human = true;
     if (!human) {
       combatLog("El Hipnotron falla: el objetivo no es humano (0% efectividad).");
       combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
@@ -14218,7 +14272,6 @@ function combatAttack() {
     }
     if (Math.random() < chance) {
       combatLog("¡Hipnosis exitosa! El sujeto queda sometido.");
-      // Fin especial: sin loot/xp/caps
       combatState.hypnoCapture = true;
       endCombat(true);
       return;
