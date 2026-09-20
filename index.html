@@ -6942,7 +6942,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.6</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.7</div>
   `;
   m.classList.add('show');
 }
@@ -7488,13 +7488,9 @@ function startVaultExperimentCombat(label, lvl) {
     armorBroken: 0
   };
   P.location = P.location || { type: 'settlement', settlementId: 'player_vault' };
-  // Cerrar modal de resultado antes de pintar combate
-  try { closeModal(); } catch (e) {}
-  setTimeout(function() {
-    if (!combatState) return;
-    renderCombatUI();
-    updateStats();
-  }, 50);
+  // NO llamar closeModal(): borra combatState. Pintar combate encima del modal.
+  renderCombatUI();
+  updateStats();
 }
 
 function showVaultExperimentStats(idx) {
