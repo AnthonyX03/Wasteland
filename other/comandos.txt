@@ -86,3 +86,13 @@ OTROS
 Notas:
 - Los cambios se guardan automáticamente al ejecutar un comando.
 - Los nombres de facción admiten alias en español (Hermandad, Enclave, RNC…).
+
+NUKA-WORLD
+----------
+[/NukaTickets +N]   Tickets de premio del circo
+[/FichasNuka +N]    Fichas del NukaCade (para jugar)
+[/Preguerra +N]     Dinero de antes de la guerra
+Taquilla: 100 $ preguerra = 1 ficha Nuka-World
+
+[/Esclavos +N]     Añade N objetos Esclavo (id 2305)
+[/Moradores +N]    Añade N moradores (id 2500)
