@@ -433,6 +433,11 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   border-color: #e05050;
   color: #ff6666;
 }
+.world-cell.bank {
+  background: #1a1a08;
+  border-color: #d5bd69;
+  color: #e8d48b;
+}
 .world-cell.settlement {
   background: #1a0030;
   color: #cc88ff;
@@ -3052,6 +3057,8 @@ function renderCharacter(sub) {
         <div class="row"><span style="color:#4a9eff;display:inline-flex;align-items:center;gap:4px;"><img class="ticket-icon" src="ticket-cz.png" alt="tickets" style="width:22px;height:14px;object-fit:contain;"> Tickets Combat Zone</span><b style="color:#4a9eff;">${P.tickets||0}</b></div>
         <div class="row"><span style="color:#e05050;display:inline-flex;align-items:center;gap:4px;"><img class="ticket-icon" src="${typeof NUKA_TICKET_ICON_B64!=='undefined'?NUKA_TICKET_ICON_B64:'ticket-nuka.png'}" alt="nuka" style="width:22px;height:14px;object-fit:contain;"> Tickets Nuka-World</span><b style="color:#e05050;">${P.nukaTickets||0}</b></div>
         <div class="row"><span style="color:#e8d48b;display:inline-flex;align-items:center;gap:4px;"><img src="${typeof NUKA_TOKEN_ICON_B64!=='undefined'?NUKA_TOKEN_ICON_B64:'nuka-token.png'}" alt="ficha" style="width:18px;height:18px;object-fit:contain;"> Fichas Nuka-World</span><b style="color:#e8d48b;">${P.nukaTokens||0}</b></div>
+        ${(P.bank&&P.bank.accountOpen)?`<div class="row"><span style="color:#d5bd69;">🏦 Chapas (banco)</span><b style="color:#d5bd69;">${P.bank.caps||0}</b></div>
+        <div class="row"><span style="color:#d5bd69;">🏦 $ preguerra (banco)</span><b style="color:#d5bd69;">${P.bank.prewar||0}</b></div>`:''}
         <div class="row"><span style="color:#e8d48b;">${chipIconHtml('sierra')} Sierra Madre</span><b style="color:#e8d48b;">${getCasinoChips('sierra')}</b></div>
         ${STRIP_CASINOS.map(c => {
           let col = c.color;
@@ -4515,6 +4522,7 @@ const ZONE_DEFS = {
   commerce: { icon: '⚖', label: 'Zona de Comercio', cls: 'commerce', enterable: false, radChance: 0.05, exploreBias: 'nothing' },
   combatzone: { icon: '🥊', label: 'Combat Zone', cls: 'combatzone', enterable: false, radChance: 0.1, exploreBias: 'nothing' },
   nukaworld: { icon: '🎪', label: 'Circo Nuka-World', cls: 'nukaworld', enterable: false, radChance: 0.05, exploreBias: 'nothing' },
+  bank: { icon: '🏦', label: 'Banco Central', cls: 'bank', enterable: false, radChance: 0.05, exploreBias: 'nothing' },
   unique: { icon: '◆', label: 'Localidad única', cls: 'unique', enterable: true, radChance: 0.22, exploreBias: 'loot' }
 };
 
@@ -4670,7 +4678,8 @@ const IMPORTANT_LOCS = [
   { id: 'player_house', name: 'Hogar del Superviviente', x: 2, y: -1, kind: 'home' },
   { id: 'commerce_hub', name: '⚖️ Zona de Comercio', x: 3, y: -3, kind: 'commerce' },
   { id: 'combat_zone', name: '🥊 Combat Zone', x: -5, y: 4, kind: 'combatzone' },
-  { id: 'nuka_world', name: '🎪 Circo de Nuka-World', x: 20, y: -8, kind: 'nukaworld' }
+  { id: 'nuka_world', name: '🎪 Circo de Nuka-World', x: 20, y: -8, kind: 'nukaworld' },
+  { id: 'central_bank', name: '🏦 Banco Central', x: 8, y: 6, kind: 'bank' }
 ];
 function getPlayerHomeName() {
   let n = (P && P.playerName) ? String(P.playerName).trim() : '';
@@ -5572,6 +5581,9 @@ function advanceTime(hours = 1) {
   }
   for (let h = 0; h < hours; h++) tickSierraEarnings();
   for (let h = 0; h < hours; h++) tickRobcoScrap();
+  if (typeof tickBankInterest === 'function') {
+    for (let h = 0; h < hours; h++) tickBankInterest();
+  }
   if (P.prison && P.prison.length) {
     for (let h = 0; h < hours; h++) {
       P.prison.forEach(c => {
@@ -5614,6 +5626,9 @@ function getZoneAt(x, y) {
   }
   if (x === 20 && y === -8) {
     return { type: 'nukaworld', ...ZONE_DEFS.nukaworld, name: 'Circo de Nuka-World', importantId: 'nuka_world', enterable: false };
+  }
+  if (x === 8 && y === 6) {
+    return { type: 'bank', ...ZONE_DEFS.bank, name: 'Banco Central', importantId: 'central_bank', enterable: false };
   }
   if (x === ABDUCTION_SITE.x && y === ABDUCTION_SITE.y) {
     return { type: 'abduction', icon: '🛸', name: 'Zona de abducción Zetan', cls: 'poi', radChance: 0.1, enterable: false, abduction: true };
@@ -5751,6 +5766,10 @@ function renderMap() {
     enterNukaWorld();
     return;
   }
+  if (P.location && P.location.type === 'bank') {
+    enterCentralBank();
+    return;
+  }
   if (P.location && P.location.type === 'combatzone') {
     renderCombatZoneUI(P.czTab || 'combat');
     return;
@@ -5815,6 +5834,11 @@ function renderMap() {
     actHint = P.nukaWorldUnlocked
       ? `<span style="color:#e05050;">🎪 Circo de Nuka-World — minijuegos y tienda</span>`
       : `<span style="color:#e05050;">🎪 Entra para desbloquear el Circo de Nuka-World</span>`;
+  } else if (zone.type === 'bank') {
+    actBtns = `<button style="background:#3a3010;color:#e8d48b;border-color:#d5bd69;" onclick="enterCentralBank()">ENTRAR</button>`;
+    actHint = (P.bank && P.bank.accountOpen)
+      ? `<span style="color:#d5bd69;">🏦 Banco Central — cuenta abierta</span>`
+      : `<span style="color:#d5bd69;">🏦 Banco Central · Abrir cuenta (10000 chapas)</span>`;
   } else if (zone.type === 'combatzone') {
     actBtns = `<button style="background:#1a4a8a;color:#fff;border-color:#4a9eff;" onclick="enterCombatZone()">ENTRAR</button>`;
     actHint = P.combatZoneUnlocked
@@ -6491,7 +6515,7 @@ function openAdditionalContentUI() {
     <button style="width:100%;margin:8px 0;border-color:#88aadd;color:#88aadd;font-weight:bold;" onclick="openVaultTecDlcInfo()">🧪 DLC: El experimento de Vaul-Tec</button>
     <button style="width:100%;margin:8px 0;border-color:#66cc99;color:#66cc99;font-weight:bold;" onclick="openSpiesDlcInfo()">🕵 DLC: Espías entre nosotros</button>
     <button style="width:100%;margin:8px 0;border-color:#dd8844;color:#dd8844;font-weight:bold;" onclick="openTemiblesDlcInfo()">☠️ DLC: Los Temibles del Yermo</button>
-    <button style="width:100%;margin:8px 0;border-color:#e05050;color:#e05050;font-weight:bold;" onclick="openNukaWorldDlcInfo()">🎪 DLC: El Circo de Nuka-World</button>
+    <button style="width:100%;margin:8px 0;border-color:#d5bd69;color:#d5bd69;font-weight:bold;" onclick="openNukaWorldDlcInfo()">💰 DLC: Chapas en juego</button>
     <button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>
     <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
   `;
@@ -6500,14 +6524,14 @@ function openAdditionalContentUI() {
 
 function openNukaWorldDlcInfo() {
   document.getElementById('modal-body').innerHTML = `
-    <h2 style="color:#e05050;text-align:center;margin-top:0;">🎪 El Circo de Nuka-World</h2>
+    <h2 style="color:#d5bd69;text-align:center;margin-top:0;">💰 Chapas en juego</h2>
     <p style="text-align:center;font-size:11px;color:#8d9880;margin:0 0 8px 0;">Expansión · Wasteland</p>
-    <div class="item" style="border-color:#e05050;font-size:12px;color:#8d9880;line-height:1.45;">
-      <p style="color:var(--txt);">Antes de la Gran Guerra, <b style="color:#e05050;">Nuka-World</b> prometía “diversión radiante para toda la familia”. Tras las bombas, el parque quedó medio enterrado… hasta que alguien volvió a encender las luces del <b>circo ambulante</b> y del <b>NukaCade</b>.</p>
-      <p>En las afueras del Yermo [<b>+20, -8</b>] aún funcionan atracciones, puestos de premios y máquinas de arcade. No es una facción ni un ejército: es un negocio de feriantes que solo habla el idioma de las fichas y los tickets.</p>
-      <p><b style="color:#e8d48b;">Fichas Nuka-World</b> — Las máquinas del NukaCade son tecnología de antes de la guerra. Solo aceptan <b>Dinero de antes de la guerra</b> (el mismo que usa Vaul-Tec): <b>100 billetes = 1 ficha</b>, en la Taquilla. Cada minijuego cuesta <b>1 ficha</b>.</p>
-      <p><b style="color:#e05050;">Tickets</b> — Se ganan en los minijuegos. Sirven para la tienda exclusiva y para canjear por chapas o mejorar la tienda (hasta nivel 10) en la Taquilla.</p>
-      <p style="color:#e05050;margin-bottom:0;">Mapa: Circo de Nuka-World <b>[+20, -8]</b> · Viaje rápido en Ubicaciones importantes tras desbloquear.</p>
+    <div class="item" style="border-color:#d5bd69;font-size:12px;color:#8d9880;line-height:1.45;">
+      <p style="color:var(--txt);">En el Yermo hay tres formas de sangrar o engordar el monedero: la <b style="color:#4a9eff;">arena</b>, la <b style="color:#e05050;">feria</b> y la <b style="color:#d5bd69;">bóveda</b>. Esta expansión une el espectáculo y el capital en un mismo circuito.</p>
+      <p><b style="color:#4a9eff;">🥊 Combat Zone</b> [<b>-5, +4</b>] — Arena de combates de pago. Ganas <b>tickets de Combat Zone</b> (sin loot ni legendarios). Tienda y taquilla de mejora (hasta nivel 5).</p>
+      <p><b style="color:#e05050;">🎪 Circo de Nuka-World</b> [<b>+20, -8</b>] — Parque de atracciones y NukaCade. Las máquinas solo aceptan <b>fichas</b> (100 $ de antes de la guerra = 1 ficha en Taquilla). Minijuegos con SCORE → tickets Nuka. Tienda exclusiva y canje de tickets.</p>
+      <p><b style="color:#d5bd69;">🏦 Banco Central</b> [<b>+8, +6</b>] — Alguien ha vuelto a abrir cuentas de ahorro. <b>Apertura: 10000 chapas</b>. Deposita chapas y dinero de antes de la guerra; el saldo crece un <b>1% por hora</b>. También puedes <b>apostar</b> por combates retransmitidos de la Combat Zone o por pringados del Circo Nuka-World.</p>
+      <p style="color:#d5bd69;margin-bottom:0;">Tres destinos, una misma obsesión: que las chapas no duerman en el bolsillo… o que lo hagan en la caja fuerte adecuada.</p>
     </div>
     <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
     <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>`;
@@ -6944,7 +6968,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.9</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.0</div>
   `;
   m.classList.add('show');
 }
@@ -11842,6 +11866,245 @@ function buyCombatZoneItem(id) {
 }
 
 
+
+// ========== BANCO CENTRAL (DLC Chapas en juego) ==========
+function ensureBank() {
+  if (!P.bank) {
+    P.bank = {
+      accountOpen: false,
+      accountName: '',
+      caps: 0,
+      prewar: 0,
+      tab: 'cuenta',
+      lastInterestHour: P.worldHours || 0
+    };
+  }
+  if (P.bank.caps == null) P.bank.caps = 0;
+  if (P.bank.prewar == null) P.bank.prewar = 0;
+  if (P.prewarMoney === undefined) P.prewarMoney = 0;
+}
+
+function tickBankInterest() {
+  ensureBank();
+  if (!P.bank.accountOpen) return;
+  // 1% por hora (compuesto suave, redondeo hacia abajo, mínimo 0)
+  if (P.bank.caps >= 1) {
+    let gain = Math.floor(P.bank.caps * 0.01);
+    if (gain < 1 && P.bank.caps >= 50) gain = 1; // umbral bajo para ver crecimiento
+    if (gain > 0) P.bank.caps += gain;
+  }
+  if (P.bank.prewar >= 1) {
+    let gainP = Math.floor(P.bank.prewar * 0.01);
+    if (gainP < 1 && P.bank.prewar >= 50) gainP = 1;
+    if (gainP > 0) P.bank.prewar += gainP;
+  }
+}
+
+function enterCentralBank() {
+  ensureBank();
+  P.location = { type: 'bank', name: 'Banco Central' };
+  renderCentralBankUI(P.bank.tab || 'cuenta');
+}
+
+function unlockCentralBankFT() {
+  if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+  if (!P.fastTravelUnlocked.includes('central_bank')) P.fastTravelUnlocked.push('central_bank');
+}
+
+function openBankAccount() {
+  ensureBank();
+  if (P.bank.accountOpen) { logMsg('Ya tienes una cuenta.'); return; }
+  if ((P.caps || 0) < 10000) { logMsg('Necesitas 10000 chapas para abrir la cuenta.'); return; }
+  P.caps -= 10000;
+  P.bank.accountOpen = true;
+  P.bank.accountName = (P.playerName || 'Superviviente').trim() || 'Superviviente';
+  unlockCentralBankFT();
+  playBuySound();
+  logMsg('Cuenta abierta a nombre de ' + P.bank.accountName + '. −10000 chapas. Viaje rápido desbloqueado.');
+  renderCentralBankUI('cuenta');
+  updateStats();
+}
+
+function renderCentralBankUI(tab) {
+  ensureBank();
+  const GOLD = '#d5bd69';
+  P.bank.tab = tab || 'cuenta';
+  let b = P.bank;
+  let html = `<h2 style="color:${GOLD};margin-top:0;">🏦 BANCO CENTRAL</h2>`;
+  if (!b.accountOpen) {
+    html += `<div class="item" style="border-color:${GOLD};">
+      <p style="font-size:13px;">Las bóvedas del Viejo Mundo han vuelto a abrir… con comisión. <b>Apertura de cuenta: 10000 chapas</b>.</p>
+      <p style="font-size:12px;color:#8d9880;">Podrás depositar chapas y dinero de antes de la guerra. El saldo crece un <b>1% por hora</b>. También apostar por combates de la Combat Zone o por pringados del Circo Nuka-World.</p>
+      <button style="width:100%;margin-top:8px;background:#3a3010;color:${GOLD};border-color:${GOLD};font-weight:bold;" ${(P.caps||0)<10000?'disabled':''} onclick="openBankAccount()">ABRIR CUENTA (−10000 chapas)</button>
+    </div>
+    <button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← SALIR AL YERMO</button>`;
+    document.getElementById('main-view').innerHTML = html;
+    return;
+  }
+  html += `<div class="subtabs">
+    <button class="${P.bank.tab==='cuenta'?'active':''}" onclick="renderCentralBankUI('cuenta')">Cuenta</button>
+    <button class="${P.bank.tab==='move'?'active':''}" onclick="renderCentralBankUI('move')">Movimientos</button>
+    <button class="${P.bank.tab==='bets'?'active':''}" onclick="renderCentralBankUI('bets')">Apuestas</button>
+  </div>
+  <p style="font-size:12px;color:${GOLD};">Titular: <b>${b.accountName||'—'}</b></p>`;
+
+  if (P.bank.tab === 'cuenta') {
+    html += `<div class="item" style="border-color:${GOLD};">
+      <b style="color:${GOLD};">Saldo en bóveda</b><br>
+      <div class="row"><span style="color:#e05050;">Chapas en banco</span><b style="color:#e05050;">${b.caps||0}</b></div>
+      <div class="row"><span style="color:#88aadd;">$ preguerra en banco</span><b style="color:#88aadd;">${b.prewar||0}</b></div>
+      <p style="font-size:11px;color:#8d9880;margin-top:8px;">Interés: <b>+1% por hora</b> sobre cada saldo (mientras la cuenta esté abierta). El efectivo en el bolsillo no genera interés.</p>
+      <p style="font-size:11px;color:#8d9880;">En bolsillo: <b style="color:#e05050;">${P.caps||0}</b> chapas · <b style="color:#88aadd;">${P.prewarMoney||0}</b> $ preguerra</p>
+    </div>`;
+  } else if (P.bank.tab === 'move') {
+    html += `<div class="item" style="border-color:${GOLD};">
+      <b style="color:#e05050;">Chapas</b><br>
+      <span style="font-size:11px;color:#8d9880;">Banco: ${b.caps||0} · Bolsillo: ${P.caps||0}</span><br>
+      <button style="width:100%;margin:6px 0;border-color:#e05050;color:#e05050;" onclick="bankDepositCaps()">Depositar chapas…</button>
+      <button style="width:100%;margin:4px 0;border-color:#e05050;color:#e05050;" onclick="bankWithdrawCaps()">Retirar chapas…</button>
+    </div>
+    <div class="item" style="border-color:#88aadd;">
+      <b style="color:#88aadd;">Dinero de antes de la guerra</b><br>
+      <span style="font-size:11px;color:#8d9880;">Banco: ${b.prewar||0} · Bolsillo: ${P.prewarMoney||0}</span><br>
+      <button style="width:100%;margin:6px 0;border-color:#88aadd;color:#88aadd;" onclick="bankDepositPrewar()">Depositar $ preguerra…</button>
+      <button style="width:100%;margin:4px 0;border-color:#88aadd;color:#88aadd;" onclick="bankWithdrawPrewar()">Retirar $ preguerra…</button>
+    </div>`;
+  } else {
+    // Apuestas
+    html += `<div class="item" style="border-color:#4a9eff;">
+      <b style="color:#4a9eff;">🥊 Retransmisión Combat Zone</b><br>
+      <span style="font-size:11px;color:#8d9880;">Apuestas con el saldo de <b>chapas del banco</b> (no del bolsillo). El favorito paga menos; el underdog, más.</span><br>
+      <button style="width:100%;margin:6px 0;border-color:#4a9eff;" ${(b.caps||0)<50?'disabled':''} onclick="bankBetCombat(50,'fav')">50 chapas · Favorito (x1.4)</button>
+      <button style="width:100%;margin:4px 0;border-color:#4a9eff;" ${(b.caps||0)<100?'disabled':''} onclick="bankBetCombat(100,'fav')">100 chapas · Favorito (x1.4)</button>
+      <button style="width:100%;margin:4px 0;border-color:#ff8844;" ${(b.caps||0)<50?'disabled':''} onclick="bankBetCombat(50,'dog')">50 chapas · Underdog (x2.8)</button>
+      <button style="width:100%;margin:4px 0;border-color:#ff8844;" ${(b.caps||0)<100?'disabled':''} onclick="bankBetCombat(100,'dog')">100 chapas · Underdog (x2.8)</button>
+    </div>
+    <div class="item" style="border-color:#e05050;">
+      <b style="color:#e05050;">🎪 Pringado del Circo Nuka-World</b><br>
+      <span style="font-size:11px;color:#8d9880;">Apuestas si un desconocido saca buen SCORE en una atracción. Usa chapas del banco.</span><br>
+      <button style="width:100%;margin:6px 0;border-color:#e05050;" ${(b.caps||0)<40?'disabled':''} onclick="bankBetCircus(40)">40 chapas · SCORE alto (x2.2)</button>
+      <button style="width:100%;margin:4px 0;border-color:#e05050;" ${(b.caps||0)<80?'disabled':''} onclick="bankBetCircus(80)">80 chapas · SCORE legendario (x4)</button>
+    </div>
+    <p style="font-size:11px;color:#8d9880;">Las apuestas se resuelven al instante (retransmisión). Ganancias y pérdidas afectan solo al saldo bancario.</p>`;
+  }
+  html += `<button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← SALIR AL YERMO</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
+function bankDepositCaps() {
+  ensureBank();
+  let max = P.caps || 0;
+  if (max < 1) { logMsg('No tienes chapas en el bolsillo.'); return; }
+  openQtyPad(max, 'Depositar chapas en el banco', function(qty) {
+    qty = Math.min(max, Math.max(1, qty|0));
+    P.caps -= qty;
+    P.bank.caps = (P.bank.caps || 0) + qty;
+    playBuySound();
+    logMsg('Depositadas ' + qty + ' chapas en el Banco Central.');
+    renderCentralBankUI('move');
+    updateStats();
+  });
+}
+
+function bankWithdrawCaps() {
+  ensureBank();
+  let max = P.bank.caps || 0;
+  if (max < 1) { logMsg('No hay chapas en el banco.'); return; }
+  openQtyPad(max, 'Retirar chapas del banco', function(qty) {
+    qty = Math.min(max, Math.max(1, qty|0));
+    P.bank.caps -= qty;
+    P.caps = (P.caps || 0) + qty;
+    playBuySound();
+    logMsg('Retiradas ' + qty + ' chapas del Banco Central.');
+    renderCentralBankUI('move');
+    updateStats();
+  });
+}
+
+function bankDepositPrewar() {
+  ensureBank();
+  let max = P.prewarMoney || 0;
+  if (max < 1) { logMsg('No tienes dinero de antes de la guerra en el bolsillo.'); return; }
+  openQtyPad(max, 'Depositar $ preguerra', function(qty) {
+    qty = Math.min(max, Math.max(1, qty|0));
+    P.prewarMoney -= qty;
+    P.bank.prewar = (P.bank.prewar || 0) + qty;
+    playBuySound();
+    logMsg('Depositados ' + qty + ' $ preguerra en el banco.');
+    renderCentralBankUI('move');
+    updateStats();
+  });
+}
+
+function bankWithdrawPrewar() {
+  ensureBank();
+  let max = P.bank.prewar || 0;
+  if (max < 1) { logMsg('No hay $ preguerra en el banco.'); return; }
+  openQtyPad(max, 'Retirar $ preguerra', function(qty) {
+    qty = Math.min(max, Math.max(1, qty|0));
+    P.bank.prewar -= qty;
+    P.prewarMoney = (P.prewarMoney || 0) + qty;
+    playBuySound();
+    logMsg('Retirados ' + qty + ' $ preguerra del banco.');
+    renderCentralBankUI('move');
+    updateStats();
+  });
+}
+
+function bankBetCombat(stake, side) {
+  ensureBank();
+  stake = Math.floor(stake) || 0;
+  if ((P.bank.caps || 0) < stake) { logMsg('Saldo bancario insuficiente.'); return; }
+  P.bank.caps -= stake;
+  // favorito ~65% win, underdog ~28%
+  let winChance = side === 'dog' ? 0.28 : 0.65;
+  let mult = side === 'dog' ? 2.8 : 1.4;
+  let names = ['Colmillo de acero', 'La Sombra', 'Brick', 'Rad-Ray', 'El Carnicero', 'Nuka-Knuckles'];
+  let a = names[Math.floor(Math.random() * names.length)];
+  let b = names[Math.floor(Math.random() * names.length)];
+  while (b === a) b = names[Math.floor(Math.random() * names.length)];
+  let favWins = Math.random() < 0.62;
+  let youWin = (side === 'fav' && favWins) || (side === 'dog' && !favWins);
+  // slight random override by luck
+  let L = (P.special && P.special.L) || 5;
+  if (Math.random() < L * 0.01) youWin = !youWin;
+  let winner = favWins ? a : b;
+  let msg = 'Retransmisión CZ: ' + a + ' vs ' + b + '. Gana ' + winner + '.';
+  if (youWin) {
+    let gain = Math.floor(stake * mult);
+    P.bank.caps += gain;
+    logMsg(msg + ' ¡Apuesta acertada! +' + gain + ' chapas en el banco.');
+  } else {
+    logMsg(msg + ' Apuesta perdida (−' + stake + ' chapas del banco).');
+  }
+  renderCentralBankUI('bets');
+  updateStats();
+}
+
+function bankBetCircus(stake) {
+  ensureBank();
+  stake = Math.floor(stake) || 0;
+  if ((P.bank.caps || 0) < stake) { logMsg('Saldo bancario insuficiente.'); return; }
+  P.bank.caps -= stake;
+  let score = Math.floor(Math.random() * 140);
+  let L = (P.special && P.special.L) || 5;
+  score += Math.floor(Math.random() * L);
+  let need = stake >= 80 ? 120 : 70;
+  let mult = stake >= 80 ? 4 : 2.2;
+  let sucker = ['Un colono nervioso', 'Un saqueador borracho', 'Una feriante', 'Un robot oxidado', 'Un supervisor jubilado'][Math.floor(Math.random()*5)];
+  let game = ['Diana Nuka', 'Carrera de ratas', 'Golpea el fuerte', 'Tragaperras Nuka', 'Dardos'][Math.floor(Math.random()*5)];
+  if (score >= need) {
+    let gain = Math.floor(stake * mult);
+    P.bank.caps += gain;
+    logMsg(sucker + ' en ' + game + ': SCORE ' + score + '. ¡Ganas +' + gain + ' chapas en el banco!');
+  } else {
+    logMsg(sucker + ' en ' + game + ': SCORE ' + score + ' (hacía falta ' + need + '). Pierdes ' + stake + ' chapas del banco.');
+  }
+  renderCentralBankUI('bets');
+  updateStats();
+}
+
+
 function ensureNukaWorld() {
   if (P.nukaWorldUnlocked === undefined) P.nukaWorldUnlocked = false;
   if (P.nukaTickets === undefined) P.nukaTickets = 0;
@@ -12565,6 +12828,7 @@ function openFastTravelUI(section) {
     else if (l.kind === 'commerce') { color = '#ffcc44'; tag = 'Comercio'; name = ensureEmoji(l.name, '⚖'); }
     else if (l.kind === 'combatzone') { color = '#4a9eff'; tag = 'Arena'; name = ensureEmoji(l.name, '🥊'); }
     else if (l.kind === 'nukaworld') { color = '#e05050'; tag = 'Circo'; name = ensureEmoji(l.name, '🎪'); }
+    else if (l.kind === 'bank') { color = '#d5bd69'; tag = 'Banco'; name = ensureEmoji(l.name, '🏦'); }
     return { id: l.id, name: name, x: l.x, y: l.y, color, tag };
   });
 
