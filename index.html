@@ -2587,6 +2587,7 @@ function getEquippedWeapon() {
   let inst = P.inv.find(i => i.uid === P.equippedWeaponUid);
   if (!inst) return { name: "Desarmado", damage: 2, ammoType: "Ninguna (Cuerpo a cuerpo)", mods: [], legendary: false, itemLevel: 1 };
   let base = getItemBase(inst.id);
+  if (!base) return { name: "Desarmado", damage: 2, ammoType: "Ninguna (Cuerpo a cuerpo)", mods: [], legendary: false, itemLevel: 1 };
   let ilvl = inst.itemLevel || 1;
   let scale = getItemLevelBonus(ilvl);
   let modScale = getModLevelScale(ilvl);
@@ -2594,7 +2595,7 @@ function getEquippedWeapon() {
     let m = MODS_DB.find(x => x.id === mId);
     return acc + (m ? Math.floor((m.bonusDmg || 0) * modScale) : 0);
   }, 0);
-  let dmg = Math.max(1, Math.floor(base.damage * scale) + modDmg);
+  let dmg = Math.max(1, Math.floor((base.damage || 2) * scale) + modDmg);
   return { 
     ...base, 
     damage: dmg,
@@ -2646,6 +2647,7 @@ function getEquippedArmor() {
   let inst = P.inv.find(i => i.uid === P.equippedArmorUid);
   if (!inst) return { name: "Sin armadura", def: 0, radRes: 0, mods: [], legendary: false, itemLevel: 1 };
   let base = getItemBase(inst.id);
+  if (!base) return { name: "Sin armadura", def: 0, radRes: 0, mods: [], legendary: false, itemLevel: 1 };
   let ilvl = inst.itemLevel || 1;
   let scale = getItemLevelBonus(ilvl);
   let modScale = getModLevelScale(ilvl);
@@ -2653,7 +2655,7 @@ function getEquippedArmor() {
     let m = MODS_DB.find(x => x.id === mId);
     return acc + (m ? Math.floor((m.bonusDef || 0) * modScale) : 0);
   }, 0);
-  let def = Math.max(0, Math.floor(base.def * scale) + modDef);
+  let def = Math.max(0, Math.floor((base.def || 0) * scale) + modDef);
   let baseRad = getBaseRadRes(base);
   // Si base radRes es 0, permanece 0 aunque suba el nivel
   let radRes = baseRad > 0 ? Math.floor(baseRad * scale) : 0;
@@ -6942,7 +6944,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.7</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.10.8</div>
   `;
   m.classList.add('show');
 }
@@ -14046,6 +14048,7 @@ function tryCapture(uid) {
 
 function companionAttack() {
   if (!combatState) return;
+  try {
   let comp = getEquippedCompanion();
   if (!comp || comp.resting || comp.hp <= 0) {
     combatLog("Tu compañero no puede atacar.");
@@ -14061,7 +14064,7 @@ function companionAttack() {
   let totalHit = 0;
   for (let i = 0; i < attacks; i++) {
     let hit = Math.max(1, st.dmg + Math.floor(Math.random() * 4));
-    let critChance = 0.05 + (comp.special.L || 1) * 0.02;
+    let critChance = 0.05 + ((comp.special && comp.special.L) || 1) * 0.02;
     if (comp.ability && comp.ability.id === 'c_crit') critChance += 0.30;
     if (Math.random() < critChance) {
       let mult = (comp.ability && comp.ability.id === 'c_precise') ? 2.2 : 1.5;
@@ -14116,6 +14119,10 @@ function companionAttack() {
     return;
   }
   renderCombatUI();
+  } catch (err) {
+    console.error('companionAttack', err);
+    try { combatLog('Error compañero: ' + (err && err.message ? err.message : err)); renderCombatUI(); } catch (e2) {}
+  }
 }
 
 function enemyCombatTurn() {
@@ -14169,6 +14176,7 @@ function combatLog(msg) {
 
 function combatThrowGrenade() {
   if (!combatState) return;
+  try {
   let g = getEquippedGrenade();
   if (!g) { combatLog("No tienes granada equipada."); return; }
   let gInst = P.inv.find(i => i.uid === P.equippedGrenadeUid);
@@ -14180,7 +14188,7 @@ function combatThrowGrenade() {
   }
   playWeaponSound(g);
   let hit = Math.max(1, g.damage + Math.floor(Math.random() * 6));
-  let critChance = (P.special.L || 1) * 0.02;
+  let critChance = ((P.special && P.special.L) || 1) * 0.02;
   if (Math.random() < critChance) {
     hit = Math.floor(hit * 1.5);
     combatLog("¡Granada crítica!");
@@ -14201,285 +14209,271 @@ function combatThrowGrenade() {
   updateStats();
   renderCombatUI();
   setTimeout(function() { if (combatState) enemyTurn(); }, 400);
+  } catch (err) {
+    console.error('grenade', err);
+    try { combatLog('Error granada: ' + (err && err.message ? err.message : err)); renderCombatUI(); } catch (e2) {}
+  }
 }
 
 function combatAttack() {
   if (!combatState) return;
+  try {
+    let w = getEquippedWeapon();
+    let a = getEquippedArmor();
+    let ammoKey = w.ammoType || '';
+    let isGrenade = false;
+    let isMelee = !ammoKey || String(ammoKey).includes("Ninguna") || String(ammoKey).toLowerCase().includes("cuerpo");
+    let wAb = getWeaponAbility();
+    let aAb = getArmorAbility();
 
-  let w = getEquippedWeapon();
-  let a = getEquippedArmor();
-  let ammoKey = w.ammoType || '';
-  let isGrenade = false; // las granadas se lanzan con combatThrowGrenade()
-  let isMelee = String(ammoKey).includes("Ninguna");
-  let wAb = getWeaponAbility();
-  let aAb = getArmorAbility();
+    let ironBonus = ((P.perks && P.perks.p_iron) || 0) * 3;
+    let gunsBonus = (!isMelee && P.perks && P.perks.p_guns) ? (P.perks.p_guns * 2) : 0;
+    let brawlerBonus = (isMelee && P.perks && P.perks.p_brawler) ? (P.perks.p_brawler * 4) : 0;
+    let furyBonus = (P.hp / getMaxHp() < 0.3 && P.perks && P.perks.p_fury) ? (P.perks.p_fury * 5) : 0;
 
-  let ironBonus = ((P.perks && P.perks.p_iron) || 0) * 3;
-  let gunsBonus = (!isMelee && P.perks && P.perks.p_guns) ? (P.perks.p_guns * 2) : 0;
-  let brawlerBonus = (isMelee && P.perks && P.perks.p_brawler) ? (P.perks.p_brawler * 4) : 0;
-  let furyBonus = (P.hp / getMaxHp() < 0.3 && P.perks && P.perks.p_fury) ? (P.perks.p_fury * 5) : 0;
-
-  // Bonos de habilidades legendarias de arma
-  let legDmgBonus = 0;
-  if (wAb) {
-    if (wAb.id === 'w_precision') legDmgBonus += 8;
-    if (wAb.id === 'w_fury' && P.hp / getMaxHp() < 0.4) legDmgBonus += 15;
-    if (wAb.id === 'w_exec' && combatState.enemyHp / combatState.enemyMaxHp < 0.3) legDmgBonus = Math.floor((w.damage + legDmgBonus) * 0.5);
-    if (wAb.id === 'w_rad') legDmgBonus += 10;
-    if (wAb.id === 'w_burn') legDmgBonus += 12;
-    if (wAb.id === 'w_legend' && combatState.isLegendary) legDmgBonus = Math.floor((w.damage) * 0.35);
-  }
-  if (aAb && aAb.id === 'a_power') legDmgBonus += 6;
-
-  // Bonos de efectos activos (Nuka, drogas, comida...)
-  legDmgBonus += getEffectBonus('dmg');
-  if (isMelee) legDmgBonus += getEffectBonus('meleeDmg');
-
-  let baseDmg = w.damage + ironBonus + gunsBonus + brawlerBonus + furyBonus + legDmgBonus;
-
-
-  // --- HIPNOTRON: captura de esclavos (sin daño real; solo hipnosis o 1 de daño residual) ---
-  if (w.hypno || (w.hypnoChance !== undefined)) {
-    let ammoKeyH = w.ammoType;
-    let isMeleeH = !ammoKeyH || String(ammoKeyH).includes("Ninguna");
-    if (!isMeleeH && !(P.ammoBox[ammoKeyH] && P.ammoBox[ammoKeyH] > 0)) {
-      combatLog("¡Sin Células de Hipnotron!");
-      combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
-      combatLog("El haz apenas roza al objetivo (1 de daño).");
-      renderCombatUI();
-      updateStats();
-      if (combatState.enemyHp <= 0) endCombat(true);
-      else setTimeout(() => { if (combatState) enemyTurn(); }, 400);
-      return;
+    let legDmgBonus = 0;
+    if (wAb) {
+      if (wAb.id === 'w_precision') legDmgBonus += 8;
+      if (wAb.id === 'w_fury' && P.hp / getMaxHp() < 0.4) legDmgBonus += 15;
+      if (wAb.id === 'w_exec' && combatState.enemyHp / combatState.enemyMaxHp < 0.3) legDmgBonus = Math.floor((w.damage + legDmgBonus) * 0.5);
+      if (wAb.id === 'w_rad') legDmgBonus += 10;
+      if (wAb.id === 'w_burn') legDmgBonus += 12;
+      if (wAb.id === 'w_legend' && combatState.isLegendary) legDmgBonus = Math.floor((w.damage) * 0.35);
     }
-    if (!isMeleeH) P.ammoBox[ammoKeyH] = (P.ammoBox[ammoKeyH] || 1) - 1;
-    playWeaponSound(w);
-    let chance = w.hypnoChance || 0.2;
-    let human = combatState.enemyHuman === true || isHumanEnemy(combatState.enemyName);
-    if (combatState.vaultExperiment) human = true;
-    if (!human) {
-      combatLog("El Hipnotron falla: el objetivo no es humano (0% efectividad).");
-      combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
-      renderCombatUI();
-      updateStats();
-      if (combatState.enemyHp <= 0) endCombat(true);
-      else setTimeout(() => { if (combatState) enemyTurn(); }, 450);
-      return;
-    }
-    if (Math.random() < chance) {
-      combatLog("¡Hipnosis exitosa! El sujeto queda sometido.");
-      combatState.hypnoCapture = true;
-      endCombat(true);
-      return;
-    } else {
+    if (aAb && aAb.id === 'a_power') legDmgBonus += 6;
+    legDmgBonus += getEffectBonus('dmg');
+    if (isMelee) legDmgBonus += getEffectBonus('meleeDmg');
+
+    let baseDmg = (w.damage || 2) + ironBonus + gunsBonus + brawlerBonus + furyBonus + legDmgBonus;
+
+    // --- HIPNOTRON: sin daño real (1 residual) ---
+    if (w.hypno || (w.hypnoChance !== undefined)) {
+      let ammoKeyH = w.ammoType;
+      let isMeleeH = !ammoKeyH || String(ammoKeyH).includes("Ninguna");
+      if (!isMeleeH && !(P.ammoBox[ammoKeyH] && P.ammoBox[ammoKeyH] > 0)) {
+        combatLog("¡Sin Células de Hipnotron!");
+        combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
+        combatLog("El haz apenas roza al objetivo (1 de daño).");
+        renderCombatUI();
+        updateStats();
+        if (combatState.enemyHp <= 0) endCombat(true);
+        else setTimeout(function() { if (combatState) enemyTurn(); }, 400);
+        return;
+      }
+      if (!isMeleeH) P.ammoBox[ammoKeyH] = (P.ammoBox[ammoKeyH] || 1) - 1;
+      playWeaponSound(w);
+      let chance = w.hypnoChance || 0.2;
+      let human = combatState.enemyHuman === true || isHumanEnemy(combatState.enemyName);
+      if (combatState.vaultExperiment) human = true;
+      if (!human) {
+        combatLog("El Hipnotron falla: el objetivo no es humano (0% efectividad).");
+        combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
+        renderCombatUI();
+        updateStats();
+        if (combatState.enemyHp <= 0) endCombat(true);
+        else setTimeout(function() { if (combatState) enemyTurn(); }, 450);
+        return;
+      }
+      if (Math.random() < chance) {
+        combatLog("¡Hipnosis exitosa! El sujeto queda sometido.");
+        combatState.hypnoCapture = true;
+        endCombat(true);
+        return;
+      }
       combatLog("El Hipnotron no hace efecto esta vez (prob. " + Math.round(chance * 100) + "% en humanos).");
       combatState.enemyHp = Math.max(0, combatState.enemyHp - 1);
       renderCombatUI();
       updateStats();
       if (combatState.enemyHp <= 0) endCombat(true);
-      else setTimeout(() => { if (combatState) enemyTurn(); }, 450);
+      else setTimeout(function() { if (combatState) enemyTurn(); }, 450);
       return;
     }
+
+    // Ataque normal
+    let hit = 0;
+    let attacks = 1;
+    if (wAb && wAb.id === 'w_double' && Math.random() < 0.15) {
+      attacks = 2;
+      combatLog("¡Disparo Doble!");
+    }
+
+    for (let atk = 0; atk < attacks; atk++) {
+      let canShoot = isMelee || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] > 0);
+      if (!isMelee && aAb && aAb.id === 'a_ammo' && Math.random() < 0.10) canShoot = true;
+      if (canShoot || isMelee) {
+        playWeaponSound(w);
+        hit = Math.max(1, baseDmg + Math.floor(Math.random() * 4));
+        let _L = (P.special && P.special.L != null) ? P.special.L : 5;
+        let critChance = (((P.perks && P.perks.p_bloody) || 0) * 0.05) + (_L * 0.02) + getEffectBonus('critChance');
+        if (wAb && wAb.id === 'w_crit') critChance += 0.40;
+        if (Math.random() < critChance) {
+          let critMult = 1.5 + (((P.perks && P.perks.p_crit) || 0) * 0.15);
+          hit = Math.floor(hit * critMult);
+          combatLog("¡Golpe crítico mortífero!");
+        }
+        if (wAb && wAb.id === 'w_lucky' && Math.random() < 0.10) {
+          hit = Math.floor(hit * 3);
+          combatLog("¡Golpe de Suerte! ¡Daño x3!");
+        }
+        if (wAb && wAb.id === 'w_chain') {
+          let chain = Math.floor(hit * 0.30);
+          hit += chain;
+          combatLog("Daño en Cadena: +" + chain);
+        }
+        if (!isMelee && !(aAb && aAb.id === 'a_ammo' && Math.random() < 0.10)) {
+          if (P.ammoBox[ammoKey] > 0) P.ammoBox[ammoKey]--;
+        }
+        if (wAb && wAb.id === 'w_armorbreak') {
+          combatState.armorBroken = (combatState.armorBroken || 0) + 3;
+          hit += 3;
+        }
+        combatLog("Atacas con " + w.name + (w.legendary ? " ★" : "") + " e infliges " + hit + " de daño.");
+      } else {
+        hit = 2 + Math.floor(Math.random() * 3);
+        combatLog("¡Sin munición! Atacas con los puños e infliges " + hit + " de daño.");
+      }
+      if (wAb && wAb.id === 'w_poison') combatState.poisonTurns = 3;
+      if (wAb && wAb.id === 'w_vamp') {
+        let heal = Math.floor(hit * 0.20);
+        P.hp = Math.min(getMaxHp(), P.hp + heal);
+        if (heal > 0) combatLog("Vampirismo: +" + heal + " HP.");
+      }
+      if (wAb && wAb.id === 'w_lifesteal') {
+        P.hp = Math.min(getMaxHp(), P.hp + 8);
+        combatLog("Sed de Sangre: +8 HP.");
+      }
+      combatState.enemyHp -= hit;
+    }
+
+    if (combatState.poisonTurns > 0) {
+      combatState.enemyHp -= 5;
+      combatState.poisonTurns--;
+      combatLog("Veneno Persistente: 5 de daño.");
+    }
+
+    if (combatState.isLegendary && !combatState.hasHealed && combatState.enemyHp > 0 &&
+        combatState.enemyHp <= combatState.enemyMaxHp * 0.25) {
+      combatState.enemyHp = combatState.enemyMaxHp;
+      combatState.hasHealed = true;
+      combatLog("¡El enemigo LEGENDARIO se regenera completamente!");
+    }
+
+    if (combatState.enemyHp <= 0) {
+      combatState.enemyHp = 0;
+      endCombat(true);
+      return;
+    }
+
+    // Turno enemigo
+    let enemyStunned = false;
+    if (wAb && wAb.id === 'w_stun' && Math.random() < 0.20) {
+      enemyStunned = true;
+      combatLog("¡El enemigo está aturdido y pierde su turno!");
+    }
+    let enemyDmgMult = 1;
+    if (wAb && wAb.id === 'w_freeze') enemyDmgMult = 0.75;
+
+    if (!enemyStunned) {
+      let _A = (P.special && P.special.A != null) ? P.special.A : 5;
+      let dodgeChance = (_A * 0.03) + (((P.perks && P.perks.p_reflex) || 0) * 0.05) + getEffectBonus('dodge');
+      if (aAb && aAb.id === 'a_dodge') dodgeChance += 0.15;
+      if (Math.random() < dodgeChance) {
+        combatLog("¡Esquivaste el ataque del enemigo!");
+      } else {
+        let totalDef = (a.def || 0) + (((P.perks && P.perks.p_skin) || 0) * 2);
+        try { totalDef += getDefenseBonusFromEndurance(); } catch (e) {}
+        try { totalDef += getEffectBonus('def'); } catch (e) {}
+        if (aAb && aAb.id === 'a_tank') totalDef += 15;
+        if (aAb && aAb.id === 'a_immortal') totalDef += 4;
+        let rawDmg = Math.floor((combatState.enemyDmg || 5) * enemyDmgMult);
+        let dmgTaken = Math.max(1, rawDmg - totalDef);
+        if (aAb && aAb.id === 'a_thorns') {
+          combatState.enemyHp -= 6;
+          combatLog("Espinas: el enemigo recibe 6 de daño.");
+        }
+        if (aAb && aAb.id === 'a_reflect') {
+          let reflected = Math.floor(dmgTaken * 0.20);
+          combatState.enemyHp -= reflected;
+          combatLog("Reflejo de Daño: " + reflected + " devueltos.");
+        }
+        P.hp -= dmgTaken;
+        combatLog(combatState.enemyName + " te golpea por " + dmgTaken + " de daño.");
+        if (aAb && aAb.id === 'a_absorb') {
+          P.hp = Math.min(getMaxHp(), P.hp + 5);
+          combatLog("Absorción: +5 HP.");
+        }
+      }
+    }
+
+    if (aAb && aAb.id === 'a_regen') {
+      P.hp = Math.min(getMaxHp(), P.hp + 4);
+      combatLog("Regeneración: +4 HP.");
+    }
+
+    if (combatState.causesRads) {
+      let radHit = 8 + Math.floor(Math.random() * 12);
+      let res = getRadResistance();
+      let actual = Math.max(1, Math.floor(radHit * (1 - res / 100)));
+      P.rads = Math.min(1000, (P.rads || 0) + actual);
+      combatLog("Radiación +" + actual + " (total " + P.rads + ")");
+      let maxhp = getMaxHp();
+      if (P.hp > maxhp) P.hp = maxhp;
+    }
+
+    if (P.hp <= 0 && aAb && aAb.id === 'a_second' && !combatState.playerSecondChanceUsed) {
+      P.hp = 1;
+      combatState.playerSecondChanceUsed = true;
+      combatLog("¡Segunda Oportunidad! Sobrevives con 1 HP.");
+    }
+
+    if (P.hp <= 0) {
+      P.hp = 0;
+      endCombat(false);
+      return;
+    }
+    if (combatState.enemyHp <= 0) {
+      combatState.enemyHp = 0;
+      endCombat(true);
+      return;
+    }
+
+    updateStats();
+    renderCombatUI();
+  } catch (err) {
+    console.error('combatAttack', err);
+    try { combatLog('Error de combate: ' + (err && err.message ? err.message : err)); } catch (e2) {}
+    try { updateStats(); renderCombatUI(); } catch (e3) {}
   }
+}
 
-  // Ataque del jugador
-  let hasAmmo = isMelee || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] > 0);
-  // Munición Infinita (armadura)
-  if (!isMelee && aAb && aAb.id === 'a_ammo' && Math.random() < 0.10) {
-    hasAmmo = true; // no consume
-  }
-  let hit = 0;
-  let attacks = 1;
-
-  // Disparo Doble
-  if (wAb && wAb.id === 'w_double' && Math.random() < 0.15) {
-    attacks = 2;
-    combatLog("¡Disparo Doble!");
-  }
-
-  for (let atk = 0; atk < attacks; atk++) {
-    // Cada disparo a distancia consume 1 bala
-    let canShoot = isMelee || isGrenade || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] > 0);
-    if (!isMelee && !isGrenade && aAb && aAb.id === 'a_ammo' && Math.random() < 0.10) canShoot = true;
-    if (canShoot || isMelee) {
-      playWeaponSound(w);
-      hit = Math.max(1, baseDmg + Math.floor(Math.random() * 4));
-
-      // Penetración de Blindaje
-      if (wAb && wAb.id === 'w_pen') {
-        // se aplica después restando defensa enemiga
-      }
-
-      let critChance = (((P.perks && P.perks.p_bloody) || 0) * 0.05) + (P.special.L * 0.02) + getEffectBonus('critChance');
-      if (wAb && wAb.id === 'w_crit') critChance += 0.40;
-      if (Math.random() < critChance) {
-        let critMult = 1.5 + (((P.perks && P.perks.p_crit) || 0) * 0.15);
-        hit = Math.floor(hit * critMult);
-        combatLog("¡Golpe crítico mortífero!");
-      }
-
-      // Golpe de Suerte (x3)
-      if (wAb && wAb.id === 'w_lucky' && Math.random() < 0.10) {
-        hit = Math.floor(hit * 3);
-        combatLog("¡Golpe de Suerte! ¡Daño x3!");
-      }
-
-      // Daño en Cadena
-      if (wAb && wAb.id === 'w_chain') {
-        let chain = Math.floor(hit * 0.30);
-        hit += chain;
-        combatLog("Daño en Cadena: +" + chain);
-      }
-
-      if (!isMelee && !(aAb && aAb.id === 'a_ammo' && Math.random() < 0.10)) {
-        if (P.ammoBox[ammoKey] > 0) P.ammoBox[ammoKey]--;
-      }
-
-      // Rompeblindajes: daño extra acumulativo
-      if (wAb && wAb.id === 'w_armorbreak') {
-        combatState.armorBroken = (combatState.armorBroken || 0) + 3;
-        hit += 3;
-      }
-
-      combatLog(`Atacas con ${w.name}${w.legendary ? ' ★' : ''} e infliges ${hit} de daño.`);
+function enemyTurn() {
+  if (!combatState) return;
+  try {
+    if (typeof enemyCombatTurn === 'function') {
+      enemyCombatTurn();
     } else {
-      hit = 2 + Math.floor(Math.random() * 3);
-      combatLog("¡Sin munición! Atacas con los puños e infliges " + hit + " de daño.");
-    }
-
-    // Aplicar veneno
-    if (wAb && wAb.id === 'w_poison') {
-      combatState.poisonTurns = 3;
-    }
-
-    // Vampirismo / Sed de Sangre
-    if (wAb && wAb.id === 'w_vamp') {
-      let heal = Math.floor(hit * 0.20);
-      P.hp = Math.min(getMaxHp(), P.hp + heal);
-      if (heal > 0) combatLog("Vampirismo: +" + heal + " HP.");
-    }
-    if (wAb && wAb.id === 'w_lifesteal') {
-      P.hp = Math.min(getMaxHp(), P.hp + 8);
-      combatLog("Sed de Sangre: +8 HP.");
-    }
-
-    combatState.enemyHp -= hit;
-  }
-
-  // Daño de veneno al final del turno del jugador
-  if (combatState.poisonTurns > 0) {
-    combatState.enemyHp -= 5;
-    combatState.poisonTurns--;
-    combatLog("Veneno Persistente: 5 de daño.");
-  }
-
-  // Curación legendaria del enemigo al 25%
-  if (combatState.isLegendary && !combatState.hasHealed && combatState.enemyHp > 0 &&
-      combatState.enemyHp <= combatState.enemyMaxHp * 0.25) {
-    combatState.enemyHp = combatState.enemyMaxHp;
-    combatState.hasHealed = true;
-    combatLog("¡El enemigo LEGENDARIO se regenera completamente!");
-  }
-
-  if (combatState.enemyHp <= 0) {
-    combatState.enemyHp = 0;
-    endCombat(true);
-    return;
-  }
-
-  // ¿El enemigo está aturdido?
-  let enemyStunned = false;
-  if (wAb && wAb.id === 'w_stun' && Math.random() < 0.20) {
-    enemyStunned = true;
-    combatLog("¡El enemigo está aturdido y pierde su turno!");
-  }
-
-  // Congelante: reduce daño enemigo
-  let enemyDmgMult = 1;
-  if (wAb && wAb.id === 'w_freeze') enemyDmgMult = 0.75;
-
-  if (!enemyStunned) {
-    // Ataque del enemigo
-    let dodgeChance = (P.special.A * 0.03) + (((P.perks && P.perks.p_reflex) || 0) * 0.05) + getEffectBonus('dodge');
-    if (aAb && aAb.id === 'a_dodge') dodgeChance += 0.15;
-
-    if (Math.random() < dodgeChance) {
-      combatLog("¡Esquivaste el ataque del enemigo!");
-    } else {
-      let totalDef = a.def + (((P.perks && P.perks.p_skin) || 0) * 2) + getDefenseBonusFromEndurance() + getEffectBonus('def');
-      if (aAb && aAb.id === 'a_tank') totalDef += 15;
-      if (aAb && aAb.id === 'a_immortal') totalDef += 4;
-
-      let rawDmg = Math.floor(combatState.enemyDmg * enemyDmgMult);
-      let dmgTaken = Math.max(1, rawDmg - totalDef);
-
-      // Espinas / Reflejo
-      if (aAb && aAb.id === 'a_thorns') {
-        combatState.enemyHp -= 6;
-        combatLog("Espinas: el enemigo recibe 6 de daño.");
-      }
-      if (aAb && aAb.id === 'a_reflect') {
-        let reflected = Math.floor(dmgTaken * 0.20);
-        combatState.enemyHp -= reflected;
-        combatLog("Reflejo de Daño: " + reflected + " devueltos.");
-      }
-
+      let a = getEquippedArmor();
+      let totalDef = (a && a.def) ? a.def : 0;
+      try { totalDef += getDefenseBonusFromEndurance(); } catch (e) {}
+      let dmgTaken = Math.max(1, (combatState.enemyDmg || 5) - totalDef);
       P.hp -= dmgTaken;
-      combatLog(`${combatState.enemyName} te golpea por ${dmgTaken} de daño.`);
-
-      // Absorción
-      if (aAb && aAb.id === 'a_absorb') {
-        P.hp = Math.min(getMaxHp(), P.hp + 5);
-        combatLog("Absorción: +5 HP.");
-      }
+      combatLog((combatState.enemyName || 'Enemigo') + ' te golpea por ' + dmgTaken + ' de daño.');
     }
+    if (!combatState) return;
+    if (P.hp <= 0) { P.hp = 0; endCombat(false); return; }
+    if (combatState.enemyHp <= 0) { combatState.enemyHp = 0; endCombat(true); return; }
+    updateStats();
+    renderCombatUI();
+  } catch (err) {
+    console.error('enemyTurn', err);
+    try { renderCombatUI(); } catch (e2) {}
   }
-
-  // Regeneración de armadura
-  if (aAb && aAb.id === 'a_regen') {
-    P.hp = Math.min(getMaxHp(), P.hp + 4);
-    combatLog("Regeneración: +4 HP.");
-  }
-
-  // Radiación de enemigos contaminados
-  if (combatState.causesRads) {
-    let radHit = 8 + Math.floor(Math.random() * 12);
-    let res = getRadResistance();
-    let actual = Math.max(1, Math.floor(radHit * (1 - res / 100)));
-    P.rads = Math.min(1000, (P.rads || 0) + actual);
-    combatLog("Radiación +" + actual + " (total " + P.rads + ")");
-    let maxhp = getMaxHp();
-    if (P.hp > maxhp) P.hp = maxhp;
-  }
-
-  // Segunda Oportunidad
-  if (P.hp <= 0 && aAb && aAb.id === 'a_second' && !combatState.playerSecondChanceUsed) {
-    P.hp = 1;
-    combatState.playerSecondChanceUsed = true;
-    combatLog("¡Segunda Oportunidad! Sobrevives con 1 HP.");
-  }
-
-  if (P.hp <= 0) {
-    P.hp = 0;
-    endCombat(false);
-    return;
-  }
-
-  // Si el enemigo murió por espinas/reflejo
-  if (combatState.enemyHp <= 0) {
-    combatState.enemyHp = 0;
-    endCombat(true);
-    return;
-  }
-
-  updateStats();
-  renderCombatUI();
 }
 
 function combatFlee() {
   if (!combatState) return;
 
-  let fleeChance = 0.5 + (P.special.A * 0.03);
+  let fleeChance = 0.5 + (((P.special && P.special.A) || 5) * 0.03);
   if (P.perks && P.perks.p_ninja) fleeChance += 0.2;
   let aAb = getArmorAbility();
   if (aAb && aAb.id === 'a_speed') fleeChance += 0.20;
