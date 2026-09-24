@@ -433,7 +433,163 @@ h1 { margin: 0; color: var(--accent); font-size: 16px; white-space: nowrap; }
   border-color: #e05050;
   color: #ff6666;
 }
+/* ===== MODO PC 16:9 ===== */
+body.pc-mode {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  background-image:
+    radial-gradient(ellipse at center, #001a00 0%, #000 70%);
+}
+body.pc-mode .app {
+  /* Contenedor tipo monitor 16:9 */
+  width: min(100vw - 24px, calc((100vh - 24px) * 16 / 9), 1440px);
+  height: min(100vh - 24px, calc((100vw - 24px) * 9 / 16), 810px);
+  max-width: none;
+  margin: 0;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: minmax(220px, 28%) 1fr;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  border: 1px solid #00aa2a;
+  box-shadow:
+    0 0 0 1px #003300,
+    0 0 32px rgba(0, 255, 65, 0.12),
+    inset 0 0 60px rgba(0, 40, 0, 0.35);
+  border-radius: 6px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+body.pc-mode header {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  padding: 6px 8px 8px;
+  gap: 6px;
+}
+body.pc-mode h1 {
+  font-size: 20px;
+  letter-spacing: 0.04em;
+}
+body.pc-mode .stats {
+  font-size: 13px;
+  gap: 8px;
+}
+body.pc-mode .stats span {
+  padding: 4px 8px;
+}
+body.pc-mode .panel-log {
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+body.pc-mode .panel-log .log {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.35;
+}
+body.pc-mode .panel-main {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+}
+body.pc-mode #main-view {
+  min-height: 100%;
+}
+body.pc-mode .bottom-bar {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  gap: 8px;
+  padding-top: 2px;
+}
+body.pc-mode .bottom-bar .tabs button {
+  padding: 10px 12px;
+  font-size: 13px;
+  min-height: 42px;
+}
+body.pc-mode .btn-settings {
+  width: 48px;
+  min-width: 48px;
+  font-size: 22px;
+}
+body.pc-mode button {
+  padding: 8px 12px;
+  min-height: 36px;
+  font-size: 13px;
+}
+body.pc-mode .map-compact .world-grid {
+  width: min(100%, 420px);
+  max-width: 420px;
+  gap: 3px;
+  padding: 6px;
+  margin: 8px auto;
+}
+body.pc-mode .map-compact .world-cell {
+  font-size: 16px;
+}
+body.pc-mode .map-compact .map-arrows {
+  width: 168px;
+  grid-template-columns: repeat(3, 52px);
+  gap: 6px;
+}
+body.pc-mode .map-compact .map-arrows button,
+body.pc-mode .dpad button {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  min-height: 52px;
+  font-size: 18px;
+}
+body.pc-mode .map-compact .map-controls {
+  height: 128px;
+  min-height: 128px;
+  max-height: 128px;
+}
+body.pc-mode .map-compact .map-actions button {
+  font-size: 12px;
+  padding: 6px 12px;
+  height: 32px;
+  min-height: 32px;
+  max-height: 32px;
+}
+body.pc-mode .item {
+  font-size: 13px;
+}
+body.pc-mode .subtabs button {
+  padding: 8px 10px;
+  font-size: 12px;
+}
+/* Pantallas muy anchas: un poco más de aire */
+@media (min-width: 1600px) {
+  body.pc-mode .app {
+    width: min(100vw - 48px, calc((100vh - 48px) * 16 / 9), 1600px);
+    height: min(100vh - 48px, calc((100vw - 48px) * 9 / 16), 900px);
+  }
+}
+
+/* ===== MODO DISPOSITIVO (móvil) ===== */
+body.mobile-mode .app {
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+}
 @keyframes slot-reel-blur {
+
   0% { transform: translateY(-8px); opacity: 0.4; filter: blur(2px); }
   50% { transform: translateY(8px); opacity: 0.7; filter: blur(1px); }
   100% { transform: translateY(0); opacity: 1; filter: blur(0); }
@@ -6986,6 +7142,131 @@ function executeCheat(raw) {
 }
 
 
+
+// --- Adaptabilidad / Controles ---
+function ensureUISettings() {
+  if (!P.ui) P.ui = {};
+  if (!P.ui.hudMode) P.ui.hudMode = 'mobile'; // mobile | pc
+  if (!P.ui.keys) {
+    P.ui.keys = { up: 'w', down: 's', left: 'a', right: 'd', stim: 'e', rad: 'q' };
+  }
+  applyHudMode(P.ui.hudMode);
+}
+
+function applyHudMode(mode) {
+  mode = mode === 'pc' ? 'pc' : 'mobile';
+  document.body.classList.remove('pc-mode', 'mobile-mode');
+  document.body.classList.add(mode === 'pc' ? 'pc-mode' : 'mobile-mode');
+  if (P && P.ui) P.ui.hudMode = mode;
+  try { localStorage.setItem('wl_hud_mode', mode); } catch (e) {}
+}
+
+function setHudMode(mode) {
+  ensureUISettings();
+  applyHudMode(mode);
+  logMsg(mode === 'pc' ? 'HUD: modo PC' : 'HUD: modo dispositivo');
+  openAdaptabilidadUI();
+}
+
+function openAdaptabilidadUI() {
+  ensureUISettings();
+  let m = P.ui.hudMode || 'mobile';
+  let k = P.ui.keys;
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:var(--accent);text-align:center;margin-top:0;">🖥 Adaptabilidad</h2>
+    <div class="item">
+      <b>Modo de interfaz</b><br>
+      <span style="font-size:11px;color:#8d9880;">Ajusta densidad y tamaño de botones.</span><br>
+      <button style="width:48%;margin:6px 1%;${m==='mobile'?'border-color:var(--accent);color:var(--accent);':''}" onclick="setHudMode('mobile')">📱 Dispositivo</button>
+      <button style="width:48%;margin:6px 1%;${m==='pc'?'border-color:var(--accent);color:var(--accent);':''}" onclick="setHudMode('pc')">🖥 Modo PC</button>
+    </div>
+    <div class="item">
+      <b>Controles de teclado</b><br>
+      <span style="font-size:11px;color:#8d9880;">Clic en una tecla para reasignar. Por defecto WASD · E stim · Q RadAway.</span>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:8px;font-size:13px;align-items:center;">
+        <span>Arriba / Norte</span><button onclick="startRebindKey('up')">${(k.up||'w').toUpperCase()}</button>
+        <span>Abajo / Sur</span><button onclick="startRebindKey('down')">${(k.down||'s').toUpperCase()}</button>
+        <span>Izquierda / Oeste</span><button onclick="startRebindKey('left')">${(k.left||'a').toUpperCase()}</button>
+        <span>Derecha / Este</span><button onclick="startRebindKey('right')">${(k.right||'d').toUpperCase()}</button>
+        <span>Estimulante</span><button onclick="startRebindKey('stim')">${(k.stim||'e').toUpperCase()}</button>
+        <span>RadAway</span><button onclick="startRebindKey('rad')">${(k.rad||'q').toUpperCase()}</button>
+      </div>
+      <button style="width:100%;margin-top:8px;" onclick="resetKeybinds()">Restablecer WASD + E/Q</button>
+    </div>
+    <p id="rebind-hint" style="font-size:12px;color:#8d9880;text-align:center;min-height:18px;"></p>
+    <button style="width:100%;margin-top:8px;" onclick="openSettings()">← Volver a Ajustes</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+
+let _rebindAction = null;
+function startRebindKey(action) {
+  _rebindAction = action;
+  let h = document.getElementById('rebind-hint');
+  if (h) h.innerHTML = '<span style="color:var(--gold);">Pulsa una tecla para: <b>' + action + '</b> (Esc cancela)</span>';
+}
+function resetKeybinds() {
+  ensureUISettings();
+  P.ui.keys = { up: 'w', down: 's', left: 'a', right: 'd', stim: 'e', rad: 'q' };
+  logMsg('Controles restablecidos a WASD + E/Q.');
+  openAdaptabilidadUI();
+}
+
+function setupKeyboardControls() {
+  if (window._wlKeysBound) return;
+  window._wlKeysBound = true;
+  document.addEventListener('keydown', function(ev) {
+    // Rebinding
+    if (_rebindAction) {
+      if (ev.key === 'Escape') {
+        _rebindAction = null;
+        let h = document.getElementById('rebind-hint');
+        if (h) h.textContent = '';
+        return;
+      }
+      let key = (ev.key || '').toLowerCase();
+      if (key.length === 1 || ['arrowup','arrowdown','arrowleft','arrowright'].includes(key)) {
+        ev.preventDefault();
+        ensureUISettings();
+        if (key === 'arrowup') key = 'arrowup';
+        P.ui.keys[_rebindAction] = key;
+        _rebindAction = null;
+        openAdaptabilidadUI();
+        logMsg('Tecla asignada.');
+      }
+      return;
+    }
+    // Ignore if typing in input
+    let tag = (ev.target && ev.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || (ev.target && ev.target.isContentEditable)) return;
+    if (document.getElementById('modal') && document.getElementById('modal').classList.contains('show')) {
+      // allow stim/rad only outside combat modal? skip while modal unless combat
+      if (!combatState) return;
+    }
+    ensureUISettings();
+    let k = P.ui.keys || {};
+    let key = (ev.key || '').toLowerCase();
+    let handled = true;
+    if (key === (k.up || 'w') || key === 'arrowup') {
+      if (typeof move === 'function') move(0, 1);
+    } else if (key === (k.down || 's') || key === 'arrowdown') {
+      if (typeof move === 'function') move(0, -1);
+    } else if (key === (k.left || 'a') || key === 'arrowleft') {
+      if (typeof move === 'function') move(-1, 0);
+    } else if (key === (k.right || 'd') || key === 'arrowright') {
+      if (typeof move === 'function') move(1, 0);
+    } else if (key === (k.stim || 'e')) {
+      if (typeof quickUseStim === 'function') quickUseStim();
+    } else if (key === (k.rad || 'q')) {
+      if (typeof quickUseRadAway === 'function') quickUseRadAway();
+    } else {
+      handled = false;
+    }
+    if (handled) ev.preventDefault();
+  });
+}
+
+
 function openSettings() {
   let vm = P.volMusic !== undefined ? P.volMusic : 0.6;
   let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
@@ -7006,9 +7287,10 @@ function openSettings() {
     <button style="width:100%; margin:6px 0;" onclick="renameSurvivor(); closeModal();">✏ Renombrar</button>
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
+    <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.2</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.4</div>
   `;
   m.classList.add('show');
 }
@@ -7953,9 +8235,9 @@ const CRIMSON_ABILITIES = {
   penal4:      { name: 'Sabotaje', desc: '-4 al carril rival del mismo palo' },
   penal6:      { name: 'Devastar', desc: '-6 al carril rival del mismo palo' },
   copy_high:   { name: 'Espejo', desc: 'Copia el valor base de tu carta más alta del carril' },
-  floor10:     { name: 'Mínimo 10', desc: 'Si esta carta vale menos de 10, cuenta como 10' },
-  ace_high:    { name: 'As alto', desc: 'Los Ases de este carril valen 14' },
-  face_bonus:  { name: 'Corte', desc: '+4 si es J, Q o K' },
+  floor10:     { name: 'Mínimo 10', desc: 'Valor mínimo 10 (útil en cartas de 1 a 9)' },
+  ace_high:    { name: 'As alto', desc: 'Mientras esté en el carril, todos los Ases del carril valen 14' },
+  face_bonus:  { name: 'Corte', desc: '+4 al valor (solo figuras J/Q/K)' },
   pair_syn:    { name: 'Pareja', desc: '+3 si hay otra carta del mismo rango en el carril' },
   full_lane:   { name: 'Completo', desc: '+6 si el carril tiene 4 cartas' },
   anti_red:    { name: 'Anti-rojo', desc: '+5 si el carril rival tiene cartas rojas' },
@@ -7966,7 +8248,7 @@ const CRIMSON_ABILITIES = {
   // Especiales
   boost1:      { name: 'Toque', desc: '+1 al valor de esta carta' },
   suit_syn:    { name: 'Afinidad', desc: '+2 si hay otra carta del mismo palo en el carril' },
-  low_boost:   { name: 'Bajo peso', desc: '+3 si el valor base es 5 o menos' },
+  low_boost:   { name: 'Bajo peso', desc: '+3 si el valor base de esta carta es ≤5 (solo en cartas bajas)' },
   soft_penal:  { name: 'Roce', desc: '-1 al carril rival' },
   // Míticas
   mythic_x4:   { name: 'Cuádruple', desc: 'Esta carta vale ×4' },
@@ -7977,24 +8259,45 @@ const CRIMSON_ABILITIES = {
 };
 
 function buildCrimsonCardDB() {
-  if (window._CRIMSON_CARD_DB && window._CRIMSON_CARD_DB.length >= 1000 && window._CRIMSON_CARD_DB._balanced4) {
+  if (window._CRIMSON_CARD_DB && window._CRIMSON_CARD_DB.length >= 1000 && window._CRIMSON_CARD_DB._balanced5) {
     return window._CRIMSON_CARD_DB;
   }
   let db = [];
   let n = 0;
+  // Pools base; se filtran por rango para que la habilidad siempre pueda activarse
   const specialAbs = ['boost1','boost2','suit_syn','low_boost','soft_penal','face_bonus','pair_syn'];
   const rareAbs = ['boost2','boost3','lane2','penal2','face_bonus','pair_syn','floor10'];
   const epicAbs = ['boost5','double','lane3','penal4','ace_high','full_lane','anti_red','anti_black','copy_high'];
   const legAbs = ['boost8','thrice','lane5','penal6','legend_aura','drain'];
   const mythAbs = ['mythic_x4','mythic_lane','mythic_crush','mythic_steal','mythic_all'];
-  // Por cara: 1 común + 8 especial + 7 rara + 5 épica + 3 leg + 1 mítica = 25
-  // 52×25 = 1300
   const SPEC_N = 8, RARE_N = 7, EPIC_N = 5, LEG_N = 3, MYTH_N = 1;
+  function abilityFitsRank(ab, rank) {
+    let rv = CRIMSON_RANK_VAL[rank] || 1;
+    if (ab === 'low_boost') return rv <= 5;           // solo cartas ≤5
+    if (ab === 'face_bonus') return rv >= 11;          // solo J/Q/K
+    if (ab === 'floor10') return rv < 10;              // solo si base < 10
+    // ace_high / pair_syn / lane / penal / boost: válidos en cualquier rango
+    return true;
+  }
+  function pickAbilities(pool, rank, count) {
+    let fit = pool.filter(function(ab){ return abilityFitsRank(ab, rank); });
+    if (!fit.length) fit = pool.filter(function(ab){ return ab !== 'low_boost' && ab !== 'face_bonus' && ab !== 'floor10'; });
+    if (!fit.length) fit = ['boost2','boost3','lane2','pair_syn','suit_syn'];
+    let out = [];
+    for (let i = 0; i < count; i++) out.push(fit[i % fit.length]);
+    return out;
+  }
   function add(s, rank, rarity, ability) {
     n++;
     let id = 'cc' + String(n).padStart(4, '0');
     let val = CRIMSON_RANK_VAL[rank] || 1;
     let ab = ability || 'none';
+    // Seguridad: si aún así no encaja, sustituir por boost genérico
+    if (ab !== 'none' && !abilityFitsRank(ab, rank)) {
+      if (val <= 5) ab = 'low_boost';
+      else if (val >= 11) ab = 'face_bonus';
+      else ab = 'boost2';
+    }
     db.push({
       id: id, s: s, rank: String(rank), r: val, rarity: rarity,
       ability: ab,
@@ -8005,14 +8308,19 @@ function buildCrimsonCardDB() {
   CRIMSON_SUITS.forEach(function(s) {
     CRIMSON_RANK_ORDER.forEach(function(rank) {
       add(s, rank, 'common', 'none');
-      for (let i = 0; i < SPEC_N; i++) add(s, rank, 'special', specialAbs[i % specialAbs.length]);
-      for (let i = 0; i < RARE_N; i++) add(s, rank, 'rare', rareAbs[i % rareAbs.length]);
-      for (let i = 0; i < EPIC_N; i++) add(s, rank, 'epic', epicAbs[i % epicAbs.length]);
-      for (let i = 0; i < LEG_N; i++) add(s, rank, 'legendary', legAbs[i % legAbs.length]);
-      for (let i = 0; i < MYTH_N; i++) add(s, rank, 'mythic', mythAbs[(n + i) % mythAbs.length]);
+      let sp = pickAbilities(specialAbs, rank, SPEC_N);
+      let rr = pickAbilities(rareAbs, rank, RARE_N);
+      let ep = pickAbilities(epicAbs, rank, EPIC_N);
+      let lg = pickAbilities(legAbs, rank, LEG_N);
+      let my = pickAbilities(mythAbs, rank, MYTH_N);
+      for (let i = 0; i < SPEC_N; i++) add(s, rank, 'special', sp[i]);
+      for (let i = 0; i < RARE_N; i++) add(s, rank, 'rare', rr[i]);
+      for (let i = 0; i < EPIC_N; i++) add(s, rank, 'epic', ep[i]);
+      for (let i = 0; i < LEG_N; i++) add(s, rank, 'legendary', lg[i]);
+      for (let i = 0; i < MYTH_N; i++) add(s, rank, 'mythic', my[i]);
     });
   });
-  db._balanced4 = true;
+  db._balanced5 = true;
   window._CRIMSON_CARD_DB = db;
   return db;
 }
@@ -8116,8 +8424,10 @@ function cardEffectiveValue(c, laneCards, enemyLane) {
     let sameS = (laneCards || []).filter(x => x && x.s === c.s).length;
     if (sameS >= 2) v += 2;
   }
-  if (ab === 'low_boost' && (c.r || 0) <= 5) v += 3;
-  if (ab === 'ace_high' && (c.rank === 'A' || c.r === 1)) v = 14;
+  if (ab === 'low_boost' && (c.r || CRIMSON_RANK_VAL[c.rank] || 0) <= 5) v += 3;
+  // As alto: aura de carril — cualquier As cuenta 14 si hay una carta ace_high en el carril
+  let hasAceHigh = (ab === 'ace_high') || (laneCards || []).some(function(x){ return x && x.ability === 'ace_high'; });
+  if (hasAceHigh && (c.rank === 'A' || c.r === 1)) v = Math.max(v, 14);
   return v;
 }
 function caravanLaneSum(cards, enemyCards) {
