@@ -445,8 +445,8 @@ body.pc-mode {
 }
 body.pc-mode .app {
   /* Contenedor tipo monitor 16:9 */
-  width: min(100vw - 24px, calc((100vh - 24px) * 16 / 9), 1440px);
-  height: min(100vh - 24px, calc((100vw - 24px) * 9 / 16), 810px);
+  width: min(100vw - 16px, calc((100vh - 16px) * 16 / 9), 1480px);
+  height: min(100vh - 16px, calc((100vw - 16px) * 9 / 16), 860px);
   max-width: none;
   margin: 0;
   padding: 10px 14px;
@@ -504,66 +504,230 @@ body.pc-mode .panel-main {
   margin: 0;
   min-height: 0;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 body.pc-mode #main-view {
-  min-height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 body.pc-mode .bottom-bar {
   grid-column: 1 / -1;
   grid-row: 3;
   gap: 8px;
   padding-top: 2px;
+  flex-shrink: 0;
 }
 body.pc-mode .bottom-bar .tabs button {
-  padding: 10px 12px;
-  font-size: 13px;
-  min-height: 42px;
+  padding: 8px 10px;
+  font-size: 12px;
+  min-height: 38px;
 }
 body.pc-mode .btn-settings {
-  width: 48px;
-  min-width: 48px;
-  font-size: 22px;
+  width: 44px;
+  min-width: 44px;
+  font-size: 20px;
 }
 body.pc-mode button {
-  padding: 8px 12px;
-  min-height: 36px;
+  padding: 6px 10px;
+  min-height: 32px;
+  font-size: 12px;
+}
+/* Mapa PC: mapa compacto + zona de acciones + fila de botones siempre visibles */
+body.pc-mode #main-view > .map-compact {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 6px 10px 8px;
+  box-sizing: border-box;
+}
+body.pc-mode .map-compact > button {
+  max-width: 90%;
+  flex-shrink: 0;
+}
+body.pc-mode .map-compact .map-top {
+  flex: 0 0 auto;
+  text-align: center;
   font-size: 13px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+body.pc-mode .map-compact .map-signal-hint {
+  flex: 0 0 auto;
+  font-size: 11px;
+  min-height: 14px;
+  max-height: 28px;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+  margin: 0;
 }
 body.pc-mode .map-compact .world-grid {
-  width: min(100%, 420px);
-  max-width: 420px;
-  gap: 3px;
-  padding: 6px;
-  margin: 8px auto;
+  width: min(100%, 220px) !important;
+  max-width: 220px !important;
+  margin: 2px auto !important;
+  gap: 2px;
+  padding: 3px;
+  flex: 0 0 auto !important;
 }
 body.pc-mode .map-compact .world-cell {
-  font-size: 16px;
+  font-size: 12px;
 }
-body.pc-mode .map-compact .map-arrows {
-  width: 168px;
-  grid-template-columns: repeat(3, 52px);
+body.pc-mode .map-compact .map-actions {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 28px !important;
+  max-height: none !important;
+  margin: 2px 0 0 !important;
+  width: 100%;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+body.pc-mode .map-compact .map-actions .map-act-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 6px;
+  max-height: none !important;
+  overflow: visible !important;
 }
-body.pc-mode .map-compact .map-arrows button,
-body.pc-mode .dpad button {
-  width: 52px;
-  height: 52px;
-  min-width: 52px;
-  min-height: 52px;
-  font-size: 18px;
-}
-body.pc-mode .map-compact .map-controls {
-  height: 128px;
-  min-height: 128px;
-  max-height: 128px;
+body.pc-mode .map-compact .map-actions .map-act-hint {
+  font-size: 11px !important;
+  height: auto !important;
+  min-height: 14px !important;
+  max-height: none !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-align: center;
+  color: #8d9880;
+  margin-top: 2px;
 }
 body.pc-mode .map-compact .map-actions button {
   font-size: 12px;
-  padding: 6px 12px;
-  height: 32px;
-  min-height: 32px;
-  max-height: 32px;
+  padding: 6px 14px;
+  height: 30px;
+  min-height: 30px;
+  max-height: 30px;
+}
+/* Fila centrada: Stim | RadAway | Radio | Viaje — sin flechas */
+body.pc-mode .map-compact .map-controls {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 560px;
+  margin: 4px auto 0 !important;
+  padding: 4px 0 0 !important;
+  height: auto !important;
+  min-height: 44px !important;
+  max-height: none !important;
+  grid-template-columns: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 0 0 auto !important;
+}
+body.pc-mode .map-compact .map-arrows {
+  display: none !important;
+}
+body.pc-mode .map-compact .quick-meds,
+body.pc-mode .map-compact .quick-radio {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap;
+  gap: 8px;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  align-items: center;
+  justify-content: center;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+body.pc-mode .map-compact .quick-meds button,
+body.pc-mode .map-compact .quick-radio button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: auto !important;
+  min-width: 100px;
+  font-size: 12px !important;
+  padding: 8px 12px !important;
+  min-height: 36px !important;
+  max-height: none !important;
+  height: auto !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+/* Log PC: sin recortes de stats */
+body.pc-mode .quick-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  font-size: 11px;
+  justify-content: flex-end;
+  max-width: 100%;
+}
+body.pc-mode .panel-log .log-header {
+  flex-wrap: wrap;
+  min-height: auto;
+  gap: 4px 8px;
+  align-items: flex-start;
+}
+body.pc-mode .panel-log .log-title {
+  flex-shrink: 0;
+}
+body.pc-mode .item {
+  font-size: 13px;
+}
+body.pc-mode .subtabs button {
+  padding: 8px 10px;
+  font-size: 12px;
+}
+/* Layout swap */
+body.pc-mode.pc-log-right .app {
+  grid-template-columns: 1fr minmax(200px, 26%);
+}
+body.pc-mode.pc-log-right .panel-log {
+  grid-column: 2;
+  grid-row: 2;
+}
+body.pc-mode.pc-log-right .panel-main {
+  grid-column: 1;
+  grid-row: 2;
+}
+body.pc-mode.pc-log-left .app {
+  grid-template-columns: minmax(200px, 26%) 1fr;
+}
+body.pc-mode.pc-log-left .panel-log {
+  grid-column: 1;
+  grid-row: 2;
+}
+body.pc-mode.pc-log-left .panel-main {
+  grid-column: 2;
+  grid-row: 2;
 }
 body.pc-mode .item {
   font-size: 13px;
@@ -581,6 +745,75 @@ body.pc-mode .subtabs button {
 }
 
 /* ===== MODO DISPOSITIVO (móvil) ===== */
+.game-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  background-image: radial-gradient(ellipse at 50% 20%, #001a08 0%, #000 55%);
+  color: var(--txt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  font-family: monospace;
+}
+.game-intro-box {
+  width: min(520px, 100%);
+  border: 1px solid var(--line);
+  background: #0a120a;
+  box-shadow: 0 0 40px rgba(0,255,65,0.12);
+  border-radius: 6px;
+  padding: 18px 16px 16px;
+}
+.game-intro-box h1 {
+  margin: 0 0 4px 0;
+  text-align: center;
+  color: var(--accent);
+  font-size: 22px;
+  letter-spacing: 0.06em;
+}
+.game-intro-box .intro-sub {
+  text-align: center;
+  font-size: 11px;
+  color: #8d9880;
+  margin-bottom: 12px;
+}
+.game-intro-box .intro-lore {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #8d9880;
+  max-height: min(42vh, 280px);
+  overflow-y: auto;
+  border: 1px solid #30362c;
+  padding: 10px;
+  margin-bottom: 14px;
+  background: #050805;
+}
+.game-intro-box .intro-lore b { color: var(--txt); }
+.game-intro-box input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  background: #001400;
+  border: 1px solid var(--line);
+  color: var(--accent);
+  font: inherit;
+  font-size: 15px;
+  padding: 10px 12px;
+  margin: 8px 0 12px;
+  text-align: center;
+}
+.game-intro-box .intro-start {
+  width: 100%;
+  padding: 12px;
+  font-weight: bold;
+  background: var(--accent);
+  color: #111;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
 body.mobile-mode .app {
   max-width: 480px;
   margin: 0 auto;
@@ -1111,6 +1344,349 @@ body.mobile-mode .app {
   50% { transform: scale(1.08); opacity: 0.85; }
 }
 .nw-spin { animation: nwPulse 0.35s ease-in-out infinite; }
+
+/* ===== PC MODE MAP OVERRIDE (after v36) ===== */
+body.pc-mode #main-view > .map-compact {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 6px !important;
+  overflow: hidden !important;
+  height: 100% !important;
+  padding: 6px 10px !important;
+}
+body.pc-mode .map-compact .world-grid {
+  width: 200px !important;
+  max-width: 200px !important;
+  height: 200px !important;
+  max-height: 200px !important;
+  margin: 4px auto !important;
+  flex: 0 0 auto !important;
+}
+body.pc-mode .map-compact .world-cell {
+  font-size: 11px !important;
+}
+body.pc-mode .map-compact .map-top {
+  font-size: 13px !important;
+  flex-shrink: 0 !important;
+}
+body.pc-mode .map-compact .map-signal-hint {
+  flex-shrink: 0 !important;
+  max-height: 28px !important;
+  overflow: hidden !important;
+}
+body.pc-mode .map-compact .map-actions {
+  flex: 0 0 auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  height: auto !important;
+  margin: 4px 0 0 !important;
+  width: 100% !important;
+}
+body.pc-mode .map-compact .map-actions .map-act-row {
+  max-height: none !important;
+  overflow: visible !important;
+  justify-content: center !important;
+}
+body.pc-mode .map-compact .map-actions .map-act-hint {
+  height: auto !important;
+  max-height: none !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+}
+body.pc-mode .map-compact .map-controls {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 560px !important;
+  margin: 6px auto 0 !important;
+  margin-top: 6px !important;
+  padding: 0 !important;
+  height: auto !important;
+  min-height: 40px !important;
+  max-height: none !important;
+  grid-template-columns: none !important;
+  flex-shrink: 0 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+body.pc-mode .map-compact .map-arrows {
+  display: none !important;
+}
+body.pc-mode .map-compact .quick-meds,
+body.pc-mode .map-compact .quick-radio {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px !important;
+  width: auto !important;
+  max-width: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+body.pc-mode .map-compact .quick-meds button,
+body.pc-mode .map-compact .quick-radio button {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 100px !important;
+  height: auto !important;
+  min-height: 36px !important;
+  max-height: none !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  white-space: nowrap !important;
+}
+
+
+
+/* ===== PC MAP ROW: columnas fijas (no se mueven) ===== */
+body.pc-mode .pc-map-row {
+  display: grid !important;
+  grid-template-columns: 128px 190px 128px !important;
+  column-gap: 16px !important;
+  row-gap: 0 !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  margin: 8px auto 0 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  box-sizing: border-box !important;
+}
+body.pc-mode .pc-side {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  width: 128px !important;
+  min-width: 128px !important;
+  max-width: 128px !important;
+  flex: none !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+body.pc-mode .pc-side-left {
+  grid-column: 1 !important;
+}
+body.pc-mode .pc-side-right {
+  grid-column: 3 !important;
+}
+body.pc-mode .pc-side button {
+  display: block !important;
+  width: 100% !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  max-height: 40px !important;
+  padding: 6px 8px !important;
+  font-size: 11px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  box-sizing: border-box !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin: 0 !important;
+}
+body.pc-mode .pc-map-center {
+  grid-column: 2 !important;
+  width: 190px !important;
+  min-width: 190px !important;
+  max-width: 190px !important;
+  flex: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+body.pc-mode .pc-map-center .world-grid,
+body.pc-mode .map-compact .pc-map-center .world-grid {
+  width: 190px !important;
+  max-width: 190px !important;
+  min-width: 190px !important;
+  height: 190px !important;
+  max-height: 190px !important;
+  min-height: 190px !important;
+  margin: 0 !important;
+  flex: none !important;
+}
+body.pc-mode .pc-map-hint {
+  text-align: center !important;
+  font-size: 10px !important;
+  color: #8d9880 !important;
+  margin-top: 6px !important;
+  width: 190px !important;
+  min-height: 28px !important;
+  max-width: 190px !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+  box-sizing: border-box !important;
+}
+body.pc-mode .pc-side-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+  width: 100% !important;
+  min-height: 88px !important; /* reserva espacio fijo para Explorar/Entrar */
+  box-sizing: border-box !important;
+}
+body.pc-mode .pc-side-actions button {
+  width: 100% !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  max-height: 40px !important;
+  font-size: 11px !important;
+  padding: 6px 8px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+body.pc-mode .map-compact .map-controls {
+  display: none !important;
+}
+/* ===== Localidad única: mapa + botones a los lados ===== */
+.unique-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  padding: 4px 6px;
+  box-sizing: border-box;
+}
+.unique-title {
+  color: #e8c547;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.unique-name {
+  color: #e8c547;
+  font-size: 13px;
+  text-align: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+.unique-room {
+  color: #8d9880;
+  font-size: 11px;
+  text-align: center;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+.unique-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.unique-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 110px;
+  flex-shrink: 0;
+  align-items: stretch;
+}
+.unique-side button {
+  width: 100%;
+  min-height: 40px;
+  font-size: 11px;
+  padding: 8px 6px;
+  white-space: normal;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+.unique-side .btn-exit {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.unique-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.unique-grid {
+  display: grid;
+  width: min(52vw, 220px);
+  height: min(52vw, 220px);
+  max-width: 220px;
+  max-height: 220px;
+  gap: 2px;
+  padding: 3px;
+  background: #000800;
+  border: 1px solid #d4a017;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.unique-cell {
+  aspect-ratio: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  border: 1px solid #3a3010;
+  background: #12100a;
+  color: #c9a227;
+}
+.unique-cell.wall { background: #050505; color: #333; border-color: #222; }
+.unique-cell.here {
+  border-color: var(--accent);
+  background: #003300;
+  color: var(--accent);
+  box-shadow: 0 0 6px #00ff4166;
+  font-weight: bold;
+}
+.unique-cell.loot { border-color: #ffcc00; }
+.unique-cell.exit { border-color: #00ff41; }
+.unique-cell.start { border-color: #66b3ff; }
+.unique-hint {
+  font-size: 10px;
+  color: #8d9880;
+  text-align: center;
+  margin-top: 6px;
+  max-width: 220px;
+  line-height: 1.3;
+}
+body.pc-mode .unique-grid {
+  width: 200px;
+  height: 200px;
+  max-width: 200px;
+  max-height: 200px;
+}
+body.pc-mode .unique-side {
+  width: 120px;
+}
+@media (max-width: 380px) {
+  .unique-side { width: 88px; }
+  .unique-side button { font-size: 10px; min-height: 36px; padding: 6px 4px; }
+  .unique-grid {
+    width: min(48vw, 180px);
+    height: min(48vw, 180px);
+  }
+}
 </style>
 </head>
 <body>
@@ -2131,6 +2707,7 @@ const PERKS_DB = [
 
 let P = {
   playerName: "Superviviente",
+  introDone: false,
   x: 0, y: 0,
   lvl: 1, xp: 0, caps: 75,
   hp: 100, baseMaxHp: 100,
@@ -5546,7 +6123,7 @@ function enterUniqueLocation(loc) {
 
 function moveInUniqueInterior(dx, dy) {
   if (!isInUniqueInterior()) return;
-  if (typeof combatState !== 'undefined' && combatState) return;
+  if (isGameplayLocked()) return;
   let loc = P.location;
   let nx = loc.px + dx, ny = loc.py + dy;
   if (nx < 0 || ny < 0 || nx >= loc.size || ny >= loc.size) {
@@ -5597,44 +6174,49 @@ function renderUniqueInteriorMap() {
   let cell = loc.grid[loc.py][loc.px];
   let stims = countMedsById(7);
   let radaways = countMedsById(74);
+  let n = loc.size || 7;
   let cells = '';
-  for (let y = 0; y < loc.size; y++) {
-    for (let x = 0; x < loc.size; x++) {
+  for (let y = 0; y < n; y++) {
+    for (let x = 0; x < n; x++) {
       let c = loc.grid[y][x];
       let isHere = (x === loc.px && y === loc.py);
-      let cls = 'world-cell unique-int';
-      if (c.wall) cls += ' unique-wall';
-      if (isHere) cls += ' player';
-      if (c.loot && !c.searched) cls += ' unique-loot';
-      if (c.isExit) cls += ' unique-exit';
+      let cls = 'unique-cell';
+      if (c.wall) cls += ' wall';
+      if (isHere) cls += ' here';
+      if (c.loot && !c.searched) cls += ' loot';
+      if (c.isExit) cls += ' exit';
+      if (c.isStart) cls += ' start';
       let content = isHere ? '☺' : (c.wall ? '▓' : (c.visited || c.isStart || c.isExit ? (c.icon || '·') : '·'));
-      cells += '<div class="' + cls + '" title="' + (c.visited || isHere ? c.name : '???') + '">' + content + '</div>';
+      cells += '<div class="' + cls + '">' + content + '</div>';
     }
   }
-  let gridStyle = 'grid-template-columns:repeat(' + loc.size + ',1fr);max-width:260px;width:260px;height:260px;margin:8px auto;';
   let canExit = !!(cell && cell.isStart);
-  let html = '<div><b style="color:#e8c547;">◆ LOCALIDAD ÚNICA</b></div>' +
-    '<div style="font-size:14px;color:#e8c547;text-align:center;margin:4px 0;">' + (loc.icon||'◆') + ' ' + loc.name + '</div>' +
-    '<div style="font-size:12px;color:#8d9880;text-align:center;">' + (cell ? cell.name : '') + (cell && cell.searched ? ' · registrado' : '') + '</div>' +
-    '<div class="world-grid" style="' + gridStyle + '">' + cells + '</div>' +
-    '<div class="map-actions">' +
-    '<div class="map-act-row">' +
-    '<button onclick="pipClick();searchUniqueCell()">REGISTRAR ZONA</button> ' +
-    (canExit ? '<button style="border-color:var(--danger);color:var(--danger);" onclick="pipClick();exitLocation()">← SALIR AL YERMO</button>' : '<span style="font-size:11px;color:#8d9880;">Vuelve a la entrada ◎ para salir</span>') +
-    '</div></div>' +
-    '<div class="map-controls" style="margin-top:10px;">' +
-    '<div class="quick-meds">' +
-    '<button onclick="pipClick();quickUseStim()" ' + (stims===0?'disabled':'') + '>💉 Stim (' + stims + ')</button>' +
-    '<button onclick="pipClick();quickUseRadAway()" ' + (radaways===0?'disabled':'') + '>☢ RadAway (' + radaways + ')</button>' +
+  let roomLabel = (cell ? cell.name : '') + (cell && cell.searched ? ' · registrado' : '');
+
+  let html = '<div class="unique-wrap">' +
+    '<div class="unique-title">◆ LOCALIDAD ÚNICA</div>' +
+    '<div class="unique-name">' + (loc.icon || '◆') + ' ' + loc.name + '</div>' +
+    '<div class="unique-room">' + roomLabel + ' · WASD mover</div>' +
+    '<div class="unique-row">' +
+      '<div class="unique-side unique-side-left">' +
+        '<button onclick="pipClick();quickUseStim()" ' + (stims === 0 ? 'disabled' : '') + '>💉 Stim (' + stims + ')</button>' +
+        '<button onclick="pipClick();quickUseRadAway()" ' + (radaways === 0 ? 'disabled' : '') + '>☢ RadAway (' + radaways + ')</button>' +
+      '</div>' +
+      '<div class="unique-center">' +
+        '<div class="unique-grid" style="grid-template-columns:repeat(' + n + ',1fr);grid-template-rows:repeat(' + n + ',1fr);">' + cells + '</div>' +
+        '<div class="unique-hint">' + (canExit ? 'Entrada ◎ — puedes salir' : 'Explora con E · Sal por la entrada ◎') + '</div>' +
+      '</div>' +
+      '<div class="unique-side unique-side-right">' +
+        '<button onclick="pipClick();openRadioUI()">📻 Radio</button>' +
+        '<button onclick="pipClick();searchUniqueCell()">REGISTRAR (E)</button>' +
+        (canExit ? '<button class="btn-exit" onclick="pipClick();exitLocation()">← SALIR (Q)</button>' : '') +
+      '</div>' +
     '</div>' +
-    '<div class="map-arrows">' +
-    '<div></div><button onclick="pipClick();moveInUniqueInterior(0,-1)">▲</button><div></div>' +
-    '<button onclick="pipClick();moveInUniqueInterior(-1,0)">◀</button><button onclick="pipClick();moveInUniqueInterior(0,1)">▼</button><button onclick="pipClick();moveInUniqueInterior(1,0)">▶</button>' +
-    '</div>' +
-    '<div class="quick-radio"><button onclick="pipClick();openRadioUI()">📻 RADIO</button></div>' +
-    '</div>';
+  '</div>';
   document.getElementById('main-view').innerHTML = html;
 }
+
+
 
 
 const INTERIOR_TEMPLATES = {
@@ -6104,36 +6686,59 @@ function renderMap() {
     }
   }
 
-  document.getElementById('main-view').innerHTML = `
-    <div class="map-compact">
+  const isPc = document.body.classList.contains('pc-mode');
+  const medBtns = `
+        <button onclick="quickUseStim()" ${stims === 0 ? 'disabled' : ''}>💉 Stim (${stims})</button>
+        <button onclick="quickUseRadAway()" ${radaways === 0 ? 'disabled' : ''}>☢ RadAway (${radaways})</button>`;
+  const radioBtns = `
+        <button onclick="openRadioUI()" style="background:#003300; border-color:var(--accent);">📻 RADIO</button>
+        <button onclick="openFastTravelUI()" style="background:#1a0030; border-color:#aa55ff;">⚡ VIAJE</button>`;
+  const escortBtn = (P.crimsonEscort && P.crimsonEscort.active && P.x === P.crimsonEscort.active.destX && P.y === P.crimsonEscort.active.destY)
+      ? '<button style="width:auto;max-width:100%;margin:2px auto;padding:3px 10px;font-size:11px;display:block;background:var(--accent);color:#111;font-weight:bold;border-radius:3px;" onclick="finishCrimsonEscort();renderMap();">🐪 Finalizar escolta</button>'
+      : '';
+
+  let mapBody;
+  if (isPc) {
+    mapBody = `
+    <div class="map-top"><b>[${fmtX},${fmtY}]</b> ${zone.icon} <b style="color:var(--accent);">${zone.name}</b>
+    ${zone.enterable ? ' <span style="color:var(--gold);font-size:11px;">(entrable)</span>' : ''}
+    </div>
+    ${signalHint || ''}
+    ${escortBtn}
+    <div class="pc-map-row">
+      <div class="pc-side pc-side-left">${medBtns}</div>
+      <div class="pc-map-center">
+        ${renderWorldGrid()}
+        <div class="pc-map-hint">${actHint || '&nbsp;'}</div>
+      </div>
+      <div class="pc-side pc-side-right">
+        ${radioBtns}
+        <div class="pc-side-actions">${actBtns || '<span style="display:block;min-height:40px;"></span>'}</div>
+      </div>
+    </div>`;
+  } else {
+    mapBody = `
     <div class="map-top"><b>[${fmtX},${fmtY}]</b> ${zone.icon} <b style="color:var(--accent);">${zone.name}</b>
     ${zone.enterable ? ' <span style="color:var(--gold);font-size:11px;">(entrable)</span>' : ''}
     </div>
     ${signalHint || '<div class="map-signal-hint">&nbsp;</div>'}
-    ${(P.crimsonEscort && P.crimsonEscort.active && P.x === P.crimsonEscort.active.destX && P.y === P.crimsonEscort.active.destY)
-      ? '<button style="width:auto;max-width:100%;margin:2px auto;padding:3px 10px;font-size:11px;display:block;background:var(--accent);color:#111;font-weight:bold;border-radius:3px;" onclick="finishCrimsonEscort();renderMap();">🐪 Finalizar escolta</button>'
-      : ''}
+    ${escortBtn}
     ${renderWorldGrid()}
     <div class="map-actions">
       <div class="map-act-row">${actBtns}</div>
       <div class="map-act-hint">${actHint || '&nbsp;'}</div>
     </div>
     <div class="map-controls">
-      <div class="quick-meds">
-        <button onclick="quickUseStim()" ${stims === 0 ? 'disabled' : ''}>💉 Stim (${stims})</button>
-        <button onclick="quickUseRadAway()" ${radaways === 0 ? 'disabled' : ''}>☢ RadAway (${radaways})</button>
-      </div>
+      <div class="quick-meds">${medBtns}</div>
       <div class="map-arrows">
         <div></div><button onclick="move(0, 1)">▲</button><div></div>
         <button onclick="move(-1, 0)">◀</button><button onclick="move(0, -1)">▼</button><button onclick="move(1, 0)">▶</button>
       </div>
-      <div class="quick-radio">
-        <button onclick="openRadioUI()" style="background:#003300; border-color:var(--accent);">📻 RADIO</button>
-        <button onclick="openFastTravelUI()" style="background:#1a0030; border-color:#aa55ff; margin-top:3px;">⚡ VIAJE</button>
-      </div>
-    </div>
-    </div>
-  `;
+      <div class="quick-radio">${radioBtns}</div>
+    </div>`;
+  }
+
+  document.getElementById('main-view').innerHTML = `<div class="map-compact">${mapBody}</div>`;
 }
 
 function renderInteriorMap() {
@@ -6215,6 +6820,7 @@ function exitLocation() {
 }
 
 function interiorMove(dir) {
+  if (isGameplayLocked()) return;
   let room = getCurrentRoom();
   if (!room || !room.exits[dir]) {
     logMsg("No puedes ir en esa dirección.");
@@ -7147,24 +7753,44 @@ function executeCheat(raw) {
 function ensureUISettings() {
   if (!P.ui) P.ui = {};
   if (!P.ui.hudMode) P.ui.hudMode = 'mobile'; // mobile | pc
+  if (!P.ui.pcLayout) P.ui.pcLayout = 'log-left'; // log-left | log-right
   if (!P.ui.keys) {
-    P.ui.keys = { up: 'w', down: 's', left: 'a', right: 'd', stim: 'e', rad: 'q' };
+    P.ui.keys = { up: 'w', down: 's', left: 'a', right: 'd', stim: 'x', rad: 'z', action: 'e', cancel: 'q' };
+  } else {
+    if (!P.ui.keys.stim) P.ui.keys.stim = 'x';
+    if (!P.ui.keys.rad) P.ui.keys.rad = 'z';
+    if (!P.ui.keys.action) P.ui.keys.action = 'e';
+    if (!P.ui.keys.cancel) P.ui.keys.cancel = 'q';
   }
   applyHudMode(P.ui.hudMode);
 }
 
 function applyHudMode(mode) {
   mode = mode === 'pc' ? 'pc' : 'mobile';
-  document.body.classList.remove('pc-mode', 'mobile-mode');
+  document.body.classList.remove('pc-mode', 'mobile-mode', 'pc-log-left', 'pc-log-right');
   document.body.classList.add(mode === 'pc' ? 'pc-mode' : 'mobile-mode');
+  if (mode === 'pc') {
+    let side = (P && P.ui && P.ui.pcLayout === 'log-right') ? 'pc-log-right' : 'pc-log-left';
+    document.body.classList.add(side);
+  }
   if (P && P.ui) P.ui.hudMode = mode;
   try { localStorage.setItem('wl_hud_mode', mode); } catch (e) {}
+  try { localStorage.setItem('wl_pc_layout', (P && P.ui && P.ui.pcLayout) || 'log-left'); } catch (e) {}
 }
 
 function setHudMode(mode) {
   ensureUISettings();
   applyHudMode(mode);
   logMsg(mode === 'pc' ? 'HUD: modo PC' : 'HUD: modo dispositivo');
+  openAdaptabilidadUI();
+  try { if (typeof renderMap === 'function' && (!P.location || P.location.type === undefined)) renderMap(); } catch (e) {}
+}
+
+function setPcLayout(side) {
+  ensureUISettings();
+  P.ui.pcLayout = (side === 'log-right') ? 'log-right' : 'log-left';
+  applyHudMode('pc');
+  logMsg(P.ui.pcLayout === 'log-right' ? 'PC: mapa izquierda · registro derecha' : 'PC: registro izquierda · mapa derecha');
   openAdaptabilidadUI();
 }
 
@@ -7179,19 +7805,27 @@ function openAdaptabilidadUI() {
       <span style="font-size:11px;color:#8d9880;">Ajusta densidad y tamaño de botones.</span><br>
       <button style="width:48%;margin:6px 1%;${m==='mobile'?'border-color:var(--accent);color:var(--accent);':''}" onclick="setHudMode('mobile')">📱 Dispositivo</button>
       <button style="width:48%;margin:6px 1%;${m==='pc'?'border-color:var(--accent);color:var(--accent);':''}" onclick="setHudMode('pc')">🖥 Modo PC</button>
+      ${m==='pc' ? `<div style="margin-top:10px;padding-top:8px;border-top:1px solid #30362c;">
+        <b style="font-size:12px;">Disposición 16:9</b><br>
+        <span style="font-size:11px;color:#8d9880;">Elige qué panel va a cada lado.</span><br>
+        <button style="width:100%;margin:6px 0;${(P.ui.pcLayout||'log-left')==='log-left'?'border-color:var(--gold);color:var(--gold);':''}" onclick="setPcLayout('log-left')">📋 Registro izquierda · Mapa derecha</button>
+        <button style="width:100%;margin:4px 0;${(P.ui.pcLayout)==='log-right'?'border-color:var(--gold);color:var(--gold);':''}" onclick="setPcLayout('log-right')">🗺 Mapa izquierda · Registro derecha</button>
+      </div>` : ''}
     </div>
     <div class="item">
       <b>Controles de teclado</b><br>
-      <span style="font-size:11px;color:#8d9880;">Clic en una tecla para reasignar. Por defecto WASD · E stim · Q RadAway.</span>
+      <span style="font-size:11px;color:#8d9880;">Por defecto: WASD mover · E explorar · Q entrar/salir · X Stim · Z RadAway.</span>
       <div style="display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:8px;font-size:13px;align-items:center;">
         <span>Arriba / Norte</span><button onclick="startRebindKey('up')">${(k.up||'w').toUpperCase()}</button>
         <span>Abajo / Sur</span><button onclick="startRebindKey('down')">${(k.down||'s').toUpperCase()}</button>
         <span>Izquierda / Oeste</span><button onclick="startRebindKey('left')">${(k.left||'a').toUpperCase()}</button>
         <span>Derecha / Este</span><button onclick="startRebindKey('right')">${(k.right||'d').toUpperCase()}</button>
-        <span>Estimulante</span><button onclick="startRebindKey('stim')">${(k.stim||'e').toUpperCase()}</button>
-        <span>RadAway</span><button onclick="startRebindKey('rad')">${(k.rad||'q').toUpperCase()}</button>
+        <span>Explorar (E)</span><button onclick="startRebindKey('action')">${(k.action||'e').toUpperCase()}</button>
+        <span>Estimulante</span><button onclick="startRebindKey('stim')">${(k.stim||'x').toUpperCase()}</button>
+        <span>RadAway</span><button onclick="startRebindKey('rad')">${(k.rad||'z').toUpperCase()}</button>
+        <span>Entrar / Salir (Q)</span><button onclick="startRebindKey('cancel')">${(k.cancel||'q').toUpperCase()}</button>
       </div>
-      <button style="width:100%;margin-top:8px;" onclick="resetKeybinds()">Restablecer WASD + E/Q</button>
+      <button style="width:100%;margin-top:8px;" onclick="resetKeybinds()">Restablecer controles</button>
     </div>
     <p id="rebind-hint" style="font-size:12px;color:#8d9880;text-align:center;min-height:18px;"></p>
     <button style="width:100%;margin-top:8px;" onclick="openSettings()">← Volver a Ajustes</button>
@@ -7207,8 +7841,8 @@ function startRebindKey(action) {
 }
 function resetKeybinds() {
   ensureUISettings();
-  P.ui.keys = { up: 'w', down: 's', left: 'a', right: 'd', stim: 'e', rad: 'q' };
-  logMsg('Controles restablecidos a WASD + E/Q.');
+  P.ui.keys = { up: 'w', down: 's', left: 'a', right: 'd', stim: 'x', rad: 'z', action: 'e', cancel: 'q' };
+  logMsg('Controles: WASD · E entrar/explorar · X Stim · Z RadAway · Q salir.');
   openAdaptabilidadUI();
 }
 
@@ -7239,15 +7873,27 @@ function setupKeyboardControls() {
     // Ignore if typing in input
     let tag = (ev.target && ev.target.tagName) || '';
     if (tag === 'INPUT' || tag === 'TEXTAREA' || (ev.target && ev.target.isContentEditable)) return;
-    if (document.getElementById('modal') && document.getElementById('modal').classList.contains('show')) {
-      // allow stim/rad only outside combat modal? skip while modal unless combat
+    let modalOpen = document.getElementById('modal') && document.getElementById('modal').classList.contains('show');
+    let keyPeek = (ev.key || '').toLowerCase();
+    ensureUISettings();
+    let kPeek = P.ui.keys || {};
+    // Con modal abierto: solo cancelar (Q/Esc) o combate
+    if (modalOpen) {
+      if (keyPeek === (kPeek.cancel || 'q') || keyPeek === 'escape') {
+        if (typeof closeModal === 'function') closeModal();
+        ev.preventDefault();
+        return;
+      }
       if (!combatState) return;
     }
     ensureUISettings();
     let k = P.ui.keys || {};
     let key = (ev.key || '').toLowerCase();
     let handled = true;
-    if (key === (k.up || 'w') || key === 'arrowup') {
+    // Q: cerrar modal · entrar (yermo) · salir (interior/asentamiento)
+    if (key === (k.cancel || 'q') || key === 'escape') {
+      if (typeof tryEnterOrExitAction === 'function') tryEnterOrExitAction();
+    } else if (key === (k.up || 'w') || key === 'arrowup') {
       if (typeof move === 'function') move(0, 1);
     } else if (key === (k.down || 's') || key === 'arrowdown') {
       if (typeof move === 'function') move(0, -1);
@@ -7255,15 +7901,123 @@ function setupKeyboardControls() {
       if (typeof move === 'function') move(-1, 0);
     } else if (key === (k.right || 'd') || key === 'arrowright') {
       if (typeof move === 'function') move(1, 0);
-    } else if (key === (k.stim || 'e')) {
+    } else if (key === (k.stim || 'x')) {
       if (typeof quickUseStim === 'function') quickUseStim();
-    } else if (key === (k.rad || 'q')) {
+    } else if (key === (k.rad || 'z')) {
       if (typeof quickUseRadAway === 'function') quickUseRadAway();
+    } else if (key === (k.action || 'e') || key === 'enter') {
+      // E: solo explorar / registrar
+      if (typeof tryExploreAction === 'function') tryExploreAction();
     } else {
       handled = false;
     }
     if (handled) ev.preventDefault();
   });
+}
+
+/** E: explorar yermo o registrar zona interior */
+function tryExploreAction() {
+  if (isGameplayLocked() && !combatState) return;
+  if (isInUniqueInterior()) {
+    if (typeof searchUniqueCell === 'function') searchUniqueCell();
+    return;
+  }
+  if (P.location && P.location.rooms) {
+    if (typeof exploreZone === 'function') exploreZone();
+    return;
+  }
+  if (isOnZetanShip()) {
+    logMsg('En la nave solo puedes moverte y combatir. Busca la salida.');
+    return;
+  }
+  if (P.location) return; // asentamiento: no explorar
+  if (typeof exploreZone === 'function') exploreZone();
+}
+
+/** Q: entrar (fuera) o salir (dentro) o cerrar modal */
+function tryEnterOrExitAction() {
+  let modal = document.getElementById('modal');
+  if (modal && modal.classList.contains('show')) {
+    // En combate no cerrar con Q a la ligera
+    if (combatState) {
+      logMsg('Estás en combate.');
+      return;
+    }
+    if (typeof closeModal === 'function') closeModal();
+    return;
+  }
+  if (isGameplayLocked()) return;
+
+  // Dentro de localidad única: salir solo en entrada
+  if (isInUniqueInterior()) {
+    let loc = P.location;
+    let cell = loc.grid[loc.py][loc.px];
+    if (cell && cell.isStart) {
+      if (typeof exitLocation === 'function') exitLocation();
+    } else {
+      logMsg('Vuelve a la entrada ◎ para salir (Q).');
+    }
+    return;
+  }
+  // Nave Zetan: no salir con Q (solo casilla de escape del propio mapa)
+  if (isOnZetanShip()) {
+    logMsg('Busca la vía de escape en la nave.');
+    return;
+  }
+  // Interior habitaciones o asentamiento / hub
+  if (P.location) {
+    if (typeof exitLocation === 'function') exitLocation();
+    return;
+  }
+  // En el yermo: entrar
+  tryEnterLocation();
+}
+
+function tryEnterLocation() {
+  let zone = typeof getZoneAt === 'function' ? getZoneAt(P.x, P.y) : null;
+  if (!zone) return;
+  if (zone.type === 'settlement' && zone.settlementId && typeof enterSettlement === 'function') {
+    enterSettlement(zone.settlementId);
+    return;
+  }
+  if (zone.type === 'commerce' && typeof enterCommerceHub === 'function') {
+    enterCommerceHub();
+    return;
+  }
+  if (zone.type === 'nukaworld' && typeof enterNukaWorld === 'function') {
+    enterNukaWorld();
+    return;
+  }
+  if (zone.type === 'bank' && typeof enterCentralBank === 'function') {
+    enterCentralBank();
+    return;
+  }
+  if (zone.type === 'combatzone' && typeof enterCombatZone === 'function') {
+    enterCombatZone();
+    return;
+  }
+  if (zone.type === 'home' && typeof enterPlayerHome === 'function') {
+    enterPlayerHome();
+    return;
+  }
+  if ((zone.type === 'abduction' || zone.abduction) && typeof startZetanAbduction === 'function') {
+    startZetanAbduction();
+    return;
+  }
+  if (zone.type === 'vault') {
+    logMsg('Usa la pestaña REFUGIO estando en esta casilla.');
+    return;
+  }
+  if ((zone.type === 'unique' || zone.enterable) && typeof enterLocation === 'function') {
+    enterLocation();
+    return;
+  }
+  logMsg('Aquí no hay nada a lo que entrar. Usa E para explorar.');
+}
+
+/** compat: E antiguamente hacía entrar+explorar */
+function tryPrimaryMapAction() {
+  tryExploreAction();
 }
 
 
@@ -7290,7 +8044,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.4</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.18</div>
   `;
   m.classList.add('show');
 }
@@ -14038,13 +14792,39 @@ function captureSignal() {
   updateStats();
 }
 
+function isGameplayLocked() {
+  if (typeof combatState !== 'undefined' && combatState) return true;
+  if (P && P.inCombat) return true;
+  try {
+    let m = document.getElementById('modal');
+    if (m && m.classList.contains('show')) return true;
+  } catch (e) {}
+  return false;
+}
+
 function move(dx, dy) {
+  if (isGameplayLocked()) return;
   if (isOnZetanShip()) {
     moveOnZetanShip(dx, dy);
     return;
   }
+  if (isInUniqueInterior()) {
+    // Cuadrícula interior: Y crece hacia abajo (opuesto al mapa del yermo)
+    moveInUniqueInterior(dx, -dy);
+    return;
+  }
+  // Interior por habitaciones (plantillas)
+  if (P.location && P.location.rooms) {
+    let dir = null;
+    if (dx === 0 && dy === 1) dir = 'n';
+    else if (dx === 0 && dy === -1) dir = 's';
+    else if (dx === -1 && dy === 0) dir = 'w';
+    else if (dx === 1 && dy === 0) dir = 'e';
+    if (dir && typeof interiorMove === 'function') interiorMove(dir);
+    return;
+  }
   if (P.location) {
-    logMsg("Estás en un interior. Usa las salidas de la habitación o SALIR.");
+    // Asentamiento / hub: no mover por el yermo
     return;
   }
   P.x += dx;
@@ -16273,6 +17053,11 @@ function loadGame() {
     if (!parsed.special) parsed.special = { S: 1, P: 1, E: 1, C: 1, I: 1, A: 1, L: 1 };
     if (!parsed.perks) parsed.perks = {};
     if (!parsed.playerName) parsed.playerName = "Superviviente";
+    if (parsed.introDone === undefined) {
+      // Solo marcar intro hecha si ya hay progreso real
+      let progressed = (parsed.lvl || 1) > 1 || (parsed.xp || 0) > 0 || (parsed.caps || 0) > 100 || (parsed.worldHours || 9) > 12;
+      parsed.introDone = !!progressed;
+    }
     if (parsed.rads === undefined) parsed.rads = 0;
     if (!parsed.storage) parsed.storage = [];
     if (!parsed.activeEffects) parsed.activeEffects = [];
@@ -16313,6 +17098,86 @@ function resetGame() {
   confirmResetGame();
 }
 
+
+function showGameIntro() {
+  try {
+    let app = document.querySelector('.app');
+    if (app) app.style.visibility = 'hidden';
+  } catch (e) {}
+  let existing = document.getElementById('game-intro-overlay');
+  if (existing) existing.remove();
+  let ov = document.createElement('div');
+  ov.id = 'game-intro-overlay';
+  ov.className = 'game-intro-overlay';
+  ov.innerHTML = `
+    <div class="game-intro-box">
+      <h1>☢ WASTELAND</h1>
+      <div class="intro-sub">Supervivencia en el Yermo</div>
+      <div class="intro-lore">
+        <p style="margin-top:0;color:var(--txt);"><b>El cielo se abrió en fuego. Después, solo silencio.</b></p>
+        <p>Nadie recuerda con exactitud el día en que las sirenas dejaron de sonar. Las ciudades se convirtieron en esqueletos de hormigón, los ríos en veneno y la noche en un enemigo más. Quienes quedaron aprendieron pronto la única moneda que importa: las <b>chapas</b>, el metal y la voluntad de seguir adelante.</p>
+        <p>Tú despiertas en el borde de ese mundo. A tus espaldas, un <b>Refugio</b> a medio reparar; delante, un mapa infinito de carreteras rotas, asentamientos desconfiados y facciones que aún pelean por lo que queda. La Hermandad guarda tecnología como reliquias. Otros comercian, saquean o simplemente sobreviven un día más.</p>
+        <p>Cada paso cuenta. La radiación no perdona. Un arma bien fabricada, un trato justo o un aliado inesperado pueden marcar la diferencia entre volver al Refugio… o convertirse en otro nombre olvidado bajo el polvo.</p>
+        <p style="margin-bottom:0;color:var(--txt);"><b>El Yermo no elige héroes. Solo deja vivir a quien se niega a morir.</b></p>
+      </div>
+      <label style="font-size:12px;color:var(--accent);display:block;text-align:center;">Nombre del superviviente</label>
+      <input id="intro-name-input" type="text" maxlength="24" placeholder="Escribe tu nombre…" value="" autocomplete="off" />
+      <button type="button" class="intro-start" onclick="confirmGameIntro()">COMENZAR SUPERVIVENCIA</button>
+    </div>`;
+  document.body.appendChild(ov);
+  setTimeout(function() {
+    let inp = document.getElementById('intro-name-input');
+    if (inp) {
+      try { inp.focus(); } catch (e) {}
+      inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); confirmGameIntro(); }
+      });
+    }
+  }, 120);
+}
+
+function confirmGameIntro() {
+  let inp = document.getElementById('intro-name-input');
+  let name = (inp && inp.value) ? String(inp.value).trim() : '';
+  if (!name) name = 'Superviviente';
+  if (name.length > 24) name = name.slice(0, 24);
+  P.playerName = name;
+  P.introDone = true;
+  let ov = document.getElementById('game-intro-overlay');
+  if (ov) ov.remove();
+  try {
+    let app = document.querySelector('.app');
+    if (app) app.style.visibility = '';
+  } catch (e) {}
+  try { ensureUISettings(); setupKeyboardControls(); } catch (e) {}
+  logMsg('Bienvenido al Yermo, ' + name + '. Fabrica, modifica tus objetos y sobrevive.');
+  renderMap();
+  updateStats();
+  try { startAmbientMusic(); } catch (e) {}
+  try { saveGame(); } catch (e) {}
+}
+
+function bootGame() {
+  try { ensureUISettings(); setupKeyboardControls(); } catch (e) {}
+  let hasSave = false;
+  try { hasSave = !!(localStorage.getItem && localStorage.getItem('wl_save_v16')); } catch (e) {}
+  // Intro: partida nueva o aún no confirmada
+  let needIntro = !hasSave || !P.introDone;
+  if (needIntro) {
+    // Esperar a que el DOM esté listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() { showGameIntro(); });
+    } else {
+      showGameIntro();
+    }
+    return;
+  }
+  logMsg('Bienvenido al Yermo. Fabrica, modifica tus objetos y sobrevive.');
+  renderMap();
+  updateStats();
+}
+
+
 // INICIALIZACIÓN
 let savedData = localStorage.getItem ? localStorage.getItem("wl_save_v16") : null;
 if (savedData) {
@@ -16341,6 +17206,11 @@ if (savedData) {
     if (parsed.shopPage === undefined) parsed.shopPage = 0;
     if (parsed.rads === undefined) parsed.rads = 0;
     if (!parsed.playerName) parsed.playerName = "Superviviente";
+    if (parsed.introDone === undefined) {
+      // Solo marcar intro hecha si ya hay progreso real
+      let progressed = (parsed.lvl || 1) > 1 || (parsed.xp || 0) > 0 || (parsed.caps || 0) > 100 || (parsed.worldHours || 9) > 12;
+      parsed.introDone = !!progressed;
+    }
     if (parsed.radioSignal === undefined) parsed.radioSignal = null;
     if (parsed.location === undefined) parsed.location = null;
     if (parsed.worldHours === undefined) parsed.worldHours = 9;
@@ -16370,12 +17240,10 @@ if (savedData) {
   } catch (e) {}
 }
 
-logMsg("Bienvenido al Yermo. Fabrica, modifica tus objetos y sobrevive.");
-renderMap();
-updateStats();
+bootGame();
 
-// Música ambiente offline (se pausa con la radio)
-startAmbientMusic();
+// Música ambiente offline (se pausa con la radio; en intro se lanza al confirmar)
+try { if (P.introDone) startAmbientMusic(); } catch (e) {}
 // Desbloquear audio tras primera interacción (políticas del navegador)
 document.addEventListener('pointerdown', function ambientUnlockOnce() {
   startAmbientMusic();
