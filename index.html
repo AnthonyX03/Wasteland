@@ -445,8 +445,8 @@ body.pc-mode {
 }
 body.pc-mode .app {
   /* Contenedor tipo monitor 16:9 */
-  width: min(100vw - 16px, calc((100vh - 16px) * 16 / 9), 1480px);
-  height: min(100vh - 16px, calc((100vw - 16px) * 9 / 16), 860px);
+  width: min(100vw - 12px, calc((100vh - 12px) * 16 / 9), 1600px);
+  height: min(100vh - 12px, calc((100vw - 12px) * 9 / 16), 920px);
   max-width: none;
   margin: 0;
   padding: 10px 14px;
@@ -577,12 +577,8 @@ body.pc-mode .map-compact .map-signal-hint {
   margin: 0;
 }
 body.pc-mode .map-compact .world-grid {
-  width: min(100%, 220px) !important;
-  max-width: 220px !important;
-  margin: 2px auto !important;
-  gap: 2px;
-  padding: 3px;
-  flex: 0 0 auto !important;
+  width: min(100%, 320px) !important;
+  max-width: 320px !important;
 }
 body.pc-mode .map-compact .world-cell {
   font-size: 12px;
@@ -1357,18 +1353,18 @@ body.pc-mode #main-view > .map-compact {
   padding: 6px 10px !important;
 }
 body.pc-mode .map-compact .world-grid {
-  width: 200px !important;
-  max-width: 200px !important;
-  height: 200px !important;
-  max-height: 200px !important;
+  width: 320px !important;
+  max-width: 320px !important;
+  height: 320px !important;
+  max-height: 320px !important;
   margin: 4px auto !important;
   flex: 0 0 auto !important;
 }
 body.pc-mode .map-compact .world-cell {
-  font-size: 11px !important;
+  font-size: 15px !important;
 }
 body.pc-mode .map-compact .map-top {
-  font-size: 13px !important;
+  font-size: 14px !important;
   flex-shrink: 0 !important;
 }
 body.pc-mode .map-compact .map-signal-hint {
@@ -1448,15 +1444,15 @@ body.pc-mode .map-compact .quick-radio button {
 
 
 
-/* ===== PC MAP ROW: columnas fijas (no se mueven) ===== */
+/* ===== PC MAP ROW: mapa grande + botones fijos ===== */
 body.pc-mode .pc-map-row {
   display: grid !important;
-  grid-template-columns: 128px 190px 128px !important;
-  column-gap: 16px !important;
+  grid-template-columns: 118px 320px 118px !important;
+  column-gap: 18px !important;
   row-gap: 0 !important;
   width: max-content !important;
   max-width: 100% !important;
-  margin: 8px auto 0 !important;
+  margin: 6px auto 0 !important;
   align-items: center !important;
   justify-content: center !important;
   flex: 0 0 auto !important;
@@ -1465,10 +1461,10 @@ body.pc-mode .pc-map-row {
 body.pc-mode .pc-side {
   display: flex !important;
   flex-direction: column !important;
-  gap: 8px !important;
-  width: 128px !important;
-  min-width: 128px !important;
-  max-width: 128px !important;
+  gap: 7px !important;
+  width: 118px !important;
+  min-width: 118px !important;
+  max-width: 118px !important;
   flex: none !important;
   align-items: stretch !important;
   justify-content: center !important;
@@ -1483,10 +1479,10 @@ body.pc-mode .pc-side-right {
 body.pc-mode .pc-side button {
   display: block !important;
   width: 100% !important;
-  min-height: 40px !important;
-  height: 40px !important;
-  max-height: 40px !important;
-  padding: 6px 8px !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  max-height: 34px !important;
+  padding: 4px 6px !important;
   font-size: 11px !important;
   white-space: nowrap !important;
   overflow: hidden !important;
@@ -1498,9 +1494,9 @@ body.pc-mode .pc-side button {
 }
 body.pc-mode .pc-map-center {
   grid-column: 2 !important;
-  width: 190px !important;
-  min-width: 190px !important;
-  max-width: 190px !important;
+  width: 320px !important;
+  min-width: 320px !important;
+  max-width: 320px !important;
   flex: none !important;
   display: flex !important;
   flex-direction: column !important;
@@ -1510,27 +1506,57 @@ body.pc-mode .pc-map-center {
 }
 body.pc-mode .pc-map-center .world-grid,
 body.pc-mode .map-compact .pc-map-center .world-grid {
-  width: 190px !important;
-  max-width: 190px !important;
-  min-width: 190px !important;
-  height: 190px !important;
-  max-height: 190px !important;
-  min-height: 190px !important;
+  width: 320px !important;
+  max-width: 320px !important;
+  min-width: 320px !important;
+  height: 320px !important;
+  max-height: 320px !important;
+  min-height: 320px !important;
   margin: 0 !important;
   flex: none !important;
+  gap: 2px !important;
+}
+body.pc-mode .pc-map-center .world-cell {
+  font-size: 15px !important;
 }
 body.pc-mode .pc-map-hint {
   text-align: center !important;
-  font-size: 10px !important;
+  font-size: 11px !important;
   color: #8d9880 !important;
   margin-top: 6px !important;
-  width: 190px !important;
-  min-height: 28px !important;
-  max-width: 190px !important;
+  width: 320px !important;
+  min-height: 24px !important;
+  max-width: 320px !important;
   line-height: 1.25 !important;
   white-space: normal !important;
   box-sizing: border-box !important;
 }
+body.pc-mode .pc-side-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
+  margin-top: 7px !important;
+  width: 100% !important;
+  min-height: 75px !important;
+  box-sizing: border-box !important;
+}
+body.pc-mode .pc-side-actions button {
+  width: 100% !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  max-height: 34px !important;
+  font-size: 11px !important;
+  padding: 4px 6px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+body.pc-mode .map-compact .map-controls {
+  display: none !important;
+}
+
 body.pc-mode .pc-side-actions {
   display: flex !important;
   flex-direction: column !important;
@@ -1739,10 +1765,10 @@ body.pc-mode .unique-pc .unique-center {
   align-items: center;
 }
 body.pc-mode .unique-pc .unique-grid {
-  width: 200px;
-  height: 200px;
-  max-width: 200px;
-  max-height: 200px;
+  width: 280px;
+  height: 280px;
+  max-width: 280px;
+  max-height: 280px;
   margin: 0;
 }
 .unique-side button { font-size: 10px; min-height: 36px; padding: 6px 4px; }
@@ -1751,6 +1777,83 @@ body.pc-mode .unique-pc .unique-grid {
     height: min(48vw, 180px);
   }
 }
+
+/* ===== PC: menús más compactos, mapa prioritario ===== */
+body.pc-mode {
+  font-size: 13px;
+}
+body.pc-mode button {
+  padding: 5px 8px !important;
+  min-height: 30px !important;
+  font-size: 12px !important;
+}
+body.pc-mode .item {
+  font-size: 12px !important;
+  padding: 6px 8px !important;
+  margin-bottom: 6px !important;
+}
+body.pc-mode .item button {
+  min-height: 28px !important;
+  padding: 4px 8px !important;
+  font-size: 11px !important;
+}
+body.pc-mode .subtabs button {
+  padding: 5px 8px !important;
+  font-size: 11px !important;
+  min-height: 28px !important;
+}
+body.pc-mode .bottom-bar .tabs button {
+  padding: 6px 8px !important;
+  font-size: 12px !important;
+  min-height: 34px !important;
+}
+body.pc-mode h2 {
+  font-size: 15px !important;
+  margin: 4px 0 8px !important;
+}
+body.pc-mode #modal-body {
+  font-size: 12px;
+}
+body.pc-mode #modal-body button {
+  min-height: 30px !important;
+  padding: 5px 10px !important;
+  font-size: 12px !important;
+}
+body.pc-mode .panel-log .log {
+  font-size: 11px !important;
+}
+body.pc-mode .map-compact .map-top {
+  font-size: 14px !important;
+}
+body.pc-mode #main-view {
+  font-size: 12px;
+}
+
+
+/* PC mapa tamaño final (prioridad) */
+body.pc-mode .pc-map-row {
+  grid-template-columns: 118px 320px 118px !important;
+}
+body.pc-mode .pc-map-center,
+body.pc-mode .pc-map-center .world-grid,
+body.pc-mode .map-compact .pc-map-center .world-grid,
+body.pc-mode .map-compact .world-grid {
+  width: 320px !important;
+  min-width: 320px !important;
+  max-width: 320px !important;
+  height: 320px !important;
+  min-height: 320px !important;
+  max-height: 320px !important;
+}
+body.pc-mode .pc-map-hint {
+  width: 320px !important;
+  max-width: 320px !important;
+}
+body.pc-mode .pc-map-center .world-cell,
+body.pc-mode .map-compact .world-cell {
+  font-size: 15px !important;
+}
+
 </style>
 </head>
 <body>
@@ -8129,7 +8232,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.19</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.20</div>
   `;
   m.classList.add('show');
 }
