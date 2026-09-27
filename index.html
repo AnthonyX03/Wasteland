@@ -1369,10 +1369,9 @@ body.pc-mode #main-view > .map-compact {
   justify-content: flex-start !important;
   align-items: center !important;
   gap: 6px !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
+  overflow: visible !important;
   height: auto !important;
-  max-height: 100% !important;
+  max-height: none !important;
   min-height: 0 !important;
   padding: 6px 10px 16px !important;
   box-sizing: border-box !important;
@@ -1888,8 +1887,9 @@ body.pc-mode .map-compact .world-cell {
 
 /* PC: mapa sin scroll interno; contenido con margen inferior limpio */
 body.pc-mode #main-view > .map-compact {
-  overflow: hidden !important;
-  max-height: 100%;
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
   box-sizing: border-box;
 }
 body.pc-mode #main-view > .unique-wrap {
@@ -2038,8 +2038,8 @@ body.pc-mode .panel-log .log::-webkit-scrollbar-thumb:hover {
   opacity: 1 !important;
 }
 body.pc-mode #main-view > .unique-wrap {
-  overflow-y: auto !important;
-  max-height: 100% !important;
+  overflow: visible !important;
+  max-height: none !important;
   padding-bottom: 32px !important;
   box-sizing: border-box !important;
 }
@@ -2102,11 +2102,57 @@ body.pc-mode .map-compact .map-signal-hint {
   margin: 2px 0 !important;
 }
 body.pc-mode #main-view > .map-compact {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  max-height: 100% !important;
+  overflow: visible !important;
+  max-height: none !important;
   height: auto !important;
   padding-bottom: 12px !important;
+}
+
+
+/* Una sola barra de scroll (verde) en PC */
+body.pc-mode,
+body.pc-mode .app,
+body.pc-mode .panel-main {
+  overflow: hidden !important;
+}
+body.pc-mode #main-view {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin !important; /* Firefox */
+  scrollbar-color: #2a5a2a #0a0e08 !important;
+}
+body.pc-mode #main-view > * {
+  overflow: visible !important;
+  max-height: none !important;
+}
+body.pc-mode #main-view > .map-compact,
+body.pc-mode #main-view > .unique-wrap {
+  overflow: visible !important;
+}
+/* Registro: solo su barra verde, no la del navegador blanca */
+body.pc-mode .panel-log {
+  overflow: hidden !important;
+}
+body.pc-mode .panel-log .log {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #2a5a2a #0a0e08 !important;
+}
+body.pc-mode #main-view::-webkit-scrollbar,
+body.pc-mode .panel-log .log::-webkit-scrollbar {
+  width: 10px !important;
+  background: #0a0e08 !important;
+}
+body.pc-mode #main-view::-webkit-scrollbar-track,
+body.pc-mode .panel-log .log::-webkit-scrollbar-track {
+  background: #0a0e08 !important;
+}
+body.pc-mode #main-view::-webkit-scrollbar-thumb,
+body.pc-mode .panel-log .log::-webkit-scrollbar-thumb {
+  background: #2a5a2a !important;
+  border-radius: 4px !important;
+  border: 2px solid #0a0e08 !important;
 }
 
 </style>
@@ -8531,7 +8577,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.27</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.28</div>
   `;
   m.classList.add('show');
 }
