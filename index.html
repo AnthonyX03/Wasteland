@@ -507,16 +507,36 @@ body.pc-mode .panel-main {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 body.pc-mode #main-view {
   flex: 1 1 auto;
   min-height: 0;
   height: 100%;
+  max-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   display: block;
+  box-sizing: border-box;
+  padding: 4px 14px 28px 4px; /* espacio inferior + hueco para scrollbar */
+  scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
 }
+body.pc-mode #main-view::-webkit-scrollbar {
+  width: 10px;
+}
+body.pc-mode #main-view::-webkit-scrollbar-track {
+  background: #0a0e08;
+  border-left: 1px solid #1a3a1a;
+}
+body.pc-mode #main-view::-webkit-scrollbar-thumb {
+  background: #2a5a2a;
+  border-radius: 4px;
+}
+body.pc-mode #main-view::-webkit-scrollbar-thumb:hover {
+  background: #3a7a3a;
+}
+
 body.pc-mode .bottom-bar {
   grid-column: 1 / -1;
   grid-row: 3;
@@ -1856,20 +1876,60 @@ body.pc-mode .map-compact .world-cell {
 }
 
 
-/* PC: mapa sin scroll interno raro; resto de menús sí scrollean en #main-view */
+/* PC: mapa sin scroll interno; contenido con margen inferior limpio */
 body.pc-mode #main-view > .map-compact {
   overflow: hidden !important;
+  max-height: 100%;
+  box-sizing: border-box;
 }
 body.pc-mode #main-view > .unique-wrap {
+  overflow: visible !important;
+  max-height: none;
+}
+body.pc-mode #main-view > *:last-child {
+  margin-bottom: 8px;
+}
+
+
+/* PC scroll limpio: no tapa el final */
+body.pc-mode #main-view {
+  padding: 4px 14px 32px 6px !important;
+  scrollbar-gutter: stable !important;
   overflow-y: auto !important;
-  max-height: 100%;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
 }
-body.pc-mode #main-view .items,
-body.pc-mode #main-view .radio-panel,
-body.pc-mode #main-view .inv-panel,
-body.pc-mode #main-view .shop-list {
-  overflow: visible;
+body.pc-mode .panel-main {
+  overflow: hidden !important;
 }
+
+
+/* PC: Stim/Rad alineados con Radio/Viaje; acciones bajo el mapa */
+body.pc-mode .pc-side {
+  justify-content: center !important;
+}
+body.pc-mode .pc-side-left,
+body.pc-mode .pc-side-right {
+  align-self: center !important;
+}
+body.pc-mode .pc-map-actrow {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin-top: 8px !important;
+  min-height: 0 !important;
+}
+body.pc-mode .pc-map-actrow button {
+  min-height: 34px !important;
+  height: auto !important;
+  padding: 6px 14px !important;
+  font-size: 12px !important;
+  width: auto !important;
+  min-width: 100px !important;
+}
+body.pc-mode .pc-side-actions { display: none !important; }
 
 </style>
 </head>
@@ -4280,19 +4340,17 @@ function renderScrapUI() {
   let list = P.inv.filter(inst => {
     let it = getItemBase(inst.id);
     if (!it) return false;
-    if (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid) return false;
+    if (inst.uid == P.equippedWeaponUid || inst.uid == P.equippedArmorUid) return false;
     return it.type === 'weapon' || it.type === 'armor';
   });
-    if (list.length === 0) {
-    html += sub === 'notes'
-      ? `<p style="font-size:12px; color:#8d9880;">Ninguna nota. Escríbelas en el ordenador de tu Hogar [+2, -1].</p>`
-      : `<p style="font-size:12px; color:#8d9880;">No tienes objetos en esta categoría.</p>`;
+  if (list.length === 0) {
+    html += `<p style="font-size:12px; color:#8d9880;">No tienes armas ni armaduras para desguazar (no puedes desguazar lo equipado).</p>`;
   } else {
     list.forEach(inst => {
       let it = getItemBase(inst.id);
       let name = (inst.legendary ? '★ ' : '') + it.name + ((it.type==='weapon'||it.type==='armor') ? (' Lv:' + (inst.itemLevel||1)) : '');
       html += `<div class="item" style="${inst.legendary?'border-color:var(--gold);':''}"><b style="${inst.legendary?'color:var(--gold);':''}">${name}</b>
-        <button style="margin-left:8px; font-size:11px;" onclick="scrapItem(${inst.uid})">Desguazar</button>
+        <button type="button" style="margin-left:8px; font-size:11px;" onclick="event.stopPropagation();scrapItem('${inst.uid}')">Desguazar</button>
       </div>`;
     });
   }
@@ -4300,10 +4358,11 @@ function renderScrapUI() {
 }
 
 function scrapItem(uid) {
-  let idx = P.inv.findIndex(i => i.uid === uid);
-  if (idx === -1) return;
+  uid = (uid !== undefined && uid !== null) ? String(uid) : '';
+  let idx = P.inv.findIndex(i => String(i.uid) === uid);
+  if (idx === -1) { logMsg("Objeto no encontrado para desguazar."); return; }
   let inst = P.inv[idx];
-  if (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid) {
+  if (String(inst.uid) === String(P.equippedWeaponUid) || String(inst.uid) === String(P.equippedArmorUid)) {
     logMsg("No puedes desguazar un objeto equipado.");
     return;
   }
@@ -6915,11 +6974,9 @@ function renderMap() {
       <div class="pc-map-center">
         ${renderWorldGrid()}
         <div class="pc-map-hint">${actHint || '&nbsp;'}</div>
+        <div class="pc-map-actrow">${actBtns || ''}</div>
       </div>
-      <div class="pc-side pc-side-right">
-        ${radioBtns}
-        <div class="pc-side-actions">${actBtns || '<span style="display:block;min-height:40px;"></span>'}</div>
-      </div>
+      <div class="pc-side pc-side-right">${radioBtns}</div>
     </div>`;
   } else {
     mapBody = `
@@ -7955,9 +8012,22 @@ function executeCheat(raw) {
 
 
 // --- Adaptabilidad / Controles ---
+function detectDefaultHudMode() {
+  try {
+    let w = window.innerWidth || document.documentElement.clientWidth || 800;
+    let coarse = false;
+    try { coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches; } catch (e) {}
+    let touch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    // Móvil/tablet táctil estrecho → dispositivo; escritorio ancho → PC
+    if (w <= 900 || (touch && coarse && w < 1100)) return 'mobile';
+    return 'pc';
+  } catch (e) {
+    return 'mobile';
+  }
+}
+
 function ensureUISettings() {
   if (!P.ui) P.ui = {};
-  if (!P.ui.hudMode) P.ui.hudMode = 'mobile'; // mobile | pc
   if (!P.ui.pcLayout) P.ui.pcLayout = 'log-left'; // log-left | log-right
   if (!P.ui.keys) {
     P.ui.keys = { up: 'w', down: 's', left: 'a', right: 'd', stim: 'x', rad: 'z', action: 'e', cancel: 'q' };
@@ -7966,6 +8036,13 @@ function ensureUISettings() {
     if (!P.ui.keys.rad) P.ui.keys.rad = 'z';
     if (!P.ui.keys.action) P.ui.keys.action = 'e';
     if (!P.ui.keys.cancel) P.ui.keys.cancel = 'q';
+  }
+  // Preferencia guardada del usuario; si no hay, detectar dispositivo
+  if (!P.ui.hudMode) {
+    let stored = null;
+    try { stored = localStorage.getItem('wl_hud_mode'); } catch (e) {}
+    if (stored === 'pc' || stored === 'mobile') P.ui.hudMode = stored;
+    else P.ui.hudMode = detectDefaultHudMode();
   }
   applyHudMode(P.ui.hudMode);
 }
@@ -8249,7 +8326,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.21</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.23</div>
   `;
   m.classList.add('show');
 }
