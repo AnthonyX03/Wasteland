@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v172';
+const CACHE = 'wasteland-v173';
 const AUDIO_CACHE = 'wasteland-audio-v1';
 const ASSETS = [
   './',

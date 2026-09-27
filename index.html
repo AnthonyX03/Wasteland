@@ -1556,7 +1556,8 @@ body.pc-mode .pc-side-actions button {
 body.pc-mode .map-compact .map-controls {
   display: none !important;
 }
-/* ===== Localidad única: mapa + botones a los lados ===== */
+
+/* ===== Localidad única ===== */
 .unique-wrap {
   display: flex;
   flex-direction: column;
@@ -1564,8 +1565,9 @@ body.pc-mode .map-compact .map-controls {
   width: 100%;
   height: 100%;
   min-height: 0;
-  overflow: hidden;
-  padding: 4px 6px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 4px 6px 8px;
   box-sizing: border-box;
 }
 .unique-title {
@@ -1589,56 +1591,19 @@ body.pc-mode .map-compact .map-controls {
   margin-bottom: 4px;
   flex-shrink: 0;
 }
-.unique-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  flex: 1 1 auto;
-  min-height: 0;
-}
-.unique-side {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 110px;
-  flex-shrink: 0;
-  align-items: stretch;
-}
-.unique-side button {
-  width: 100%;
-  min-height: 40px;
-  font-size: 11px;
-  padding: 8px 6px;
-  white-space: normal;
-  line-height: 1.2;
-  box-sizing: border-box;
-}
-.unique-side .btn-exit {
-  border-color: var(--danger);
-  color: var(--danger);
-}
-.unique-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 0 1 auto;
-  min-width: 0;
-}
 .unique-grid {
   display: grid;
-  width: min(52vw, 220px);
-  height: min(52vw, 220px);
-  max-width: 220px;
-  max-height: 220px;
+  width: min(78vw, 240px);
+  height: min(78vw, 240px);
+  max-width: 240px;
+  max-height: 240px;
   gap: 2px;
   padding: 3px;
   background: #000800;
   border: 1px solid #d4a017;
   box-sizing: border-box;
   flex-shrink: 0;
+  margin: 4px auto;
 }
 .unique-cell {
   aspect-ratio: 1;
@@ -1663,25 +1628,124 @@ body.pc-mode .map-compact .map-controls {
 .unique-cell.exit { border-color: #00ff41; }
 .unique-cell.start { border-color: #66b3ff; }
 .unique-hint {
-  font-size: 10px;
+  font-size: 11px;
   color: #8d9880;
   text-align: center;
-  margin-top: 6px;
-  max-width: 220px;
+  margin: 4px 0;
+  max-width: 280px;
   line-height: 1.3;
+  flex-shrink: 0;
 }
-body.pc-mode .unique-grid {
+/* --- Móvil: acciones + flechas debajo --- */
+.unique-mobile .unique-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+  max-width: 320px;
+  margin: 2px 0;
+  flex-shrink: 0;
+}
+.unique-mobile .unique-actions button {
+  flex: 1 1 auto;
+  min-width: 110px;
+  min-height: 36px;
+  font-size: 12px;
+  padding: 6px 10px;
+}
+.unique-mobile .unique-actions .btn-exit {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.unique-mobile .unique-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+  max-width: 320px;
+  margin: 2px 0;
+  flex-shrink: 0;
+}
+.unique-mobile .unique-quick button {
+  flex: 1 1 auto;
+  min-width: 90px;
+  min-height: 34px;
+  font-size: 11px;
+  padding: 6px 8px;
+}
+.unique-mobile .unique-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(2, 48px);
+  gap: 5px;
+  margin: 8px auto 4px;
+  justify-items: center;
+  flex-shrink: 0;
+}
+.unique-mobile .unique-pad button {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.unique-mobile .unique-pad > div {
+  width: 48px;
+  height: 48px;
+}
+/* --- PC: lados (sin flechas) --- */
+body.pc-mode .unique-pc .unique-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+body.pc-mode .unique-pc .unique-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 120px;
+  flex-shrink: 0;
+  align-items: stretch;
+}
+body.pc-mode .unique-pc .unique-side button {
+  width: 100%;
+  min-height: 40px;
+  font-size: 11px;
+  padding: 8px 6px;
+  white-space: normal;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+body.pc-mode .unique-pc .unique-side .btn-exit {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+body.pc-mode .unique-pc .unique-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body.pc-mode .unique-pc .unique-grid {
   width: 200px;
   height: 200px;
   max-width: 200px;
   max-height: 200px;
+  margin: 0;
 }
-body.pc-mode .unique-side {
-  width: 120px;
-}
-@media (max-width: 380px) {
-  .unique-side { width: 88px; }
-  .unique-side button { font-size: 10px; min-height: 36px; padding: 6px 4px; }
+.unique-side button { font-size: 10px; min-height: 36px; padding: 6px 4px; }
   .unique-grid {
     width: min(48vw, 180px);
     height: min(48vw, 180px);
@@ -6192,29 +6256,50 @@ function renderUniqueInteriorMap() {
   }
   let canExit = !!(cell && cell.isStart);
   let roomLabel = (cell ? cell.name : '') + (cell && cell.searched ? ' · registrado' : '');
-
-  let html = '<div class="unique-wrap">' +
-    '<div class="unique-title">◆ LOCALIDAD ÚNICA</div>' +
-    '<div class="unique-name">' + (loc.icon || '◆') + ' ' + loc.name + '</div>' +
-    '<div class="unique-room">' + roomLabel + ' · WASD mover</div>' +
-    '<div class="unique-row">' +
-      '<div class="unique-side unique-side-left">' +
-        '<button onclick="pipClick();quickUseStim()" ' + (stims === 0 ? 'disabled' : '') + '>💉 Stim (' + stims + ')</button>' +
-        '<button onclick="pipClick();quickUseRadAway()" ' + (radaways === 0 ? 'disabled' : '') + '>☢ RadAway (' + radaways + ')</button>' +
-      '</div>' +
-      '<div class="unique-center">' +
-        '<div class="unique-grid" style="grid-template-columns:repeat(' + n + ',1fr);grid-template-rows:repeat(' + n + ',1fr);">' + cells + '</div>' +
-        '<div class="unique-hint">' + (canExit ? 'Entrada ◎ — puedes salir' : 'Explora con E · Sal por la entrada ◎') + '</div>' +
-      '</div>' +
-      '<div class="unique-side unique-side-right">' +
-        '<button onclick="pipClick();openRadioUI()">📻 Radio</button>' +
-        '<button onclick="pipClick();searchUniqueCell()">REGISTRAR (E)</button>' +
-        (canExit ? '<button class="btn-exit" onclick="pipClick();exitLocation()">← SALIR (Q)</button>' : '') +
-      '</div>' +
-    '</div>' +
-  '</div>';
+  let isPc = document.body.classList.contains('pc-mode');
+  let gridStyle = 'grid-template-columns:repeat(' + n + ',1fr);grid-template-rows:repeat(' + n + ',1fr);';
+  let gridHtml = '<div class="unique-grid" style="' + gridStyle + '">' + cells + '</div>';
+  let hint = canExit ? 'Entrada ◎ — puedes salir' : 'Registra zonas · Sal por la entrada ◎';
+  let actBtns = '<button onclick="pipClick();searchUniqueCell()">REGISTRAR</button>' +
+    (canExit ? '<button class="btn-exit" onclick="pipClick();exitLocation()">← SALIR</button>' : '');
+  let medBtns = '<button onclick="pipClick();quickUseStim()" ' + (stims === 0 ? 'disabled' : '') + '>💉 Stim (' + stims + ')</button>' +
+    '<button onclick="pipClick();quickUseRadAway()" ' + (radaways === 0 ? 'disabled' : '') + '>☢ RadAway (' + radaways + ')</button>';
+  let html;
+  if (isPc) {
+    html = '<div class="unique-wrap unique-pc">' +
+      '<div class="unique-title">◆ LOCALIDAD ÚNICA</div>' +
+      '<div class="unique-name">' + (loc.icon || '◆') + ' ' + loc.name + '</div>' +
+      '<div class="unique-room">' + roomLabel + ' · WASD mover</div>' +
+      '<div class="unique-row">' +
+        '<div class="unique-side unique-side-left">' + medBtns + '</div>' +
+        '<div class="unique-center">' + gridHtml +
+          '<div class="unique-hint">' + hint + '</div></div>' +
+        '<div class="unique-side unique-side-right">' +
+          '<button onclick="pipClick();openRadioUI()">📻 Radio</button>' +
+          '<button onclick="pipClick();searchUniqueCell()">REGISTRAR (E)</button>' +
+          (canExit ? '<button class="btn-exit" onclick="pipClick();exitLocation()">← SALIR (Q)</button>' : '') +
+        '</div></div></div>';
+  } else {
+    // Modo dispositivo: vertical + flechas (sin paneles laterales que se solapan)
+    html = '<div class="unique-wrap unique-mobile">' +
+      '<div class="unique-title">◆ LOCALIDAD ÚNICA</div>' +
+      '<div class="unique-name">' + (loc.icon || '◆') + ' ' + loc.name + '</div>' +
+      '<div class="unique-room">' + roomLabel + '</div>' +
+      gridHtml +
+      '<div class="unique-hint">' + hint + '</div>' +
+      '<div class="unique-actions">' + actBtns + '</div>' +
+      '<div class="unique-quick">' + medBtns +
+        '<button onclick="pipClick();openRadioUI()">📻 Radio</button></div>' +
+      '<div class="unique-pad">' +
+        '<div></div><button type="button" onclick="pipClick();moveInUniqueInterior(0,-1)">▲</button><div></div>' +
+        '<button type="button" onclick="pipClick();moveInUniqueInterior(-1,0)">◀</button>' +
+        '<button type="button" onclick="pipClick();moveInUniqueInterior(0,1)">▼</button>' +
+        '<button type="button" onclick="pipClick();moveInUniqueInterior(1,0)">▶</button>' +
+      '</div></div>';
+  }
   document.getElementById('main-view').innerHTML = html;
 }
+
 
 
 
@@ -8044,7 +8129,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.18</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.19</div>
   `;
   m.classList.add('show');
 }
