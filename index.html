@@ -1369,9 +1369,13 @@ body.pc-mode #main-view > .map-compact {
   justify-content: flex-start !important;
   align-items: center !important;
   gap: 6px !important;
-  overflow: hidden !important;
-  height: 100% !important;
-  padding: 6px 10px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  max-height: 100% !important;
+  min-height: 0 !important;
+  padding: 6px 10px 16px !important;
+  box-sizing: border-box !important;
 }
 body.pc-mode .map-compact .world-grid {
   width: 320px !important;
@@ -1930,6 +1934,87 @@ body.pc-mode .pc-map-actrow button {
   min-width: 100px !important;
 }
 body.pc-mode .pc-side-actions { display: none !important; }
+
+
+/* PC: Entrar/Explorar siempre visibles */
+body.pc-mode .pc-map-row {
+  flex-shrink: 0 !important;
+}
+body.pc-mode .pc-map-actrow {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-shrink: 0 !important;
+  min-height: 36px !important;
+  margin-top: 10px !important;
+  margin-bottom: 4px !important;
+  z-index: 2 !important;
+}
+body.pc-mode .pc-map-center {
+  overflow: visible !important;
+}
+body.pc-mode .pc-map-hint {
+  flex-shrink: 0 !important;
+  min-height: 18px !important;
+}
+/* PC: registro con el mismo scroll limpio */
+body.pc-mode .panel-log {
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+body.pc-mode .panel-log .log {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding: 6px 10px 24px 6px !important;
+  scrollbar-gutter: stable !important;
+  box-sizing: border-box !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+body.pc-mode .panel-log .log::-webkit-scrollbar {
+  width: 10px;
+}
+body.pc-mode .panel-log .log::-webkit-scrollbar-track {
+  background: #0a0e08;
+  border-left: 1px solid #1a3a1a;
+}
+body.pc-mode .panel-log .log::-webkit-scrollbar-thumb {
+  background: #2a5a2a;
+  border-radius: 4px;
+}
+body.pc-mode .panel-log .log::-webkit-scrollbar-thumb:hover {
+  background: #3a7a3a;
+}
+
+
+@media (max-height: 820px) {
+  body.pc-mode .pc-map-center .world-grid,
+  body.pc-mode .map-compact .pc-map-center .world-grid,
+  body.pc-mode .map-compact .world-grid {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+    height: 260px !important;
+    min-height: 260px !important;
+    max-height: 260px !important;
+  }
+  body.pc-mode .pc-map-row {
+    grid-template-columns: 118px 260px 118px !important;
+  }
+  body.pc-mode .pc-map-center {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+  }
+  body.pc-mode .pc-map-hint {
+    width: 260px !important;
+    max-width: 260px !important;
+  }
+}
 
 </style>
 </head>
@@ -8015,11 +8100,18 @@ function executeCheat(raw) {
 function detectDefaultHudMode() {
   try {
     let w = window.innerWidth || document.documentElement.clientWidth || 800;
+    let h = window.innerHeight || document.documentElement.clientHeight || 600;
     let coarse = false;
     try { coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches; } catch (e) {}
     let touch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    // Móvil/tablet táctil estrecho → dispositivo; escritorio ancho → PC
+    let ua = (navigator.userAgent || '').toLowerCase();
+    let phoneUa = /android|iphone|ipod|mobile|windows phone/.test(ua);
+    let tabletUa = /ipad|tablet/.test(ua);
+    // Móvil / tablet → dispositivo; escritorio ancho → PC
+    if (phoneUa || tabletUa) return 'mobile';
     if (w <= 900 || (touch && coarse && w < 1100)) return 'mobile';
+    // Pantalla muy vertical pequeña
+    if (w < 1000 && h > w * 1.2 && touch) return 'mobile';
     return 'pc';
   } catch (e) {
     return 'mobile';
@@ -8037,13 +8129,8 @@ function ensureUISettings() {
     if (!P.ui.keys.action) P.ui.keys.action = 'e';
     if (!P.ui.keys.cancel) P.ui.keys.cancel = 'q';
   }
-  // Preferencia guardada del usuario; si no hay, detectar dispositivo
-  if (!P.ui.hudMode) {
-    let stored = null;
-    try { stored = localStorage.getItem('wl_hud_mode'); } catch (e) {}
-    if (stored === 'pc' || stored === 'mobile') P.ui.hudMode = stored;
-    else P.ui.hudMode = detectDefaultHudMode();
-  }
+  // Forzar modo según dispositivo en cada carga (PC ↔ móvil)
+  P.ui.hudMode = detectDefaultHudMode();
   applyHudMode(P.ui.hudMode);
 }
 
@@ -8326,7 +8413,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.23</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.24</div>
   `;
   m.classList.add('show');
 }
