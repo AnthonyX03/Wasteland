@@ -1939,7 +1939,7 @@ body.pc-mode .pc-map-actrow button {
   width: auto !important;
   min-width: 100px !important;
 }
-body.pc-mode .pc-side-actions { display: none !important; }
+/* pc-side-actions visible bajo Viaje */
 
 
 /* PC: Entrar/Explorar siempre visibles */
@@ -2055,6 +2055,58 @@ body.pc-mode .unique-mobile .unique-pad {
   overflow: hidden !important;
   margin: 0 !important;
   padding: 0 !important;
+}
+
+
+/* PC: Radio/Viaje fijos; Entrar/Explorar/Botín debajo de Viaje */
+body.pc-mode .pc-side-left,
+body.pc-mode .pc-side-right {
+  justify-content: flex-start !important;
+  align-self: center !important;
+  padding-top: 0 !important;
+}
+body.pc-mode .pc-side-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  margin-top: 8px !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+body.pc-mode .pc-side-actions button {
+  display: block !important;
+  width: 100% !important;
+  min-height: 32px !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 5px 6px !important;
+  font-size: 11px !important;
+  white-space: normal !important;
+  line-height: 1.2 !important;
+  box-sizing: border-box !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+body.pc-mode .pc-map-actrow {
+  display: none !important;
+}
+/* Señales/chivatazos: no empujan el mapa fuera de vista */
+body.pc-mode .map-compact .map-signal-hint {
+  max-height: 40px !important;
+  overflow-y: auto !important;
+  flex-shrink: 0 !important;
+  font-size: 10px !important;
+  line-height: 1.25 !important;
+  margin: 2px 0 !important;
+}
+body.pc-mode #main-view > .map-compact {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-height: 100% !important;
+  height: auto !important;
+  padding-bottom: 12px !important;
 }
 
 </style>
@@ -7100,9 +7152,11 @@ function renderMap() {
       <div class="pc-map-center">
         ${renderWorldGrid()}
         <div class="pc-map-hint">${actHint || '&nbsp;'}</div>
-        <div class="pc-map-actrow">${actBtns || ''}</div>
       </div>
-      <div class="pc-side pc-side-right">${radioBtns}</div>
+      <div class="pc-side pc-side-right">
+        ${radioBtns}
+        <div class="pc-side-actions">${actBtns || ''}</div>
+      </div>
     </div>`;
   } else {
     mapBody = `
@@ -8477,7 +8531,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.26</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.27</div>
   `;
   m.classList.add('show');
 }
