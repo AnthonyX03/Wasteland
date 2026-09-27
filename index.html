@@ -512,9 +512,10 @@ body.pc-mode #main-view {
   flex: 1 1 auto;
   min-height: 0;
   height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: block;
+  -webkit-overflow-scrolling: touch;
 }
 body.pc-mode .bottom-bar {
   grid-column: 1 / -1;
@@ -1852,6 +1853,22 @@ body.pc-mode .pc-map-hint {
 body.pc-mode .pc-map-center .world-cell,
 body.pc-mode .map-compact .world-cell {
   font-size: 15px !important;
+}
+
+
+/* PC: mapa sin scroll interno raro; resto de menús sí scrollean en #main-view */
+body.pc-mode #main-view > .map-compact {
+  overflow: hidden !important;
+}
+body.pc-mode #main-view > .unique-wrap {
+  overflow-y: auto !important;
+  max-height: 100%;
+}
+body.pc-mode #main-view .items,
+body.pc-mode #main-view .radio-panel,
+body.pc-mode #main-view .inv-panel,
+body.pc-mode #main-view .shop-list {
+  overflow: visible;
 }
 
 </style>
@@ -8232,7 +8249,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.20</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.21</div>
   `;
   m.classList.add('show');
 }
