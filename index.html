@@ -2155,6 +2155,103 @@ body.pc-mode .panel-log .log::-webkit-scrollbar-thumb {
   border: 2px solid #0a0e08 !important;
 }
 
+
+/* ===== Sprites enemigos ===== */
+.enemy-icon {
+  width: 28px;
+  height: 28px;
+  image-rendering: pixelated;
+  vertical-align: middle;
+  margin-right: 6px;
+  border: 1px solid #3a4737;
+  border-radius: 3px;
+  background: #0a0e08;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.enemy-icon.legendary {
+  border-color: var(--gold);
+  box-shadow: 0 0 4px #d5bd6966;
+}
+.combat-arena {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 10px 8px 6px;
+  margin: 6px 0 10px;
+  min-height: 140px;
+  background:
+    linear-gradient(180deg, #0a1208 0%, #121a0c 40%, #1a2210 100%);
+  border: 1px solid #3a4737;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.combat-arena::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 100%, #1a2a12 0%, transparent 55%);
+  pointer-events: none;
+}
+.combat-fighter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  max-width: 46%;
+}
+.combat-fighter img.combat-sprite {
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px #000a);
+}
+body.pc-mode .combat-fighter img.combat-sprite {
+  width: 128px;
+  height: 128px;
+}
+.combat-fighter.enemy img.combat-sprite.legendary {
+  filter: drop-shadow(0 0 6px #d5bd69aa) drop-shadow(0 2px 4px #000a);
+}
+.combat-fighter .cf-name {
+  font-size: 11px;
+  text-align: center;
+  color: var(--txt);
+  max-width: 120px;
+  line-height: 1.2;
+}
+.combat-fighter.enemy .cf-name { color: var(--danger); }
+.combat-fighter.player .cf-name { color: var(--accent); }
+.combat-fighter .cf-hp {
+  width: 100%;
+  max-width: 110px;
+  height: 8px;
+  background: #1a1f16;
+  border: 1px solid #3a4737;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.combat-fighter .cf-hp > div {
+  height: 100%;
+  background: var(--danger);
+}
+.combat-fighter.player .cf-hp > div { background: var(--accent); }
+.combat-fighter .cf-hp-text {
+  font-size: 10px;
+  color: #8d9880;
+}
+.companion-row-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 </style>
 </head>
 <body>
@@ -3292,7 +3389,6 @@ const ENEMIES = [
   { name: "Saqueador de élite", human: true, level: 12, hp: 95, dmg: 20, loot: [109, 7, 301, 28], caps: [28, 60] },
   { name: "Bestia mutada alfa", level: 12, hp: 100, dmg: 21, loot: [7, 24, 26, 28], caps: [25, 55] },
   { name: "Sanguinario joven", level: 13, hp: 105, dmg: 22, loot: [7, 24, 28], caps: [28, 58] },
-  { name: "Sintético defectuoso", level: 14, hp: 110, dmg: 22, loot: [105, 13, 22, 28], caps: [30, 65] },
   { name: "Supermutante", level: 15, hp: 130, dmg: 24, loot: [141, 7, 21, 23], caps: [35, 75] },
   { name: "Saqueador jefe", human: true, level: 16, hp: 120, dmg: 25, loot: [112, 7, 310, 28], caps: [40, 80] },
   { name: "Asesino de la Hermandad", human: true, level: 17, hp: 125, dmg: 26, loot: [113, 7, 305, 28], caps: [42, 85] },
@@ -3338,51 +3434,62 @@ const ZETAN_ENEMIES = [
   { name: "Zetan inquisidor", level: 20, hp: 165, dmg: 30, loot: [2400, 2421, 2414, 2419], caps: [45, 90], zetan: true },
   { name: "Zetan aniquilador", level: 25, hp: 220, dmg: 38, loot: [2400, 2421, 2416, 2417], caps: [70, 130], zetan: true }
 ];
-const ZETAN_LEGENDARY = [
-  { name: "Zetan Señor de la Flota", level: 20, hp: 280, dmg: 40, loot: [2400, 2410, 2414, 2421], caps: [100, 200], zetan: true },
-  { name: "Zetan Primordial", level: 25, hp: 320, dmg: 45, loot: [2400, 2416, 2417, 2421], caps: [120, 240], zetan: true },
-  { name: "Núcleo de mando Zetan", level: 28, hp: 360, dmg: 48, loot: [2400, 2417, 2415, 2420], caps: [140, 260], zetan: true }
-];
-
-const LEGENDARY_ENEMIES = [
-  { name: "Saqueador Legendario", human: true, level: 5, hp: 90, dmg: 16, loot: [1, 7, 9], caps: [40, 90] },
-  { name: "Necrófago Irradiado Legendario", level: 8, hp: 115, dmg: 20, loot: [7, 9, 20], caps: [50, 100] },
-  { name: "Bestia Mutada Alfa Legendaria", level: 10, hp: 140, dmg: 24, loot: [7, 24, 26], caps: [55, 120] },
-  { name: "Robot Guardián Antiguo", level: 12, hp: 165, dmg: 28, loot: [3, 11, 13, 28], caps: [70, 140] },
-  { name: "Supermutante Enfurecido", level: 15, hp: 200, dmg: 32, loot: [21, 23, 28], caps: [80, 160] },
-  { name: "Cazador del Yermo Legendario", human: true, level: 18, hp: 180, dmg: 30, loot: [101, 7, 13], caps: [75, 150] },
-  { name: "Señor de la Guerra Saqueador", human: true, level: 20, hp: 220, dmg: 35, loot: [112, 7, 28], caps: [100, 180] },
-  { name: "Sanguinario Legendario", level: 22, hp: 240, dmg: 36, loot: [7, 24, 28], caps: [110, 200] },
-  { name: "Assaultron Legendaria", level: 24, hp: 260, dmg: 38, loot: [105, 13, 28], caps: [115, 210] },
-  { name: "Coloso Mutante", level: 25, hp: 280, dmg: 40, loot: [158, 21, 28], caps: [120, 220] },
-  { name: "Devorador de Muerte Legendario", level: 28, hp: 320, dmg: 45, loot: [163, 28, 316], caps: [140, 250] },
-  { name: "Behemoth Legendario", level: 30, hp: 400, dmg: 48, loot: [158, 21, 28], caps: [160, 280] }
-];
 
 
-// 20 habilidades legendarias de compañeros
-const COMPANION_LEGENDARY_ABILITIES = [
-  { id: 'c_fury', name: 'Furia del Yermo', desc: '+25% daño cuando la vida del compañero está por debajo del 40%.' },
-  { id: 'c_iron', name: 'Piel de Hierro', desc: '+20% defensa permanente.' },
-  { id: 'c_regen', name: 'Regeneración Mutante', desc: 'Recupera 5% de vida máxima al final de cada turno.' },
-  { id: 'c_crit', name: 'Golpe Letal', desc: '+30% probabilidad de crítico.' },
-  { id: 'c_rad', name: 'Aura Radiactiva', desc: 'El enemigo recibe +8 daño extra por turno.' },
-  { id: 'c_shield', name: 'Escudo Absorbente', desc: 'Absorbe el 15% del daño recibido.' },
-  { id: 'c_swift', name: 'Reflejos de Asalto', desc: '15% de probabilidad de atacar dos veces.' },
-  { id: 'c_poison', name: 'Veneno Persistente', desc: 'Envenena al enemigo 3 turnos (+6 daño/turno).' },
-  { id: 'c_terror', name: 'Presencia Aterradora', desc: 'El enemigo inflige 15% menos daño.' },
-  { id: 'c_overcharge', name: 'Sobrealimentación', desc: '+18 daño plano en cada ataque.' },
-  { id: 'c_armorbreak', name: 'Rompeblindajes', desc: 'Reduce 3 defensa enemiga acumulativa por golpe.' },
-  { id: 'c_lucky', name: 'Golpe de Suerte', desc: '10% de probabilidad de daño x3.' },
-  { id: 'c_vamp', name: 'Robo de Vida', desc: 'Cura al compañero un 20% del daño infligido.' },
-  { id: 'c_shock', name: 'Descarga Eléctrica', desc: '+12 daño y 10% de aturdir (enemigo pierde turno).' },
-  { id: 'c_pack', name: 'Instinto de Manada', desc: '+10% daño por cada compañero en prisión (máx +40%).' },
-  { id: 'c_hard', name: 'Caparazón Endurecido', desc: 'Ignora el primer golpe del combate.' },
-  { id: 'c_berserk', name: 'Berserker', desc: '+40% daño, -10% defensa.' },
-  { id: 'c_precise', name: 'Puntería Perfecta', desc: 'Los críticos hacen x2.2 en lugar de x1.5.' },
-  { id: 'c_tank', name: 'Baluarte', desc: '+35% vida máxima.' },
-  { id: 'c_legend', name: 'Presencia Legendaria', desc: '+15% a todas las estadísticas de combate.' }
-];
+// --- Sprites enemigos (iconos 96px / combate 192px) ---
+const ENEMY_SPRITE_BASE = 'img/enemies/';
+const ENEMY_SPRITE_ALIASES = {
+  'Synth_Gen_1': 'Synth_Gen-1',
+  'Synth_Gen_1_armado': 'Synth_Gen-1_armado',
+  'Synth_Gen_2': 'Synth_Gen-2',
+  'Synth_Gen_2_infiltrado': 'Synth_Gen-2_infiltrado',
+  'Synth_Gen_3': 'Synth_Gen-3',
+  'Synth_Gen_3_Cazador': 'Synth_Gen-3_Cazador'
+};
+function enemySpriteKey(name) {
+  if (!name) return '';
+  let n = String(name).replace(/^★\s*/, '').replace(/\s*\(Nv\.\d+\)/gi, '').trim();
+  try {
+    n = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  } catch (e) {}
+  n = n.replace(/ñ/gi, 'n');
+  n = n.replace(/\bGen\s*[-]?\s*(\d)/gi, 'Gen-$1');
+  n = n.replace(/[^a-zA-Z0-9-]+/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+  return n;
+}
+function enemySpriteUrl(name, kind) {
+  let key = enemySpriteKey(name);
+  if (!key) return '';
+  if (ENEMY_SPRITE_ALIASES[key]) key = ENEMY_SPRITE_ALIASES[key];
+  // fallback: guiones ↔ guiones bajos
+  let folder = (kind === 'combat') ? 'combat' : 'icons';
+  return ENEMY_SPRITE_BASE + folder + '/' + key + '.png';
+}
+function enemyIconHtml(name, isLegendary, size) {
+  let url = enemySpriteUrl(name, 'icons');
+  if (!url) return '';
+  let cls = 'enemy-icon' + (isLegendary ? ' legendary' : '');
+  let st = size ? ('width:' + size + 'px;height:' + size + 'px;') : '';
+  return '<img class="' + cls + '" src="' + url + '" alt="" style="' + st + '" onerror="this.style.display=\'none\'" />';
+}
+function enemyCombatSpriteHtml(name, isLegendary) {
+  let url = enemySpriteUrl(name, 'combat');
+  if (!url) return '';
+  return '<img class="combat-sprite' + (isLegendary ? ' legendary' : '') + '" src="' + url + '" alt="" onerror="this.style.display=\'none\'" />';
+}
+
+function playerSpriteKey() {
+  return 'Morador_de_refugio';
+}
+function playerIconHtml(size) {
+  let url = ENEMY_SPRITE_BASE + 'icons/' + playerSpriteKey() + '.png';
+  let st = size ? ('width:' + size + 'px;height:' + size + 'px;') : '';
+  return '<img class="enemy-icon" src="' + url + '" alt="Superviviente" style="' + st + '" onerror="this.style.display=\'none\'" />';
+}
+function playerCombatSpriteHtml() {
+  let url = ENEMY_SPRITE_BASE + 'combat/' + playerSpriteKey() + '.png';
+  return '<img class="combat-sprite" src="' + url + '" alt="Superviviente" onerror="this.style.display=\'none\'" />';
+}
 
 function enemyWeaponType(name) {
   let n = (name || '').toLowerCase();
@@ -4655,7 +4762,7 @@ function renderPrisonUI() {
   let eq = getEquippedCompanion();
   let html = `<p style="font-size:12px;color:#8d9880;">Prisión Nv.${P.prisonLevel}/5 · Celdas ${P.prison.length}/${cap}. Equipa 1 compañero.</p>`;
   if (eq) {
-    html += `<div class="item" style="border-color:var(--accent);"><b>Equipado:</b> ${eq.isLegendary ? '★ ' : ''}${eq.name} Nv.${eq.level} · HP ${eq.hp}/${eq.maxHp}${eq.resting ? ' · DESCANSANDO' : ''}</div>`;
+    html += `<div class="item" style="border-color:var(--accent);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="companion-row-icon">${enemyIconHtml(eq.name, eq.isLegendary)}${eq.isLegendary ? '★ ' : ''}<b>${eq.name}</b></span> Nv.${eq.level} · HP ${eq.hp}/${eq.maxHp}${eq.resting ? ' · DESCANSANDO' : ''}</div>`;
   }
   if (slice.length === 0) {
     html += `<p style="font-size:12px;color:#8d9880;">Sin prisioneros. Usa Colgantes en combate para capturar enemigos.</p>`;
@@ -4668,7 +4775,7 @@ function renderPrisonUI() {
       let radV = st.radRes != null ? st.radRes : (c.radRes || 0);
       let radTxt = radV >= 100 ? 'Inmune' : (radV + '%');
       html += `<div class="item" style="${c.id === P.equippedCompanionId ? 'border-color:var(--accent);' : ''}">
-        <b style="${c.isLegendary ? 'color:var(--gold);' : ''}">${c.isLegendary ? '★ ' : ''}${c.name}</b> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
+        <span class="companion-row-icon">${enemyIconHtml(c.name, c.isLegendary)}<b style="${c.isLegendary ? 'color:var(--gold);' : ''}">${c.isLegendary ? '★ ' : ''}${c.name}</b></span> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
         ${c.resting ? ' <span style="color:var(--danger);">[DESCANSANDO]</span>' : ''}
         <br><span style="font-size:11px;color:#8d9880;">HP ${c.hp}/${c.maxHp} · ATK ${st.dmg} · DEF ${st.def || 0} · RAD ${radTxt}</span>
         <br><span style="font-size:11px;color:#8d9880;">${weap} · Armadura: ${armN}</span>
@@ -8577,7 +8684,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.28</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.31</div>
   `;
   m.classList.add('show');
 }
@@ -15889,26 +15996,25 @@ function renderCombatUI() {
   let m = document.getElementById('modal');
   let titleText = combatState.isLegendary ? "★ COMBATE LEGENDARIO ★" : "COMBATE DETECTADO";
   if (m) m.classList.add('show');
+  let enemySprite = enemyCombatSpriteHtml(combatState.enemyName, combatState.isLegendary);
+  let playerSprite = (typeof playerCombatSpriteHtml === 'function')
+    ? playerCombatSpriteHtml()
+    : '<div style="width:96px;height:96px;display:flex;align-items:center;justify-content:center;font-size:48px;">☺</div>';
   document.getElementById('modal-body').innerHTML = `
     <div class="combat-title">${titleText}</div>
 
-    <div class="combat-entity">
-      <div class="combat-entity-name enemy">
-        <span>${combatState.isLegendary ? '★ ' : ''}${combatState.enemyName}</span>
-        <span>${combatState.enemyHp} / ${combatState.enemyMaxHp}</span>
+    <div class="combat-arena">
+      <div class="combat-fighter player">
+        ${playerSprite}
+        <div class="cf-name">${(P.playerName || "Superviviente")}</div>
+        <div class="cf-hp"><div style="width:${playerPct}%;"></div></div>
+        <div class="cf-hp-text">${P.hp} / ${maxhp}</div>
       </div>
-      <div class="combat-hp-bar">
-        <div class="combat-hp-fill enemy" style="width:${enemyPct}%;"></div>
-      </div>
-    </div>
-
-    <div class="combat-entity">
-      <div class="combat-entity-name player">
-        <span>Tú</span>
-        <span>${P.hp} / ${maxhp}</span>
-      </div>
-      <div class="combat-hp-bar">
-        <div class="combat-hp-fill player" style="width:${playerPct}%;"></div>
+      <div class="combat-fighter enemy">
+        ${enemySprite || '<div style="width:96px;height:96px;font-size:40px;display:flex;align-items:center;justify-content:center;">💀</div>'}
+        <div class="cf-name">${combatState.isLegendary ? '★ ' : ''}${combatState.enemyName}</div>
+        <div class="cf-hp"><div style="width:${enemyPct}%;"></div></div>
+        <div class="cf-hp-text">${combatState.enemyHp} / ${combatState.enemyMaxHp}</div>
       </div>
     </div>
     ${compHtml}
