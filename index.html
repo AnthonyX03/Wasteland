@@ -2213,12 +2213,42 @@ body.pc-mode .panel-log .log::-webkit-scrollbar-thumb {
   filter: drop-shadow(0 2px 4px #000a);
 }
 body.pc-mode .combat-fighter img.combat-sprite {
-  width: 128px;
-  height: 128px;
+  width: 112px;
+  height: 112px;
 }
-.combat-fighter.enemy img.combat-sprite.legendary {
+.combat-fighter.enemy img.combat-sprite.legendary,
+.combat-fighter.ally img.combat-sprite.legendary {
   filter: drop-shadow(0 0 6px #d5bd69aa) drop-shadow(0 2px 4px #000a);
 }
+/* Compañero: mismo sprite de combat, mirando a la derecha (hacia el enemigo) */
+.combat-fighter.ally img.combat-sprite {
+  transform: scaleX(-1);
+}
+.combat-fighter.ally .cf-name { color: #88aacc; }
+.combat-fighter.ally .cf-hp > div { background: #6688aa; }
+.combat-arena.has-ally .combat-fighter {
+  max-width: 32%;
+}
+.combat-arena.has-ally .combat-fighter img.combat-sprite {
+  width: 80px;
+  height: 80px;
+}
+body.pc-mode .combat-arena.has-ally .combat-fighter img.combat-sprite {
+  width: 100px;
+  height: 100px;
+}
+.combat-side-player {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  flex: 1 1 auto;
+  max-width: 58%;
+}
+.combat-side-player .combat-fighter {
+  max-width: 48%;
+}
+
 .combat-fighter .cf-name {
   font-size: 11px;
   text-align: center;
@@ -3436,19 +3466,42 @@ const ZETAN_ENEMIES = [
 ];
 
 
+
 // --- Sprites enemigos (iconos 96px / combate 192px) ---
 const ENEMY_SPRITE_BASE = 'img/enemies/';
+const ENEMY_SPRITE_KEYS = new Set(['Asesino_de_la_Hermandad','Assaultron_defectuosa','Behemoth_mutante','Bestia_mutada','Bestia_mutada_alfa','Bestia_mutada_pequena','Cazador_del_Yermo','Centinela_del_Enclave','Centinela_robotico','Colonos_perdidos','Comerciante_solitario','Courser_del_Instituto','Curandero_itinerante','Devorador_de_muerte','Drone_Zetan','Granjero_del_yermo','Mensajero_civil','Mercenario_del_Yermo','Morador_de_refugio','Moscas_de_sangre','Mr_Handy_hostil','Necrofago','Necrofago_brillante','Necrofago_debil','Necrofago_experimento','Necrofago_feroz','Peregrino_herido','Perro_salvaje','Protectron_oxidado','Rata_irradiada','Refugiado_desarmado','Robot_de_seguridad','Robot_defectuoso','Robot_militar','Sanguinario','Sanguinario_alfa','Sanguinario_joven','Saqueador','Saqueador_armado','Saqueador_con_escopeta','Saqueador_con_tuberia','Saqueador_de_elite','Saqueador_jefe','Saqueador_novato','Saqueador_nuclear','Saqueador_psicopata','Saqueador_veterano','Sentry_Bot_danado','Sonda_de_abduccion','Supermutante','Supermutante_brutal','Supermutante_con_tablon','Supermutante_francotirador','Supermutante_inestable','Supermutante_novato','Supermutante_senor_de_la_guerra','Synth_Gen-1','Synth_Gen-1_armado','Synth_Gen-2','Synth_Gen-2_infiltrado','Synth_Gen-3','Synth_Gen-3_Cazador','Synth_defectuoso','Topo_mutante','Viajero_desarmado','Zetan_aniquilador','Zetan_centinela','Zetan_comandante','Zetan_de_elite','Zetan_experimental','Zetan_explorador','Zetan_genetico','Zetan_inquisidor','Zetan_soldado','Zetan_tecnico']);
 const ENEMY_SPRITE_ALIASES = {
   'Synth_Gen_1': 'Synth_Gen-1',
   'Synth_Gen_1_armado': 'Synth_Gen-1_armado',
   'Synth_Gen_2': 'Synth_Gen-2',
   'Synth_Gen_2_infiltrado': 'Synth_Gen-2_infiltrado',
   'Synth_Gen_3': 'Synth_Gen-3',
-  'Synth_Gen_3_Cazador': 'Synth_Gen-3_Cazador'
+  'Synth_Gen_3_Cazador': 'Synth_Gen-3_Cazador',
+  'Sintetico_defectuoso': 'Synth_defectuoso',
+  'Courser': 'Courser_del_Instituto',
+  'Rex': 'Perro_salvaje',
+  'Perro_cibernetico': 'Perro_salvaje'
 };
+// Fallback por tipo cuando no hay sprite exacto
+const ENEMY_SPRITE_TYPE_FALLBACK = {
+  synth: 'Synth_Gen-1',
+  robot: 'Robot_defectuoso',
+  supermutant: 'Supermutante',
+  creature: 'Bestia_mutada',
+  ghoul: 'Necrofago',
+  human: 'Saqueador',
+  zetan: 'Zetan_soldado',
+  other: 'Saqueador'
+};
+
 function enemySpriteKey(name) {
   if (!name) return '';
-  let n = String(name).replace(/^★\s*/, '').replace(/\s*\(Nv\.\d+\)/gi, '').trim();
+  let n = String(name)
+    .replace(/^★\s*/, '')
+    .replace(/\s*\(Nv\.?\s*\d+\)/gi, '')
+    .replace(/\blegendari[oa]?\b/gi, '')
+    .replace(/\bunique\b/gi, '')
+    .trim();
   try {
     n = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   } catch (e) {}
@@ -3457,27 +3510,94 @@ function enemySpriteKey(name) {
   n = n.replace(/[^a-zA-Z0-9-]+/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
   return n;
 }
-function enemySpriteUrl(name, kind) {
+
+/** Resuelve clave de sprite existente; reutiliza repertorio si no hay exacto */
+function resolveEnemySpriteKey(name, typeHint) {
   let key = enemySpriteKey(name);
-  if (!key) return '';
+  if (!key) key = '';
   if (ENEMY_SPRITE_ALIASES[key]) key = ENEMY_SPRITE_ALIASES[key];
-  // fallback: guiones ↔ guiones bajos
+  if (key && ENEMY_SPRITE_KEYS.has(key)) return key;
+
+  // Coincidencia parcial: el nombre del archivo contenido en la clave o viceversa
+  let lower = key.toLowerCase();
+  let best = null, bestLen = 0;
+  ENEMY_SPRITE_KEYS.forEach(function(k) {
+    let kl = k.toLowerCase();
+    if (!kl || !lower) return;
+    if (lower === kl) { best = k; bestLen = 999; return; }
+    if (lower.indexOf(kl) >= 0 && kl.length > bestLen) { best = k; bestLen = kl.length; }
+    if (kl.indexOf(lower) >= 0 && lower.length > bestLen) { best = k; bestLen = lower.length; }
+  });
+  if (best && bestLen >= 5) return best;
+
+  // Por palabras clave del nombre original
+  let raw = String(name || '').toLowerCase();
+  try { raw = raw.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); } catch (e) {}
+  const rules = [
+    [/zetan|sonda|drone/, 'Zetan_soldado'],
+    [/courser/, 'Courser_del_Instituto'],
+    [/synth|sintetic/, 'Synth_Gen-1'],
+    [/assaultron/, 'Assaultron_defectuosa'],
+    [/sentry/, 'Sentry_Bot_danado'],
+    [/protectron/, 'Protectron_oxidado'],
+    [/handy|mr\.?\s*handy/, 'Mr_Handy_hostil'],
+    [/robot|centinela robot/, 'Robot_defectuoso'],
+    [/behemoth/, 'Behemoth_mutante'],
+    [/supermutante|mutante/, 'Supermutante'],
+    [/sanguinario/, 'Sanguinario'],
+    [/devorador/, 'Devorador_de_muerte'],
+    [/deathclaw|yao|mole|ceniciento/, 'Bestia_mutada'],
+    [/bestia/, 'Bestia_mutada'],
+    [/topo/, 'Topo_mutante'],
+    [/rata/, 'Rata_irradiada'],
+    [/perro|rex/, 'Perro_salvaje'],
+    [/mosca/, 'Moscas_de_sangre'],
+    [/necrofago|necrofago|ghoul|feral/, 'Necrofago'],
+    [/saqueador|raider/, 'Saqueador'],
+    [/mercenario/, 'Mercenario_del_Yermo'],
+    [/cazador del yermo/, 'Cazador_del_Yermo'],
+    [/enclave/, 'Centinela_del_Enclave'],
+    [/hermandad/, 'Asesino_de_la_Hermandad'],
+    [/morador/, 'Morador_de_refugio'],
+    [/comerciante|civil|granjero|peregrino|refugiado|mensajero|curandero|viajero|colono/, 'Comerciante_solitario']
+  ];
+  for (let i = 0; i < rules.length; i++) {
+    if (rules[i][0].test(raw) && ENEMY_SPRITE_KEYS.has(rules[i][1])) return rules[i][1];
+  }
+
+  // typeHint del compañero (synth, robot, human...)
+  let th = (typeHint || '').toLowerCase();
+  if (th && ENEMY_SPRITE_TYPE_FALLBACK[th]) {
+    let fb = ENEMY_SPRITE_TYPE_FALLBACK[th];
+    if (ENEMY_SPRITE_KEYS.has(fb)) return fb;
+  }
+  // Infer type from name
+  if (typeof enemyWeaponType === 'function') {
+    let tp = enemyWeaponType(name);
+    if (tp && ENEMY_SPRITE_TYPE_FALLBACK[tp] && ENEMY_SPRITE_KEYS.has(ENEMY_SPRITE_TYPE_FALLBACK[tp])) {
+      return ENEMY_SPRITE_TYPE_FALLBACK[tp];
+    }
+  }
+  return 'Saqueador';
+}
+
+function enemySpriteUrl(name, kind, typeHint) {
+  let key = resolveEnemySpriteKey(name, typeHint);
+  if (!key) key = 'Saqueador';
   let folder = (kind === 'combat') ? 'combat' : 'icons';
   return ENEMY_SPRITE_BASE + folder + '/' + key + '.png';
 }
-function enemyIconHtml(name, isLegendary, size) {
-  let url = enemySpriteUrl(name, 'icons');
-  if (!url) return '';
+function enemyIconHtml(name, isLegendary, size, typeHint) {
+  let url = enemySpriteUrl(name, 'icons', typeHint);
   let cls = 'enemy-icon' + (isLegendary ? ' legendary' : '');
   let st = size ? ('width:' + size + 'px;height:' + size + 'px;') : '';
-  return '<img class="' + cls + '" src="' + url + '" alt="" style="' + st + '" onerror="this.style.display=\'none\'" />';
+  // onerror: probar Saqueador genérico
+  return '<img class="' + cls + '" src="' + url + '" alt="" style="' + st + '" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'img/enemies/icons/Saqueador.png\';}else{this.style.display=\'none\';}" />';
 }
-function enemyCombatSpriteHtml(name, isLegendary) {
-  let url = enemySpriteUrl(name, 'combat');
-  if (!url) return '';
-  return '<img class="combat-sprite' + (isLegendary ? ' legendary' : '') + '" src="' + url + '" alt="" onerror="this.style.display=\'none\'" />';
+function enemyCombatSpriteHtml(name, isLegendary, typeHint) {
+  let url = enemySpriteUrl(name, 'combat', typeHint);
+  return '<img class="combat-sprite' + (isLegendary ? ' legendary' : '') + '" src="' + url + '" alt="" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'img/enemies/combat/Saqueador.png\';}else{this.style.display=\'none\';}" />';
 }
-
 function playerSpriteKey() {
   return 'Morador_de_refugio';
 }
@@ -3490,6 +3610,7 @@ function playerCombatSpriteHtml() {
   let url = ENEMY_SPRITE_BASE + 'combat/' + playerSpriteKey() + '.png';
   return '<img class="combat-sprite" src="' + url + '" alt="Superviviente" onerror="this.style.display=\'none\'" />';
 }
+
 
 function enemyWeaponType(name) {
   let n = (name || '').toLowerCase();
@@ -4762,7 +4883,7 @@ function renderPrisonUI() {
   let eq = getEquippedCompanion();
   let html = `<p style="font-size:12px;color:#8d9880;">Prisión Nv.${P.prisonLevel}/5 · Celdas ${P.prison.length}/${cap}. Equipa 1 compañero.</p>`;
   if (eq) {
-    html += `<div class="item" style="border-color:var(--accent);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="companion-row-icon">${enemyIconHtml(eq.name, eq.isLegendary)}${eq.isLegendary ? '★ ' : ''}<b>${eq.name}</b></span> Nv.${eq.level} · HP ${eq.hp}/${eq.maxHp}${eq.resting ? ' · DESCANSANDO' : ''}</div>`;
+    html += `<div class="item" style="border-color:var(--accent);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="companion-row-icon">${enemyIconHtml(eq.name, eq.isLegendary, null, eq.type)}${eq.isLegendary ? '★ ' : ''}<b>${eq.name}</b></span> Nv.${eq.level} · HP ${eq.hp}/${eq.maxHp}${eq.resting ? ' · DESCANSANDO' : ''}</div>`;
   }
   if (slice.length === 0) {
     html += `<p style="font-size:12px;color:#8d9880;">Sin prisioneros. Usa Colgantes en combate para capturar enemigos.</p>`;
@@ -4775,7 +4896,7 @@ function renderPrisonUI() {
       let radV = st.radRes != null ? st.radRes : (c.radRes || 0);
       let radTxt = radV >= 100 ? 'Inmune' : (radV + '%');
       html += `<div class="item" style="${c.id === P.equippedCompanionId ? 'border-color:var(--accent);' : ''}">
-        <span class="companion-row-icon">${enemyIconHtml(c.name, c.isLegendary)}<b style="${c.isLegendary ? 'color:var(--gold);' : ''}">${c.isLegendary ? '★ ' : ''}${c.name}</b></span> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
+        <span class="companion-row-icon">${enemyIconHtml(c.name, c.isLegendary, null, c.type)}<b style="${c.isLegendary ? 'color:var(--gold);' : ''}">${c.isLegendary ? '★ ' : ''}${c.name}</b></span> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
         ${c.resting ? ' <span style="color:var(--danger);">[DESCANSANDO]</span>' : ''}
         <br><span style="font-size:11px;color:#8d9880;">HP ${c.hp}/${c.maxHp} · ATK ${st.dmg} · DEF ${st.def || 0} · RAD ${radTxt}</span>
         <br><span style="font-size:11px;color:#8d9880;">${weap} · Armadura: ${armN}</span>
@@ -5816,7 +5937,7 @@ function renderQuests(tab) {
 
     html += `<h3 style="color:#dd8844;font-size:13px;margin:8px 0 4px;">🎯 Cazarrecompensas (${bounty.filter(c=>!c.completed).length}/3 activos)</h3>`;
     if (!bounty.length) {
-      html += `<p style="font-size:12px;color:#8d9880;">Sin contratos de cazarrecompensas. Visita el Gremio [-9, -14].</p>`;
+      html += `<p style="font-size:12px;color:#8d9880;">Sin contratos de cazarrecompensas. Visita el Gremio (X-9 / Y-14).</p>`;
     } else {
       bounty.forEach(c => {
         html += `<div class="item" style="border-color:#dd8844 !important;">
@@ -5831,7 +5952,7 @@ function renderQuests(tab) {
 
     html += `<h3 style="color:#88aa44;font-size:13px;margin:10px 0 4px;">🏹 Cazadores (${hunters.filter(c=>!c.completed).length}/3 activos)</h3>`;
     if (!hunters.length) {
-      html += `<p style="font-size:12px;color:#8d9880;">Sin contratos de cazadores. Visita la Logia [+17, -14].</p>`;
+      html += `<p style="font-size:12px;color:#8d9880;">Sin contratos de cazadores. Visita la Logia (X+17 / Y-14).</p>`;
     } else {
       hunters.forEach(c => {
         html += `<div class="item" style="border-color:#88aa44 !important;">
@@ -6760,7 +6881,7 @@ function renderUniqueInteriorMap() {
       if (c.loot && !c.searched) cls += ' loot';
       if (c.isExit) cls += ' exit';
       if (c.isStart) cls += ' start';
-      let content = isHere ? '☺' : (c.wall ? '▓' : (c.visited || c.isStart || c.isExit ? (c.icon || '·') : '·'));
+      let content = isHere ? '<img class="player-map-face" src="img/player-face.png" alt="" />' : (c.wall ? '▓' : (c.visited || c.isStart || c.isExit ? (c.icon || '·') : '·'));
       cells += '<div class="' + cls + '">' + content + '</div>';
     }
   }
@@ -7088,7 +7209,14 @@ function countMedsById(baseId) {
 }
 
 function fmtCoord(n) {
-  return n > 0 ? '+' + n : '' + n;
+  if (n === 0 || n === '0') return '0';
+  n = Number(n);
+  if (isNaN(n)) return '0';
+  return n > 0 ? '+' + n : String(n);
+}
+/** Formato unificado: X0 / Y0 · X-13 / Y+1 */
+function fmtXY(x, y) {
+  return 'X' + fmtCoord(x) + ' / Y' + fmtCoord(y);
 }
 
 function renderWorldGrid() {
@@ -7104,7 +7232,7 @@ function renderWorldGrid() {
       if (z.settlementId === 'player_vault') cls += ' player-vault';
       if (z.settlementId === 'vaulttec_hq' || z.faction === 'vaulttec') cls += ' vaulttec-settlement';
       if (z.faction === 'nucleologos') cls += ' nucleo-settlement';
-      let icon = isPlayer ? '☺' : z.icon;
+      let icon = isPlayer ? '<img class="player-map-face" src="img/player-face.png" alt="" />' : z.icon;
       cells += `<div class="${cls}" title="${z.name}">${icon}</div>`;
     }
   }
@@ -7166,7 +7294,7 @@ function renderMap() {
     let sx = fmtCoord(P.radioSignal.x);
     let sy = fmtCoord(P.radioSignal.y);
     let here = (P.x === P.radioSignal.x && P.y === P.radioSignal.y);
-    signalHint += `<div class="map-signal-hint" style="color:${here ? 'var(--gold)' : '#8d9880'};">📡 Señal en [${sx}, ${sy}]${here ? ' — ¡AQUÍ! Usa la Radio.' : ''}</div>`;
+    signalHint += `<div class="map-signal-hint" style="color:${here ? 'var(--gold)' : '#8d9880'};">📡 Señal en (${fmtXY(P.radioSignal.x, P.radioSignal.y)})${here ? ' — ¡AQUÍ! Usa la Radio.' : ''}</div>`;
   }
   if (P.lootTip) {
     let lx = fmtCoord(P.lootTip.x);
@@ -7295,7 +7423,7 @@ function renderMap() {
   let mapBody;
   if (isPc) {
     mapBody = `
-    <div class="map-top"><b>[${fmtX},${fmtY}]</b> ${zone.icon} <b style="color:var(--accent);">${zone.name}</b>
+    <div class="map-top"><b>(${fmtXY(P.x, P.y)})</b> ${zone.icon} <b style="color:var(--accent);">${zone.name}</b>
     ${zone.enterable ? ' <span style="color:var(--gold);font-size:11px;">(entrable)</span>' : ''}
     </div>
     ${signalHint || ''}
@@ -7313,7 +7441,7 @@ function renderMap() {
     </div>`;
   } else {
     mapBody = `
-    <div class="map-top"><b>[${fmtX},${fmtY}]</b> ${zone.icon} <b style="color:var(--accent);">${zone.name}</b>
+    <div class="map-top"><b>(${fmtXY(P.x, P.y)})</b> ${zone.icon} <b style="color:var(--accent);">${zone.name}</b>
     ${zone.enterable ? ' <span style="color:var(--gold);font-size:11px;">(entrable)</span>' : ''}
     </div>
     ${signalHint || '<div class="map-signal-hint">&nbsp;</div>'}
@@ -7627,7 +7755,7 @@ function renderZetanShipMap() {
       if (isHere) cls += ' player';
       if (c.isExit) cls += ' enterable';
       let content;
-      if (isHere) content = '☺';
+      if (isHere) content = '<img class="player-map-face" src="img/player-face.png" alt="" />';
       else if (c.visited || c.isExit || c.isStart) content = c.icon || '◈';
       else content = '·';
       cells += '<div class="' + cls + '" title="' + (c.visited || isHere ? c.name : '???') + '">' + content + '</div>';
@@ -7682,7 +7810,7 @@ function renderZetanShipMap() {
   document.getElementById('main-view').innerHTML = `
     <div class="map-compact">
     <div class="map-top"><b style="color:#66ffaa;">🛸 Nave Zetan</b> · ${cell.icon || '◈'} <b>${cell.name}</b>${isPc ? ' · WASD' : ''}</div>
-    <div class="map-signal-hint" style="color:#8d9880;">Sangre: <b style="color:#66ffaa;">${blood}</b> · [${ship.px},${ship.py}] · Si mueres pierdes la sangre</div>
+    <div class="map-signal-hint" style="color:#8d9880;">Sangre: <b style="color:#66ffaa;">${blood}</b> · (${fmtXY(ship.px, ship.py)}) · Si mueres pierdes la sangre</div>
     ${controls}
     </div>
   `;
@@ -7948,9 +8076,9 @@ function openNukaWorldDlcInfo() {
     <p style="text-align:center;font-size:11px;color:#8d9880;margin:0 0 8px 0;">Expansión · Wasteland</p>
     <div class="item" style="border-color:#d5bd69;font-size:12px;color:#8d9880;line-height:1.45;">
       <p style="color:var(--txt);">En el Yermo hay tres formas de sangrar o engordar el monedero: la <b style="color:#4a9eff;">arena</b>, la <b style="color:#e05050;">feria</b> y la <b style="color:#d5bd69;">bóveda</b>. Esta expansión une el espectáculo y el capital en un mismo circuito.</p>
-      <p><b style="color:#4a9eff;">🥊 Combat Zone</b> [<b>-5, +4</b>] — Arena de combates de pago. Ganas <b>tickets de Combat Zone</b> (sin loot ni legendarios). Tienda y taquilla de mejora (hasta nivel 5).</p>
-      <p><b style="color:#e05050;">🎪 Circo de Nuka-World</b> [<b>+20, -8</b>] — Parque de atracciones y NukaCade. Las máquinas solo aceptan <b>fichas</b> (100 $ de antes de la guerra = 1 ficha en Taquilla). Minijuegos con SCORE → tickets Nuka. Tienda exclusiva y canje de tickets.</p>
-      <p><b style="color:#d5bd69;">🏦 Banco Central</b> [<b>+8, +6</b>] — Alguien ha vuelto a abrir cuentas de ahorro. <b>Apertura: 10000 chapas</b>. Deposita chapas y dinero de antes de la guerra; el saldo crece un <b>1% por hora</b>. También puedes <b>apostar</b> por combates retransmitidos de la Combat Zone o por pringados del Circo Nuka-World.</p>
+      <p><b style="color:#4a9eff;">🥊 Combat Zone</b> (<b>X-5 / Y+4</b>) — Arena de combates de pago. Ganas <b>tickets de Combat Zone</b> (sin loot ni legendarios). Tienda y taquilla de mejora (hasta nivel 5).</p>
+      <p><b style="color:#e05050;">🎪 Circo de Nuka-World</b> (<b>X+20 / Y-8</b>) — Parque de atracciones y NukaCade. Las máquinas solo aceptan <b>fichas</b> (100 $ de antes de la guerra = 1 ficha en Taquilla). Minijuegos con SCORE → tickets Nuka. Tienda exclusiva y canje de tickets.</p>
+      <p><b style="color:#d5bd69;">🏦 Banco Central</b> (<b>X+8 / Y+6</b>) — Alguien ha vuelto a abrir cuentas de ahorro. <b>Apertura: 10000 chapas</b>. Deposita chapas y dinero de antes de la guerra; el saldo crece un <b>1% por hora</b>. También puedes <b>apostar</b> por combates retransmitidos de la Combat Zone o por pringados del Circo Nuka-World.</p>
       <p style="color:#d5bd69;margin-bottom:0;">Tres destinos, una misma obsesión: que las chapas no duerman en el bolsillo… o que lo hagan en la caja fuerte adecuada.</p>
     </div>
     <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
@@ -7967,7 +8095,7 @@ function openTemiblesDlcInfo() {
       <p>Los <b style="color:#88aa44;">Cazadores</b> 🏹 persiguen otra clase de presa: necrófagos, supermutantes, bestias irradiadas… cada una con nombre propio. Pueden aparecer dentro de localidades o al azar en el Yermo. Misma regla de tablero y de contratos activos.</p>
       <p><b style="color:#dd8844;">Cazarrecompensas</b> — Contratos de humanos en localidades únicas. Tienda de armas y atuendos de caza. Base con médico, casa y viaje rápido.</p>
       <p><b style="color:#88aa44;">Cazadores</b> — Contratos de mutantes y fauna. Tienda exclusiva. Base igual que el resto de facciones.</p>
-      <p style="color:#dd8844;margin-bottom:0;">Mapa: Gremio de Cazarrecompensas 🎯 <b>[-9, -14]</b> · Logia de los Cazadores 🏹 <b>[+17, -14]</b></p>
+      <p style="color:#dd8844;margin-bottom:0;">Mapa: Gremio de Cazarrecompensas 🎯 <b>(X-9 / Y-14)</b> · Logia de los Cazadores 🏹 <b>(X+17 / Y-14)</b></p>
     </div>
     <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
     <button style="width:100%;margin-top:6px;" onclick="closeModal();">Cerrar</button>
@@ -7984,7 +8112,7 @@ function openSpiesDlcInfo() {
       <p>Para infiltrarse y recuperar esos conocimientos, los Seguidores perfeccionaron un método de <b>Necrofaguización</b>: convertirte en necrófago, ganar acceso a Necrópolis… y pagar el precio de que facciones humanistas te cierren la puerta.</p>
       <p><b style="color:#66cc99;">Seguidores</b> — Vende libros/documentos por chapas y reputación. Necrofaguización / revertir (1000 chapas). Tienda sin armas: consumibles, atuendos y Stealth Boy.</p>
       <p><b style="color:#88aa66;">Necrópolis</b> — Solo necrófagos. Misiones normales cuya recompensa incluye libros o documentos antiguos. Tienda con armas y atuendos. El médico solo cura salud.</p>
-      <p style="color:#66cc99;margin-bottom:0;">Mapa: Clínica de los Seguidores <b>[-20, -8]</b> · Necrópolis <b>[+16, -12]</b></p>
+      <p style="color:#66cc99;margin-bottom:0;">Mapa: Clínica de los Seguidores <b>(X-20 / Y-8)</b> · Necrópolis <b>(X+16 / Y-12)</b></p>
     </div>
     <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
   
@@ -8000,8 +8128,8 @@ function openZetanDlcInfo() {
     <p style="text-align:center;font-size:11px;color:#8d9880;margin:0 0 8px 0;">Expansión · Wasteland</p>
     <div class="item" style="border-color:#66ffaa;font-size:12px;color:#8d9880;line-height:1.45;">
       <p style="color:var(--txt);">No estás solo en el Yermo. Desde hace décadas, luces imposibles cruzan el cielo y dejan cicatrices en la tierra. Los <b style="color:#66ffaa;">Zentans</b> observan, abducen y experimentan: humanos convertidos en datos a bordo de naves que no deberían existir.</p>
-      <p>En una zona remota del mapa [<b>+18, +15</b>] puedes ser abducido. Dentro de la nave el espacio es limitado, las emboscadas constantes y la muerte te devuelve a la entrada… sin la <b>Sangre de Zetan</b> que hayas reunido. Si logras escapar, demuestras que la Tierra aún muerde.</p>
-      <p>Esa hazaña abre las puertas de los <b style="color:#66ffaa;">Nucleólogos</b> [+18, +15]: científicos obsesionados con lo alienígena. Misiones propias, tienda exclusiva y compra de sangre de Zetan (100 chapas + 5 rep por unidad). Armas y munición alienígena solo se obtienen farmeando a bordo.</p>
+      <p>En una zona remota del mapa (<b>X+18 / Y+15</b>) puedes ser abducido. Dentro de la nave el espacio es limitado, las emboscadas constantes y la muerte te devuelve a la entrada… sin la <b>Sangre de Zetan</b> que hayas reunido. Si logras escapar, demuestras que la Tierra aún muerde.</p>
+      <p>Esa hazaña abre las puertas de los <b style="color:#66ffaa;">Nucleólogos</b> (X+18 / Y+15): científicos obsesionados con lo alienígena. Misiones propias, tienda exclusiva y compra de sangre de Zetan (100 chapas + 5 rep por unidad). Armas y munición alienígena solo se obtienen farmeando a bordo.</p>
       <p style="color:#66ffaa;margin-bottom:0;">Estado: ${esc}</p>
     </div>
     <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
@@ -8021,8 +8149,8 @@ function openVaultTecDlcInfo() {
     <p style="text-align:center;font-size:11px;color:#8d9880;margin:0 0 8px 0;">Expansión · Wasteland</p>
     <div class="item" style="border-color:#88aadd;font-size:12px;color:#8d9880;line-height:1.45;">
       <p style="color:var(--txt);">Antes de la guerra, <b style="color:#88aadd;">Vaul-Tec</b> prometió salvación bajo tierra. En la práctica, muchos Refugios fueron laboratorios: gas, radiación, virus de evolución forzada… todo en nombre del “progreso”.</p>
-      <p>En un rincón remoto del Yermo [<b>-22, +18</b>] sigue en pie un <b>Refugio experimental</b>. Puedes reclamarlo, numerarlo y convertirte en Supervisor. Repara la antena de atracción para que lleguen <b>moradores</b> (Inventario → Especiales) y, en el <b>Laboratorio</b>, somételos a las pruebas de siempre.</p>
-      <p>Los que sobreviven pasan a <b>Criogenización</b>: úsalos como compañeros o sacrifícalos por <b>Documentos del experimento</b>. Desde la Sala del Supervisor contactas con la <b>Sede de Vaul-Tec</b> [<b>-18, +14</b>]: misiones, tienda y la moneda que solo ellos aceptan — el <b>Dinero de antes de la guerra</b>.</p>
+      <p>En un rincón remoto del Yermo (<b>X-22 / Y+18</b>) sigue en pie un <b>Refugio experimental</b>. Puedes reclamarlo, numerarlo y convertirte en Supervisor. Repara la antena de atracción para que lleguen <b>moradores</b> (Inventario → Especiales) y, en el <b>Laboratorio</b>, somételos a las pruebas de siempre.</p>
+      <p>Los que sobreviven pasan a <b>Criogenización</b>: úsalos como compañeros o sacrifícalos por <b>Documentos del experimento</b>. Desde la Sala del Supervisor contactas con la <b>Sede de Vaul-Tec</b> (<b>X-18 / Y+14</b>): misiones, tienda y la moneda que solo ellos aceptan — el <b>Dinero de antes de la guerra</b>.</p>
       <p style="color:#88aadd;margin-bottom:0;">Estado: ${st}</p>
     </div>
     <button style="width:100%;margin-top:10px;" onclick="openAdditionalContentUI()">← Contenido Adicional</button>
@@ -8684,7 +8812,7 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.31</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.34</div>
   `;
   m.classList.add('show');
 }
@@ -9021,7 +9149,7 @@ function renderPlayerVaultUI(tab) {
     </div>
     <div class="item" style="border-color:#88aadd;">
       <b>📡 Sala del Supervisor</b><br>
-      <span style="font-size:12px;color:#8d9880;">Contacta con la Sede de Vaul-Tec [-18, +14] para desbloquear el asentamiento de facción.</span><br>
+      <span style="font-size:12px;color:#8d9880;">Contacta con la Sede de Vaul-Tec (X-18 / Y+14) para desbloquear el asentamiento de facción.</span><br>
       <button style="margin-top:6px;" onclick="contactVaultTecHQ()">${v.hqUnlocked ? 'Sede desbloqueada ✓' : 'Contactar Vaul-Tec'}</button>
     </div>`;
   }
@@ -9368,7 +9496,7 @@ function contactVaultTecHQ() {
   P.playerVault.hqUnlocked = true;
   if (!P.fastTravel) P.fastTravel = {};
   P.fastTravel.vaulttec_hq = true;
-  logMsg('Contacto establecido. Sede de Vaul-Tec desbloqueada [-18, +14].');
+  logMsg('Contacto establecido. Sede de Vaul-Tec desbloqueada (X-18 / Y+14).');
   renderPlayerVaultUI('base');
 }
 function vaultRestUI() {
@@ -9403,7 +9531,7 @@ function ghoulDenialMessage(factionId) {
       icon: '☠',
       subtitle: 'Acceso denegado',
       msg: 'Los necrófagos no aceptan humanos entre sus muros.',
-      hint: 'Los Seguidores del Apocalipsis conocen un método de <b>Necrofaguización</b> para infiltrarte. Clínica de los Seguidores [-20, -8].'
+      hint: 'Los Seguidores del Apocalipsis conocen un método de <b>Necrofaguización</b> para infiltrarte. Clínica de los Seguidores (X-20 / Y-8).'
     };
   }
   let f = FACTIONS[factionId];
@@ -12702,7 +12830,7 @@ const ROBCO_SCRAP_IDS = [13, 20, 21, 22, 23, 27, 28, 30, 33, 36]; // variedades 
 function enterRobcoFactory() {
   ensureRobcoFactory();
   if (P.x !== 8 || P.y !== -10) {
-    logMsg("Debes estar en la Fábrica RobCo [+8, -10].");
+    logMsg("Debes estar en la Fábrica RobCo (X+8 / Y-10).");
     return;
   }
   P.location = { type: 'settlement', settlementId: 'robco_factory', name: 'Fábrica RobCo Industries', faction: 'robco' };
@@ -14991,7 +15119,7 @@ function openRadioCaptureUI() {
     let here = (P.x === P.radioSignal.x && P.y === P.radioSignal.y);
     signalInfo = here
       ? `¡Estás en la ubicación de la señal! [${sx}, ${sy}] — pulsa CAPTAR SEÑAL.`
-      : `Señal pendiente en coordenadas [${sx}, ${sy}]. Desplázate hasta allí.`;
+      : `Señal pendiente en coordenadas (${fmtXY(P.radioSignal.x, P.radioSignal.y)}). Desplázate hasta allí.`;
   }
   document.getElementById('main-view').innerHTML = `
     <div class="radio-panel">
@@ -15427,7 +15555,7 @@ function captureSignal() {
   P.radioSignal = { x: P.x + dx, y: P.y + dy };
   let sx = P.radioSignal.x > 0 ? "+" + P.radioSignal.x : P.radioSignal.x;
   let sy = P.radioSignal.y > 0 ? "+" + P.radioSignal.y : P.radioSignal.y;
-  logMsg("Señal detectada en coordenadas [" + sx + ", " + sy + "]. Desplázate hasta allí y vuelve a captar.");
+  logMsg("Señal detectada en coordenadas (" + fmtXY(tx, ty) + "). Desplázate hasta allí y vuelve a captar.");
   openRadioCaptureUI();
   updateStats();
 }
@@ -15470,7 +15598,7 @@ function move(dx, dy) {
   P.x += dx;
   P.y += dy;
   let zone = getZoneAt(P.x, P.y);
-  logMsg("Te desplazas a [" + fmtCoord(P.x) + ", " + fmtCoord(P.y) + "] — " + zone.icon + " " + zone.name + ".");
+  logMsg("Te desplazas a (" + fmtXY(P.x, P.y) + ") — " + zone.icon + " " + zone.name + ".");
   updateQuestProgress('explore', 1);
   tickEffects();
   advanceTime(1);
@@ -15643,12 +15771,12 @@ function eventTipster() {
   document.getElementById('modal-body').innerHTML =
     '<h2 style="color:var(--accent);">🗺 INFORMANTE</h2>' +
     '<p style="font-size:13px;">Un superviviente nervioso te ofrece coordenadas de un posible botín.</p>' +
-    '<p style="color:var(--gold);font-size:14px;">Ubicación: <b>[' + sx + ', ' + sy + ']</b></p>' +
+    '<p style="color:var(--gold);font-size:14px;">Ubicación: <b>(' + fmtXY(sx, sy) + ')</b></p>' +
     '<p style="font-size:11px;color:#8d9880;">Si aceptas, se marcará en el mapa. Al llegar podrás reclamar el botín. También puedes ignorarlo.</p>' +
     '<button style="width:100%;margin:6px 0;background:var(--accent);color:#111;font-weight:bold;" onclick="acceptLootTip(' + tx + ',' + ty + ')">Aceptar chivatazo</button>' +
     '<button style="width:100%;" onclick="closeModal(); logMsg(\'Ignoras al informante.\');">Ignorar</button>';
   document.getElementById('modal').classList.add('show');
-  logMsg('Un informante ofrece un chivatazo de botín en [' + sx + ', ' + sy + '].');
+  logMsg('Un informante ofrece un chivatazo de botín en (' + fmtXY(sx, sy) + ').');
   return true;
 }
 function acceptLootTip(x, y) {
@@ -15973,19 +16101,13 @@ function renderCombatUI() {
   let enemyPct = Math.max(0, Math.floor((combatState.enemyHp / combatState.enemyMaxHp) * 100));
   let playerPct = Math.max(0, Math.floor((P.hp / maxhp) * 100));
   let comp = getEquippedCompanion();
-  let compHtml = '';
-  if (comp && !comp.resting && comp.hp > 0) {
-    let cp = Math.max(0, Math.floor((comp.hp / comp.maxHp) * 100));
-    compHtml = `
-    <div class="combat-entity">
-      <div class="combat-entity-name player">
-        <span>🤝 ${comp.isLegendary ? '★ ' : ''}${comp.name}</span>
-        <span>${comp.hp} / ${comp.maxHp}</span>
-      </div>
-      <div class="combat-hp-bar">
-        <div class="combat-hp-fill player" style="width:${cp}%;background:#6688aa;"></div>
-      </div>
-    </div>`;
+  let compActive = !!(comp && !comp.resting && comp.hp > 0);
+  let compPct = 0;
+  let compSprite = '';
+  if (compActive) {
+    compPct = Math.max(0, Math.floor((comp.hp / comp.maxHp) * 100));
+    // Mismo resolve que el icono (nombre + type) → mismo archivo en /combat/
+    compSprite = enemyCombatSpriteHtml(comp.name, !!comp.isLegendary, comp.type);
   }
   let hasPendant = (P.inv || []).some(x => {
     let b = getItemBase(x.id);
@@ -16000,15 +16122,28 @@ function renderCombatUI() {
   let playerSprite = (typeof playerCombatSpriteHtml === 'function')
     ? playerCombatSpriteHtml()
     : '<div style="width:96px;height:96px;display:flex;align-items:center;justify-content:center;font-size:48px;">☺</div>';
+  let allyBlock = '';
+  if (compActive) {
+    allyBlock = `
+      <div class="combat-fighter ally">
+        ${compSprite || '<div style="width:80px;height:80px;font-size:36px;display:flex;align-items:center;justify-content:center;transform:scaleX(-1);">🤝</div>'}
+        <div class="cf-name">${comp.isLegendary ? '★ ' : ''}${comp.name}</div>
+        <div class="cf-hp"><div style="width:${compPct}%;"></div></div>
+        <div class="cf-hp-text">${comp.hp} / ${comp.maxHp}</div>
+      </div>`;
+  }
   document.getElementById('modal-body').innerHTML = `
     <div class="combat-title">${titleText}</div>
 
-    <div class="combat-arena">
-      <div class="combat-fighter player">
-        ${playerSprite}
-        <div class="cf-name">${(P.playerName || "Superviviente")}</div>
-        <div class="cf-hp"><div style="width:${playerPct}%;"></div></div>
-        <div class="cf-hp-text">${P.hp} / ${maxhp}</div>
+    <div class="combat-arena${compActive ? ' has-ally' : ''}">
+      <div class="combat-side-player">
+        <div class="combat-fighter player">
+          ${playerSprite}
+          <div class="cf-name">${(P.playerName || "Superviviente")}</div>
+          <div class="cf-hp"><div style="width:${playerPct}%;"></div></div>
+          <div class="cf-hp-text">${P.hp} / ${maxhp}</div>
+        </div>
+        ${allyBlock}
       </div>
       <div class="combat-fighter enemy">
         ${enemySprite || '<div style="width:96px;height:96px;font-size:40px;display:flex;align-items:center;justify-content:center;">💀</div>'}
@@ -16017,7 +16152,6 @@ function renderCombatUI() {
         <div class="cf-hp-text">${combatState.enemyHp} / ${combatState.enemyMaxHp}</div>
       </div>
     </div>
-    ${compHtml}
 
     <div class="combat-log" id="combat-log-box">
       ${logHtml}

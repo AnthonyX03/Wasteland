@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v185';
+const CACHE = 'wasteland-v188';
 const AUDIO_CACHE = 'wasteland-audio-v1';
 const ASSETS = [
   './',
@@ -6,6 +6,7 @@ const ASSETS = [
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
+  './img/player-face.png',
   './img/enemies/icons/Asesino_de_la_Hermandad.png',
   './img/enemies/icons/Assaultron_defectuosa.png',
   './img/enemies/icons/Behemoth_mutante.png',
