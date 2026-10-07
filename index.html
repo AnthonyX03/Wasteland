@@ -8789,6 +8789,39 @@ function tryPrimaryMapAction() {
 }
 
 
+
+function isFullscreenActive() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+}
+function toggleFullscreen() {
+  try {
+    if (isFullscreenActive()) {
+      let exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+      if (exit) exit.call(document);
+      logMsg('Pantalla completa desactivada.');
+    } else {
+      let el = document.documentElement;
+      let req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+      if (req) {
+        req.call(el).then(function() {
+          logMsg('Pantalla completa activada.');
+        }).catch(function() {
+          // Safari sometimes returns undefined instead of promise
+          logMsg('Pantalla completa activada.');
+        });
+      } else {
+        logMsg('Tu navegador no admite pantalla completa.');
+      }
+    }
+  } catch (e) {
+    logMsg('No se pudo cambiar a pantalla completa.');
+  }
+  try { openSettings(); } catch (e2) {}
+}
+function fullscreenBtnLabel() {
+  return isFullscreenActive() ? '🗗 Salir de pantalla completa' : '⛶ Pantalla completa (Modo PC)';
+}
+
 function openSettings() {
   let vm = P.volMusic !== undefined ? P.volMusic : 0.6;
   let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
@@ -8810,9 +8843,11 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
     <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
+    <button id="btn-fullscreen" style="width:100%; margin:6px 0; border-color:#66aaff; color:#66ccff;" onclick="toggleFullscreen();">${fullscreenBtnLabel()}</button>
+    <p style="font-size:10px;color:#556655;margin:0 0 6px;text-align:center;">Pantalla completa recomendada en Modo PC</p>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.34</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.35</div>
   `;
   m.classList.add('show');
 }
