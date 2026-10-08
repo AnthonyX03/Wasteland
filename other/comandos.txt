@@ -96,3 +96,41 @@ Taquilla: 100 $ preguerra = 1 ficha Nuka-World
 
 [/Esclavos +N]     Añade N objetos Esclavo (id 2305)
 [/Moradores +N]    Añade N moradores (id 2500)
+
+
+VIAJE RÁPIDO
+------------
+[/ViajeRapido Importantes]
+  Desbloquea viaje rápido a ubicaciones importantes (Refugio, Comercio, Combat Zone, Nuka-World, Banco, Refugio experimental).
+
+[/ViajeRapido Propios]
+  Desbloquea viaje a tus asentamientos (Tu Asentamiento, Sierra Madre, RobCo, Refugio experimental).
+
+[/ViajeRapido Facciones]
+  Desbloquea viaje a todos los asentamientos de facción.
+
+[/ViajeRapido Todos]
+  Desbloquea todos los destinos de viaje rápido.
+
+CASAS Y ASENTAMIENTO PROPIO
+---------------------------
+[/Desbloquear Casas]
+  Desbloquea casas/habitaciones en asentamientos de facción y propios.
+
+[/Asentamiento Nivel N]
+  Fija el nivel del asentamiento propio (1–10). Desbloquea casa/viaje/médico según nivel.
+
+[/Asentamiento Colonos N]
+  Fija el número de colonos (0–10).
+
+[/Asentamiento Casa]
+  Construye la casa del asentamiento propio.
+
+[/Asentamiento Viaje]
+  Construye el viaje rápido del asentamiento propio.
+
+[/Asentamiento Medico]
+  Construye el médico del asentamiento propio.
+
+[/Asentamiento Maximo]
+  Nivel 10, 10 colonos, casa, viaje y médico.
