@@ -8596,6 +8596,11 @@ function openAdaptabilidadUI() {
       <button style="width:100%;margin-top:8px;" onclick="resetKeybinds()">Restablecer controles</button>
     </div>
     <p id="rebind-hint" style="font-size:12px;color:#8d9880;text-align:center;min-height:18px;"></p>
+    <div class="item" style="margin-top:8px;border-color:#66aaff;">
+      <b style="color:#66ccff;">Pantalla completa</b><br>
+      <span style="font-size:11px;color:#8d9880;">Recomendado en Modo PC para aprovechar todo el monitor.</span>
+      <button id="btn-fullscreen" style="width:100%;margin-top:8px;border-color:#66aaff;color:#66ccff;" onclick="toggleFullscreen();">${fullscreenBtnLabel()}</button>
+    </div>
     <button style="width:100%;margin-top:8px;" onclick="openSettings()">← Volver a Ajustes</button>
   `;
   document.getElementById('modal').classList.add('show');
@@ -8823,12 +8828,29 @@ function fullscreenBtnLabel() {
 }
 
 function openSettings() {
-  let vm = P.volMusic !== undefined ? P.volMusic : 0.6;
-  let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
   let m = document.getElementById('modal');
   document.getElementById('modal-body').innerHTML = `
     <h2 style="color:var(--accent); text-align:center; margin-top:0;">⚙ AJUSTES</h2>
     <p style="font-size:12px; color:#8d9880; text-align:center;">${P.playerName || 'Superviviente'} · ${formatGameDateTime()}</p>
+
+    <button style="width:100%; margin:6px 0; border-color:#66aadd; color:#88ccff;" onclick="openSettingsSonido();">🔊 Sonido</button>
+    <button style="width:100%; margin:6px 0; border-color:var(--accent); color:var(--accent);" onclick="openSettingsPartida();">💾 Partida</button>
+    <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
+    <button style="width:100%; margin:6px 0; border-color:#ff66cc; color:#ff88dd;" onclick="openCheatConsole();">💻 Consola de comandos</button>
+    <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
+    <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="openSettingsReinicio();">☠ Reinicio</button>
+    <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
+    <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.36</div>
+  `;
+  m.classList.add('show');
+}
+
+function openSettingsSonido() {
+  let vm = P.volMusic !== undefined ? P.volMusic : 0.6;
+  let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:#88ccff;text-align:center;margin-top:0;">🔊 Sonido</h2>
     <div class="item" style="margin:8px 0;">
       <b>Volumen música</b>
       <input id="vol-music" type="range" min="0" max="100" value="${Math.round(vm * 100)}" style="width:100%;" oninput="setVolMusic(this.value)">
@@ -8837,30 +8859,92 @@ function openSettings() {
       <b>Volumen efectos</b>
       <input id="vol-sfx" type="range" min="0" max="100" value="${Math.round(vs * 100)}" style="width:100%;" oninput="setVolSfx(this.value)">
     </div>
-    <button style="width:100%; margin:6px 0;" onclick="saveGame(); closeModal();">💾 Guardar partida</button>
-    <button style="width:100%; margin:6px 0;" onclick="loadGame(); closeModal();">📂 Cargar partida</button>
-    <button style="width:100%; margin:6px 0;" onclick="renameSurvivor(); closeModal();">✏ Renombrar</button>
-    <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
-    <button style="width:100%; margin:6px 0; border-color:#33ff66; color:#33ff66;" onclick="openCheatConsole();">💻 Consola de comandos</button>
-    <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
-    <button id="btn-fullscreen" style="width:100%; margin:6px 0; border-color:#66aaff; color:#66ccff;" onclick="toggleFullscreen();">${fullscreenBtnLabel()}</button>
-    <p style="font-size:10px;color:#556655;margin:0 0 6px;text-align:center;">Pantalla completa recomendada en Modo PC</p>
-    <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
-    <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.35</div>
+    <button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>
   `;
-  m.classList.add('show');
+  document.getElementById('modal').classList.add('show');
 }
 
-function openSettingsOtros() {
+function openSettingsPartida() {
+  document.getElementById('modal-body').innerHTML = `
+    <h2 style="color:var(--accent);text-align:center;margin-top:0;">💾 Partida</h2>
+    <p style="font-size:12px;color:#8d9880;text-align:center;">Guardar, cargar o transferir tu progreso entre navegadores.</p>
+    <button style="width:100%; margin:6px 0;" onclick="saveGame(); openSettingsPartida();">💾 Guardar partida</button>
+    <button style="width:100%; margin:6px 0;" onclick="loadGame(); closeModal();">📂 Cargar partida</button>
+    <div class="item" style="margin:10px 0;border-color:#66aadd;">
+      <b style="color:#88ccff;">Transferir partida</b><br>
+      <span style="font-size:11px;color:#8d9880;">Exporta un archivo .json para importarlo en otro navegador o si se borra la caché.</span>
+      <button style="width:100%; margin:8px 0 4px; border-color:#66aadd; color:#88ccff;" onclick="exportSaveFile();">📤 Exportar partida</button>
+      <button style="width:100%; margin:4px 0; border-color:#66aadd; color:#88ccff;" onclick="document.getElementById('import-save-input').click();">📥 Importar partida</button>
+      <input id="import-save-input" type="file" accept=".json,application/json" style="display:none;" onchange="importSaveFile(this)" />
+    </div>
+    <button style="width:100%;margin-top:8px;" onclick="openSettings()">← Volver a Ajustes</button>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+
+function exportSaveFile() {
+  try {
+    saveGame();
+    let data = localStorage.getItem('wl_save_v16') || JSON.stringify(P);
+    let blob = new Blob([data], { type: 'application/json' });
+    let name = 'wasteland-save-' + (P.playerName || 'superviviente').replace(/[^\w\-]+/g, '_') + '-' + Date.now() + '.json';
+    let a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+    logMsg('Partida exportada: ' + name);
+  } catch (e) {
+    logMsg('Error al exportar la partida.');
+  }
+}
+
+function importSaveFile(input) {
+  let file = input && input.files && input.files[0];
+  if (!file) return;
+  let reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      let parsed = JSON.parse(ev.target.result);
+      if (!parsed || typeof parsed !== 'object') throw new Error('formato');
+      // Validación mínima
+      if (parsed.hp === undefined && parsed.lvl === undefined && !parsed.inv) {
+        throw new Error('no parece un save de Wasteland');
+      }
+      localStorage.setItem('wl_save_v16', JSON.stringify(parsed));
+      logMsg('Partida importada. Cargando...');
+      loadGame();
+      closeModal();
+    } catch (err) {
+      logMsg('No se pudo importar: archivo inválido.');
+      try { openSettingsPartida(); } catch (e2) {}
+    }
+  };
+  reader.onerror = function() { logMsg('Error leyendo el archivo.'); };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function openSettingsReinicio() {
   document.getElementById('modal-body').innerHTML =
-    '<h2 style="color:var(--accent);text-align:center;margin-top:0;">📁 Otros</h2>' +
+    '<h2 style="color:var(--danger);text-align:center;margin-top:0;">☠ Reinicio</h2>' +
     '<p style="font-size:12px;color:#8d9880;text-align:center;">Opciones irreversibles. Lee bien antes de aceptar.</p>' +
     '<button style="width:100%;margin:8px 0;border-color:var(--danger);color:var(--danger);" onclick="confirmResetGame()">☠ Reiniciar partida</button>' +
     '<button style="width:100%;margin:8px 0;border-color:#cc3333;color:#cc3333;" onclick="confirmResetCaravan()">🃏 Reinicio de Caravana</button>' +
     '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
   document.getElementById('modal').classList.add('show');
 }
+
+function openSettingsOtros() {
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:#d5bd69;text-align:center;margin-top:0;">📁 Otros</h2>' +
+    '<p style="font-size:12px;color:#8d9880;text-align:center;">Opciones generales del superviviente.</p>' +
+    '<button style="width:100%;margin:8px 0;" onclick="renameSurvivor();">✏ Renombrar superviviente</button>' +
+    '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
+  document.getElementById('modal').classList.add('show');
+}
+
 
 function confirmResetGame() {
   document.getElementById('modal-body').innerHTML =
@@ -8873,7 +8957,7 @@ function confirmResetGame() {
     '• Volverás al inicio como partida nueva</span></div>' +
     '<p style="font-size:12px;color:var(--danger);text-align:center;"><b>Esta acción no se puede deshacer.</b></p>' +
     '<button style="width:100%;margin:6px 0;background:var(--danger);color:#111;font-weight:bold;" onclick="resetGameConfirmed()">Aceptar — borrar todo</button>' +
-    '<button style="width:100%;margin:6px 0;" onclick="openSettingsOtros()">Cancelar</button>';
+    '<button style="width:100%;margin:6px 0;" onclick="openSettingsReinicio()">Cancelar</button>';
   document.getElementById('modal').classList.add('show');
 }
 
@@ -8900,7 +8984,7 @@ function confirmResetCaravan() {
     '• No afecta al resto de la partida (chapas, nivel, escoltas, etc.)</span></div>' +
     '<p style="font-size:12px;color:#cc3333;text-align:center;"><b>Las cartas de sobres se perderán.</b></p>' +
     '<button style="width:100%;margin:6px 0;background:#cc3333;color:#fff;font-weight:bold;" onclick="resetCaravanCardsConfirmed()">Aceptar — reiniciar cartas</button>' +
-    '<button style="width:100%;margin:6px 0;" onclick="openSettingsOtros()">Cancelar</button>';
+    '<button style="width:100%;margin:6px 0;" onclick="openSettingsReinicio()">Cancelar</button>';
   document.getElementById('modal').classList.add('show');
 }
 
