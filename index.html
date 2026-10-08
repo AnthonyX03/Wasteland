@@ -2578,7 +2578,7 @@ const DB_ITEMS = [
   { id: 197, name: "Escopeta Industrial", type: "weapon", damage: 72, ammoType: "Cartucho de escopeta", weight: 9, value: 710, stackable: false, shopTier: 6 },
   { id: 198, name: "Rifle de Asalto Táctico", type: "weapon", damage: 64, ammoType: "5.56mm", weight: 8.5, value: 920, stackable: false, shopTier: 7 },
   { id: 199, name: "Lanzanukes Experimental (Fat Man MKII)", type: "weapon", damage: 700, ammoType: "Mini Nukes", weight: 32, value: 6000, stackable: false, shopTier: 10 },
-  { id: 200, name: "El Destructor del Yermo (Arma Legendaria)", type: "weapon", damage: 250, ammoType: "Cartucho de 2mm", weight: 10, value: 10000, stackable: false, shopTier: 10 },
+  { id: 200, name: "El Destructor del Yermo (Arma Legendaria)", type: "weapon", damage: 250, ammoType: "Cartucho de 2mm", weight: 10, value: 10000, stackable: false, shopTier: 10, weaponCat: "energy", ammoPerShot: 5, legendary: true, abilityId: "w_destructor", abilityName: "Devastación del Yermo" },
   // --- 50 ARMADURAS (Incluyendo Servoarmaduras) ---
   { id: 5, name: "Ropa de superviviente", type: "armor", def: 2, weight: 2, value: 15, stackable: false, shopTier: 1, radRes: 0 },
   { id: 6, name: "Chaqueta blindada", type: "armor", def: 7, weight: 6, value: 90, stackable: false, shopTier: 2, radRes: 0 },
@@ -3201,7 +3201,8 @@ const LEG_WEAPON_ABILITIES = [
   { id: 'w_armorbreak', name: "Rompeblindajes", desc: "Reduce permanentemente 3 de defensa enemiga." },
   { id: 'w_fury', name: "Furia Desatada", desc: "+15 de daño cuando tienes menos del 40% HP." },
   { id: 'w_precision', name: "Precisión Mortal", desc: "Nunca fallas y +8 de daño base." },
-  { id: 'w_legend', name: "Cazador de Leyendas", desc: "+35% de daño contra enemigos legendarios." }
+  { id: 'w_legend', name: "Cazador de Leyendas", desc: "+35% de daño contra enemigos legendarios." },
+  { id: 'w_destructor', name: "Devastación del Yermo", desc: "Ignora el 50% de la defensa enemiga. 25% de probabilidad de daño doble. Arma única." }
 ];
 
 // ========== HABILIDADES LEGENDARIAS DE ARMADURAS (20) ==========
@@ -4147,7 +4148,18 @@ function addLegendaryToInv(preferType = null) {
 
 function getWeaponAbility() {
   let inst = P.inv.find(i => i.uid === P.equippedWeaponUid);
-  if (inst && inst.legendary && inst.abilityId) {
+  if (!inst) return null;
+  let aid = inst.abilityId;
+  if (!aid) {
+    let base = getItemBase(inst.id);
+    if (base && base.abilityId) aid = base.abilityId;
+  }
+  // Destructor del Yermo y otras armas con habilidad fija
+  if (!aid && inst.id === 200) aid = 'w_destructor';
+  if (aid) {
+    return LEG_WEAPON_ABILITIES.find(a => a.id === aid) || null;
+  }
+  if (inst.legendary && inst.abilityId) {
     return LEG_WEAPON_ABILITIES.find(a => a.id === inst.abilityId) || null;
   }
   return null;
@@ -4402,6 +4414,76 @@ function getItemLevelBonus(itemLevel) {
 function getModLevelScale(itemLevel) {
   // módulos escalan con el nivel del objeto sin romper el flat bonus
   return 1 + Math.max(0, (itemLevel || 1) - 1) * 0.05;
+}
+
+
+/** Categoría del arma: melee, pistol, revolver, shotgun, rifle, sniper, smg, assault, minigun, flamer, heavy, energy, grenade */
+function getWeaponCategory(w) {
+  if (!w) return 'melee';
+  if (w.weaponCat) return w.weaponCat;
+  if (w.grenade) return 'grenade';
+  let n = (w.name || '').toLowerCase();
+  let ammo = String(w.ammoType || '').toLowerCase();
+  if (!ammo || ammo.includes('ninguna') || ammo.includes('cuerpo') || ammo.includes('melee')) return 'melee';
+  if (/minigun|ametralladora gatling|gatling gun|ca[nñ][oó]n gatling/i.test(n)) return 'minigun';
+  if (/lanzallamas|flamer|lanzallamas/i.test(n)) return 'flamer';
+  if (/escopeta|shotgun|recortada/i.test(n)) return 'shotgun';
+  if (/subfusil|smg|uzi|thompson|ametralladora ligera|mp5|tecn9/i.test(n)) return 'smg';
+  if (/francotirador|sniper|de precisi[oó]n|anti[- ]?material/i.test(n)) return 'sniper';
+  if (/fusil de asalto|rifle de combate|rifle de asalto|assault|r91|tipo 93/i.test(n)) return 'assault';
+  if (/rev[oó]lver|magnum|\.44|\.357/i.test(n)) return 'revolver';
+  if (/pistola|10mm|\.38|derringer|handgun/i.test(n)) return 'pistol';
+  if (/fat man|mini[- ]?nuke|lanzamisiles|lanzacohetes|lanzagranadas|misil|missile/i.test(n)) return 'heavy';
+  if (/destructor del yermo/i.test(n)) return 'energy';
+  if (/l[aá]ser|plasma|gauss|pulso|gamma|ion|blaster|zetan|energ/i.test(n)) return 'energy';
+  if (/c[eé]lula|fusi[oó]n|2mm|microfusi[oó]n|electr/i.test(ammo)) return 'energy';
+  if (/rifle|carabina|fusil/i.test(n)) return 'rifle';
+  return 'rifle';
+}
+
+function getWeaponCategoryLabel(cat) {
+  let map = {
+    melee: 'Cuerpo a cuerpo', pistol: 'Pistola', revolver: 'Revólver', shotgun: 'Escopeta',
+    rifle: 'Rifle', sniper: 'Francotirador', smg: 'Subfusil', assault: 'Fusil de asalto',
+    minigun: 'Minigun', flamer: 'Lanzallamas', heavy: 'Arma pesada', energy: 'Energía', grenade: 'Granada'
+  };
+  return map[cat] || cat || 'Arma';
+}
+
+/** Balas consumidas por disparo según categoría */
+function getAmmoPerShot(w) {
+  if (!w) return 0;
+  if (w.ammoPerShot != null && !isNaN(w.ammoPerShot)) return Math.max(0, Number(w.ammoPerShot));
+  let cat = getWeaponCategory(w);
+  switch (cat) {
+    case 'melee': case 'grenade': return 0;
+    case 'pistol': case 'revolver': return 1;
+    case 'shotgun': return 1;
+    case 'rifle': case 'sniper': return 1;
+    case 'energy': return 1;
+    case 'smg': return 5;
+    case 'assault': return 3;
+    case 'minigun': return 20;
+    case 'flamer': return 8;
+    case 'heavy': return 1;
+    default: return 1;
+  }
+}
+
+function getAmmoCount(ammoKey) {
+  if (!ammoKey) return 0;
+  if (!P.ammoBox) P.ammoBox = {};
+  return P.ammoBox[ammoKey] || 0;
+}
+
+function formatCombatAmmo(w) {
+  if (!w) return 'Sin arma';
+  let cat = getWeaponCategory(w);
+  if (cat === 'melee' || cat === 'grenade') return getWeaponCategoryLabel(cat);
+  let key = w.ammoType || '';
+  let have = getAmmoCount(key);
+  let per = getAmmoPerShot(w);
+  return have + '× ' + key + ' (−' + per + '/disp.)';
 }
 
 function getEquippedWeapon() {
@@ -9455,12 +9537,22 @@ function fullscreenBtnLabel() {
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
   {
+    ver: '0.11.45',
+    date: '2026-10-08',
+    title: 'Categorías de armas y munición por disparo',
+    notes: [
+      'Categorías: pistola, revólver, escopeta, rifle, sniper, SMG, asalto, minigun, flamer, pesada, energía, melee.',
+      'Consumo de balas por disparo según categoría (minigun 20, SMG 5, asalto 3…).',
+      'Contador de munición en combate junto al superviviente.',
+      'El Destructor del Yermo: habilidad única Devastación del Yermo.'
+    ]
+  },
+  {
     ver: '0.11.44',
     date: '2026-10-08',
     title: 'Iconos de objetos y comandos de asentamiento',
     notes: [
-      'Iconos/sprites de img/assets en inventario, tiendas y visor.',
-      'Nuevos comandos: /ViajeRapido, /Desbloquear Casas, /Asentamiento Nivel|Colonos|Casa|Viaje|Medico|Maximo.'
+      'Iconos img/assets; comandos /ViajeRapido y /Asentamiento.'
     ]
   },
   {
@@ -9468,7 +9560,7 @@ const VERSION_HISTORY = [
     date: '2026-10-08',
     title: 'Entrada a asentamientos (fix)',
     notes: [
-      'getAvailableFactionQuests restaurada.'
+      'getAvailableFactionQuests.'
     ]
   },
   {
@@ -9485,14 +9577,6 @@ const VERSION_HISTORY = [
     title: 'Sprite del jugador',
     notes: [
       'img/player/combat/.'
-    ]
-  },
-  {
-    ver: '0.11.40',
-    date: '2026-10-08',
-    title: 'Iconos y sprites de compañero',
-    notes: [
-      'Retratos y visor.'
     ]
   }
 ];
@@ -16919,6 +17003,7 @@ function renderCombatUI() {
           ${playerSprite}
           <div class="cf-name">${(P.playerName || "Superviviente")}</div>
           <div class="cf-weapon-icon" style="margin:2px 0;">${w ? itemIconHtml(w, 'sm', !!w.legendary) : ''}</div>
+          <div class="cf-ammo" style="font-size:10px;color:#c9d5a8;margin:2px 0;line-height:1.2;">${typeof formatCombatAmmo==='function'?formatCombatAmmo(w):''}</div>
           <div class="cf-hp"><div style="width:${playerPct}%;"></div></div>
           <div class="cf-hp-text">${P.hp} / ${maxhp}</div>
         </div>
@@ -17275,6 +17360,7 @@ function combatAttack() {
       if (wAb.id === 'w_rad') legDmgBonus += 10;
       if (wAb.id === 'w_burn') legDmgBonus += 12;
       if (wAb.id === 'w_legend' && combatState.isLegendary) legDmgBonus = Math.floor((w.damage) * 0.35);
+      if (wAb.id === 'w_destructor') legDmgBonus += Math.floor((w.damage || 0) * 0.15);
     }
     if (aAb && aAb.id === 'a_power') legDmgBonus += 6;
     legDmgBonus += getEffectBonus('dmg');
@@ -17333,9 +17419,11 @@ function combatAttack() {
       combatLog("¡Disparo Doble!");
     }
 
+    let ammoCost = isMelee ? 0 : getAmmoPerShot(w);
     for (let atk = 0; atk < attacks; atk++) {
-      let canShoot = isMelee || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] > 0);
-      if (!isMelee && aAb && aAb.id === 'a_ammo' && Math.random() < 0.10) canShoot = true;
+      let haveAmmo = isMelee || (P.ammoBox[ammoKey] && P.ammoBox[ammoKey] >= ammoCost);
+      let freeAmmo = !isMelee && aAb && aAb.id === 'a_ammo' && Math.random() < 0.10;
+      let canShoot = isMelee || haveAmmo || freeAmmo;
       if (canShoot || isMelee) {
         playWeaponSound(w);
         hit = Math.max(1, baseDmg + Math.floor(Math.random() * 4));
@@ -17347,6 +17435,10 @@ function combatAttack() {
           hit = Math.floor(hit * critMult);
           combatLog("¡Golpe crítico mortífero!");
         }
+        if (wAb && wAb.id === 'w_destructor' && Math.random() < 0.25) {
+          hit = Math.floor(hit * 2);
+          combatLog("¡Devastación del Yermo! Daño doble.");
+        }
         if (wAb && wAb.id === 'w_lucky' && Math.random() < 0.10) {
           hit = Math.floor(hit * 3);
           combatLog("¡Golpe de Suerte! ¡Daño x3!");
@@ -17356,8 +17448,11 @@ function combatAttack() {
           hit += chain;
           combatLog("Daño en Cadena: +" + chain);
         }
-        if (!isMelee && !(aAb && aAb.id === 'a_ammo' && Math.random() < 0.10)) {
-          if (P.ammoBox[ammoKey] > 0) P.ammoBox[ammoKey]--;
+        if (!isMelee && !freeAmmo) {
+          let cost = ammoCost || 1;
+          if (P.ammoBox[ammoKey] > 0) {
+            P.ammoBox[ammoKey] = Math.max(0, (P.ammoBox[ammoKey] || 0) - cost);
+          }
         }
         if (wAb && wAb.id === 'w_armorbreak') {
           combatState.armorBroken = (combatState.armorBroken || 0) + 3;
@@ -17902,7 +17997,7 @@ function renderInv(sub = P.subtab, page) {
           html += `<span style="font-size:12px; color:var(--accent);">💣 Granada · Lv:${gLvl} (iguala al tuyo) · Daño: +${scaledDmg}</span><br>`;
           html += `<span style="font-size:11px; color:#8d9880;">Equipar y usar en combate gasta 1 unidad.</span><br>`;
         } else {
-          html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Daño: +${scaledDmg} | Munición: ${it.ammoType || 'Cuerpo a cuerpo'}</span><br>`;
+          html += `<span style="font-size:12px; color:var(--accent);">Lv:${ilvl} · Daño: +${scaledDmg} | ${getWeaponCategoryLabel(getWeaponCategory(it))} | Munición: ${it.ammoType || 'Cuerpo a cuerpo'}${(!it.ammoType || String(it.ammoType).includes('Ninguna') || String(it.ammoType).toLowerCase().includes('cuerpo')) ? '' : ' (−' + getAmmoPerShot(it) + '/disp.)'}</span><br>`;
         }
         if (it.hypno || it.hypnoChance !== undefined) {
           let pct = Math.round((it.hypnoChance || 0.2) * 100);
