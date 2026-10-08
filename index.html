@@ -3878,7 +3878,7 @@ function pickMeleeIconPath(it) {
   if (/llave|destornillador/i.test(n)) return MELEE_ICON_POOL[4];
   if (/pu[nñ]o|nudillo|guantelete|power fist|motosierra|ripper/i.test(n)) return MELEE_ICON_POOL[7];
   if (/espada|wakizashi|katana|machete|cuchillo|navaja/i.test(n)) return MELEE_ICON_POOL[2];
-  if (/lanza/i.test(n)) return MELEE_ICON_POOL[8];
+  if (/lanza|pica|lanza/i.test(n)) return MELEE_ICON_POOL[2]; // espada/hoja alargada
   let id = it.id != null ? Number(it.id) : 0;
   return MELEE_ICON_POOL[Math.abs(id) % MELEE_ICON_POOL.length];
 }
@@ -3903,6 +3903,12 @@ function getItemIconUrl(id) {
   return a.icon.startsWith('./') ? a.icon : ('./' + a.icon.replace(/^\//, ''));
 }
 function getItemSpriteUrl(id) {
+  // Melee: mismo asset que el icono (los sprites del pack suelen ser pistolas/rifles)
+  let it = (typeof getItemBase === 'function') ? getItemBase(id) : null;
+  if (it && isMeleeWeaponItem(it)) {
+    let p = pickMeleeIconPath(it);
+    return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
+  }
   let a = getItemAsset(id);
   if (!a || !a.sprite) return null;
   return a.sprite.startsWith('./') ? a.sprite : ('./' + a.sprite.replace(/^\//, ''));
@@ -9831,12 +9837,20 @@ function fullscreenBtnLabel() {
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
   {
+    ver: '0.11.55',
+    date: '2026-10-08',
+    title: 'Icono = sprite melee',
+    notes: [
+      'Armas cuerpo a cuerpo: el sprite ampliado usa el mismo asset que el icono.',
+      'Se evitan sprites de pistola/rifle en melee (el pack de sprites casi no tiene melee).'
+    ]
+  },
+  {
     ver: '0.11.54',
     date: '2026-10-08',
     title: 'Iconos melee de assets',
     notes: [
-      'Armas cuerpo a cuerpo usan iconos de assets (mazas, martillos, espadas, etc.).',
-      'Se evitan iconos de pistola/rifle en melee.'
+      'Iconos de mazas, martillos y espadas para melee.'
     ]
   },
   {
@@ -9844,7 +9858,7 @@ const VERSION_HISTORY = [
     date: '2026-10-08',
     title: 'Asentamiento y Sierra Madre',
     notes: [
-      'Renombrar asentamiento; fichas Sierra Madre; descargas consola.'
+      'Renombrar asentamiento; fichas; consola.'
     ]
   },
   {
@@ -9852,7 +9866,7 @@ const VERSION_HISTORY = [
     date: '2026-10-08',
     title: 'Colores Adaptabilidad',
     notes: [
-      'Teclas en verde; restablecer en rojo.'
+      'Teclas en verde.'
     ]
   },
   {
@@ -9861,14 +9875,6 @@ const VERSION_HISTORY = [
     title: 'Modo activo',
     notes: [
       'Amarillo al cambiar de modo.'
-    ]
-  },
-  {
-    ver: '0.11.50',
-    date: '2026-10-08',
-    title: 'Sonido y logros',
-    notes: [
-      'Mute y logros.'
     ]
   }
 ];
