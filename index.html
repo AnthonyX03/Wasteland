@@ -8827,6 +8827,102 @@ function fullscreenBtnLabel() {
   return isFullscreenActive() ? '🗗 Salir de pantalla completa' : '⛶ Pantalla completa (Modo PC)';
 }
 
+
+// Historial de versiones (máx. 5; [0] = actual). Al subir versión: unshift nueva y pop si length>5.
+const VERSION_HISTORY = [
+  {
+    ver: '0.11.36',
+    date: '2026-10-08',
+    title: 'Ajustes reorganizados y transferir partida',
+    notes: [
+      'Menú de Ajustes dividido: Sonido, Partida, Contenido, Consola, Adaptabilidad, Reinicio y Otros.',
+      'Nuevo apartado Partida: guardar, cargar, exportar e importar archivo .json de guardado.',
+      'Permite mover la partida a otro navegador o recuperarla si se borra la caché.',
+      'Pantalla completa movida a Adaptabilidad (Modo PC).',
+      'Consola de comandos con color distintivo (magenta).',
+      'Reinicio agrupa reiniciar partida y reinicio de Caravana; Otros incluye renombrar.'
+    ]
+  },
+  {
+    ver: '0.11.35',
+    date: '2026-10-07',
+    title: 'Pantalla completa',
+    notes: [
+      'Opción de pantalla completa para aprovechar el monitor en Modo PC.',
+      'Botón que alterna entre activar y salir de pantalla completa.'
+    ]
+  },
+  {
+    ver: '0.11.34',
+    date: '2026-10-02',
+    title: 'Marcador Vault Boy y coordenadas X/Y',
+    notes: [
+      'La casilla del jugador en el mapa usa la cara de Vault Boy en lugar del emoji.',
+      'Coordenadas unificadas al formato (X0 / Y0), (X-13 / Y+1), etc.',
+      'Aplicado en mapa, señales de radio, chivatazos, lore de DLCs y mensajes de movimiento.'
+    ]
+  },
+  {
+    ver: '0.11.33',
+    date: '2026-10-02',
+    title: 'Compañero visual en combate',
+    notes: [
+      'El compañero equipado aparece en la arena de combate junto al superviviente.',
+      'Usa el sprite de /combat/ del mismo repertorio que su icono (coincidencia garantizada).',
+      'Sprite volteado horizontalmente para mirar hacia el enemigo.',
+      'Legendarios mantienen el mismo sprite base con brillo dorado.'
+    ]
+  },
+  {
+    ver: '0.11.32',
+    date: '2026-10-02',
+    title: 'Sprites: fallbacks y legendarios',
+    notes: [
+      'Iconos y sprites de combate reutilizan el repertorio si no hay imagen exacta.',
+      'Resolución por nombre, coincidencia parcial, tipo (synth, robot, mutante…) o Saqueador genérico.',
+      'Enemigos legendarios usan el sprite del tipo base.',
+      'Corrección de mapeo Synth Gen-1/2/3 y nombres con acentos.'
+    ]
+  }
+];
+
+function getCurrentVersion() {
+  return (VERSION_HISTORY[0] && VERSION_HISTORY[0].ver) || '0.0.0';
+}
+
+function openVersionHistoryUI() {
+  let html = '<h2 style="color:var(--accent);text-align:center;margin-top:0;">📋 Versión</h2>';
+  html += '<p style="font-size:12px;color:#8d9880;text-align:center;">Últimas 5 versiones · Actual: <b style="color:var(--gold);">Wasteland ' + getCurrentVersion() + '</b></p>';
+  VERSION_HISTORY.forEach(function(v, idx) {
+    let badge = idx === 0
+      ? '<span style="font-size:10px;color:#111;background:var(--gold);padding:1px 6px;border-radius:3px;margin-left:6px;">ACTUAL</span>'
+      : '';
+    let border = idx === 0 ? 'border-color:var(--gold);' : '';
+    html += '<button style="width:100%;margin:6px 0;text-align:left;padding:10px 12px;' + border + '" onclick="openVersionDetailUI(' + idx + ')">' +
+      '<b style="color:' + (idx === 0 ? 'var(--gold)' : 'var(--accent)') + ';">v' + v.ver + '</b>' + badge +
+      '<br><span style="font-size:11px;color:#8d9880;">' + (v.date || '') + ' · ' + (v.title || '') + '</span></button>';
+  });
+  html += '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+
+function openVersionDetailUI(idx) {
+  let v = VERSION_HISTORY[idx];
+  if (!v) { openVersionHistoryUI(); return; }
+  let notes = (v.notes || []).map(function(n) {
+    return '<li style="margin:4px 0;font-size:12px;color:#c8d0b8;">' + n + '</li>';
+  }).join('');
+  let html = '<h2 style="color:var(--accent);text-align:center;margin-top:0;">v' + v.ver + '</h2>';
+  html += '<p style="font-size:12px;color:#8d9880;text-align:center;">' + (v.date || '') + '</p>';
+  html += '<div class="item" style="' + (idx === 0 ? 'border-color:var(--gold);' : '') + '">';
+  html += '<b style="color:' + (idx === 0 ? 'var(--gold)' : 'var(--accent)') + ';">' + (v.title || 'Cambios') + '</b>';
+  html += '<ul style="margin:8px 0 0;padding-left:18px;">' + notes + '</ul></div>';
+  html += '<button style="width:100%;margin-top:12px;" onclick="openVersionHistoryUI()">← Volver al registro</button>';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+
 function openSettings() {
   let m = document.getElementById('modal');
   document.getElementById('modal-body').innerHTML = `
@@ -8840,8 +8936,9 @@ function openSettings() {
     <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
     <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="openSettingsReinicio();">☠ Reinicio</button>
     <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
+    <button style="width:100%; margin:6px 0; border-color:#aadd66; color:#c8e888;" onclick="openVersionHistoryUI();">📋 Versión</button>
     <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland 0.11.36</div>
+    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland ${getCurrentVersion()}</div>
   `;
   m.classList.add('show');
 }
