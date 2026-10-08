@@ -5843,7 +5843,8 @@ function renderQuests(tab) {
     ['factions', 'Facciones'],
     ['escorts', 'Escoltas'],
     ['side', 'Secundarias'],
-    ['contracts', 'Contratos']
+    ['contracts', 'Contratos'],
+    ['signals', 'Señales']
   ];
   let html = `<h2 style="margin-bottom:6px;">REGISTRO DE MISIONES</h2>
     <div class="subtabs" style="flex-wrap:wrap;">
@@ -5962,6 +5963,51 @@ function renderQuests(tab) {
           <span style="font-size:11px;">Recompensa: ${c.reward.caps} chapas · ${c.reward.xp} XP · +${c.reward.rep} rep</span><br>
           <span style="font-size:11px;color:#8d9880;">${c.completed ? 'Vuelve a la Logia a reclamar.' : 'En curso…'}</span>
         </div>`;
+      });
+    }
+  } else if (tab === 'signals') {
+    ensureSignalQuests();
+    html += `<p style="font-size:11px;color:#8d9880;">Señales de radio activadas desde la Radio (botín y socorro).</p>`;
+    let active = (P.signalQuests || []).filter(q => q && q.status === 'active');
+    // compat radioSignal
+    if (P.radioSignal && P.radioSignal.type !== 'distress' && !active.some(q => q.type === 'loot')) {
+      active = active.concat([{
+        id: 'legacy_loot', type: 'loot', status: 'active',
+        title: 'Señal de botín', desc: 'Alijo de radio.',
+        x: P.radioSignal.x, y: P.radioSignal.y
+      }]);
+    }
+    let done = (P.signalQuests || []).filter(q => q && q.status === 'done').slice(-8);
+    if (!active.length) {
+      html += `<p style="font-size:12px;color:#8d9880;">Ninguna señal activa. Radio → Captar señal.</p>`;
+    }
+    active.forEach(q => {
+      let here = (P.x === q.x && P.y === q.y);
+      let isLoot = q.type === 'loot';
+      let col = isLoot ? 'var(--gold)' : '#ff8866';
+      let icon = isLoot ? '📦' : '🆘';
+      let btn = '';
+      if (here) {
+        if (isLoot) {
+          btn = '<button style="margin-top:6px;border-color:' + col + ';color:' + col + ';" onclick="captureSignal()">Reclamar botín</button>';
+        } else {
+          btn = '<button style="margin-top:6px;border-color:' + col + ';color:' + col + ';" onclick="claimDistressFromQuests(\'' + q.id + '\')">Completar socorro</button>';
+        }
+      } else {
+        btn = '<span style="font-size:11px;color:#8d9880;">Viaja a las coordenadas para completar.</span>';
+      }
+      html += '<div class="item" style="border-color:' + col + ';">' +
+        '<b style="color:' + col + ';">' + icon + ' ' + (q.title || 'Señal') + '</b>' +
+        '<span style="font-size:10px;color:#8d9880;"> · ' + (isLoot ? 'Botín' : 'Socorro') + '</span><br>' +
+        '<span style="font-size:12px;">' + (q.desc || '') + '</span><br>' +
+        '<span style="font-size:11px;color:#8d9880;">Ubicación: <b>(' + fmtXY(q.x, q.y) + ')</b>' + (here ? ' · ¡Estás aquí!' : '') + '</span><br>' +
+        btn + '</div>';
+    });
+    if (done.length) {
+      html += `<p style="font-size:11px;color:#556655;margin-top:8px;">Completadas recientemente:</p>`;
+      done.forEach(q => {
+        let icon = q.type === 'loot' ? '📦' : '🆘';
+        html += `<div class="item" style="opacity:0.7;"><span style="font-size:12px;color:#8d9880;">✓ ${icon} ${q.title || 'Señal'}</span></div>`;
       });
     }
   }
@@ -7295,6 +7341,10 @@ function renderMap() {
     let sy = fmtCoord(P.radioSignal.y);
     let here = (P.x === P.radioSignal.x && P.y === P.radioSignal.y);
     signalHint += `<div class="map-signal-hint" style="color:${here ? 'var(--gold)' : '#8d9880'};">📡 Señal en (${fmtXY(P.radioSignal.x, P.radioSignal.y)})${here ? ' — ¡AQUÍ! Usa la Radio.' : ''}</div>`;
+  }
+  if (P.distressSignal) {
+    let hereD = (P.x === P.distressSignal.x && P.y === P.distressSignal.y);
+    signalHint += `<div class="map-signal-hint" style="color:${hereD ? '#ff8866' : '#aa6655'};">🆘 Socorro en (${fmtXY(P.distressSignal.x, P.distressSignal.y)})${hereD ? ' — ¡AQUÍ! Completa en Radio o Misiones.' : ''}</div>`;
   }
   if (P.lootTip) {
     let lx = fmtCoord(P.lootTip.x);
@@ -8828,19 +8878,38 @@ function fullscreenBtnLabel() {
 }
 
 
-// Historial de versiones (máx. 5; [0] = actual). Al subir versión: unshift nueva y pop si length>5.
+
+// Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
+  {
+    ver: '0.11.38',
+    date: '2026-10-08',
+    title: 'Radio: menú Captar señal unificado',
+    notes: [
+      'La Radio muestra un solo botón Captar señal; dentro están Botín y Socorro.',
+      'Al pulsar cualquiera se activa la misión al instante.',
+      'Botín y socorro se registran en Misiones → Señales.',
+      'Se puede reclamar desde la radio o desde el registro de misiones.'
+    ]
+  },
+  {
+    ver: '0.11.37',
+    date: '2026-10-08',
+    title: 'Señales de socorro, Ajustes y coordenadas',
+    notes: [
+      'Viaje rápido muestra coordenadas en formato (X… / Y…).',
+      'Radio: señales de botín y socorro; pestaña Misiones → Señales.',
+      'Corregida la actualización inmediata al captar señal.',
+      'Ajustes reordenados y decorados.'
+    ]
+  },
   {
     ver: '0.11.36',
     date: '2026-10-08',
     title: 'Ajustes reorganizados y transferir partida',
     notes: [
-      'Menú de Ajustes dividido: Sonido, Partida, Contenido, Consola, Adaptabilidad, Reinicio y Otros.',
-      'Nuevo apartado Partida: guardar, cargar, exportar e importar archivo .json de guardado.',
-      'Permite mover la partida a otro navegador o recuperarla si se borra la caché.',
-      'Pantalla completa movida a Adaptabilidad (Modo PC).',
-      'Consola de comandos con color distintivo (magenta).',
-      'Reinicio agrupa reiniciar partida y reinicio de Caravana; Otros incluye renombrar.'
+      'Partida: guardar, cargar, exportar e importar .json.',
+      'Pantalla completa en Adaptabilidad; consola con color distintivo.'
     ]
   },
   {
@@ -8848,8 +8917,7 @@ const VERSION_HISTORY = [
     date: '2026-10-07',
     title: 'Pantalla completa',
     notes: [
-      'Opción de pantalla completa para aprovechar el monitor en Modo PC.',
-      'Botón que alterna entre activar y salir de pantalla completa.'
+      'Opción de pantalla completa para Modo PC.'
     ]
   },
   {
@@ -8857,31 +8925,7 @@ const VERSION_HISTORY = [
     date: '2026-10-02',
     title: 'Marcador Vault Boy y coordenadas X/Y',
     notes: [
-      'La casilla del jugador en el mapa usa la cara de Vault Boy en lugar del emoji.',
-      'Coordenadas unificadas al formato (X0 / Y0), (X-13 / Y+1), etc.',
-      'Aplicado en mapa, señales de radio, chivatazos, lore de DLCs y mensajes de movimiento.'
-    ]
-  },
-  {
-    ver: '0.11.33',
-    date: '2026-10-02',
-    title: 'Compañero visual en combate',
-    notes: [
-      'El compañero equipado aparece en la arena de combate junto al superviviente.',
-      'Usa el sprite de /combat/ del mismo repertorio que su icono (coincidencia garantizada).',
-      'Sprite volteado horizontalmente para mirar hacia el enemigo.',
-      'Legendarios mantienen el mismo sprite base con brillo dorado.'
-    ]
-  },
-  {
-    ver: '0.11.32',
-    date: '2026-10-02',
-    title: 'Sprites: fallbacks y legendarios',
-    notes: [
-      'Iconos y sprites de combate reutilizan el repertorio si no hay imagen exacta.',
-      'Resolución por nombre, coincidencia parcial, tipo (synth, robot, mutante…) o Saqueador genérico.',
-      'Enemigos legendarios usan el sprite del tipo base.',
-      'Corrección de mapeo Synth Gen-1/2/3 y nombres con acentos.'
+      'Cara de Vault Boy en el mapa; coordenadas (X0 / Y0).'
     ]
   }
 ];
@@ -8892,11 +8936,9 @@ function getCurrentVersion() {
 
 function openVersionHistoryUI() {
   let html = '<h2 style="color:var(--accent);text-align:center;margin-top:0;">📋 Versión</h2>';
-  html += '<p style="font-size:12px;color:#8d9880;text-align:center;">Últimas 5 versiones · Actual: <b style="color:var(--gold);">Wasteland ' + getCurrentVersion() + '</b></p>';
+  html += '<p style="font-size:12px;color:#8d9880;text-align:center;">Últimas 5 · Actual: <b style="color:var(--gold);">Wasteland ' + getCurrentVersion() + '</b></p>';
   VERSION_HISTORY.forEach(function(v, idx) {
-    let badge = idx === 0
-      ? '<span style="font-size:10px;color:#111;background:var(--gold);padding:1px 6px;border-radius:3px;margin-left:6px;">ACTUAL</span>'
-      : '';
+    let badge = idx === 0 ? '<span style="font-size:10px;color:#111;background:var(--gold);padding:1px 6px;border-radius:3px;margin-left:6px;">ACTUAL</span>' : '';
     let border = idx === 0 ? 'border-color:var(--gold);' : '';
     html += '<button style="width:100%;margin:6px 0;text-align:left;padding:10px 12px;' + border + '" onclick="openVersionDetailUI(' + idx + ')">' +
       '<b style="color:' + (idx === 0 ? 'var(--gold)' : 'var(--accent)') + ';">v' + v.ver + '</b>' + badge +
@@ -8928,16 +8970,17 @@ function openSettings() {
   document.getElementById('modal-body').innerHTML = `
     <h2 style="color:var(--accent); text-align:center; margin-top:0;">⚙ AJUSTES</h2>
     <p style="font-size:12px; color:#8d9880; text-align:center;">${P.playerName || 'Superviviente'} · ${formatGameDateTime()}</p>
-
-    <button style="width:100%; margin:6px 0; border-color:#66aadd; color:#88ccff;" onclick="openSettingsSonido();">🔊 Sonido</button>
-    <button style="width:100%; margin:6px 0; border-color:var(--accent); color:var(--accent);" onclick="openSettingsPartida();">💾 Partida</button>
-    <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
-    <button style="width:100%; margin:6px 0; border-color:#ff66cc; color:#ff88dd;" onclick="openCheatConsole();">💻 Consola de comandos</button>
-    <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
-    <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger);" onclick="openSettingsReinicio();">☠ Reinicio</button>
-    <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69;" onclick="openSettingsOtros();">📁 Otros</button>
-    <button style="width:100%; margin:6px 0; border-color:#aadd66; color:#c8e888;" onclick="openVersionHistoryUI();">📋 Versión</button>
-    <button style="width:100%; margin-top:12px;" onclick="closeModal();">Cerrar</button>
+    <div style="height:1px;background:linear-gradient(90deg,transparent,#3a4737,transparent);margin:8px 0 12px;"></div>
+    <button style="width:100%; margin:6px 0; border-color:#e8b84a; color:#f0d78c; background:#1a1508;" onclick="openSettingsPartida();">💾 Partida</button>
+    <button style="width:100%; margin:6px 0; border-color:#66aadd; color:#88ccff; background:#0a1520;" onclick="openSettingsSonido();">🔊 Sonido</button>
+    <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd; background:#0a1218;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
+    <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa; background:#0a1a10;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
+    <button style="width:100%; margin:6px 0; border-color:#ff66cc; color:#ff88dd; background:#1a0a14;" onclick="openCheatConsole();">💻 Consola de comandos</button>
+    <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69; background:#151208;" onclick="openSettingsOtros();">📁 Otros</button>
+    <button style="width:100%; margin:6px 0; border-color:#aadd66; color:#c8e888; background:#101808;" onclick="openVersionHistoryUI();">📋 Versión</button>
+    <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger); background:#1a0808;" onclick="openSettingsReinicio();">☠ Reinicio</button>
+    <div style="height:1px;background:linear-gradient(90deg,transparent,#3a4737,transparent);margin:12px 0 8px;"></div>
+    <button style="width:100%; margin-top:4px;" onclick="closeModal();">Cerrar</button>
     <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland ${getCurrentVersion()}</div>
   `;
   m.classList.add('show');
@@ -8948,13 +8991,15 @@ function openSettingsSonido() {
   let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
   document.getElementById('modal-body').innerHTML = `
     <h2 style="color:#88ccff;text-align:center;margin-top:0;">🔊 Sonido</h2>
-    <div class="item" style="margin:8px 0;">
-      <b>Volumen música</b>
-      <input id="vol-music" type="range" min="0" max="100" value="${Math.round(vm * 100)}" style="width:100%;" oninput="setVolMusic(this.value)">
+    <p style="font-size:11px;color:#8d9880;text-align:center;">Ajusta la atmósfera del Yermo</p>
+    <div style="height:1px;background:linear-gradient(90deg,transparent,#66aadd55,transparent);margin:6px 0 12px;"></div>
+    <div class="item" style="margin:8px 0;border-color:#66aadd;background:#0a1520;">
+      <b style="color:#88ccff;">♪ Volumen música</b>
+      <input id="vol-music" type="range" min="0" max="100" value="${Math.round(vm * 100)}" style="width:100%;margin-top:6px;" oninput="setVolMusic(this.value)">
     </div>
-    <div class="item" style="margin:8px 0;">
-      <b>Volumen efectos</b>
-      <input id="vol-sfx" type="range" min="0" max="100" value="${Math.round(vs * 100)}" style="width:100%;" oninput="setVolSfx(this.value)">
+    <div class="item" style="margin:8px 0;border-color:#66aadd;background:#0a1520;">
+      <b style="color:#88ccff;">🔔 Volumen efectos</b>
+      <input id="vol-sfx" type="range" min="0" max="100" value="${Math.round(vs * 100)}" style="width:100%;margin-top:6px;" oninput="setVolSfx(this.value)">
     </div>
     <button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>
   `;
@@ -8963,13 +9008,17 @@ function openSettingsSonido() {
 
 function openSettingsPartida() {
   document.getElementById('modal-body').innerHTML = `
-    <h2 style="color:var(--accent);text-align:center;margin-top:0;">💾 Partida</h2>
-    <p style="font-size:12px;color:#8d9880;text-align:center;">Guardar, cargar o transferir tu progreso entre navegadores.</p>
-    <button style="width:100%; margin:6px 0;" onclick="saveGame(); openSettingsPartida();">💾 Guardar partida</button>
-    <button style="width:100%; margin:6px 0;" onclick="loadGame(); closeModal();">📂 Cargar partida</button>
-    <div class="item" style="margin:10px 0;border-color:#66aadd;">
+    <h2 style="color:#f0d78c;text-align:center;margin-top:0;">💾 Partida</h2>
+    <p style="font-size:12px;color:#8d9880;text-align:center;">Guardar, cargar o transferir tu progreso</p>
+    <div style="height:1px;background:linear-gradient(90deg,transparent,#e8b84a55,transparent);margin:6px 0 12px;"></div>
+    <div class="item" style="border-color:#e8b84a;background:#1a1508;">
+      <b style="color:#f0d78c;">Progreso local</b>
+      <button style="width:100%; margin:8px 0 4px; border-color:#e8b84a; color:#f0d78c;" onclick="saveGame(); openSettingsPartida();">💾 Guardar partida</button>
+      <button style="width:100%; margin:4px 0; border-color:#e8b84a; color:#f0d78c;" onclick="loadGame(); closeModal();">📂 Cargar partida</button>
+    </div>
+    <div class="item" style="margin:10px 0;border-color:#66aadd;background:#0a1520;">
       <b style="color:#88ccff;">Transferir partida</b><br>
-      <span style="font-size:11px;color:#8d9880;">Exporta un archivo .json para importarlo en otro navegador o si se borra la caché.</span>
+      <span style="font-size:11px;color:#8d9880;">Exporta un .json para otro navegador o si se borra la caché.</span>
       <button style="width:100%; margin:8px 0 4px; border-color:#66aadd; color:#88ccff;" onclick="exportSaveFile();">📤 Exportar partida</button>
       <button style="width:100%; margin:4px 0; border-color:#66aadd; color:#88ccff;" onclick="document.getElementById('import-save-input').click();">📥 Importar partida</button>
       <input id="import-save-input" type="file" accept=".json,application/json" style="display:none;" onchange="importSaveFile(this)" />
@@ -9005,10 +9054,7 @@ function importSaveFile(input) {
     try {
       let parsed = JSON.parse(ev.target.result);
       if (!parsed || typeof parsed !== 'object') throw new Error('formato');
-      // Validación mínima
-      if (parsed.hp === undefined && parsed.lvl === undefined && !parsed.inv) {
-        throw new Error('no parece un save de Wasteland');
-      }
+      if (parsed.hp === undefined && parsed.lvl === undefined && !parsed.inv) throw new Error('no save');
       localStorage.setItem('wl_save_v16', JSON.stringify(parsed));
       logMsg('Partida importada. Cargando...');
       loadGame();
@@ -9026,7 +9072,7 @@ function importSaveFile(input) {
 function openSettingsReinicio() {
   document.getElementById('modal-body').innerHTML =
     '<h2 style="color:var(--danger);text-align:center;margin-top:0;">☠ Reinicio</h2>' +
-    '<p style="font-size:12px;color:#8d9880;text-align:center;">Opciones irreversibles. Lee bien antes de aceptar.</p>' +
+    '<p style="font-size:12px;color:#8d9880;text-align:center;">Opciones irreversibles.</p>' +
     '<button style="width:100%;margin:8px 0;border-color:var(--danger);color:var(--danger);" onclick="confirmResetGame()">☠ Reiniciar partida</button>' +
     '<button style="width:100%;margin:8px 0;border-color:#cc3333;color:#cc3333;" onclick="confirmResetCaravan()">🃏 Reinicio de Caravana</button>' +
     '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
@@ -9042,309 +9088,56 @@ function openSettingsOtros() {
   document.getElementById('modal').classList.add('show');
 }
 
-
-function confirmResetGame() {
-  document.getElementById('modal-body').innerHTML =
-    '<h2 style="color:var(--danger);text-align:center;margin-top:0;">☠ Reiniciar partida</h2>' +
-    '<div class="item" style="border-color:var(--danger);">' +
-    '<b>Se va a borrar por completo:</b><br>' +
-    '<span style="font-size:12px;color:#8d9880;">• Todo el progreso del superviviente<br>' +
-    '• Inventario, refugio, asentamientos y reputación<br>' +
-    '• Misiones, escoltas, cartas de Caravana y guardado<br>' +
-    '• Volverás al inicio como partida nueva</span></div>' +
-    '<p style="font-size:12px;color:var(--danger);text-align:center;"><b>Esta acción no se puede deshacer.</b></p>' +
-    '<button style="width:100%;margin:6px 0;background:var(--danger);color:#111;font-weight:bold;" onclick="resetGameConfirmed()">Aceptar — borrar todo</button>' +
-    '<button style="width:100%;margin:6px 0;" onclick="openSettingsReinicio()">Cancelar</button>';
-  document.getElementById('modal').classList.add('show');
-}
-
-function resetGameConfirmed() {
-  stopRadioMusic();
-  try { localStorage.removeItem("wl_save_v16"); } catch (e) {}
-  location.reload();
-}
-
-function confirmResetCaravan() {
-  ensureCrimson();
-  let owned = 0;
-  Object.keys((P.crimsonCards && P.crimsonCards.collection) || {}).forEach(function(id) {
-    owned += P.crimsonCards.collection[id] || 0;
-  });
-  let deckN = (P.crimsonCards && P.crimsonCards.deck) ? P.crimsonCards.deck.length : 0;
-  document.getElementById('modal-body').innerHTML =
-    '<h2 style="color:#cc3333;text-align:center;margin-top:0;">🃏 Reinicio de Caravana</h2>' +
-    '<div class="item" style="border-color:#cc3333;">' +
-    '<b>Se va a reiniciar solo el sistema de cartas:</b><br>' +
-    '<span style="font-size:12px;color:#8d9880;">• Colección completa (descubrimiento incluido)<br>' +
-    '• Cartas libres y mazo actual (' + deckN + ' cartas en mazo · ' + owned + ' en colección)<br>' +
-    '• Volverás al mazo inicial de <b>30 Comunes</b><br>' +
-    '• No afecta al resto de la partida (chapas, nivel, escoltas, etc.)</span></div>' +
-    '<p style="font-size:12px;color:#cc3333;text-align:center;"><b>Las cartas de sobres se perderán.</b></p>' +
-    '<button style="width:100%;margin:6px 0;background:#cc3333;color:#fff;font-weight:bold;" onclick="resetCaravanCardsConfirmed()">Aceptar — reiniciar cartas</button>' +
-    '<button style="width:100%;margin:6px 0;" onclick="openSettingsReinicio()">Cancelar</button>';
-  document.getElementById('modal').classList.add('show');
-}
-
-function resetCaravanCardsConfirmed() {
-  ensureCrimson();
-  if (typeof _caravanGame !== 'undefined') _caravanGame = null;
-  P.crimsonCards = { collection: {}, deck: [], schema: 5 };
-  initStarterCrimsonDeck();
-  try { if (typeof saveGame === 'function') saveGame(); } catch (e) {}
-  logMsg('Caravana reiniciada: mazo de 30 comunes. Colección borrada.');
-  closeModal();
-  updateStats();
-}
-
-function setVolMusic(v) {
-  P.volMusic = Math.max(0, Math.min(1, Number(v) / 100));
-  let radio = document.getElementById('radio-audio');
-  if (radio) radio.volume = P.volMusic;
-  let amb = document.getElementById('ambient-audio');
-  if (amb) amb.volume = P.volMusic;
-  let cas = document.getElementById('casino-audio');
-  if (cas) cas.volume = P.volMusic;
-}
-
-function setVolSfx(v) {
-  P.volSfx = Math.max(0, Math.min(1, Number(v) / 100));
-}
-
-function ensureFactionDefaults() {
-  if (!P.reputation) P.reputation = {};
-  ['bos','enclave','outcasts','settlers','railroad','rnc','strip','institute','atom','minutemen','legion','slavers','nucleologos','vaulttec','followers','necropolis','kings','powder','bounty','hunters','regulators','hitmen','crimson'].forEach(k => {
-    if (P.reputation[k] === undefined || P.reputation[k] === null) P.reputation[k] = 0;
-  });
-  try { ensureZetanDefaults(); } catch(e) {}
-
-  if (!P.activeFactionQuests) P.activeFactionQuests = [];
-  if (!Array.isArray(P.activeFactionQuests)) P.activeFactionQuests = [];
-  if (!P.factionQuestPool) P.factionQuestPool = {};
-  if (P.volMusic === undefined) P.volMusic = 0.6;
-  if (P.volSfx === undefined) P.volSfx = 0.7;
-  if (P.factionShopPage === undefined) P.factionShopPage = {};
-  if (P.commerceUnlocked === undefined) P.commerceUnlocked = false;
-  if (!P.fastTravelUnlocked) P.fastTravelUnlocked = ['vault_home'];
-  if (!P.fastTravelUnlocked.includes('vault_home')) P.fastTravelUnlocked.unshift('vault_home');
-  ensureChips();
-  try { if (typeof ensureZetanDefaults === 'function') ensureZetanDefaults(); } catch (e) {}
-}
-
-
-function factionColor(fid) {
-  try {
-    let f = FACTIONS && FACTIONS[fid];
-    return (f && f.color) ? f.color : '#00aa2a';
-  } catch (e) { return '#00aa2a'; }
-}
-function factionName(fid) {
-  try {
-    let f = FACTIONS && FACTIONS[fid];
-    return (f && f.name) ? f.name : (fid || 'Facción');
-  } catch (e) { return fid || 'Facción'; }
-}
-
-function getFactionRep(fid) {
-  ensureFactionDefaults();
-  return P.reputation[fid] || 0;
-}
-
-function addFactionRep(fid, amount) {
-  ensureFactionDefaults();
-  P.reputation[fid] = Math.min(1000, (P.reputation[fid] || 0) + amount);
-  logMsg("Reputación con " + (FACTIONS[fid]?.name || fid) + ": " + P.reputation[fid]);
-}
-
-function getAvailableFactionQuests(fid) {
-  ensureFactionDefaults();
-  let rep = getFactionRep(fid);
-  let pool = FACTION_QUEST_POOL[fid] || [];
-  let activeIds = (P.activeFactionQuests || []).filter(q => q.faction === fid).map(q => q.id);
-  let activeCount = activeIds.length;
-  // Slots de oferta = 3 menos las ya activas (máx 3 activas por facción)
-  let offerSlots = Math.max(0, 3 - activeCount);
-  if (!P.factionQuestPool[fid]) P.factionQuestPool[fid] = [];
-  // Quitar del pool las ya activas o inválidas
-  P.factionQuestPool[fid] = P.factionQuestPool[fid].filter(id => {
-    if (activeIds.includes(id)) return false;
-    let q = pool.find(x => x.id === id);
-    return q && q.minRep <= rep;
-  });
-  // Cap duro a offerSlots
-  if (P.factionQuestPool[fid].length > offerSlots) {
-    P.factionQuestPool[fid] = P.factionQuestPool[fid].slice(0, offerSlots);
-  }
-  // Rellenar hasta offerSlots
-  while (P.factionQuestPool[fid].length < offerSlots) {
-    let candidates = pool.filter(q =>
-      q.minRep <= rep &&
-      !P.factionQuestPool[fid].includes(q.id) &&
-      !activeIds.includes(q.id)
-    );
-    if (candidates.length === 0) break;
-    let pick = candidates[Math.floor(Math.random() * candidates.length)];
-    P.factionQuestPool[fid].push(pick.id);
-  }
-  return P.factionQuestPool[fid].map(id => pool.find(q => q.id === id)).filter(Boolean);
-}
-
-
-// ===== VAUL-TEC EXPERIMENTO / REFUGIO =====
 function ensurePlayerVault() {
   if (!P.playerVault) {
-    P.playerVault = { claimed: false, number: '', antennaFixed: false, lastDwellerHour: -999, dwellersAtDoor: 0, cryo: [], houseBuilt: false, travelBuilt: false, hqUnlocked: false };
+    P.playerVault = {
+      claimed: false, number: null, antennaRepaired: false,
+      houseBuilt: false, travelBuilt: false, hqUnlocked: false,
+      lastDwellerHour: 0, pendingDwellers: 0
+    };
   }
-  if (P.prewarMoney === undefined) P.prewarMoney = 0;
-  if (!P.reputation) P.reputation = {};
-  if (P.reputation.vaulttec === undefined) P.reputation.vaulttec = 0;
-}
-
-function sellExperimentDocs() {
-  let inst = P.inv.find(i => i.id === 2501);
-  if (!inst) { logMsg('No tienes Documentos del experimento.'); return; }
-  let qty = inst.qty || 1;
-  // sell one
-  if (qty > 1) inst.qty--;
-  else P.inv = P.inv.filter(i => i !== inst);
-  let pay = 75 + Math.floor(Math.random()*50);
-  P.prewarMoney = (P.prewarMoney || 0) + pay;
-  logMsg('Vaul-Tec paga ' + pay + ' $ de antes de la guerra por los documentos.');
-  updateStats();
-  if (P.location && P.location.settlementId) renderSettlementUI(P.location.settlementId, 'base');
-}
-function claimPlayerVault() {
-  ensurePlayerVault();
-  let num = '';
-  document.getElementById('modal-body').innerHTML = `
-    <h3 style="color:#88aadd;">Reclamar Refugio</h3>
-    <p style="font-size:12px;color:#8d9880;">Asigna un número al Refugio (1–999). Ejemplo: 101, 111, 22...</p>
-    <div style="text-align:center;font-size:28px;color:#88aadd;margin:10px 0;" id="vault-num-display">—</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:180px;margin:0 auto;">
-      ${[1,2,3,4,5,6,7,8,9,'C',0,'OK'].map(k =>
-        `<button style="padding:12px;" onclick="vaultPadInput('${k}')">${k}</button>`
-      ).join('')}
-    </div>
-    <button style="width:100%;margin-top:10px;" onclick="closeModal()">Cancelar</button>
-  `;
-  window._vaultPad = '';
-  document.getElementById('modal').classList.add('show');
-}
-function vaultPadInput(k) {
-  if (k === 'C') { window._vaultPad = ''; }
-  else if (k === 'OK') {
-    if (!window._vaultPad || window._vaultPad.length < 1) { logMsg('Introduce un número.'); return; }
-    ensurePlayerVault();
-    P.playerVault.claimed = true;
-    P.playerVault.number = window._vaultPad;
-    P.playerVault.houseBuilt = false;
-    P.playerVault.travelBuilt = false;
-    logMsg('Refugio ' + window._vaultPad + ' reclamado. Bienvenido, Supervisor.');
-    closeModal();
-    renderPlayerVaultUI('door');
-    updateStats();
-    return;
-  } else {
-    if ((window._vaultPad || '').length >= 3) return;
-    window._vaultPad = (window._vaultPad || '') + k;
-  }
-  let el = document.getElementById('vault-num-display');
-  if (el) el.textContent = window._vaultPad || '—';
+  return P.playerVault;
 }
 
 function renderPlayerVaultUI(tab) {
   ensurePlayerVault();
   let v = P.playerVault;
+  tab = tab || 'door';
   if (!v.claimed) {
     document.getElementById('main-view').innerHTML = `
-      <h2 style="color:#88aadd;">Refugio experimental</h2>
-      <div class="item" style="border-color:#88aadd;">
-        <p style="font-size:12px;color:#8d9880;">Un Refugio Vaul-Tec abandonado. Puedes reclamarlo y convertirte en Supervisor.</p>
-        <button style="width:100%;background:#88aadd;color:#111;font-weight:bold;" onclick="claimPlayerVault()">RECLAMAR REFUGIO</button>
-      </div>
-      <button style="width:100%;margin-top:8px;" onclick="P.location=null;renderMap();">← Salir</button>
-    `;
+      <h2 style="color:#88aadd;">🧪 Refugio experimental</h2>
+      <p style="font-size:12px;color:#8d9880;">Asentamiento del DLC El experimento de Vaul-Tec.</p>
+      <button style="width:100%;margin:8px 0;border-color:#88aadd;color:#88aadd;" onclick="claimPlayerVault()">Reclamar Refugio</button>
+      <button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← Salir al mapa</button>`;
     return;
   }
-  let title = 'Refugio ' + (v.number || '???');
-  // Tabs: Puerta | Laboratorio (con sub Experimentar/Criogenización) | Base
-  let mainTab = tab;
-  let labSub = 'experiment';
-  if (tab === 'cryo' || tab === 'lab_cryo') { mainTab = 'lab'; labSub = 'cryo'; }
-  if (tab === 'lab' || tab === 'lab_exp') { mainTab = 'lab'; labSub = 'experiment'; }
-  if (tab === 'experiment') { mainTab = 'lab'; labSub = 'experiment'; }
-
   let tabs = [
     ['door', 'Puerta'],
     ['lab', 'Laboratorio'],
     ['base', 'Base']
   ];
-  let html = `<h2 style="color:#88aadd;">${title}</h2>
-    <div class="subtabs">
-      ${tabs.map(t => `<button class="${mainTab===t[0]?'active':''}" onclick="renderPlayerVaultUI('${t[0]}')">${t[1]}</button>`).join('')}
-    </div>`;
+  let html = `<h2 style="color:#88aadd;margin-top:0;">🧪 Refugio ${v.number || ''}</h2>
+    <div class="subtabs">${tabs.map(t => `<button class="${tab===t[0]?'active':''}" onclick="renderPlayerVaultUI('${t[0]}')">${t[1]}</button>`).join('')}</div>`;
 
-  if (mainTab === 'door') {
-    tickVaultDwellers();
-    let dwellersInv = countDwellers();
-    let atDoor = v.dwellersAtDoor || 0;
-    let hrsLeft = Math.max(0, 24 - ((P.worldHours||0) - (v.lastDwellerHour||0)));
+  if (tab === 'door') {
+    let dwellers = typeof countDwellers === 'function' ? countDwellers() : 0;
     html += `<div class="item" style="border-color:#88aadd;">
-      <b>Antena de atracción</b><br>
-      <span style="font-size:12px;color:#8d9880;">Estado: ${v.antennaFixed ? '<span style="color:var(--accent);">OPERATIVA</span>' : '<span style="color:var(--danger);">AVERIADA</span>'}</span><br>
-      ${!v.antennaFixed ? `<button style="margin-top:6px;" onclick="repairVaultAntenna()">Reparar antena (50 chapas + 5 chatarra electrónica)</button>` : ''}
-    </div>
-    <div class="item" style="border-color:#88aadd;">
-      <b>Reclamar moradores</b><br>
-      <span style="font-size:12px;color:#8d9880;">1 cada 24 h · Hasta <b>3</b> esperando en la puerta. Puedes reclamarlos aunque ya tengas en Especiales.</span><br>
-      <span style="font-size:11px;color:#8d9880;">En puerta: <b style="color:#88aadd;">${atDoor}/3</b> · En Especiales: <b>${dwellersInv}</b></span><br>
-      <span style="font-size:11px;color:#8d9880;">Próximo: ${!v.antennaFixed ? 'repara la antena' : atDoor >= 3 ? 'puerta llena (reclama para que lleguen más)' : 'en ' + hrsLeft + ' h'}</span><br>
-      <button style="margin-top:6px;" ${atDoor >= 1 ? '' : 'disabled'} onclick="claimVaultDweller()">Reclamar 1</button>
-      <button style="margin-top:6px;" ${atDoor > 1 ? '' : 'disabled'} onclick="claimAllVaultDwellers()">Reclamar todos (${atDoor})</button>
+      <b>📡 Antena de atracción</b><br>
+      <span style="font-size:12px;color:#8d9880;">${v.antennaRepaired ? 'Operativa. Atrae moradores con el tiempo (máx. 3 pendientes).' : 'Rota. Repárala para atraer moradores.'}</span><br>
+      ${v.antennaRepaired
+        ? `<span style="font-size:11px;color:#8d9880;">Pendientes: ${v.pendingDwellers || 0}/3 · En inventario: ${dwellers}</span><br>
+           <button style="margin-top:6px;" ${(v.pendingDwellers||0)<1?'disabled':''} onclick="claimVaultDweller()">Reclamar morador</button>
+           <button style="margin-top:6px;" ${(v.pendingDwellers||0)<1?'disabled':''} onclick="claimAllVaultDwellers()">Reclamar todos</button>`
+        : `<button style="margin-top:6px;" onclick="repairVaultAntenna()">Reparar antena</button>`}
     </div>`;
-  } else if (mainTab === 'lab') {
-    html += `<div class="subtabs" style="margin-bottom:8px;">
-      <button class="${labSub==='experiment'?'active':''}" onclick="renderPlayerVaultUI('lab')">Experimentar</button>
-      <button class="${labSub==='cryo'?'active':''}" onclick="renderPlayerVaultUI('cryo')">Criogenización</button>
+  } else if (tab === 'lab') {
+    html += `<div class="item" style="border-color:#cc88ff;">
+      <b>⚗ Laboratorio</b><br>
+      <span style="font-size:12px;color:#8d9880;">Experimenta con moradores. Éxito → criogenización; fallo → muerte o combate.</span><br>
+      <button style="margin-top:6px;border-color:#cc88ff;color:#cc88ff;" onclick="runVaultExperiment()">Experimentar</button>
+      <button style="margin-top:6px;" onclick="showVaultExperimentStats()">Sala de criogenización</button>
     </div>`;
-    if (labSub === 'experiment') {
-      let d = countDwellers();
-      html += `<div class="item" style="border-color:#88aadd;">
-        <b style="color:#88aadd;">Laboratorio de experimentos</b><br>
-        <span style="font-size:12px;color:#8d9880;">Cada prueba consume <b>1× Morador</b> (Especiales).</span><br>
-        <span style="font-size:11px;color:#8d9880;">Éxito → criogenización · Muerte → se pierde · Locura → combate · Mutación/necro → criogenización</span><br>
-        <span style="font-size:11px;">Moradores disponibles: <b style="color:#88aadd;">${d}</b></span>
-      </div>
-      <div class="item"><b>🧪 Gasear</b><br><span style="font-size:11px;color:#8d9880;">Neurotoxina controlada. Riesgo moderado.</span><br>
-        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('gas')">Iniciar prueba</button></div>
-      <div class="item"><b>☢ Irradiar</b><br><span style="font-size:11px;color:#8d9880;">Cámara de radiación. Puede crear resistencias… o necrofagia.</span><br>
-        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('rad')">Iniciar prueba</button></div>
-      <div class="item"><b>☣ Virus de Evolución Forzada</b><br><span style="font-size:11px;color:#8d9880;">FEV. Alto riesgo de mutación inestable.</span><br>
-        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('fev')">Iniciar prueba</button></div>
-      <div class="item"><b>🔒 Aislamiento prolongado</b><br><span style="font-size:11px;color:#8d9880;">Prueba psicológica. Locura frecuente.</span><br>
-        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('isolation')">Iniciar prueba</button></div>
-      <div class="item"><b>💉 Sobredosis de estimulantes</b><br><span style="font-size:11px;color:#8d9880;">Límite fisiológico. Muerte o hiperactividad.</span><br>
-        <button style="margin-top:4px;width:100%;" ${d<1?'disabled':''} onclick="runVaultExperiment('stim')">Iniciar prueba</button></div>`;
-    } else {
-      // cryo with full stats
-      let cryo = v.cryo || [];
-      html += `<p style="font-size:12px;color:#8d9880;">Sala de criogenización · ${cryo.length} sujeto(s)</p>`;
-      if (!cryo.length) html += `<p style="font-size:12px;color:#8d9880;">Vacía. Los experimentos exitosos aparecen aquí.</p>`;
-      cryo.forEach((ex, idx) => {
-        let sp = ex.special || { S:5,P:4,E:6,C:1,I:3,A:4,L:2 };
-        html += `<div class="item" style="border-color:#88aadd;">
-          <b style="color:#88aadd;">Experimento #${ex.id}</b> · ${ex.kind || 'Sujeto'}
-          <br><span style="font-size:11px;color:#8d9880;">Prueba: ${ex.label || '—'} · Nv.${ex.level || P.lvl || 1}</span>
-          <br><span style="font-size:11px;">HP ${ex.hp}/${ex.maxHp} · ATK ${ex.atk} · DEF ${ex.def} · RAD ${ex.radRes >= 100 ? 'Inmune' : ((ex.radRes != null ? ex.radRes : 5) + '%')}</span>
-          <br><span style="font-size:10px;">S${sp.S} P${sp.P} E${sp.E} C${sp.C} I${sp.I} A${sp.A} L${sp.L}</span>
-          <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;">
-            <button style="font-size:11px;" onclick="showVaultExperimentStats(${idx})">Stats</button>
-            <button style="font-size:11px;" onclick="equipVaultExperiment(${idx})">→ Compañero (Prisión)</button>
-            <button style="font-size:11px;border-color:var(--danger);color:var(--danger);" onclick="sacrificeVaultExperiment(${idx})">Sacrificar → Documentos</button>
-          </div>
-        </div>`;
-      });
-    }
-  } else if (mainTab === 'base') {
+  } else {
     let houseCost = [{ id: 20, qty: 10 }, { id: 24, qty: 5 }, { id: 13, qty: 3 }];
     let travelCost = [{ id: 13, qty: 8 }, { id: 27, qty: 4 }, { id: 21, qty: 5 }];
     html += `<div class="item" style="border-color:#88aadd;">
@@ -9371,6 +9164,22 @@ function renderPlayerVaultUI(tab) {
   }
   html += `<button style="width:100%;margin-top:10px;" onclick="P.location=null;renderMap();">← Salir al mapa</button>`;
   document.getElementById('main-view').innerHTML = html;
+}
+
+function claimPlayerVault() {
+  ensurePlayerVault();
+  if (P.playerVault.claimed) return;
+  let num = prompt('Número del Refugio (1-999):', '111');
+  if (num === null) return;
+  num = parseInt(num, 10);
+  if (!num || num < 1) num = 111;
+  P.playerVault.claimed = true;
+  P.playerVault.number = num;
+  if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+  if (!P.fastTravelUnlocked.includes('player_vault')) P.fastTravelUnlocked.push('player_vault');
+  logMsg('Refugio ' + num + ' reclamado.');
+  renderPlayerVaultUI('door');
+  updateStats();
 }
 
 function countDwellers() {
@@ -15083,7 +14892,7 @@ function openFastTravelUI(section) {
           <b style="color:${s.color};font-size:13px;line-height:1.35;flex:1;word-break:break-word;">${s.name}</b>
           <span style="font-size:10px;color:#8d9880;white-space:nowrap;flex-shrink:0;margin-top:2px;">${s.tag || ''}</span>
         </div>
-        <span style="font-size:11px;color:#8d9880;">[${s.x >= 0 ? '+' : ''}${s.x}, ${s.y >= 0 ? '+' : ''}${s.y}]</span><br>
+        <span style="font-size:11px;color:#8d9880;">(${fmtXY(s.x, s.y)})</span><br>
         <button style="margin-top:6px;border-color:${s.color};" onclick="doFastTravel('${s.id}')">Viajar aquí</button>
       </div>`;
     });
@@ -15318,33 +15127,57 @@ function openRadioUI() {
     <div class="radio-panel">
       <h3>📻 RADIO DEL YERMO</h3>
       <p style="font-size:12px; color:#8d9880;">Elige una función de la radio.</p>
-      <button style="width:100%; margin:8px 0; padding:14px; background:#001a00; border-color:var(--gold); color:var(--gold); font-weight:bold;" onclick="pipClick(); openRadioCaptureUI()">📡 CAPTAR</button>
-      <p style="font-size:11px; color:#8d9880; margin-top:-4px;">Busca señales misteriosas y reclama recompensas.</p>
+      <button style="width:100%; margin:8px 0; padding:14px; background:#001a00; border-color:var(--gold); color:var(--gold); font-weight:bold;" onclick="pipClick(); openRadioCaptureUI()">📡 CAPTAR SEÑAL</button>
+      <p style="font-size:11px; color:#8d9880; margin-top:-4px;">Botín o socorro · Las misiones aparecen en Misiones → Señales.</p>
       <button style="width:100%; margin:8px 0; padding:14px; background:#001a00; border-color:var(--accent); color:var(--accent); font-weight:bold;" onclick="pipClick(); openRadioTuneUI()">🎛 SINTONIZAR</button>
-      <p style="font-size:11px; color:#8d9880; margin-top:-4px;">Estaciones de radio: Wasteland y Enclave.</p>
+      <p style="font-size:11px; color:#8d9880; margin-top:-4px;">Estaciones: Wasteland, New Vegas y Enclave.</p>
       <button style="width:100%; margin-top:12px;" onclick="renderMap()">← VOLVER AL MAPA</button>
     </div>
   `;
 }
 
-function openRadioCaptureUI() {
-  let signalInfo = "Sin señal marcada.";
-  if (P.radioSignal) {
-    let sx = P.radioSignal.x > 0 ? "+" + P.radioSignal.x : P.radioSignal.x;
-    let sy = P.radioSignal.y > 0 ? "+" + P.radioSignal.y : P.radioSignal.y;
-    let here = (P.x === P.radioSignal.x && P.y === P.radioSignal.y);
-    signalInfo = here
-      ? `¡Estás en la ubicación de la señal! [${sx}, ${sy}] — pulsa CAPTAR SEÑAL.`
-      : `Señal pendiente en coordenadas (${fmtXY(P.radioSignal.x, P.radioSignal.y)}). Desplázate hasta allí.`;
+function openRadioCaptureUI(mode) {
+  // mode opcional: si se pasa tras activar, solo refresca el menú
+  ensureSignalQuests();
+  let lootQ = (P.signalQuests || []).find(q => q && q.status === 'active' && q.type === 'loot');
+  let distQ = (P.signalQuests || []).find(q => q && q.status === 'active' && q.type === 'distress');
+  // compat: radioSignal antiguo de botín
+  if (!lootQ && P.radioSignal && P.radioSignal.type !== 'distress') {
+    lootQ = { x: P.radioSignal.x, y: P.radioSignal.y, title: 'Señal de botín', type: 'loot', status: 'active' };
   }
+
+  let lootStatus = 'Pulsa para marcar un alijo cercano.';
+  if (lootQ) {
+    let here = (P.x === lootQ.x && P.y === lootQ.y);
+    lootStatus = here
+      ? ('¡Estás en el alijo! (' + fmtXY(lootQ.x, lootQ.y) + ') — pulsa de nuevo para reclamar.')
+      : ('Activa en (' + fmtXY(lootQ.x, lootQ.y) + '). Ve allí y vuelve a captar o reclama en Misiones.');
+  }
+  let distStatus = 'Pulsa para activar una misión de socorro.';
+  if (distQ) {
+    let here = (P.x === distQ.x && P.y === distQ.y);
+    distStatus = here
+      ? ('¡En el punto de socorro! (' + fmtXY(distQ.x, distQ.y) + ') — pulsa para completar.')
+      : ((distQ.title || 'Socorro') + ' · (' + fmtXY(distQ.x, distQ.y) + ')');
+  }
+
   document.getElementById('main-view').innerHTML = `
     <div class="radio-panel">
-      <h3>📡 CAPTAR SEÑAL</h3>
-      <div class="item" style="border-color:var(--gold);">
-        <span style="font-size:11px; color:#8d9880;">Obtén coordenadas cercanas. Al llegar y captar de nuevo, recibirás recompensas jugosas.</span>
-        <p class="radio-status" id="signal-status">${signalInfo}</p>
-        <button style="margin-top:6px; width:100%;" onclick="pipClick(); captureSignal()">CAPTAR SEÑAL</button>
+      <h3 style="color:var(--gold);">📡 CAPTAR SEÑAL</h3>
+      <p style="font-size:11px;color:#8d9880;">Elige el tipo de señal. Al pulsar se activa la misión y queda registrada en <b>Misiones → Señales</b>.</p>
+
+      <div class="item" style="border-color:var(--gold);margin:10px 0;">
+        <b style="color:var(--gold);">📦 Señal de botín</b>
+        <p class="radio-status" style="margin:6px 0;">${lootStatus}</p>
+        <button style="width:100%;border-color:var(--gold);color:var(--gold);" onclick="pipClick(); captureSignal()">CAPTAR SEÑAL DE BOTÍN</button>
       </div>
+
+      <div class="item" style="border-color:#ff8866;margin:10px 0;">
+        <b style="color:#ff8866;">🆘 Señal de socorro</b>
+        <p class="radio-status" style="margin:6px 0;">${distStatus}</p>
+        <button style="width:100%;border-color:#ff8866;color:#ff8866;" onclick="pipClick(); captureDistressSignal()">CAPTAR SEÑAL DE SOCORRO</button>
+      </div>
+
       <button style="width:100%; margin-top:10px;" onclick="openRadioUI()">← VOLVER</button>
     </div>
   `;
@@ -15733,7 +15566,15 @@ function stopRadioMusic() {
 }
 
 function captureSignal() {
-  if (P.radioSignal && P.x === P.radioSignal.x && P.y === P.radioSignal.y) {
+  ensureSignalQuests();
+  let lootQ = (P.signalQuests || []).find(q => q && q.status === 'active' && q.type === 'loot');
+  // Reclamar si estamos en el punto
+  let tx = null, ty = null, qid = null;
+  if (lootQ) { tx = lootQ.x; ty = lootQ.y; qid = lootQ.id; }
+  else if (P.radioSignal && P.radioSignal.type !== 'distress') {
+    tx = P.radioSignal.x; ty = P.radioSignal.y;
+  }
+  if (tx != null && P.x === tx && P.y === ty) {
     let rewards = [];
     let capsGain = 40 + Math.floor(Math.random() * 80) + P.lvl * 5;
     P.caps += capsGain;
@@ -15759,22 +15600,150 @@ function captureSignal() {
       if (addItemToInv(7, 1 + Math.floor(Math.random() * 2))) rewards.push("Estimulante");
     }
     addXP(20 + P.lvl * 3);
-    logMsg("¡Señal capturada! Recompensas: " + rewards.join(", "));
+    logMsg("¡Señal de botín reclamada! " + rewards.join(", "));
+    if (qid) {
+      let q = P.signalQuests.find(x => x.id === qid);
+      if (q) q.status = 'done';
+    }
     P.radioSignal = null;
     updateStats();
     openRadioCaptureUI();
     return;
   }
+  // Ya hay botín activo
+  if (lootQ) {
+    logMsg("Ya tienes una señal de botín activa en (" + fmtXY(lootQ.x, lootQ.y) + ").");
+    openRadioCaptureUI();
+    return;
+  }
+  // Activar nueva misión de botín
   let dx = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 1 : -1);
   let dy = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? 1 : -1);
   if (dx === 0 && dy === 0) dx = 1;
-  P.radioSignal = { x: P.x + dx, y: P.y + dy };
-  let sx = P.radioSignal.x > 0 ? "+" + P.radioSignal.x : P.radioSignal.x;
-  let sy = P.radioSignal.y > 0 ? "+" + P.radioSignal.y : P.radioSignal.y;
-  logMsg("Señal detectada en coordenadas (" + fmtXY(tx, ty) + "). Desplázate hasta allí y vuelve a captar.");
+  let id = 'loot_' + Date.now() + '_' + Math.floor(Math.random() * 999);
+  let q = {
+    id: id,
+    type: 'loot',
+    status: 'active',
+    title: 'Señal de botín',
+    desc: 'Alijo localizado por la radio. Llega a las coordenadas y reclama el botín.',
+    x: P.x + dx,
+    y: P.y + dy,
+    lvl: P.lvl || 1
+  };
+  P.signalQuests.push(q);
+  P.radioSignal = { x: q.x, y: q.y, type: 'loot', questId: id };
+  logMsg("📡 Misión de botín activada en (" + fmtXY(q.x, q.y) + "). Ver Misiones → Señales.");
+  updateStats();
   openRadioCaptureUI();
+}
+
+
+const DISTRESS_TEMPLATES = [
+  { title: 'Socorro en la tormenta', desc: 'Una voz rota pide ayuda entre estática. Alguien sobrevive… de momento.' },
+  { title: 'Frecuencia de emergencia', desc: 'Código médico repetido sin cesar. Hay heridos cerca.' },
+  { title: 'Última transmisión', desc: 'Un superviviente atrapado. La batería de su radio se agota.' },
+  { title: 'Eco del refugio perdido', desc: 'Piden extracción inmediata. Prometen suministros de antes de la guerra.' },
+  { title: 'Señal de la caravana rota', desc: 'Mercaderes emboscados. Quien responda se queda el cargamento.' },
+  { title: 'Llamada del páramo', desc: 'Gritos y disparos al fondo. Si llegas a tiempo, habrá recompensa.' },
+  { title: 'Baliza de rescate Vault-Tec', desc: 'Protocolo de emergencia antiguo. Las balizas aún pagan en material raro.' },
+  { title: 'S.O.S. del vertedero', desc: 'Un chatarrero rodeado. Ofrece piezas únicas a cambio de ayuda.' }
+];
+
+function ensureSignalQuests() {
+  if (!P.signalQuests) P.signalQuests = [];
+}
+
+function captureDistressSignal() {
+  ensureSignalQuests();
+  // Completar si estamos en la ubicación de una misión de socorro activa
+  let active = P.signalQuests.find(q => q && q.status === 'active' && q.type === 'distress');
+  if (active && P.x === active.x && P.y === active.y) {
+    completeDistressQuest(active.id);
+    openRadioCaptureUI('distress');
+    return;
+  }
+  // Solo una de socorro activa a la vez
+  if (active) {
+    logMsg("Ya tienes una señal de socorro activa en (" + fmtXY(active.x, active.y) + ").");
+    openRadioCaptureUI('distress');
+    return;
+  }
+  let dx = (Math.floor(Math.random() * 5) + 2) * (Math.random() < 0.5 ? 1 : -1);
+  let dy = (Math.floor(Math.random() * 5) + 2) * (Math.random() < 0.5 ? 1 : -1);
+  let tpl = DISTRESS_TEMPLATES[Math.floor(Math.random() * DISTRESS_TEMPLATES.length)];
+  let id = 'sig_' + Date.now() + '_' + Math.floor(Math.random() * 999);
+  let q = {
+    id: id,
+    type: 'distress',
+    status: 'active',
+    title: tpl.title,
+    desc: tpl.desc,
+    x: P.x + dx,
+    y: P.y + dy,
+    lvl: P.lvl || 1
+  };
+  P.signalQuests.push(q);
+  // Marcador en mapa (hint)
+  P.distressSignal = { x: q.x, y: q.y, questId: id };
+  logMsg("📡 Señal de socorro: " + q.title + " en (" + fmtXY(q.x, q.y) + ").");
+  updateStats();
+  openRadioCaptureUI('distress');
+}
+
+function completeDistressQuest(questId) {
+  ensureSignalQuests();
+  let q = P.signalQuests.find(x => x.id === questId);
+  if (!q || q.status !== 'active') return;
+  if (P.x !== q.x || P.y !== q.y) {
+    logMsg("No estás en la ubicación de la señal de socorro.");
+    return;
+  }
+  let rewards = [];
+  let capsGain = 80 + Math.floor(Math.random() * 120) + (P.lvl || 1) * 8;
+  P.caps += capsGain;
+  rewards.push(capsGain + ' chapas');
+  addXP(35 + (P.lvl || 1) * 5);
+  rewards.push('XP');
+  // Recompensas exclusivas de socorro
+  let exclusive = [
+    { id: 29, qty: 1, name: '★ Tartera Legendaria', chance: 0.25 },
+    { id: 15, qty: 1, name: 'Tartera Nuka-Cola', chance: 0.35 },
+    { id: 8, qty: 2, name: 'Superestimulante', chance: 0.5 },
+    { id: 7, qty: 3, name: 'Estimulante', chance: 0.7 },
+    { id: 74, qty: 2, name: 'RadAway', chance: 0.55 },
+    { id: 28, qty: 4, name: 'Chatarra avanzada', chance: 0.4 }
+  ];
+  exclusive.forEach(function(e) {
+    if (Math.random() < e.chance) {
+      if (addItemToInv(e.id, e.qty)) rewards.push((e.qty > 1 ? e.qty + 'x ' : '') + e.name);
+    }
+  });
+  // Objeto exclusivo: Baliza de socorro respondida (Otros) — usar id alto si existe o inventar con addItem
+  try {
+    if (typeof addItemToInv === 'function') {
+      // Intentar item especial 2901 si está en catálogo; si no, chapas extra
+      let special = getItemBase && getItemBase(2901);
+      if (special) {
+        if (addItemToInv(2901, 1)) rewards.push(special.name);
+      } else {
+        let bonus = 25 + Math.floor(Math.random() * 50);
+        P.caps += bonus;
+        rewards.push('+' + bonus + ' chapas de rescate');
+      }
+    }
+  } catch (e) {}
+  q.status = 'done';
+  if (P.distressSignal && P.distressSignal.questId === questId) P.distressSignal = null;
+  logMsg("¡Socorro atendido! " + rewards.join(', '));
   updateStats();
 }
+
+function claimDistressFromQuests(questId) {
+  completeDistressQuest(questId);
+  renderQuests('signals');
+}
+
 
 function isGameplayLocked() {
   if (typeof combatState !== 'undefined' && combatState) return true;
