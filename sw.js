@@ -1,12 +1,14 @@
-const CACHE = 'wasteland-v194';
+const CACHE = 'wasteland-v195';
 const AUDIO_CACHE = 'wasteland-audio-v1';
 const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './icon-192.png',
-  './icon-512.png',
-  './img/player-face.png',
+  './img/icons/icon-192.png',
+  './img/icons/icon-512.png',
+  './img/icons/player-face.png',
+  './img/player/icons/Morador_de_refugio.png',
+  './img/player/combat/Morador_de_refugio.png',
   './img/enemies/icons/Asesino_de_la_Hermandad.png',
   './img/enemies/icons/Assaultron_defectuosa.png',
   './img/enemies/icons/Behemoth_mutante.png',
