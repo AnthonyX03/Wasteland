@@ -2303,6 +2303,7 @@ body.pc-mode .combat-arena.has-ally .combat-fighter img.combat-sprite {
   user-select: none;
   transition: border-color 0.12s, box-shadow 0.12s;
 }
+.item-icon img { width:100%; height:100%; object-fit:contain; image-rendering:pixelated; pointer-events:none; }
 .item-icon:hover, .sprite-thumb:hover, .enemy-icon.clickable:hover {
   border-color: var(--accent);
   box-shadow: 0 0 6px #00ff4166;
@@ -3777,6 +3778,37 @@ function itemIconColor(it) {
   return '#3a4737';
 }
 
+let ITEM_ASSET_BY_ID = {};
+let ITEM_ASSETS_READY = false;
+function loadItemAssets() {
+  try {
+    fetch('./img/assets/items.json')
+      .then(function(r) { return r.ok ? r.json() : []; })
+      .then(function(list) {
+        ITEM_ASSET_BY_ID = {};
+        (list || []).forEach(function(e) {
+          if (e && e.id != null) ITEM_ASSET_BY_ID[Number(e.id)] = e;
+        });
+        ITEM_ASSETS_READY = true;
+      })
+      .catch(function() { ITEM_ASSETS_READY = false; });
+  } catch (e) { ITEM_ASSETS_READY = false; }
+}
+function getItemAsset(id) {
+  if (id == null) return null;
+  return ITEM_ASSET_BY_ID[Number(id)] || null;
+}
+function getItemIconUrl(id) {
+  let a = getItemAsset(id);
+  if (!a || !a.icon) return null;
+  return a.icon.startsWith('./') ? a.icon : ('./' + a.icon.replace(/^\//, ''));
+}
+function getItemSpriteUrl(id) {
+  let a = getItemAsset(id);
+  if (!a || !a.sprite) return null;
+  return a.sprite.startsWith('./') ? a.sprite : ('./' + a.sprite.replace(/^\//, ''));
+}
+
 function itemIconHtml(itOrId, size, isLeg) {
   let it = (typeof itOrId === 'object' && itOrId) ? itOrId : getItemBase(itOrId);
   if (!it && typeof itOrId === 'object') it = itOrId;
@@ -3784,13 +3816,19 @@ function itemIconHtml(itOrId, size, isLeg) {
   let emoji = itemIconEmoji(it);
   let col = itemIconColor(it);
   let sz = size === 'lg' ? 'lg' : (size === 'sm' ? 'sm' : '');
-  let name = (it && it.name) ? String(it.name).replace(/'/g, "\\'") : 'Objeto';
   let tip = (it && it.name) ? it.name : 'Objeto';
-  // data attributes for viewer
-  let idAttr = (it && it.id != null) ? (' data-item-id="' + it.id + '"') : '';
+  let id = (it && it.id != null) ? it.id : (typeof itOrId === 'number' ? itOrId : null);
+  let idAttr = (id != null) ? (' data-item-id="' + id + '"') : '';
+  let url = (id != null) ? getItemIconUrl(id) : null;
+  let inner;
+  if (url) {
+    inner = '<img src="' + url + '" alt="" draggable="false" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;" onerror="this.onerror=null;this.style.display=\'none\';if(this.parentNode)this.parentNode.insertAdjacentText(\'beforeend\',\'' + emoji.replace(/'/g, '') + '\');" />';
+  } else {
+    inner = emoji;
+  }
   return '<span class="item-icon ' + sz + (leg ? ' legendary' : '') + '" title="' + tip + ' (tocar para ampliar)"' + idAttr +
     ' style="border-color:' + col + ';" onclick="event.stopPropagation();openItemSpriteViewer(' +
-    (it && it.id != null ? it.id : 'null') + ',' + (leg ? 'true' : 'false') + ')">' + emoji + '</span>';
+    (id != null ? id : 'null') + ',' + (leg ? 'true' : 'false') + ')">' + inner + '</span>';
 }
 
 function openItemSpriteViewer(itemId, isLeg) {
@@ -3799,15 +3837,19 @@ function openItemSpriteViewer(itemId, isLeg) {
   let emoji = itemIconEmoji(it);
   let col = itemIconColor(it);
   let title = (isLeg || it.legendary ? '★ ' : '') + it.name;
-  let sub = (it.type || 'objeto') + (it.damage ? ' · Daño ' + it.damage : '') + (it.defense ? ' · Def ' + it.defense : '');
+  let sub = (it.type || 'objeto') + (it.damage ? ' · Daño ' + it.damage : '') + (it.defense ? ' · Def ' + it.defense : '') + (it.def ? ' · Def ' + it.def : '');
+  let sprite = getItemSpriteUrl(itemId);
   openSpriteViewer({
     title: title,
     subtitle: sub,
     emoji: emoji,
+    img: sprite || getItemIconUrl(itemId) || null,
     borderColor: col,
     legendary: !!(isLeg || it.legendary)
   });
 }
+
+
 
 function companionPortraitHtml(c, size) {
   if (!c) return '';
@@ -3905,13 +3947,15 @@ function playerSpriteKey() {
   return 'Morador_de_refugio';
 }
 function playerIconHtml(size) {
-  let url = ENEMY_SPRITE_BASE + 'icons/' + playerSpriteKey() + '.png';
+  let key = playerSpriteKey();
+  let url = './img/player/icons/' + key + '.png';
   let st = size ? ('width:' + size + 'px;height:' + size + 'px;') : '';
-  return '<img class="enemy-icon" src="' + url + '" alt="Superviviente" style="' + st + '" onerror="this.style.display=\'none\'" />';
+  return '<img class="enemy-icon" src="' + url + '" alt="Superviviente" style="' + st + '" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'./img/enemies/icons/' + key + '.png\';}else if(!this.dataset.fb2){this.dataset.fb2=1;this.src=\'./img/icons/player-face.png\';}" />';
 }
 function playerCombatSpriteHtml() {
-  let url = ENEMY_SPRITE_BASE + 'combat/' + playerSpriteKey() + '.png';
-  return '<img class="combat-sprite" src="' + url + '" alt="Superviviente" onerror="this.style.display=\'none\'" />';
+  let key = playerSpriteKey();
+  let url = './img/player/combat/' + key + '.png';
+  return '<img class="combat-sprite" src="' + url + '" alt="Superviviente" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'./img/enemies/combat/' + key + '.png\';}else if(!this.dataset.fb2){this.dataset.fb2=1;this.src=\'./img/icons/player-face.png\';}" />';
 }
 
 
@@ -6160,6 +6204,49 @@ function ensureFactionDefaults() {
     });
   }
   if (!Array.isArray(P.signalQuests)) P.signalQuests = [];
+  if (!P.factionQuestPool || typeof P.factionQuestPool !== 'object') P.factionQuestPool = {};
+}
+
+/** Devuelve hasta 3 misiones disponibles de la facción (rotación). */
+function getAvailableFactionQuests(factionId) {
+  ensureFactionDefaults();
+  if (!factionId) return [];
+  let pool = (typeof FACTION_QUEST_POOL !== 'undefined' && FACTION_QUEST_POOL[factionId]) ? FACTION_QUEST_POOL[factionId] : [];
+  if (!pool.length) return [];
+  let rep = getFactionRep(factionId);
+  let activeIds = (P.activeFactionQuests || []).filter(function(q) { return q && q.faction === factionId; }).map(function(q) { return q.id; });
+  // Candidatos por reputación y no activos
+  let candidates = pool.filter(function(q) {
+    if (!q || !q.id) return false;
+    if (activeIds.indexOf(q.id) >= 0) return false;
+    let minR = (q.minRep !== undefined) ? q.minRep : 0;
+    return rep >= minR;
+  });
+  // Inicializar / rellenar rotación (máx 3)
+  if (!Array.isArray(P.factionQuestPool[factionId])) P.factionQuestPool[factionId] = [];
+  // Limpiar ids inválidos o ya activos
+  P.factionQuestPool[factionId] = P.factionQuestPool[factionId].filter(function(id) {
+    return candidates.some(function(c) { return c.id === id; });
+  });
+  // Rellenar hasta 3
+  let need = 3 - P.factionQuestPool[factionId].length;
+  if (need > 0) {
+    let remaining = candidates.filter(function(c) {
+      return P.factionQuestPool[factionId].indexOf(c.id) < 0;
+    });
+    // Mezcla simple
+    for (let i = remaining.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      let tmp = remaining[i]; remaining[i] = remaining[j]; remaining[j] = tmp;
+    }
+    for (let k = 0; k < need && k < remaining.length; k++) {
+      P.factionQuestPool[factionId].push(remaining[k].id);
+    }
+  }
+  // Mapear a objetos del pool
+  return P.factionQuestPool[factionId].map(function(id) {
+    return pool.find(function(q) { return q.id === id; });
+  }).filter(Boolean);
 }
 
 function renderQuests(tab) {
@@ -6471,6 +6558,24 @@ function getCasinoDef(cid) {
   return STRIP_CASINOS.find(x => x.id === cid) || null;
 }
 
+function getFactionRep(fid) {
+  if (!fid) return 0;
+  try { if (typeof ensureFactionDefaults === 'function') ensureFactionDefaults(); } catch (e) {}
+  if (!P.reputation || typeof P.reputation !== 'object') P.reputation = {};
+  let v = P.reputation[fid];
+  if (v === undefined || v === null || isNaN(v)) return 0;
+  return Math.max(0, Math.min(1000, Number(v) || 0));
+}
+function setFactionRep(fid, val) {
+  if (!fid) return;
+  try { if (typeof ensureFactionDefaults === 'function') ensureFactionDefaults(); } catch (e) {}
+  if (!P.reputation) P.reputation = {};
+  P.reputation[fid] = Math.max(0, Math.min(1000, Math.floor(Number(val) || 0)));
+}
+function addFactionRep(fid, delta) {
+  setFactionRep(fid, getFactionRep(fid) + (Number(delta) || 0));
+  return getFactionRep(fid);
+}
 function getFactionShopLevel(fid) {
   let rep = getFactionRep(fid);
   let levels = (FACTIONS[fid] && FACTIONS[fid].shopLevels) || [100, 250, 500, 750, 1000];
@@ -7696,7 +7801,7 @@ function renderMap() {
   let actHint = '';
   // Asentamientos, refugio y comercio: NO se exploran
   if (zone.type === 'settlement') {
-    actBtns = `<button style="background:var(--accent);color:#111;" onclick="enterSettlement('${zone.settlementId}')">ENTRAR</button>`;
+    actBtns = `<button style="background:var(--accent);color:#111;" onclick="pipClick();enterSettlement('${zone.settlementId || ''}')">ENTRAR</button>`;
   } else if (zone.type === 'vault') {
     actBtns = '';
     actHint = `<span style="color:#66b3ff;">⌂ Refugio — usa la pestaña REFUGIO (no se explora)</span>`;
@@ -8693,7 +8798,7 @@ function executeCheat(raw) {
   let parts = cmd.split(/\s+/);
 
   if (low === 'ayuda' || low === 'help' || low === '?') {
-    return { ok: true, msg: 'Comandos: /Reputacion XXX Facción | /Reputacion Maxima | /Subir Nivel +N | /Chapas +N | /HP | /RAD0 | /TP X Y | /Desbloquear Comercio | /Tickets +N | /FichasSierra +N | /XP +N | /ListaFacciones' };
+    return { ok: true, msg: 'Ver /ayuda completa en other/comandos.txt · Claves: /ViajeRapido Todos | /Desbloquear Casas | /Asentamiento Maximo | /Reputacion Maxima | /Chapas +N | /TP X Y' };
   }
 
   // /Reputacion Maxima
@@ -8847,7 +8952,8 @@ function executeCheat(raw) {
   if (mMor) {
     let q = parseInt(mMor[1], 10);
     addItemToInv(2500, q);
-    return { ok: true, msg: '+' + q + ' Morador(es)' }
+    return { ok: true, msg: '+' + q + ' Morador(es)' };
+  }
 
   // /Esclavos +N
   let mEsc = cmd.match(/^esclavos?\s+\+?(\d+)$/i);
@@ -8862,7 +8968,143 @@ function executeCheat(raw) {
     }
     return { ok: true, msg: 'Esclavos +' + n + ' (Otros/Especiales)' };
   }
-;
+
+  // /ViajeRapido Importantes | Propios | Facciones | Todos
+  let mVr = cmd.match(/^viaje\s*rapido\s+(importantes|propios|facciones|todos)$/i) ||
+            cmd.match(/^viajerapido\s+(importantes|propios|facciones|todos)$/i) ||
+            cmd.match(/^ft\s+(importantes|propios|facciones|todos|all)$/i);
+  if (mVr) {
+    if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+    let mode = mVr[1].toLowerCase();
+    let add = [];
+    if (mode === 'importantes' || mode === 'todos' || mode === 'all') {
+      add.push('vault_home', 'commerce_hub', 'combat_zone', 'nuka_world', 'central_bank', 'player_vault');
+    }
+    if (mode === 'propios' || mode === 'todos' || mode === 'all') {
+      add.push('player_home', 'player_vault', 'sierra_madre', 'robco_factory');
+      // asegurar flags de viaje construido
+      try {
+        ensurePlayerSettlement();
+        P.playerSettlement.travelBuilt = true;
+        P.playerSettlement.claimed = true;
+        if (!P.playerSettlement.name) P.playerSettlement.name = 'Tu Asentamiento';
+      } catch (e) {}
+      try {
+        if (typeof ensureSierraCasino === 'function') ensureSierraCasino();
+        if (P.sierraCasino) { P.sierraCasino.claimed = true; P.sierraCasino.travelBuilt = true; }
+      } catch (e) {}
+      try {
+        if (typeof ensureRobco === 'function') ensureRobco();
+        if (P.robco) { P.robco.claimed = true; P.robco.travelBuilt = true; }
+      } catch (e) {}
+    }
+    if (mode === 'facciones' || mode === 'todos' || mode === 'all') {
+      (SETTLEMENTS || []).forEach(function(s) {
+        if (s && s.id && s.faction && !s.playerOwned && s.id !== 'player_home') add.push(s.id);
+      });
+    }
+    add.forEach(function(id) {
+      if (id && P.fastTravelUnlocked.indexOf(id) < 0) P.fastTravelUnlocked.push(id);
+    });
+    return { ok: true, msg: 'Viaje rápido desbloqueado: ' + mode + ' (' + P.fastTravelUnlocked.length + ' destinos).' };
+  }
+
+  // /Desbloquear Casas  (propias + facción)
+  if (/^desbloquear\s+casas?$/i.test(cmd) || low === 'unlock houses') {
+    if (!P.ownedHouses) P.ownedHouses = [];
+    (SETTLEMENTS || []).forEach(function(s) {
+      if (!s || !s.id) return;
+      if (P.ownedHouses.indexOf(s.id) < 0) P.ownedHouses.push(s.id);
+    });
+    try {
+      ensurePlayerSettlement();
+      P.playerSettlement.houseBuilt = true;
+      P.playerSettlement.claimed = true;
+      if (!P.playerSettlement.name) P.playerSettlement.name = 'Tu Asentamiento';
+    } catch (e) {}
+    try {
+      if (P.playerVault) P.playerVault.houseBuilt = true;
+    } catch (e) {}
+    try {
+      if (P.sierraCasino) { P.sierraCasino.roomBuilt = true; P.sierraCasino.claimed = true; }
+    } catch (e) {}
+    try {
+      if (P.robco) { P.robco.roomBuilt = true; P.robco.claimed = true; }
+    } catch (e) {}
+    return { ok: true, msg: 'Casas/habitaciones desbloqueadas en asentamientos propios y de facción.' };
+  }
+
+  // /Asentamiento Nivel N
+  let mAsLv = cmd.match(/^asentamiento\s+nivel\s+(\d+)$/i) || cmd.match(/^settlement\s+level\s+(\d+)$/i);
+  if (mAsLv) {
+    ensurePlayerSettlement();
+    let lv = Math.max(1, Math.min(10, parseInt(mAsLv[1], 10)));
+    P.playerSettlement.claimed = true;
+    if (!P.playerSettlement.name) P.playerSettlement.name = 'Tu Asentamiento';
+    P.playerSettlement.level = lv;
+    // desbloqueos por nivel
+    if (lv >= 2) P.playerSettlement.houseBuilt = true;
+    if (lv >= 5) {
+      P.playerSettlement.travelBuilt = true;
+      if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+      if (P.fastTravelUnlocked.indexOf('player_home') < 0) P.fastTravelUnlocked.push('player_home');
+    }
+    if (lv >= 8) P.playerSettlement.medicBuilt = true;
+    return { ok: true, msg: 'Asentamiento propio → nivel ' + lv };
+  }
+
+  // /Asentamiento Colonos N
+  let mAsCol = cmd.match(/^asentamiento\s+colonos?\s+(\d+)$/i) || cmd.match(/^colonos?\s+(\d+)$/i);
+  if (mAsCol) {
+    ensurePlayerSettlement();
+    let n = Math.max(0, Math.min(10, parseInt(mAsCol[1], 10)));
+    P.playerSettlement.claimed = true;
+    if (!P.playerSettlement.name) P.playerSettlement.name = 'Tu Asentamiento';
+    P.playerSettlement.settlers = n;
+    // nivel mínimo para caber colonos
+    if ((P.playerSettlement.level || 1) < n) P.playerSettlement.level = Math.max(1, n);
+    return { ok: true, msg: 'Colonos del asentamiento: ' + n + '/10' };
+  }
+
+  // /Asentamiento Casa | Viaje | Medico | Maximo
+  if (/^asentamiento\s+casa$/i.test(cmd)) {
+    ensurePlayerSettlement();
+    P.playerSettlement.claimed = true;
+    if (!P.playerSettlement.name) P.playerSettlement.name = 'Tu Asentamiento';
+    P.playerSettlement.houseBuilt = true;
+    if ((P.playerSettlement.level || 1) < 2) P.playerSettlement.level = 2;
+    return { ok: true, msg: 'Casa del asentamiento construida.' };
+  }
+  if (/^asentamiento\s+viaje$/i.test(cmd)) {
+    ensurePlayerSettlement();
+    P.playerSettlement.claimed = true;
+    if (!P.playerSettlement.name) P.playerSettlement.name = 'Tu Asentamiento';
+    P.playerSettlement.travelBuilt = true;
+    if ((P.playerSettlement.level || 1) < 5) P.playerSettlement.level = 5;
+    if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+    if (P.fastTravelUnlocked.indexOf('player_home') < 0) P.fastTravelUnlocked.push('player_home');
+    return { ok: true, msg: 'Viaje rápido del asentamiento desbloqueado.' };
+  }
+  if (/^asentamiento\s+m[eé]dico$/i.test(cmd)) {
+    ensurePlayerSettlement();
+    P.playerSettlement.claimed = true;
+    if (!P.playerSettlement.name) P.playerSettlement.name = 'Tu Asentamiento';
+    P.playerSettlement.medicBuilt = true;
+    if ((P.playerSettlement.level || 1) < 8) P.playerSettlement.level = 8;
+    return { ok: true, msg: 'Médico del asentamiento construido.' };
+  }
+  if (/^asentamiento\s+m[aá]ximo$/i.test(cmd) || low === 'asentamiento max') {
+    ensurePlayerSettlement();
+    P.playerSettlement.claimed = true;
+    if (!P.playerSettlement.name) P.playerSettlement.name = 'Tu Asentamiento';
+    P.playerSettlement.level = 10;
+    P.playerSettlement.settlers = 10;
+    P.playerSettlement.houseBuilt = true;
+    P.playerSettlement.travelBuilt = true;
+    P.playerSettlement.medicBuilt = true;
+    if (!P.fastTravelUnlocked) P.fastTravelUnlocked = [];
+    if (P.fastTravelUnlocked.indexOf('player_home') < 0) P.fastTravelUnlocked.push('player_home');
+    return { ok: true, msg: 'Asentamiento propio al máximo (Nv.10, 10 colonos, casa, viaje, médico).' };
   }
 
   // /God
@@ -9213,47 +9455,44 @@ function fullscreenBtnLabel() {
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
   {
+    ver: '0.11.44',
+    date: '2026-10-08',
+    title: 'Iconos de objetos y comandos de asentamiento',
+    notes: [
+      'Iconos/sprites de img/assets en inventario, tiendas y visor.',
+      'Nuevos comandos: /ViajeRapido, /Desbloquear Casas, /Asentamiento Nivel|Colonos|Casa|Viaje|Medico|Maximo.'
+    ]
+  },
+  {
+    ver: '0.11.43',
+    date: '2026-10-08',
+    title: 'Entrada a asentamientos (fix)',
+    notes: [
+      'getAvailableFactionQuests restaurada.'
+    ]
+  },
+  {
+    ver: '0.11.42',
+    date: '2026-10-08',
+    title: 'getFactionRep restaurada',
+    notes: [
+      'Reputación de facciones.'
+    ]
+  },
+  {
+    ver: '0.11.41',
+    date: '2026-10-08',
+    title: 'Sprite del jugador',
+    notes: [
+      'img/player/combat/.'
+    ]
+  },
+  {
     ver: '0.11.40',
     date: '2026-10-08',
-    title: 'Iconos, sprites y ficha de compañero',
+    title: 'Iconos y sprites de compañero',
     notes: [
-      'Ficha de compañero con retrato; al tocar se ve el sprite de combate.',
-      'Iconos en prisión, Synths y listados de compañeros.',
-      'Iconos de armas/armaduras/objetos en inventario; al tocar se amplían.',
-      'Visor de sprites con botón Cerrar.'
-    ]
-  },
-  {
-    ver: '0.11.39',
-    date: '2026-10-08',
-    title: 'Misiones reparadas y archivos de imagen',
-    notes: [
-      'Botón Misiones corregido.',
-      'Iconos UI en img/icons/; jugador en img/player/.'
-    ]
-  },
-  {
-    ver: '0.11.38',
-    date: '2026-10-08',
-    title: 'Radio: menú Captar señal unificado',
-    notes: [
-      'Captar señal con Botín y Socorro; registro en Misiones → Señales.'
-    ]
-  },
-  {
-    ver: '0.11.37',
-    date: '2026-10-08',
-    title: 'Señales de socorro, Ajustes y coordenadas',
-    notes: [
-      'Formato (X… / Y…) y pestaña Señales.'
-    ]
-  },
-  {
-    ver: '0.11.36',
-    date: '2026-10-08',
-    title: 'Ajustes reorganizados y transferir partida',
-    notes: [
-      'Exportar/importar partida .json.'
+      'Retratos y visor.'
     ]
   }
 ];
@@ -11065,9 +11304,16 @@ function enterSettlement(settlementId) {
     }
   }
   let sett = SETTLEMENTS.find(s => s.id === settlementId);
-  if (!sett) return;
+  if (!sett && settlementId) {
+    // fallback: buscar por coordenadas actuales
+    sett = SETTLEMENTS.find(s => s.x === P.x && s.y === P.y);
+  }
+  if (!sett) {
+    logMsg("Asentamiento no encontrado.");
+    return;
+  }
   if (P.x !== sett.x || P.y !== sett.y) {
-    logMsg("Debes estar en el asentamiento.");
+    logMsg("Debes estar en el asentamiento (" + (sett.name || settlementId) + ").");
     return;
   }
   if (sett.faction && !canEnterFactionSettlement(sett.faction)) {
@@ -11114,19 +11360,24 @@ function enterSettlement(settlementId) {
     return;
   }
   if (sett.playerOwned || sett.id === 'player_home') {
+    closeModal();
     enterPlayerSettlement();
     return;
   }
   if (sett.sierraCasino || sett.id === 'sierra_madre') {
+    closeModal();
     enterSierraCasino();
     return;
   }
   if (sett.robcoFactory || sett.id === 'robco_factory') {
+    closeModal();
     enterRobcoFactory();
     return;
   }
+  closeModal();
   P.location = { type: 'settlement', settlementId: sett.id, name: sett.name, faction: sett.faction };
-  logMsg("Entras en " + sett.name + " (" + (FACTIONS[sett.faction]?.name || '') + ").");
+  let facName = (FACTIONS[sett.faction] && FACTIONS[sett.faction].name) || '';
+  logMsg("Entras en " + sett.name + (facName ? " (" + facName + ")" : "") + ".");
   if (sett.faction === 'strip') startCasinoMusic();
   renderSettlementUI(sett.id, 'missions');
   updateStats();
@@ -11136,6 +11387,7 @@ function renderSettlementUI(settlementId, tab) {
   ensureFactionDefaults();
   let sett = SETTLEMENTS.find(s => s.id === settlementId);
   if (!sett) { renderMap(); return; }
+  closeModal();
   if (sett.playerOwned || sett.id === 'player_home') {
     enterPlayerSettlement();
     return;
@@ -11293,9 +11545,12 @@ function renderSettlementUI(settlementId, tab) {
           let price = Math.max(1, Math.floor((it.value || 10) * 1.8));
           let uniqueTag = it.factionOnly ? ' <span style="color:var(--gold);font-size:10px;">★ FACCIÓN</span>' : '';
           html += `<div class="item fcol" style="border-color:${fcol} !important;">
+            <div class="item-row-with-icon">${itemIconHtml(it, null, !!it.legendary)}
+            <div class="item-body">
             <b style="color:${fcol} !important;">${it.name}</b>${uniqueTag} — ${capsPriceHtml(price)}
             <span style="font-size:10px;color:#8d9880;"> (Tienda Nv.${entry.shopLevel || 1} · Equipo Nv.${P.lvl || 1})</span><br>
             <button style="margin-top:4px;" onclick="buyFactionItem('${sett.faction}',${entry.id},${price})">Comprar</button>
+            </div></div>
           </div>`;
         });
         if (totalPages > 1) {
@@ -16663,6 +16918,7 @@ function renderCombatUI() {
         <div class="combat-fighter player">
           ${playerSprite}
           <div class="cf-name">${(P.playerName || "Superviviente")}</div>
+          <div class="cf-weapon-icon" style="margin:2px 0;">${w ? itemIconHtml(w, 'sm', !!w.legendary) : ''}</div>
           <div class="cf-hp"><div style="width:${playerPct}%;"></div></div>
           <div class="cf-hp-text">${P.hp} / ${maxhp}</div>
         </div>
@@ -18055,6 +18311,8 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
 
       html += `
         <div class="item">
+          <div class="item-row-with-icon">${itemIconHtml(it)}
+          <div class="item-body">
           <b>${it.name}</b> — <span style="color:#e05050;">${capsPriceHtml(price)}</span><br>
           <span style="font-size:11px; color:#8d9880;">
             ${it.damage ? (it.grenade ? '💣 Granada · Daño base: ' + it.damage + ' (escala con tu nivel) · ' : 'Daño: ' + it.damage + ' · ') : ''}
@@ -18067,6 +18325,7 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
             ${it.effectDesc ? it.effectDesc : ''}
           </span><br>
           <button style="margin-top:6px;" onclick="buyItem(${it.id}, ${price})">Comprar 1</button>
+          </div></div>
         </div>
       `;
     });
@@ -18457,6 +18716,7 @@ function confirmGameIntro() {
 }
 
 function bootGame() {
+  try { if (typeof loadItemAssets === "function") loadItemAssets(); } catch (e) {}
   try { ensureUISettings(); setupKeyboardControls(); } catch (e) {}
   let hasSave = false;
   try { hasSave = !!(localStorage.getItem && localStorage.getItem('wl_save_v16')); } catch (e) {}

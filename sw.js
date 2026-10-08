@@ -1,4 +1,4 @@
-const CACHE = 'wasteland-v196';
+const CACHE = 'wasteland-v203';
 const AUDIO_CACHE = 'wasteland-audio-v1';
 const ASSETS = [
   './',
@@ -7,6 +7,7 @@ const ASSETS = [
   './img/icons/icon-192.png',
   './img/icons/icon-512.png',
   './img/icons/player-face.png',
+  './img/assets/items.json',
   './img/player/icons/Morador_de_refugio.png',
   './img/player/combat/Morador_de_refugio.png',
   './img/enemies/icons/Asesino_de_la_Hermandad.png',
