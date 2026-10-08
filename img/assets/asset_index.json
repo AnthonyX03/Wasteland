@@ -2,7 +2,7 @@
   {
     "sprite_id": "aid_001",
     "category": "aid",
-    "file": "img/assets/sprites/aid/aid_001.png",
+    "file": "img/assets/sprites/aid_001.png",
     "used_by_ids": [
       7,
       8,
@@ -60,7 +60,7 @@
   {
     "sprite_id": "ammo_001",
     "category": "ammo",
-    "file": "img/assets/sprites/ammo/ammo_001.png",
+    "file": "img/assets/sprites/ammo_001.png",
     "used_by_ids": [
       9,
       10,
@@ -94,7 +94,7 @@
   {
     "sprite_id": "armor_001",
     "category": "armor",
-    "file": "img/assets/sprites/armor/armor_001.png",
+    "file": "img/assets/sprites/armor_001.png",
     "used_by_ids": [
       5,
       6,
@@ -271,7 +271,7 @@
   {
     "sprite_id": "food_001",
     "category": "food",
-    "file": "img/assets/sprites/food/food_001.png",
+    "file": "img/assets/sprites/food_001.png",
     "used_by_ids": [
       50,
       51,
@@ -315,7 +315,7 @@
   {
     "sprite_id": "grenades_001",
     "category": "grenades",
-    "file": "img/assets/sprites/grenades/grenades_001.png",
+    "file": "img/assets/sprites/grenades_001.png",
     "used_by_ids": [
       2900,
       2901,
@@ -332,7 +332,7 @@
   {
     "sprite_id": "grenades_002",
     "category": "grenades",
-    "file": "img/assets/sprites/grenades/grenades_002.png",
+    "file": "img/assets/sprites/grenades_002.png",
     "used_by_ids": [
       2907,
       2909
@@ -341,7 +341,7 @@
   {
     "sprite_id": "ingredients_001",
     "category": "ingredients",
-    "file": "img/assets/sprites/ingredients/ingredients_001.png",
+    "file": "img/assets/sprites/ingredients_001.png",
     "used_by_ids": [
       40,
       41,
@@ -358,7 +358,7 @@
   {
     "sprite_id": "junk_001",
     "category": "junk",
-    "file": "img/assets/sprites/junk/junk_001.png",
+    "file": "img/assets/sprites/junk_001.png",
     "used_by_ids": [
       13,
       20,
@@ -386,7 +386,7 @@
   {
     "sprite_id": "other_001",
     "category": "other",
-    "file": "img/assets/sprites/other/other_001.png",
+    "file": "img/assets/sprites/other_001.png",
     "used_by_ids": [
       14,
       15,
@@ -451,7 +451,7 @@
   {
     "sprite_id": "quest_001",
     "category": "quest",
-    "file": "img/assets/sprites/quest/quest_001.png",
+    "file": "img/assets/sprites/quest_001.png",
     "used_by_ids": [
       901,
       902,
@@ -468,7 +468,7 @@
   {
     "sprite_id": "special_001",
     "category": "special",
-    "file": "img/assets/sprites/special/special_001.png",
+    "file": "img/assets/sprites/special_001.png",
     "used_by_ids": [
       2305,
       2500
@@ -477,7 +477,7 @@
   {
     "sprite_id": "weapons_001",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_001.png",
+    "file": "img/assets/sprites/weapons_001.png",
     "used_by_ids": [
       107,
       113,
@@ -492,7 +492,7 @@
   {
     "sprite_id": "weapons_002",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_002.png",
+    "file": "img/assets/sprites/weapons_002.png",
     "used_by_ids": [
       2,
       122,
@@ -503,7 +503,7 @@
   {
     "sprite_id": "weapons_003",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_003.png",
+    "file": "img/assets/sprites/weapons_003.png",
     "used_by_ids": [
       127,
       145,
@@ -521,7 +521,7 @@
   {
     "sprite_id": "weapons_004",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_004.png",
+    "file": "img/assets/sprites/weapons_004.png",
     "used_by_ids": [
       105,
       135,
@@ -531,7 +531,7 @@
   {
     "sprite_id": "weapons_005",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_005.png",
+    "file": "img/assets/sprites/weapons_005.png",
     "used_by_ids": [
       3333
     ]
@@ -539,7 +539,7 @@
   {
     "sprite_id": "weapons_006",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_006.png",
+    "file": "img/assets/sprites/weapons_006.png",
     "used_by_ids": [
       185,
       2141,
@@ -550,7 +550,7 @@
   {
     "sprite_id": "weapons_007",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_007.png",
+    "file": "img/assets/sprites/weapons_007.png",
     "used_by_ids": [
       2912
     ]
@@ -558,7 +558,7 @@
   {
     "sprite_id": "weapons_008",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_008.png",
+    "file": "img/assets/sprites/weapons_008.png",
     "used_by_ids": [
       180
     ]
@@ -566,7 +566,7 @@
   {
     "sprite_id": "weapons_009",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_009.png",
+    "file": "img/assets/sprites/weapons_009.png",
     "used_by_ids": [
       2812,
       3364,
@@ -577,7 +577,7 @@
   {
     "sprite_id": "weapons_010",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_010.png",
+    "file": "img/assets/sprites/weapons_010.png",
     "used_by_ids": [
       181,
       193,
@@ -588,7 +588,7 @@
   {
     "sprite_id": "weapons_011",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_011.png",
+    "file": "img/assets/sprites/weapons_011.png",
     "used_by_ids": [
       2622
     ]
@@ -596,7 +596,7 @@
   {
     "sprite_id": "weapons_012",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_012.png",
+    "file": "img/assets/sprites/weapons_012.png",
     "used_by_ids": [
       3334
     ]
@@ -604,7 +604,7 @@
   {
     "sprite_id": "weapons_013",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_013.png",
+    "file": "img/assets/sprites/weapons_013.png",
     "used_by_ids": [
       160
     ]
@@ -612,7 +612,7 @@
   {
     "sprite_id": "weapons_014",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_014.png",
+    "file": "img/assets/sprites/weapons_014.png",
     "used_by_ids": [
       179,
       3215
@@ -621,7 +621,7 @@
   {
     "sprite_id": "weapons_015",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_015.png",
+    "file": "img/assets/sprites/weapons_015.png",
     "used_by_ids": [
       17,
       2201
@@ -630,7 +630,7 @@
   {
     "sprite_id": "weapons_016",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_016.png",
+    "file": "img/assets/sprites/weapons_016.png",
     "used_by_ids": [
       3424
     ]
@@ -638,7 +638,7 @@
   {
     "sprite_id": "weapons_017",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_017.png",
+    "file": "img/assets/sprites/weapons_017.png",
     "used_by_ids": [
       120,
       132,
@@ -650,7 +650,7 @@
   {
     "sprite_id": "weapons_018",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_018.png",
+    "file": "img/assets/sprites/weapons_018.png",
     "used_by_ids": [
       156
     ]
@@ -658,7 +658,7 @@
   {
     "sprite_id": "weapons_019",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_019.png",
+    "file": "img/assets/sprites/weapons_019.png",
     "used_by_ids": [
       126,
       144,
@@ -670,7 +670,7 @@
   {
     "sprite_id": "weapons_020",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_020.png",
+    "file": "img/assets/sprites/weapons_020.png",
     "used_by_ids": [
       2121
     ]
@@ -678,7 +678,7 @@
   {
     "sprite_id": "weapons_021",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_021.png",
+    "file": "img/assets/sprites/weapons_021.png",
     "used_by_ids": [
       116,
       140,
@@ -689,7 +689,7 @@
   {
     "sprite_id": "weapons_022",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_022.png",
+    "file": "img/assets/sprites/weapons_022.png",
     "used_by_ids": [
       3224
     ]
@@ -697,7 +697,7 @@
   {
     "sprite_id": "weapons_023",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_023.png",
+    "file": "img/assets/sprites/weapons_023.png",
     "used_by_ids": [
       2161,
       2707,
@@ -707,7 +707,7 @@
   {
     "sprite_id": "weapons_024",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_024.png",
+    "file": "img/assets/sprites/weapons_024.png",
     "used_by_ids": [
       102,
       108,
@@ -720,7 +720,7 @@
   {
     "sprite_id": "weapons_025",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_025.png",
+    "file": "img/assets/sprites/weapons_025.png",
     "used_by_ids": [
       3704
     ]
@@ -728,7 +728,7 @@
   {
     "sprite_id": "weapons_026",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_026.png",
+    "file": "img/assets/sprites/weapons_026.png",
     "used_by_ids": [
       2013
     ]
@@ -736,7 +736,7 @@
   {
     "sprite_id": "weapons_027",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_027.png",
+    "file": "img/assets/sprites/weapons_027.png",
     "used_by_ids": [
       3335
     ]
@@ -744,7 +744,7 @@
   {
     "sprite_id": "weapons_028",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_028.png",
+    "file": "img/assets/sprites/weapons_028.png",
     "used_by_ids": [
       124,
       130,
@@ -756,7 +756,7 @@
   {
     "sprite_id": "weapons_029",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_029.png",
+    "file": "img/assets/sprites/weapons_029.png",
     "used_by_ids": [
       2401
     ]
@@ -764,7 +764,7 @@
   {
     "sprite_id": "weapons_030",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_030.png",
+    "file": "img/assets/sprites/weapons_030.png",
     "used_by_ids": [
       182,
       194,
@@ -779,7 +779,7 @@
   {
     "sprite_id": "weapons_031",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_031.png",
+    "file": "img/assets/sprites/weapons_031.png",
     "used_by_ids": [
       2412,
       2418,
@@ -789,7 +789,7 @@
   {
     "sprite_id": "weapons_032",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_032.png",
+    "file": "img/assets/sprites/weapons_032.png",
     "used_by_ids": [
       119,
       173,
@@ -802,7 +802,7 @@
   {
     "sprite_id": "weapons_033",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_033.png",
+    "file": "img/assets/sprites/weapons_033.png",
     "used_by_ids": [
       186
     ]
@@ -810,7 +810,7 @@
   {
     "sprite_id": "weapons_034",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_034.png",
+    "file": "img/assets/sprites/weapons_034.png",
     "used_by_ids": [
       197,
       2063,
@@ -822,7 +822,7 @@
   {
     "sprite_id": "weapons_035",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_035.png",
+    "file": "img/assets/sprites/weapons_035.png",
     "used_by_ids": [
       3140
     ]
@@ -830,7 +830,7 @@
   {
     "sprite_id": "weapons_036",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_036.png",
+    "file": "img/assets/sprites/weapons_036.png",
     "used_by_ids": [
       109,
       3361,
@@ -840,7 +840,7 @@
   {
     "sprite_id": "weapons_037",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_037.png",
+    "file": "img/assets/sprites/weapons_037.png",
     "used_by_ids": [
       168
     ]
@@ -848,7 +848,7 @@
   {
     "sprite_id": "weapons_038",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_038.png",
+    "file": "img/assets/sprites/weapons_038.png",
     "used_by_ids": [
       129
     ]
@@ -856,7 +856,7 @@
   {
     "sprite_id": "weapons_039",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_039.png",
+    "file": "img/assets/sprites/weapons_039.png",
     "used_by_ids": [
       146
     ]
@@ -864,7 +864,7 @@
   {
     "sprite_id": "weapons_040",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_040.png",
+    "file": "img/assets/sprites/weapons_040.png",
     "used_by_ids": [
       16,
       112,
@@ -879,7 +879,7 @@
   {
     "sprite_id": "weapons_041",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_041.png",
+    "file": "img/assets/sprites/weapons_041.png",
     "used_by_ids": [
       3305
     ]
@@ -887,7 +887,7 @@
   {
     "sprite_id": "weapons_042",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_042.png",
+    "file": "img/assets/sprites/weapons_042.png",
     "used_by_ids": [
       125
     ]
@@ -895,7 +895,7 @@
   {
     "sprite_id": "weapons_043",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_043.png",
+    "file": "img/assets/sprites/weapons_043.png",
     "used_by_ids": [
       171,
       177,
@@ -915,7 +915,7 @@
   {
     "sprite_id": "weapons_044",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_044.png",
+    "file": "img/assets/sprites/weapons_044.png",
     "used_by_ids": [
       152
     ]
@@ -923,7 +923,7 @@
   {
     "sprite_id": "weapons_045",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_045.png",
+    "file": "img/assets/sprites/weapons_045.png",
     "used_by_ids": [
       2402
     ]
@@ -931,7 +931,7 @@
   {
     "sprite_id": "weapons_046",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_046.png",
+    "file": "img/assets/sprites/weapons_046.png",
     "used_by_ids": [
       1,
       103,
@@ -944,7 +944,7 @@
   {
     "sprite_id": "weapons_047",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_047.png",
+    "file": "img/assets/sprites/weapons_047.png",
     "used_by_ids": [
       3221
     ]
@@ -952,7 +952,7 @@
   {
     "sprite_id": "weapons_048",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_048.png",
+    "file": "img/assets/sprites/weapons_048.png",
     "used_by_ids": [
       151,
       2101
@@ -961,7 +961,7 @@
   {
     "sprite_id": "weapons_049",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_049.png",
+    "file": "img/assets/sprites/weapons_049.png",
     "used_by_ids": [
       161
     ]
@@ -969,7 +969,7 @@
   {
     "sprite_id": "weapons_050",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_050.png",
+    "file": "img/assets/sprites/weapons_050.png",
     "used_by_ids": [
       110,
       134
@@ -978,7 +978,7 @@
   {
     "sprite_id": "weapons_051",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_051.png",
+    "file": "img/assets/sprites/weapons_051.png",
     "used_by_ids": [
       123,
       141,
@@ -993,7 +993,7 @@
   {
     "sprite_id": "weapons_052",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_052.png",
+    "file": "img/assets/sprites/weapons_052.png",
     "used_by_ids": [
       150,
       3660
@@ -1002,7 +1002,7 @@
   {
     "sprite_id": "weapons_053",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_053.png",
+    "file": "img/assets/sprites/weapons_053.png",
     "used_by_ids": [
       3395
     ]
@@ -1010,7 +1010,7 @@
   {
     "sprite_id": "weapons_054",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_054.png",
+    "file": "img/assets/sprites/weapons_054.png",
     "used_by_ids": [
       128,
       158,
@@ -1021,7 +1021,7 @@
   {
     "sprite_id": "weapons_055",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_055.png",
+    "file": "img/assets/sprites/weapons_055.png",
     "used_by_ids": [
       3,
       117,
@@ -1034,7 +1034,7 @@
   {
     "sprite_id": "weapons_056",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_056.png",
+    "file": "img/assets/sprites/weapons_056.png",
     "used_by_ids": [
       192
     ]
@@ -1042,7 +1042,7 @@
   {
     "sprite_id": "weapons_057",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_057.png",
+    "file": "img/assets/sprites/weapons_057.png",
     "used_by_ids": [
       2414
     ]
@@ -1050,7 +1050,7 @@
   {
     "sprite_id": "weapons_058",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_058.png",
+    "file": "img/assets/sprites/weapons_058.png",
     "used_by_ids": [
       101,
       131,
@@ -1068,7 +1068,7 @@
   {
     "sprite_id": "weapons_059",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_059.png",
+    "file": "img/assets/sprites/weapons_059.png",
     "used_by_ids": [
       2313,
       3303,
@@ -1078,7 +1078,7 @@
   {
     "sprite_id": "weapons_060",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_060.png",
+    "file": "img/assets/sprites/weapons_060.png",
     "used_by_ids": [
       169,
       3601
@@ -1087,7 +1087,7 @@
   {
     "sprite_id": "weapons_061",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_061.png",
+    "file": "img/assets/sprites/weapons_061.png",
     "used_by_ids": [
       115,
       2071,
@@ -1099,7 +1099,7 @@
   {
     "sprite_id": "weapons_062",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_062.png",
+    "file": "img/assets/sprites/weapons_062.png",
     "used_by_ids": [
       3123
     ]
@@ -1107,7 +1107,7 @@
   {
     "sprite_id": "weapons_063",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_063.png",
+    "file": "img/assets/sprites/weapons_063.png",
     "used_by_ids": [
       183,
       195,
@@ -1119,7 +1119,7 @@
   {
     "sprite_id": "weapons_064",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_064.png",
+    "file": "img/assets/sprites/weapons_064.png",
     "used_by_ids": [
       2842
     ]
@@ -1127,7 +1127,7 @@
   {
     "sprite_id": "weapons_065",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_065.png",
+    "file": "img/assets/sprites/weapons_065.png",
     "used_by_ids": [
       136,
       3706
@@ -1136,7 +1136,7 @@
   {
     "sprite_id": "weapons_066",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_066.png",
+    "file": "img/assets/sprites/weapons_066.png",
     "used_by_ids": [
       139,
       2011,
@@ -1148,7 +1148,7 @@
   {
     "sprite_id": "weapons_067",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_067.png",
+    "file": "img/assets/sprites/weapons_067.png",
     "used_by_ids": [
       2411,
       2417
@@ -1157,7 +1157,7 @@
   {
     "sprite_id": "weapons_068",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_068.png",
+    "file": "img/assets/sprites/weapons_068.png",
     "used_by_ids": [
       3668
     ]
@@ -1165,7 +1165,7 @@
   {
     "sprite_id": "weapons_069",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_069.png",
+    "file": "img/assets/sprites/weapons_069.png",
     "used_by_ids": [
       2831
     ]
@@ -1173,7 +1173,7 @@
   {
     "sprite_id": "weapons_070",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_070.png",
+    "file": "img/assets/sprites/weapons_070.png",
     "used_by_ids": [
       3302
     ]
@@ -1181,7 +1181,7 @@
   {
     "sprite_id": "weapons_071",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_071.png",
+    "file": "img/assets/sprites/weapons_071.png",
     "used_by_ids": [
       3363
     ]
@@ -1189,7 +1189,7 @@
   {
     "sprite_id": "weapons_072",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_072.png",
+    "file": "img/assets/sprites/weapons_072.png",
     "used_by_ids": [
       121,
       2131,
@@ -1199,7 +1199,7 @@
   {
     "sprite_id": "weapons_073",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_073.png",
+    "file": "img/assets/sprites/weapons_073.png",
     "used_by_ids": [
       164,
       3206
@@ -1208,7 +1208,7 @@
   {
     "sprite_id": "weapons_074",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_074.png",
+    "file": "img/assets/sprites/weapons_074.png",
     "used_by_ids": [
       2410
     ]
@@ -1216,7 +1216,7 @@
   {
     "sprite_id": "weapons_075",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_075.png",
+    "file": "img/assets/sprites/weapons_075.png",
     "used_by_ids": [
       172,
       3142
@@ -1225,7 +1225,7 @@
   {
     "sprite_id": "weapons_076",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_076.png",
+    "file": "img/assets/sprites/weapons_076.png",
     "used_by_ids": [
       106,
       196
@@ -1234,7 +1234,7 @@
   {
     "sprite_id": "weapons_077",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_077.png",
+    "file": "img/assets/sprites/weapons_077.png",
     "used_by_ids": [
       149
     ]
@@ -1242,7 +1242,7 @@
   {
     "sprite_id": "weapons_078",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_078.png",
+    "file": "img/assets/sprites/weapons_078.png",
     "used_by_ids": [
       114,
       138,
@@ -1252,7 +1252,7 @@
   {
     "sprite_id": "weapons_079",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_079.png",
+    "file": "img/assets/sprites/weapons_079.png",
     "used_by_ids": [
       3676
     ]
@@ -1260,7 +1260,7 @@
   {
     "sprite_id": "weapons_080",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_080.png",
+    "file": "img/assets/sprites/weapons_080.png",
     "used_by_ids": [
       4,
       142,
@@ -1274,7 +1274,7 @@
   {
     "sprite_id": "weapons_081",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_081.png",
+    "file": "img/assets/sprites/weapons_081.png",
     "used_by_ids": [
       159
     ]
@@ -1282,7 +1282,7 @@
   {
     "sprite_id": "weapons_082",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_082.png",
+    "file": "img/assets/sprites/weapons_082.png",
     "used_by_ids": [
       2003,
       3425
@@ -1291,7 +1291,7 @@
   {
     "sprite_id": "weapons_083",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_083.png",
+    "file": "img/assets/sprites/weapons_083.png",
     "used_by_ids": [
       3152
     ]
@@ -1299,7 +1299,7 @@
   {
     "sprite_id": "weapons_084",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_084.png",
+    "file": "img/assets/sprites/weapons_084.png",
     "used_by_ids": [
       104,
       188
@@ -1308,7 +1308,7 @@
   {
     "sprite_id": "weapons_085",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_085.png",
+    "file": "img/assets/sprites/weapons_085.png",
     "used_by_ids": [
       133,
       2053,
@@ -1319,7 +1319,7 @@
   {
     "sprite_id": "weapons_086",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_086.png",
+    "file": "img/assets/sprites/weapons_086.png",
     "used_by_ids": [
       111,
       2205
@@ -1328,7 +1328,7 @@
   {
     "sprite_id": "weapons_087",
     "category": "weapons",
-    "file": "img/assets/sprites/weapons/weapons_087.png",
+    "file": "img/assets/sprites/weapons_087.png",
     "used_by_ids": [
       153
     ]
