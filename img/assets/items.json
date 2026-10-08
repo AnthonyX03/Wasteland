@@ -1,0 +1,5834 @@
+[
+  {
+    "id": 1,
+    "name": "Pistola oxidada",
+    "category": "weapons",
+    "sprite_id": "weapons_046",
+    "icon_id": "weapons_073",
+    "sprite": "img/assets/sprites/weapons/weapons_046.png",
+    "icon": "img/assets/icons/weapons/weapons_073.png"
+  },
+  {
+    "id": 2,
+    "name": "Escopeta recortada",
+    "category": "weapons",
+    "sprite_id": "weapons_002",
+    "icon_id": "weapons_028",
+    "sprite": "img/assets/sprites/weapons/weapons_002.png",
+    "icon": "img/assets/icons/weapons/weapons_028.png"
+  },
+  {
+    "id": 3,
+    "name": "Rifle de energía",
+    "category": "weapons",
+    "sprite_id": "weapons_055",
+    "icon_id": "weapons_016",
+    "sprite": "img/assets/sprites/weapons/weapons_055.png",
+    "icon": "img/assets/icons/weapons/weapons_016.png"
+  },
+  {
+    "id": 4,
+    "name": "Tubería con púas",
+    "category": "weapons",
+    "sprite_id": "weapons_080",
+    "icon_id": "weapons_025",
+    "sprite": "img/assets/sprites/weapons/weapons_080.png",
+    "icon": "img/assets/icons/weapons/weapons_025.png"
+  },
+  {
+    "id": 5,
+    "name": "Ropa de superviviente",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 6,
+    "name": "Chaqueta blindada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 7,
+    "name": "Estimulante",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 8,
+    "name": "Superestimulante",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 9,
+    "name": "Calibre .38",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 10,
+    "name": "Cartuchos de escopeta",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 11,
+    "name": "Células de microfusión",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 12,
+    "name": "Munición 5.56mm",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 13,
+    "name": "Chatarra electrónica",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 14,
+    "name": "Tartera de Vault-Tec",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 15,
+    "name": "Tartera Nuka-Cola",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 16,
+    "name": "Rifle de Asalto Casero",
+    "category": "weapons",
+    "sprite_id": "weapons_040",
+    "icon_id": "weapons_022",
+    "sprite": "img/assets/sprites/weapons/weapons_040.png",
+    "icon": "img/assets/icons/weapons/weapons_022.png"
+  },
+  {
+    "id": 17,
+    "name": "Machete Reforzado",
+    "category": "weapons",
+    "sprite_id": "weapons_015",
+    "icon_id": "weapons_044",
+    "sprite": "img/assets/sprites/weapons/weapons_015.png",
+    "icon": "img/assets/icons/weapons/weapons_044.png"
+  },
+  {
+    "id": 18,
+    "name": "Chaleco Táctico",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 19,
+    "name": "Cuero Reforzado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 20,
+    "name": "Tornillos y tuercas",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 21,
+    "name": "Placas de hierro",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 22,
+    "name": "Cables de cobre",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 23,
+    "name": "Engranajes de acero",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 24,
+    "name": "Retales de cuero",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 25,
+    "name": "Fibra de vidrio",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 26,
+    "name": "Muelle industrial",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 27,
+    "name": "Tubo de aluminio",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 28,
+    "name": "Placa de titanio",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 29,
+    "name": "Tartera Legendaria",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 30,
+    "name": "Plástico",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 31,
+    "name": "Vidrio",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 32,
+    "name": "Caucho",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 33,
+    "name": "Aceite",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 34,
+    "name": "Ácido",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 35,
+    "name": "Antiséptico",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 36,
+    "name": "Circuito impreso",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 37,
+    "name": "Polvo de cerámica",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 38,
+    "name": "Fibra óptica",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 39,
+    "name": "Adhesivo industrial",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 40,
+    "name": "Carne de rata",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 41,
+    "name": "Carne de perro",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 42,
+    "name": "Carne mutada",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 43,
+    "name": "Carne de brahmán",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 44,
+    "name": "Maíz",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 45,
+    "name": "Zanahorias",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 46,
+    "name": "Patatas",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 47,
+    "name": "Setas del Yermo",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 48,
+    "name": "Agua purificada",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 49,
+    "name": "Harina irradiada",
+    "category": "ingredients",
+    "sprite_id": "ingredients_001",
+    "icon_id": "ingredients_001",
+    "sprite": "img/assets/sprites/ingredients/ingredients_001.png",
+    "icon": "img/assets/icons/ingredients/ingredients_001.png"
+  },
+  {
+    "id": 50,
+    "name": "Nuka-Cola",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 51,
+    "name": "Nuka-Cola Quantum",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 52,
+    "name": "Nuka-Cola Cherry",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 53,
+    "name": "Nuka-Cola Dark",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 54,
+    "name": "Nuka-Cola Victory",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 55,
+    "name": "Cerveza",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 56,
+    "name": "Whiskey",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 57,
+    "name": "Vodka",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 58,
+    "name": "Ron del Yermo",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 70,
+    "name": "Mentats",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 71,
+    "name": "Buffout",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 72,
+    "name": "Psycho",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 73,
+    "name": "Jet",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 74,
+    "name": "RadAway",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 75,
+    "name": "Rad-X",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 76,
+    "name": "Med-X",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 77,
+    "name": "Overdrive",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 80,
+    "name": "Estofado de rata",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 81,
+    "name": "Filete de perro",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 82,
+    "name": "Guiso mutante",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 83,
+    "name": "Asado de brahmán",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 84,
+    "name": "Sopa de verduras",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 85,
+    "name": "Tortilla del Yermo",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 86,
+    "name": "Estofado del superviviente",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 101,
+    "name": "Pistola 10mm",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 102,
+    "name": "Pistola del 44",
+    "category": "weapons",
+    "sprite_id": "weapons_024",
+    "icon_id": "weapons_033",
+    "sprite": "img/assets/sprites/weapons/weapons_024.png",
+    "icon": "img/assets/icons/weapons/weapons_033.png"
+  },
+  {
+    "id": 103,
+    "name": "Pistola de Bengalas",
+    "category": "weapons",
+    "sprite_id": "weapons_046",
+    "icon_id": "weapons_073",
+    "sprite": "img/assets/sprites/weapons/weapons_046.png",
+    "icon": "img/assets/icons/weapons/weapons_073.png"
+  },
+  {
+    "id": 104,
+    "name": "Pistola de Plasma",
+    "category": "weapons",
+    "sprite_id": "weapons_084",
+    "icon_id": "weapons_002",
+    "sprite": "img/assets/sprites/weapons/weapons_084.png",
+    "icon": "img/assets/icons/weapons/weapons_002.png"
+  },
+  {
+    "id": 105,
+    "name": "Pistola Láser",
+    "category": "weapons",
+    "sprite_id": "weapons_004",
+    "icon_id": "weapons_071",
+    "sprite": "img/assets/sprites/weapons/weapons_004.png",
+    "icon": "img/assets/icons/weapons/weapons_071.png"
+  },
+  {
+    "id": 106,
+    "name": "Pistola Gamma",
+    "category": "weapons",
+    "sprite_id": "weapons_076",
+    "icon_id": "weapons_027",
+    "sprite": "img/assets/sprites/weapons/weapons_076.png",
+    "icon": "img/assets/icons/weapons/weapons_027.png"
+  },
+  {
+    "id": 107,
+    "name": "Pistola Lanzadardos",
+    "category": "weapons",
+    "sprite_id": "weapons_001",
+    "icon_id": "weapons_060",
+    "sprite": "img/assets/sprites/weapons/weapons_001.png",
+    "icon": "img/assets/icons/weapons/weapons_060.png"
+  },
+  {
+    "id": 108,
+    "name": "Pistola de Clavos",
+    "category": "weapons",
+    "sprite_id": "weapons_024",
+    "icon_id": "weapons_033",
+    "sprite": "img/assets/sprites/weapons/weapons_024.png",
+    "icon": "img/assets/icons/weapons/weapons_033.png"
+  },
+  {
+    "id": 109,
+    "name": "Subfusil 10mm",
+    "category": "weapons",
+    "sprite_id": "weapons_036",
+    "icon_id": "weapons_019",
+    "sprite": "img/assets/sprites/weapons/weapons_036.png",
+    "icon": "img/assets/icons/weapons/weapons_019.png"
+  },
+  {
+    "id": 110,
+    "name": "Subfusil Thompson",
+    "category": "weapons",
+    "sprite_id": "weapons_050",
+    "icon_id": "weapons_062",
+    "sprite": "img/assets/sprites/weapons/weapons_050.png",
+    "icon": "img/assets/icons/weapons/weapons_062.png"
+  },
+  {
+    "id": 111,
+    "name": "Rifle de Caza",
+    "category": "weapons",
+    "sprite_id": "weapons_086",
+    "icon_id": "weapons_072",
+    "sprite": "img/assets/sprites/weapons/weapons_086.png",
+    "icon": "img/assets/icons/weapons/weapons_072.png"
+  },
+  {
+    "id": 112,
+    "name": "Rifle de Asalto Militar",
+    "category": "weapons",
+    "sprite_id": "weapons_040",
+    "icon_id": "weapons_022",
+    "sprite": "img/assets/sprites/weapons/weapons_040.png",
+    "icon": "img/assets/icons/weapons/weapons_022.png"
+  },
+  {
+    "id": 113,
+    "name": "Rifle de Combate",
+    "category": "weapons",
+    "sprite_id": "weapons_001",
+    "icon_id": "weapons_060",
+    "sprite": "img/assets/sprites/weapons/weapons_001.png",
+    "icon": "img/assets/icons/weapons/weapons_060.png"
+  },
+  {
+    "id": 114,
+    "name": "Rifle de Francotirador",
+    "category": "weapons",
+    "sprite_id": "weapons_078",
+    "icon_id": "weapons_065",
+    "sprite": "img/assets/sprites/weapons/weapons_078.png",
+    "icon": "img/assets/icons/weapons/weapons_065.png"
+  },
+  {
+    "id": 115,
+    "name": "Rifle Gauss",
+    "category": "weapons",
+    "sprite_id": "weapons_061",
+    "icon_id": "weapons_040",
+    "sprite": "img/assets/sprites/weapons/weapons_061.png",
+    "icon": "img/assets/icons/weapons/weapons_040.png"
+  },
+  {
+    "id": 116,
+    "name": "Rifle de Plasma avanzado",
+    "category": "weapons",
+    "sprite_id": "weapons_021",
+    "icon_id": "weapons_011",
+    "sprite": "img/assets/sprites/weapons/weapons_021.png",
+    "icon": "img/assets/icons/weapons/weapons_011.png"
+  },
+  {
+    "id": 117,
+    "name": "Rifle Láser militar",
+    "category": "weapons",
+    "sprite_id": "weapons_055",
+    "icon_id": "weapons_016",
+    "sprite": "img/assets/sprites/weapons/weapons_055.png",
+    "icon": "img/assets/icons/weapons/weapons_016.png"
+  },
+  {
+    "id": 118,
+    "name": "Fusil de Asalto Incursor",
+    "category": "weapons",
+    "sprite_id": "weapons_040",
+    "icon_id": "weapons_022",
+    "sprite": "img/assets/sprites/weapons/weapons_040.png",
+    "icon": "img/assets/icons/weapons/weapons_022.png"
+  },
+  {
+    "id": 119,
+    "name": "Carabina de Palanca",
+    "category": "weapons",
+    "sprite_id": "weapons_032",
+    "icon_id": "weapons_034",
+    "sprite": "img/assets/sprites/weapons/weapons_032.png",
+    "icon": "img/assets/icons/weapons/weapons_034.png"
+  },
+  {
+    "id": 120,
+    "name": "Rifle Radiactivo del Descendiente",
+    "category": "weapons",
+    "sprite_id": "weapons_017",
+    "icon_id": "weapons_066",
+    "sprite": "img/assets/sprites/weapons/weapons_017.png",
+    "icon": "img/assets/icons/weapons/weapons_066.png"
+  },
+  {
+    "id": 121,
+    "name": "Escopeta de Bombeo",
+    "category": "weapons",
+    "sprite_id": "weapons_072",
+    "icon_id": "weapons_057",
+    "sprite": "img/assets/sprites/weapons/weapons_072.png",
+    "icon": "img/assets/icons/weapons/weapons_057.png"
+  },
+  {
+    "id": 122,
+    "name": "Escopeta de Doble Cañón",
+    "category": "weapons",
+    "sprite_id": "weapons_002",
+    "icon_id": "weapons_028",
+    "sprite": "img/assets/sprites/weapons/weapons_002.png",
+    "icon": "img/assets/icons/weapons/weapons_028.png"
+  },
+  {
+    "id": 123,
+    "name": "Escopeta de Combate",
+    "category": "weapons",
+    "sprite_id": "weapons_051",
+    "icon_id": "weapons_017",
+    "sprite": "img/assets/sprites/weapons/weapons_051.png",
+    "icon": "img/assets/icons/weapons/weapons_017.png"
+  },
+  {
+    "id": 124,
+    "name": "Ametralladora Ligera",
+    "category": "weapons",
+    "sprite_id": "weapons_028",
+    "icon_id": "weapons_036",
+    "sprite": "img/assets/sprites/weapons/weapons_028.png",
+    "icon": "img/assets/icons/weapons/weapons_036.png"
+  },
+  {
+    "id": 125,
+    "name": "Minigun",
+    "category": "weapons",
+    "sprite_id": "weapons_042",
+    "icon_id": "weapons_068",
+    "sprite": "img/assets/sprites/weapons/weapons_042.png",
+    "icon": "img/assets/icons/weapons/weapons_068.png"
+  },
+  {
+    "id": 126,
+    "name": "Lanzamisiles",
+    "category": "weapons",
+    "sprite_id": "weapons_019",
+    "icon_id": "weapons_075",
+    "sprite": "img/assets/sprites/weapons/weapons_019.png",
+    "icon": "img/assets/icons/weapons/weapons_075.png"
+  },
+  {
+    "id": 127,
+    "name": "Lanzallamas",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 128,
+    "name": "Fat Man (Lanzanukes)",
+    "category": "weapons",
+    "sprite_id": "weapons_054",
+    "icon_id": "weapons_045",
+    "sprite": "img/assets/sprites/weapons/weapons_054.png",
+    "icon": "img/assets/icons/weapons/weapons_045.png"
+  },
+  {
+    "id": 129,
+    "name": "Cañón de Brondes",
+    "category": "weapons",
+    "sprite_id": "weapons_038",
+    "icon_id": "weapons_026",
+    "sprite": "img/assets/sprites/weapons/weapons_038.png",
+    "icon": "img/assets/icons/weapons/weapons_026.png"
+  },
+  {
+    "id": 130,
+    "name": "Chatarrero automático",
+    "category": "weapons",
+    "sprite_id": "weapons_028",
+    "icon_id": "weapons_036",
+    "sprite": "img/assets/sprites/weapons/weapons_028.png",
+    "icon": "img/assets/icons/weapons/weapons_036.png"
+  },
+  {
+    "id": 131,
+    "name": "Pistola Western",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 132,
+    "name": "Rifle de Infantería",
+    "category": "weapons",
+    "sprite_id": "weapons_017",
+    "icon_id": "weapons_066",
+    "sprite": "img/assets/sprites/weapons/weapons_017.png",
+    "icon": "img/assets/icons/weapons/weapons_066.png"
+  },
+  {
+    "id": 133,
+    "name": "Rifle de Asalto Pesado",
+    "category": "weapons",
+    "sprite_id": "weapons_085",
+    "icon_id": "weapons_047",
+    "sprite": "img/assets/sprites/weapons/weapons_085.png",
+    "icon": "img/assets/icons/weapons/weapons_047.png"
+  },
+  {
+    "id": 134,
+    "name": "Ametralladora de Tambor",
+    "category": "weapons",
+    "sprite_id": "weapons_050",
+    "icon_id": "weapons_062",
+    "sprite": "img/assets/sprites/weapons/weapons_050.png",
+    "icon": "img/assets/icons/weapons/weapons_062.png"
+  },
+  {
+    "id": 135,
+    "name": "Pistola de Pulsos",
+    "category": "weapons",
+    "sprite_id": "weapons_004",
+    "icon_id": "weapons_071",
+    "sprite": "img/assets/sprites/weapons/weapons_004.png",
+    "icon": "img/assets/icons/weapons/weapons_071.png"
+  },
+  {
+    "id": 136,
+    "name": "Rifle de Conversión Láser",
+    "category": "weapons",
+    "sprite_id": "weapons_065",
+    "icon_id": "weapons_046",
+    "sprite": "img/assets/sprites/weapons/weapons_065.png",
+    "icon": "img/assets/icons/weapons/weapons_046.png"
+  },
+  {
+    "id": 137,
+    "name": "Pistola Incursora",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 138,
+    "name": "Rifle de Francotirador Experimental",
+    "category": "weapons",
+    "sprite_id": "weapons_078",
+    "icon_id": "weapons_065",
+    "sprite": "img/assets/sprites/weapons/weapons_078.png",
+    "icon": "img/assets/icons/weapons/weapons_065.png"
+  },
+  {
+    "id": 139,
+    "name": "Pistola de Plasma pesada",
+    "category": "weapons",
+    "sprite_id": "weapons_066",
+    "icon_id": "weapons_037",
+    "sprite": "img/assets/sprites/weapons/weapons_066.png",
+    "icon": "img/assets/icons/weapons/weapons_037.png"
+  },
+  {
+    "id": 140,
+    "name": "Rifle Laser-Gatling",
+    "category": "weapons",
+    "sprite_id": "weapons_021",
+    "icon_id": "weapons_011",
+    "sprite": "img/assets/sprites/weapons/weapons_021.png",
+    "icon": "img/assets/icons/weapons/weapons_011.png"
+  },
+  {
+    "id": 141,
+    "name": "Bate de béisbol",
+    "category": "weapons",
+    "sprite_id": "weapons_051",
+    "icon_id": "weapons_017",
+    "sprite": "img/assets/sprites/weapons/weapons_051.png",
+    "icon": "img/assets/icons/weapons/weapons_017.png"
+  },
+  {
+    "id": 142,
+    "name": "Bate con pinchos",
+    "category": "weapons",
+    "sprite_id": "weapons_080",
+    "icon_id": "weapons_025",
+    "sprite": "img/assets/sprites/weapons/weapons_080.png",
+    "icon": "img/assets/icons/weapons/weapons_025.png"
+  },
+  {
+    "id": 143,
+    "name": "Tubo de plomo",
+    "category": "weapons",
+    "sprite_id": "weapons_001",
+    "icon_id": "weapons_060",
+    "sprite": "img/assets/sprites/weapons/weapons_001.png",
+    "icon": "img/assets/icons/weapons/weapons_060.png"
+  },
+  {
+    "id": 144,
+    "name": "Llave inglesa",
+    "category": "weapons",
+    "sprite_id": "weapons_019",
+    "icon_id": "weapons_075",
+    "sprite": "img/assets/sprites/weapons/weapons_019.png",
+    "icon": "img/assets/icons/weapons/weapons_075.png"
+  },
+  {
+    "id": 145,
+    "name": "Destornillador modificado",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 146,
+    "name": "Cuchillo de combate",
+    "category": "weapons",
+    "sprite_id": "weapons_039",
+    "icon_id": "weapons_076",
+    "sprite": "img/assets/sprites/weapons/weapons_039.png",
+    "icon": "img/assets/icons/weapons/weapons_076.png"
+  },
+  {
+    "id": 147,
+    "name": "Puño americano",
+    "category": "weapons",
+    "sprite_id": "weapons_051",
+    "icon_id": "weapons_017",
+    "sprite": "img/assets/sprites/weapons/weapons_051.png",
+    "icon": "img/assets/icons/weapons/weapons_017.png"
+  },
+  {
+    "id": 148,
+    "name": "Puño de hierro",
+    "category": "weapons",
+    "sprite_id": "weapons_080",
+    "icon_id": "weapons_025",
+    "sprite": "img/assets/sprites/weapons/weapons_080.png",
+    "icon": "img/assets/icons/weapons/weapons_025.png"
+  },
+  {
+    "id": 149,
+    "name": "Espada china",
+    "category": "weapons",
+    "sprite_id": "weapons_077",
+    "icon_id": "weapons_012",
+    "sprite": "img/assets/sprites/weapons/weapons_077.png",
+    "icon": "img/assets/icons/weapons/weapons_012.png"
+  },
+  {
+    "id": 150,
+    "name": "Wakizashi",
+    "category": "weapons",
+    "sprite_id": "weapons_052",
+    "icon_id": "weapons_023",
+    "sprite": "img/assets/sprites/weapons/weapons_052.png",
+    "icon": "img/assets/icons/weapons/weapons_023.png"
+  },
+  {
+    "id": 151,
+    "name": "Machete de kook",
+    "category": "weapons",
+    "sprite_id": "weapons_048",
+    "icon_id": "weapons_081",
+    "sprite": "img/assets/sprites/weapons/weapons_048.png",
+    "icon": "img/assets/icons/weapons/weapons_081.png"
+  },
+  {
+    "id": 152,
+    "name": "Hacha de mano",
+    "category": "weapons",
+    "sprite_id": "weapons_044",
+    "icon_id": "weapons_004",
+    "sprite": "img/assets/sprites/weapons/weapons_044.png",
+    "icon": "img/assets/icons/weapons/weapons_004.png"
+  },
+  {
+    "id": 153,
+    "name": "Hacha de bombero",
+    "category": "weapons",
+    "sprite_id": "weapons_087",
+    "icon_id": "weapons_061",
+    "sprite": "img/assets/sprites/weapons/weapons_087.png",
+    "icon": "img/assets/icons/weapons/weapons_061.png"
+  },
+  {
+    "id": 154,
+    "name": "Sartenazo",
+    "category": "weapons",
+    "sprite_id": "weapons_028",
+    "icon_id": "weapons_036",
+    "sprite": "img/assets/sprites/weapons/weapons_028.png",
+    "icon": "img/assets/icons/weapons/weapons_036.png"
+  },
+  {
+    "id": 155,
+    "name": "Porra de policía",
+    "category": "weapons",
+    "sprite_id": "weapons_001",
+    "icon_id": "weapons_060",
+    "sprite": "img/assets/sprites/weapons/weapons_001.png",
+    "icon": "img/assets/icons/weapons/weapons_060.png"
+  },
+  {
+    "id": 156,
+    "name": "Porra electrificada",
+    "category": "weapons",
+    "sprite_id": "weapons_018",
+    "icon_id": "weapons_063",
+    "sprite": "img/assets/sprites/weapons/weapons_018.png",
+    "icon": "img/assets/icons/weapons/weapons_063.png"
+  },
+  {
+    "id": 157,
+    "name": "Supermartillo",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 158,
+    "name": "Martillo de Supermutante",
+    "category": "weapons",
+    "sprite_id": "weapons_054",
+    "icon_id": "weapons_045",
+    "sprite": "img/assets/sprites/weapons/weapons_054.png",
+    "icon": "img/assets/icons/weapons/weapons_045.png"
+  },
+  {
+    "id": 159,
+    "name": "Motosierra",
+    "category": "weapons",
+    "sprite_id": "weapons_081",
+    "icon_id": "weapons_074",
+    "sprite": "img/assets/sprites/weapons/weapons_081.png",
+    "icon": "img/assets/icons/weapons/weapons_074.png"
+  },
+  {
+    "id": 160,
+    "name": "Ripper (Cuchilla a motor)",
+    "category": "weapons",
+    "sprite_id": "weapons_013",
+    "icon_id": "weapons_029",
+    "sprite": "img/assets/sprites/weapons/weapons_013.png",
+    "icon": "img/assets/icons/weapons/weapons_029.png"
+  },
+  {
+    "id": 161,
+    "name": "Espada de Revolución",
+    "category": "weapons",
+    "sprite_id": "weapons_049",
+    "icon_id": "weapons_015",
+    "sprite": "img/assets/sprites/weapons/weapons_049.png",
+    "icon": "img/assets/icons/weapons/weapons_015.png"
+  },
+  {
+    "id": 162,
+    "name": "Puño Asistido (Power Fist)",
+    "category": "weapons",
+    "sprite_id": "weapons_019",
+    "icon_id": "weapons_075",
+    "sprite": "img/assets/sprites/weapons/weapons_019.png",
+    "icon": "img/assets/icons/weapons/weapons_075.png"
+  },
+  {
+    "id": 163,
+    "name": "Guantelete de Garra de Sanguinario",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 164,
+    "name": "Cuchillo de Carnicero",
+    "category": "weapons",
+    "sprite_id": "weapons_073",
+    "icon_id": "weapons_038",
+    "sprite": "img/assets/sprites/weapons/weapons_073.png",
+    "icon": "img/assets/icons/weapons/weapons_038.png"
+  },
+  {
+    "id": 165,
+    "name": "Bate de Diamantes en Bruto",
+    "category": "weapons",
+    "sprite_id": "weapons_051",
+    "icon_id": "weapons_017",
+    "sprite": "img/assets/sprites/weapons/weapons_051.png",
+    "icon": "img/assets/icons/weapons/weapons_017.png"
+  },
+  {
+    "id": 166,
+    "name": "Lanza de cazador",
+    "category": "weapons",
+    "sprite_id": "weapons_080",
+    "icon_id": "weapons_025",
+    "sprite": "img/assets/sprites/weapons/weapons_080.png",
+    "icon": "img/assets/icons/weapons/weapons_025.png"
+  },
+  {
+    "id": 167,
+    "name": "Pica de Robot",
+    "category": "weapons",
+    "sprite_id": "weapons_001",
+    "icon_id": "weapons_060",
+    "sprite": "img/assets/sprites/weapons/weapons_001.png",
+    "icon": "img/assets/icons/weapons/weapons_060.png"
+  },
+  {
+    "id": 168,
+    "name": "Hacha de incursor",
+    "category": "weapons",
+    "sprite_id": "weapons_037",
+    "icon_id": "weapons_055",
+    "sprite": "img/assets/sprites/weapons/weapons_037.png",
+    "icon": "img/assets/icons/weapons/weapons_055.png"
+  },
+  {
+    "id": 169,
+    "name": "Espada corta oxidada",
+    "category": "weapons",
+    "sprite_id": "weapons_060",
+    "icon_id": "weapons_064",
+    "sprite": "img/assets/sprites/weapons/weapons_060.png",
+    "icon": "img/assets/icons/weapons/weapons_064.png"
+  },
+  {
+    "id": 170,
+    "name": "Maza pesada",
+    "category": "weapons",
+    "sprite_id": "weapons_054",
+    "icon_id": "weapons_045",
+    "sprite": "img/assets/sprites/weapons/weapons_054.png",
+    "icon": "img/assets/icons/weapons/weapons_045.png"
+  },
+  {
+    "id": 171,
+    "name": "Pistola de Ciberdelincuente",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 172,
+    "name": "Subfusil de Incursor",
+    "category": "weapons",
+    "sprite_id": "weapons_075",
+    "icon_id": "weapons_030",
+    "sprite": "img/assets/sprites/weapons/weapons_075.png",
+    "icon": "img/assets/icons/weapons/weapons_030.png"
+  },
+  {
+    "id": 173,
+    "name": "Rifle de Asalto Vault-Tec",
+    "category": "weapons",
+    "sprite_id": "weapons_032",
+    "icon_id": "weapons_034",
+    "sprite": "img/assets/sprites/weapons/weapons_032.png",
+    "icon": "img/assets/icons/weapons/weapons_034.png"
+  },
+  {
+    "id": 174,
+    "name": "Pistola Magnética",
+    "category": "weapons",
+    "sprite_id": "weapons_024",
+    "icon_id": "weapons_033",
+    "sprite": "img/assets/sprites/weapons/weapons_024.png",
+    "icon": "img/assets/icons/weapons/weapons_033.png"
+  },
+  {
+    "id": 175,
+    "name": "Lanzamisiles Cuádruple",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 176,
+    "name": "Carabina Láser",
+    "category": "weapons",
+    "sprite_id": "weapons_021",
+    "icon_id": "weapons_011",
+    "sprite": "img/assets/sprites/weapons/weapons_021.png",
+    "icon": "img/assets/icons/weapons/weapons_011.png"
+  },
+  {
+    "id": 177,
+    "name": "Pistola de Clavos neumática",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 178,
+    "name": "Rifle Antidisturbios",
+    "category": "weapons",
+    "sprite_id": "weapons_040",
+    "icon_id": "weapons_022",
+    "sprite": "img/assets/sprites/weapons/weapons_040.png",
+    "icon": "img/assets/icons/weapons/weapons_022.png"
+  },
+  {
+    "id": 179,
+    "name": "Pistola de Precisión",
+    "category": "weapons",
+    "sprite_id": "weapons_014",
+    "icon_id": "weapons_085",
+    "sprite": "img/assets/sprites/weapons/weapons_014.png",
+    "icon": "img/assets/icons/weapons/weapons_085.png"
+  },
+  {
+    "id": 180,
+    "name": "Escopeta Recortada Táctica",
+    "category": "weapons",
+    "sprite_id": "weapons_008",
+    "icon_id": "weapons_008",
+    "sprite": "img/assets/sprites/weapons/weapons_008.png",
+    "icon": "img/assets/icons/weapons/weapons_008.png"
+  },
+  {
+    "id": 181,
+    "name": "Rifle de Cerrojo Pesado",
+    "category": "weapons",
+    "sprite_id": "weapons_010",
+    "icon_id": "weapons_080",
+    "sprite": "img/assets/sprites/weapons/weapons_010.png",
+    "icon": "img/assets/icons/weapons/weapons_080.png"
+  },
+  {
+    "id": 182,
+    "name": "Pistola Silenciada",
+    "category": "weapons",
+    "sprite_id": "weapons_030",
+    "icon_id": "weapons_007",
+    "sprite": "img/assets/sprites/weapons/weapons_030.png",
+    "icon": "img/assets/icons/weapons/weapons_007.png"
+  },
+  {
+    "id": 183,
+    "name": "Rifle de Asalto Silenciado",
+    "category": "weapons",
+    "sprite_id": "weapons_063",
+    "icon_id": "weapons_032",
+    "sprite": "img/assets/sprites/weapons/weapons_063.png",
+    "icon": "img/assets/icons/weapons/weapons_032.png"
+  },
+  {
+    "id": 184,
+    "name": "Pistola de Emergencia",
+    "category": "weapons",
+    "sprite_id": "weapons_028",
+    "icon_id": "weapons_036",
+    "sprite": "img/assets/sprites/weapons/weapons_028.png",
+    "icon": "img/assets/icons/weapons/weapons_036.png"
+  },
+  {
+    "id": 185,
+    "name": "Rifle de Explorador",
+    "category": "weapons",
+    "sprite_id": "weapons_006",
+    "icon_id": "weapons_067",
+    "sprite": "img/assets/sprites/weapons/weapons_006.png",
+    "icon": "img/assets/icons/weapons/weapons_067.png"
+  },
+  {
+    "id": 186,
+    "name": "Cañón de Plasma Pesado",
+    "category": "weapons",
+    "sprite_id": "weapons_033",
+    "icon_id": "weapons_059",
+    "sprite": "img/assets/sprites/weapons/weapons_033.png",
+    "icon": "img/assets/icons/weapons/weapons_059.png"
+  },
+  {
+    "id": 187,
+    "name": "Lanzadardos Venenosos",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 188,
+    "name": "Pistola Criogénica",
+    "category": "weapons",
+    "sprite_id": "weapons_084",
+    "icon_id": "weapons_002",
+    "sprite": "img/assets/sprites/weapons/weapons_084.png",
+    "icon": "img/assets/icons/weapons/weapons_002.png"
+  },
+  {
+    "id": 189,
+    "name": "Rifle Criogénico",
+    "category": "weapons",
+    "sprite_id": "weapons_055",
+    "icon_id": "weapons_016",
+    "sprite": "img/assets/sprites/weapons/weapons_055.png",
+    "icon": "img/assets/icons/weapons/weapons_016.png"
+  },
+  {
+    "id": 190,
+    "name": "Lanzallamas Pesado",
+    "category": "weapons",
+    "sprite_id": "weapons_080",
+    "icon_id": "weapons_025",
+    "sprite": "img/assets/sprites/weapons/weapons_080.png",
+    "icon": "img/assets/icons/weapons/weapons_025.png"
+  },
+  {
+    "id": 191,
+    "name": "Ametralladora rotativa pesada",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 192,
+    "name": "Fusil de Pulso EMP",
+    "category": "weapons",
+    "sprite_id": "weapons_056",
+    "icon_id": "weapons_018",
+    "sprite": "img/assets/sprites/weapons/weapons_056.png",
+    "icon": "img/assets/icons/weapons/weapons_018.png"
+  },
+  {
+    "id": 193,
+    "name": "Rifle de Precisión Láser",
+    "category": "weapons",
+    "sprite_id": "weapons_010",
+    "icon_id": "weapons_080",
+    "sprite": "img/assets/sprites/weapons/weapons_010.png",
+    "icon": "img/assets/icons/weapons/weapons_080.png"
+  },
+  {
+    "id": 194,
+    "name": "Pistola de Abolladuras",
+    "category": "weapons",
+    "sprite_id": "weapons_030",
+    "icon_id": "weapons_007",
+    "sprite": "img/assets/sprites/weapons/weapons_030.png",
+    "icon": "img/assets/icons/weapons/weapons_007.png"
+  },
+  {
+    "id": 195,
+    "name": "Rifle Casero Doble",
+    "category": "weapons",
+    "sprite_id": "weapons_063",
+    "icon_id": "weapons_032",
+    "sprite": "img/assets/sprites/weapons/weapons_063.png",
+    "icon": "img/assets/icons/weapons/weapons_032.png"
+  },
+  {
+    "id": 196,
+    "name": "Pistola Láser de Incursor",
+    "category": "weapons",
+    "sprite_id": "weapons_076",
+    "icon_id": "weapons_027",
+    "sprite": "img/assets/sprites/weapons/weapons_076.png",
+    "icon": "img/assets/icons/weapons/weapons_027.png"
+  },
+  {
+    "id": 197,
+    "name": "Escopeta Industrial",
+    "category": "weapons",
+    "sprite_id": "weapons_034",
+    "icon_id": "weapons_021",
+    "sprite": "img/assets/sprites/weapons/weapons_034.png",
+    "icon": "img/assets/icons/weapons/weapons_021.png"
+  },
+  {
+    "id": 198,
+    "name": "Rifle de Asalto Táctico",
+    "category": "weapons",
+    "sprite_id": "weapons_017",
+    "icon_id": "weapons_066",
+    "sprite": "img/assets/sprites/weapons/weapons_017.png",
+    "icon": "img/assets/icons/weapons/weapons_066.png"
+  },
+  {
+    "id": 199,
+    "name": "Lanzanukes Experimental (Fat Man MKII)",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 200,
+    "name": "El Destructor del Yermo (Arma Legendaria)",
+    "category": "weapons",
+    "sprite_id": "weapons_030",
+    "icon_id": "weapons_007",
+    "sprite": "img/assets/sprites/weapons/weapons_030.png",
+    "icon": "img/assets/icons/weapons/weapons_007.png"
+  },
+  {
+    "id": 201,
+    "name": "Armadura de cuero completa",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 202,
+    "name": "Armadura de cuero robusta",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 203,
+    "name": "Armadura de cuero pesada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 204,
+    "name": "Armadura de saqueador",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 205,
+    "name": "Armadura de saqueador destrozada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 206,
+    "name": "Armadura metálica ligera",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 207,
+    "name": "Armadura metálica robusta",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 208,
+    "name": "Armadura metálica pesada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 209,
+    "name": "Armadura de combate ligera",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 210,
+    "name": "Armadura de combate robusta",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 211,
+    "name": "Armadura de combate pesada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 212,
+    "name": "Armadura de sintetizador ligera",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 213,
+    "name": "Armadura de sintetizador robusta",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 214,
+    "name": "Armadura de sintetizador pesada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 215,
+    "name": "Mono del Refugio 111",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 216,
+    "name": "Mono del Refugio blindado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 217,
+    "name": "Uniforme militar de fatiga",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 218,
+    "name": "Traje de la Hermandad del Acero",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 219,
+    "name": "Traje de hazmat (Antirradiación)",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 220,
+    "name": "Traje espacial de la Vault-Tec",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 221,
+    "name": "Abrigo de cuero de vagabundo",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 222,
+    "name": "Gabardina de detective",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 223,
+    "name": "Chaqueta de motorista del Yermo",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 224,
+    "name": "Traje de cientifico loco",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 225,
+    "name": "Uniforme de artillero",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 226,
+    "name": "Armadura de artillero pesada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 227,
+    "name": "Camisa a cuadros y tirantes",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 228,
+    "name": "Ropa de granjero",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 229,
+    "name": "Vestido elegante",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 230,
+    "name": "Esmoquin",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 231,
+    "name": "Armadura de merodeador",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 232,
+    "name": "Armadura de explorador",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 233,
+    "name": "Armadura antidisturbios",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 234,
+    "name": "Armadura de explorador de élite",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 235,
+    "name": "Servoarmadura T-45 (Completa)",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 236,
+    "name": "Servoarmadura T-51 (Completa)",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 237,
+    "name": "Servoarmadura T-60 (Completa)",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 238,
+    "name": "Servoarmadura X-01 (Avanzada del Enclave)",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 239,
+    "name": "Servoarmadura de Incursor (Chatarra)",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 240,
+    "name": "Servoarmadura de la Hermandad del Acero",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 241,
+    "name": "Armadura de cuero tachonado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 242,
+    "name": "Armadura metálica pintada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 243,
+    "name": "Armadura de combate sombría",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 244,
+    "name": "Traje de aislamiento avanzado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 245,
+    "name": "Armadura pesada de Operador",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 246,
+    "name": "Servoarmadura Nuka-Cola Quantum (Única)",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 301,
+    "name": "Munición 10mm",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 302,
+    "name": "Munición .44 Magnum",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 303,
+    "name": "Bengala",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 304,
+    "name": "Cartucho de plasma",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 305,
+    "name": "Célula de energía",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 306,
+    "name": "Onda Gamma",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 307,
+    "name": "Dardo",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 308,
+    "name": "Clavo",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 309,
+    "name": "Munición .45 ACP",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 310,
+    "name": "Munición .308",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 311,
+    "name": "Cartucho de 2mm",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 312,
+    "name": "Munición .45-70",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 313,
+    "name": "Munición 5mm",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 314,
+    "name": "Misil",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 315,
+    "name": "Combustible de lanzallamas",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 316,
+    "name": "Mini Nukes",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 317,
+    "name": "Bala de cañón",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 318,
+    "name": "Munición 7.62mm",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 319,
+    "name": "Núcleo de fusión",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 320,
+    "name": "Célula criogénica",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 901,
+    "name": "Núcleo de fusión antiguo",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 902,
+    "name": "Holocinta de la Hermandad",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 903,
+    "name": "Chip genético del Enclave",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 904,
+    "name": "Código de acceso del Enclave",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 905,
+    "name": "Placa de servoarmadura marcada",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 906,
+    "name": "Emblema de los Proscritos",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 907,
+    "name": "Bolsa de semillas de cultivo",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 908,
+    "name": "Caja de medicinas de colono",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 909,
+    "name": "Paquete cifrado del Ferrocarril",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 910,
+    "name": "Tarjeta de agente del Ferrocarril",
+    "category": "quest",
+    "sprite_id": "quest_001",
+    "icon_id": "quest_001",
+    "sprite": "img/assets/sprites/quest/quest_001.png",
+    "icon": "img/assets/icons/quest/quest_001.png"
+  },
+  {
+    "id": 913,
+    "name": "Águila de bronce de César",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 914,
+    "name": "Collar de negrero marcado",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 915,
+    "name": "Chip de navegación Zetan",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 916,
+    "name": "Registro de abducción",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 917,
+    "name": "Muestra de tejido Zetan",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 918,
+    "name": "Emisor de frecuencia alienígena",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 919,
+    "name": "Diario de un abducido",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 920,
+    "name": "Colgante para Prisioneros MK1",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 921,
+    "name": "Colgante para Prisioneros MK2",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 922,
+    "name": "Colgante para Prisioneros MK3",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 923,
+    "name": "Colgante para Prisioneros MK4",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 924,
+    "name": "Colgante para Prisioneros MK5",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 930,
+    "name": "Insignia de la RNC",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 931,
+    "name": "Ficha de casino marcada",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 932,
+    "name": "Chip de síntesis del Instituto",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 933,
+    "name": "Informe de campo Vaul-Tec",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2001,
+    "name": "Laserista de la Hermandad",
+    "category": "weapons",
+    "sprite_id": "weapons_004",
+    "icon_id": "weapons_071",
+    "sprite": "img/assets/sprites/weapons/weapons_004.png",
+    "icon": "img/assets/icons/weapons/weapons_071.png"
+  },
+  {
+    "id": 2002,
+    "name": "Servoarmadura T-45 (BoS)",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2003,
+    "name": "Rifle Gauss de la Hermandad",
+    "category": "weapons",
+    "sprite_id": "weapons_082",
+    "icon_id": "weapons_086",
+    "sprite": "img/assets/sprites/weapons/weapons_082.png",
+    "icon": "img/assets/icons/weapons/weapons_086.png"
+  },
+  {
+    "id": 2011,
+    "name": "Pistola de plasma del Enclave",
+    "category": "weapons",
+    "sprite_id": "weapons_066",
+    "icon_id": "weapons_037",
+    "sprite": "img/assets/sprites/weapons/weapons_066.png",
+    "icon": "img/assets/icons/weapons/weapons_037.png"
+  },
+  {
+    "id": 2012,
+    "name": "Armadura avanzada del Enclave",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2013,
+    "name": "Rifle Tesla del Enclave",
+    "category": "weapons",
+    "sprite_id": "weapons_026",
+    "icon_id": "weapons_039",
+    "sprite": "img/assets/sprites/weapons/weapons_026.png",
+    "icon": "img/assets/icons/weapons/weapons_039.png"
+  },
+  {
+    "id": 2021,
+    "name": "Rifle de los Proscritos",
+    "category": "weapons",
+    "sprite_id": "weapons_032",
+    "icon_id": "weapons_034",
+    "sprite": "img/assets/sprites/weapons/weapons_032.png",
+    "icon": "img/assets/icons/weapons/weapons_034.png"
+  },
+  {
+    "id": 2022,
+    "name": "Armadura de combate proscrita",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2031,
+    "name": "Rifle de milicia colona",
+    "category": "weapons",
+    "sprite_id": "weapons_063",
+    "icon_id": "weapons_032",
+    "sprite": "img/assets/sprites/weapons/weapons_063.png",
+    "icon": "img/assets/icons/weapons/weapons_032.png"
+  },
+  {
+    "id": 2032,
+    "name": "Chaleco de colonos reforzado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2041,
+    "name": "Pistola del Ferrocarril",
+    "category": "weapons",
+    "sprite_id": "weapons_046",
+    "icon_id": "weapons_073",
+    "sprite": "img/assets/sprites/weapons/weapons_046.png",
+    "icon": "img/assets/icons/weapons/weapons_073.png"
+  },
+  {
+    "id": 2042,
+    "name": "Abrigo de agente del Ferrocarril",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2051,
+    "name": "Servicio Rifle RNC",
+    "category": "weapons",
+    "sprite_id": "weapons_032",
+    "icon_id": "weapons_034",
+    "sprite": "img/assets/sprites/weapons/weapons_032.png",
+    "icon": "img/assets/icons/weapons/weapons_034.png"
+  },
+  {
+    "id": 2052,
+    "name": "Armadura de patrulla RNC",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2053,
+    "name": "Carabina de élite RNC",
+    "category": "weapons",
+    "sprite_id": "weapons_085",
+    "icon_id": "weapons_047",
+    "sprite": "img/assets/sprites/weapons/weapons_085.png",
+    "icon": "img/assets/icons/weapons/weapons_047.png"
+  },
+  {
+    "id": 2061,
+    "name": "Pistola de la casa (Strip)",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 2062,
+    "name": "Traje de casino blindado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2063,
+    "name": "Escopeta de seguridad del Strip",
+    "category": "weapons",
+    "sprite_id": "weapons_034",
+    "icon_id": "weapons_021",
+    "sprite": "img/assets/sprites/weapons/weapons_034.png",
+    "icon": "img/assets/icons/weapons/weapons_021.png"
+  },
+  {
+    "id": 2071,
+    "name": "Rifle de pulsos del Instituto",
+    "category": "weapons",
+    "sprite_id": "weapons_061",
+    "icon_id": "weapons_040",
+    "sprite": "img/assets/sprites/weapons/weapons_061.png",
+    "icon": "img/assets/icons/weapons/weapons_040.png"
+  },
+  {
+    "id": 2072,
+    "name": "Traje de científico reforzado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2073,
+    "name": "Pistola sintética experimental",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 2081,
+    "name": "Lanzallamas de Átomo",
+    "category": "weapons",
+    "sprite_id": "weapons_001",
+    "icon_id": "weapons_060",
+    "sprite": "img/assets/sprites/weapons/weapons_001.png",
+    "icon": "img/assets/icons/weapons/weapons_060.png"
+  },
+  {
+    "id": 2082,
+    "name": "Túnica irradiada de Átomo",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2083,
+    "name": "Pistola Gamma de Átomo",
+    "category": "weapons",
+    "sprite_id": "weapons_066",
+    "icon_id": "weapons_037",
+    "sprite": "img/assets/sprites/weapons/weapons_066.png",
+    "icon": "img/assets/icons/weapons/weapons_037.png"
+  },
+  {
+    "id": 2084,
+    "name": "Casco de culto de Átomo",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2091,
+    "name": "Mosquete láser de Minuteman",
+    "category": "weapons",
+    "sprite_id": "weapons_055",
+    "icon_id": "weapons_016",
+    "sprite": "img/assets/sprites/weapons/weapons_055.png",
+    "icon": "img/assets/icons/weapons/weapons_016.png"
+  },
+  {
+    "id": 2092,
+    "name": "Uniforme de Minuteman",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2093,
+    "name": "Rifle de artillería Minuteman",
+    "category": "weapons",
+    "sprite_id": "weapons_032",
+    "icon_id": "weapons_034",
+    "sprite": "img/assets/sprites/weapons/weapons_032.png",
+    "icon": "img/assets/icons/weapons/weapons_034.png"
+  },
+  {
+    "id": 2094,
+    "name": "Chaleco de milicia Minuteman",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2101,
+    "name": "Espada láser de la Hermandad",
+    "category": "weapons",
+    "sprite_id": "weapons_048",
+    "icon_id": "weapons_081",
+    "sprite": "img/assets/sprites/weapons/weapons_048.png",
+    "icon": "img/assets/icons/weapons/weapons_081.png"
+  },
+  {
+    "id": 2102,
+    "name": "Casco T-45 BoS",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2103,
+    "name": "Pistola 10mm de la Hermandad",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 2111,
+    "name": "Servoarmadura X-01 Enclave",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2112,
+    "name": "Rifle de asalto del Enclave",
+    "category": "weapons",
+    "sprite_id": "weapons_017",
+    "icon_id": "weapons_066",
+    "sprite": "img/assets/sprites/weapons/weapons_017.png",
+    "icon": "img/assets/icons/weapons/weapons_066.png"
+  },
+  {
+    "id": 2113,
+    "name": "Casco de oficial del Enclave",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2121,
+    "name": "Espada de los Proscritos",
+    "category": "weapons",
+    "sprite_id": "weapons_020",
+    "icon_id": "weapons_006",
+    "sprite": "img/assets/sprites/weapons/weapons_020.png",
+    "icon": "img/assets/icons/weapons/weapons_006.png"
+  },
+  {
+    "id": 2122,
+    "name": "Casco de combate proscrito",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2131,
+    "name": "Escopeta de colono",
+    "category": "weapons",
+    "sprite_id": "weapons_072",
+    "icon_id": "weapons_057",
+    "sprite": "img/assets/sprites/weapons/weapons_072.png",
+    "icon": "img/assets/icons/weapons/weapons_057.png"
+  },
+  {
+    "id": 2132,
+    "name": "Casco de granjero reforzado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2141,
+    "name": "Rifle de francotirador del Ferrocarril",
+    "category": "weapons",
+    "sprite_id": "weapons_006",
+    "icon_id": "weapons_067",
+    "sprite": "img/assets/sprites/weapons/weapons_006.png",
+    "icon": "img/assets/icons/weapons/weapons_067.png"
+  },
+  {
+    "id": 2142,
+    "name": "Máscara de agente del Ferrocarril",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2151,
+    "name": "Pistola de servicio RNC",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 2152,
+    "name": "Casco de patrulla RNC",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2161,
+    "name": "Revólver de la casa (Strip)",
+    "category": "weapons",
+    "sprite_id": "weapons_023",
+    "icon_id": "weapons_031",
+    "sprite": "img/assets/sprites/weapons/weapons_023.png",
+    "icon": "img/assets/icons/weapons/weapons_031.png"
+  },
+  {
+    "id": 2162,
+    "name": "Chaqueta de crupier blindada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2171,
+    "name": "Rifle de relé del Instituto",
+    "category": "weapons",
+    "sprite_id": "weapons_032",
+    "icon_id": "weapons_034",
+    "sprite": "img/assets/sprites/weapons/weapons_032.png",
+    "icon": "img/assets/icons/weapons/weapons_034.png"
+  },
+  {
+    "id": 2172,
+    "name": "Casco de synth gen-2",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2181,
+    "name": "Báculo de Átomo",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 2182,
+    "name": "Armadura de acólito de Átomo",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2191,
+    "name": "Pistola de Minuteman",
+    "category": "weapons",
+    "sprite_id": "weapons_046",
+    "icon_id": "weapons_073",
+    "sprite": "img/assets/sprites/weapons/weapons_046.png",
+    "icon": "img/assets/icons/weapons/weapons_073.png"
+  },
+  {
+    "id": 2192,
+    "name": "Casco de artillero Minuteman",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2201,
+    "name": "Machete de la Legión",
+    "category": "weapons",
+    "sprite_id": "weapons_015",
+    "icon_id": "weapons_044",
+    "sprite": "img/assets/sprites/weapons/weapons_015.png",
+    "icon": "img/assets/icons/weapons/weapons_044.png"
+  },
+  {
+    "id": 2202,
+    "name": "Armadura de recluta de la Legión",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2203,
+    "name": "Lanza de centurión",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 2204,
+    "name": "Armadura de centurión",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2205,
+    "name": "Rifle de francotirador de la Legión",
+    "category": "weapons",
+    "sprite_id": "weapons_086",
+    "icon_id": "weapons_072",
+    "sprite": "img/assets/sprites/weapons/weapons_086.png",
+    "icon": "img/assets/icons/weapons/weapons_072.png"
+  },
+  {
+    "id": 2206,
+    "name": "Casco de legionario",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2301,
+    "name": "Hipnotron MK1",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 2302,
+    "name": "Hipnotron MK2",
+    "category": "weapons",
+    "sprite_id": "weapons_028",
+    "icon_id": "weapons_036",
+    "sprite": "img/assets/sprites/weapons/weapons_028.png",
+    "icon": "img/assets/icons/weapons/weapons_036.png"
+  },
+  {
+    "id": 2303,
+    "name": "Hipnotron MK3",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 2304,
+    "name": "Célula de Hipnotron",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 2305,
+    "name": "Esclavo",
+    "category": "special",
+    "sprite_id": "special_001",
+    "icon_id": "special_001",
+    "sprite": "img/assets/sprites/special/special_001.png",
+    "icon": "img/assets/icons/special/special_001.png"
+  },
+  {
+    "id": 2311,
+    "name": "Látigo de negrero",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 2312,
+    "name": "Chaleco de negrero",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2313,
+    "name": "Escopeta de Paradise Falls",
+    "category": "weapons",
+    "sprite_id": "weapons_059",
+    "icon_id": "weapons_042",
+    "sprite": "img/assets/sprites/weapons/weapons_059.png",
+    "icon": "img/assets/icons/weapons/weapons_042.png"
+  },
+  {
+    "id": 2314,
+    "name": "Armadura de capturador",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2315,
+    "name": "Rifle de caza de esclavos",
+    "category": "weapons",
+    "sprite_id": "weapons_006",
+    "icon_id": "weapons_067",
+    "sprite": "img/assets/sprites/weapons/weapons_006.png",
+    "icon": "img/assets/icons/weapons/weapons_067.png"
+  },
+  {
+    "id": 2400,
+    "name": "Sangre de Zetan",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2401,
+    "name": "Blaster alienígena",
+    "category": "weapons",
+    "sprite_id": "weapons_029",
+    "icon_id": "weapons_087",
+    "sprite": "img/assets/sprites/weapons/weapons_029.png",
+    "icon": "img/assets/icons/weapons/weapons_087.png"
+  },
+  {
+    "id": 2402,
+    "name": "Blaster alienígena mejorado",
+    "category": "weapons",
+    "sprite_id": "weapons_045",
+    "icon_id": "weapons_048",
+    "sprite": "img/assets/sprites/weapons/weapons_045.png",
+    "icon": "img/assets/icons/weapons/weapons_048.png"
+  },
+  {
+    "id": 2403,
+    "name": "Traje espacial Zetan",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2404,
+    "name": "Casco de sonda Zetan",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2405,
+    "name": "Dispositivo de abducción",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2406,
+    "name": "Cristal de energía alienígena",
+    "category": "junk",
+    "sprite_id": "junk_001",
+    "icon_id": "junk_001",
+    "sprite": "img/assets/sprites/junk/junk_001.png",
+    "icon": "img/assets/icons/junk/junk_001.png"
+  },
+  {
+    "id": 2407,
+    "name": "Implante neural Zetan",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2410,
+    "name": "Blaster alienígena de élite",
+    "category": "weapons",
+    "sprite_id": "weapons_074",
+    "icon_id": "weapons_056",
+    "sprite": "img/assets/sprites/weapons/weapons_074.png",
+    "icon": "img/assets/icons/weapons/weapons_056.png"
+  },
+  {
+    "id": 2411,
+    "name": "Blaster de destello Zetan",
+    "category": "weapons",
+    "sprite_id": "weapons_067",
+    "icon_id": "weapons_078",
+    "sprite": "img/assets/sprites/weapons/weapons_067.png",
+    "icon": "img/assets/icons/weapons/weapons_078.png"
+  },
+  {
+    "id": 2412,
+    "name": "Pistola de rayos Zetan",
+    "category": "weapons",
+    "sprite_id": "weapons_031",
+    "icon_id": "weapons_010",
+    "sprite": "img/assets/sprites/weapons/weapons_031.png",
+    "icon": "img/assets/icons/weapons/weapons_010.png"
+  },
+  {
+    "id": 2413,
+    "name": "Rifle de disrupción Zetan",
+    "category": "weapons",
+    "sprite_id": "weapons_061",
+    "icon_id": "weapons_040",
+    "sprite": "img/assets/sprites/weapons/weapons_061.png",
+    "icon": "img/assets/icons/weapons/weapons_040.png"
+  },
+  {
+    "id": 2414,
+    "name": "Cañón de iones Zetan",
+    "category": "weapons",
+    "sprite_id": "weapons_057",
+    "icon_id": "weapons_053",
+    "sprite": "img/assets/sprites/weapons/weapons_057.png",
+    "icon": "img/assets/icons/weapons/weapons_053.png"
+  },
+  {
+    "id": 2415,
+    "name": "Lanzador de plasma alienígena",
+    "category": "weapons",
+    "sprite_id": "weapons_051",
+    "icon_id": "weapons_017",
+    "sprite": "img/assets/sprites/weapons/weapons_051.png",
+    "icon": "img/assets/icons/weapons/weapons_017.png"
+  },
+  {
+    "id": 2416,
+    "name": "Rifle de haz concentrado",
+    "category": "weapons",
+    "sprite_id": "weapons_040",
+    "icon_id": "weapons_022",
+    "sprite": "img/assets/sprites/weapons/weapons_040.png",
+    "icon": "img/assets/icons/weapons/weapons_022.png"
+  },
+  {
+    "id": 2417,
+    "name": "Desintegrador Zetan",
+    "category": "weapons",
+    "sprite_id": "weapons_067",
+    "icon_id": "weapons_078",
+    "sprite": "img/assets/sprites/weapons/weapons_067.png",
+    "icon": "img/assets/icons/weapons/weapons_078.png"
+  },
+  {
+    "id": 2418,
+    "name": "Pistola de pulso alienígena",
+    "category": "weapons",
+    "sprite_id": "weapons_031",
+    "icon_id": "weapons_010",
+    "sprite": "img/assets/sprites/weapons/weapons_031.png",
+    "icon": "img/assets/icons/weapons/weapons_010.png"
+  },
+  {
+    "id": 2419,
+    "name": "Arma de contención Zetan",
+    "category": "weapons",
+    "sprite_id": "weapons_066",
+    "icon_id": "weapons_037",
+    "sprite": "img/assets/sprites/weapons/weapons_066.png",
+    "icon": "img/assets/icons/weapons/weapons_037.png"
+  },
+  {
+    "id": 2420,
+    "name": "Célula energética alienígena",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 2421,
+    "name": "Módulo de alimentación alienígena",
+    "category": "ammo",
+    "sprite_id": "ammo_001",
+    "icon_id": "ammo_001",
+    "sprite": "img/assets/sprites/ammo/ammo_001.png",
+    "icon": "img/assets/icons/ammo/ammo_001.png"
+  },
+  {
+    "id": 2500,
+    "name": "Morador",
+    "category": "special",
+    "sprite_id": "special_001",
+    "icon_id": "special_001",
+    "sprite": "img/assets/sprites/special/special_001.png",
+    "icon": "img/assets/icons/special/special_001.png"
+  },
+  {
+    "id": 2501,
+    "name": "Documentos del experimento",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2600,
+    "name": "Libro antiguo",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2601,
+    "name": "Documento antiguo",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2602,
+    "name": "Stealth Boy",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 2610,
+    "name": "Estimulante de los Seguidores",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 2611,
+    "name": "Antídotos compuestos",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 2612,
+    "name": "Suero regenerativo",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 2613,
+    "name": "Bata de médico de campo",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2614,
+    "name": "Traje de archivero",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2615,
+    "name": "Chaleco sanitario reforzado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2620,
+    "name": "Rifle de necrópolis",
+    "category": "weapons",
+    "sprite_id": "weapons_040",
+    "icon_id": "weapons_022",
+    "sprite": "img/assets/sprites/weapons/weapons_040.png",
+    "icon": "img/assets/icons/weapons/weapons_022.png"
+  },
+  {
+    "id": 2621,
+    "name": "Pistola ósea",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 2622,
+    "name": "Cuchilla de necrófago",
+    "category": "weapons",
+    "sprite_id": "weapons_011",
+    "icon_id": "weapons_005",
+    "sprite": "img/assets/sprites/weapons/weapons_011.png",
+    "icon": "img/assets/icons/weapons/weapons_005.png"
+  },
+  {
+    "id": 2623,
+    "name": "Armadura de piel curtida",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2624,
+    "name": "Harapos de élite de Necrópolis",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2625,
+    "name": "Máscara de necrófago",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2701,
+    "name": "Pistola del Rey",
+    "category": "weapons",
+    "sprite_id": "weapons_046",
+    "icon_id": "weapons_073",
+    "sprite": "img/assets/sprites/weapons/weapons_046.png",
+    "icon": "img/assets/icons/weapons/weapons_073.png"
+  },
+  {
+    "id": 2702,
+    "name": "Chaqueta de terciopelo del Rey",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2703,
+    "name": "Micrófono blindado",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 2704,
+    "name": "Traje de escenario de Los Reyes",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2705,
+    "name": "Guitarra eléctrica del Rey",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 2706,
+    "name": "Botas de baile reforzadas",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2707,
+    "name": "Revólver de Freeside",
+    "category": "weapons",
+    "sprite_id": "weapons_023",
+    "icon_id": "weapons_031",
+    "sprite": "img/assets/sprites/weapons/weapons_023.png",
+    "icon": "img/assets/icons/weapons/weapons_031.png"
+  },
+  {
+    "id": 2708,
+    "name": "Armadura de guardaespaldas del Rey",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2709,
+    "name": "Rifle de rockabilly",
+    "category": "weapons",
+    "sprite_id": "weapons_063",
+    "icon_id": "weapons_032",
+    "sprite": "img/assets/sprites/weapons/weapons_063.png",
+    "icon": "img/assets/icons/weapons/weapons_032.png"
+  },
+  {
+    "id": 2710,
+    "name": "Gafas de sol del Rey",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2801,
+    "name": "Rifle de francotirador de cazarrecompensas",
+    "category": "weapons",
+    "sprite_id": "weapons_006",
+    "icon_id": "weapons_067",
+    "sprite": "img/assets/sprites/weapons/weapons_006.png",
+    "icon": "img/assets/icons/weapons/weapons_067.png"
+  },
+  {
+    "id": 2802,
+    "name": "Pistola de ejecutor",
+    "category": "weapons",
+    "sprite_id": "weapons_024",
+    "icon_id": "weapons_033",
+    "sprite": "img/assets/sprites/weapons/weapons_024.png",
+    "icon": "img/assets/icons/weapons/weapons_033.png"
+  },
+  {
+    "id": 2803,
+    "name": "Chaleco de cazarrecompensas",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2804,
+    "name": "Sombrero de cazarrecompensas",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2805,
+    "name": "Cartel de se busca (souvenir)",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2811,
+    "name": "Lanza de cazador",
+    "category": "weapons",
+    "sprite_id": "weapons_051",
+    "icon_id": "weapons_017",
+    "sprite": "img/assets/sprites/weapons/weapons_051.png",
+    "icon": "img/assets/icons/weapons/weapons_017.png"
+  },
+  {
+    "id": 2812,
+    "name": "Rifle de caza reforzado",
+    "category": "weapons",
+    "sprite_id": "weapons_009",
+    "icon_id": "weapons_079",
+    "sprite": "img/assets/sprites/weapons/weapons_009.png",
+    "icon": "img/assets/icons/weapons/weapons_079.png"
+  },
+  {
+    "id": 2813,
+    "name": "Peletería de cazador",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2814,
+    "name": "Máscara de bestia",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2815,
+    "name": "Cebo de mutantes",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2820,
+    "name": "Dedo de justicia",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2821,
+    "name": "Oreja",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2830,
+    "name": "Placa de regulador",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2831,
+    "name": "Revólver de la ley",
+    "category": "weapons",
+    "sprite_id": "weapons_069",
+    "icon_id": "weapons_069",
+    "sprite": "img/assets/sprites/weapons/weapons_069.png",
+    "icon": "img/assets/icons/weapons/weapons_069.png"
+  },
+  {
+    "id": 2832,
+    "name": "Chaleco antidisturbios de regulador",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2833,
+    "name": "Porra de la ley",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 2840,
+    "name": "Chaqueta de sicario",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2841,
+    "name": "Pistola silenciada",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 2842,
+    "name": "Cuchillo de carnicero",
+    "category": "weapons",
+    "sprite_id": "weapons_064",
+    "icon_id": "weapons_041",
+    "sprite": "img/assets/sprites/weapons/weapons_064.png",
+    "icon": "img/assets/icons/weapons/weapons_041.png"
+  },
+  {
+    "id": 2843,
+    "name": "Máscara de sicario",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2850,
+    "name": "Chaleco de caravanero Crimson",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2851,
+    "name": "Rifle de escolta Crimson",
+    "category": "weapons",
+    "sprite_id": "weapons_085",
+    "icon_id": "weapons_047",
+    "sprite": "img/assets/sprites/weapons/weapons_085.png",
+    "icon": "img/assets/icons/weapons/weapons_047.png"
+  },
+  {
+    "id": 2852,
+    "name": "Pistola de caravana",
+    "category": "weapons",
+    "sprite_id": "weapons_030",
+    "icon_id": "weapons_007",
+    "sprite": "img/assets/sprites/weapons/weapons_030.png",
+    "icon": "img/assets/icons/weapons/weapons_007.png"
+  },
+  {
+    "id": 2853,
+    "name": "Sombrero de caravanero",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2854,
+    "name": "Raciones de caravana",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 2860,
+    "name": "Sobre Crimson (1 carta)",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2861,
+    "name": "Sobre Crimson (3 cartas)",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2862,
+    "name": "Sobre Crimson (5 cartas)",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 2900,
+    "name": "Granada de fragmentación",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 2901,
+    "name": "Granada de plasma",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 2902,
+    "name": "Granada de pulso",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 2903,
+    "name": "Cóctel Molotov",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 2904,
+    "name": "Granada aturdidora",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 2905,
+    "name": "Dinamita",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 2906,
+    "name": "Granada de clavos",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 2907,
+    "name": "Carga de C4 improvisada",
+    "category": "grenades",
+    "sprite_id": "grenades_002",
+    "icon_id": "grenades_001",
+    "sprite": "img/assets/sprites/grenades/grenades_002.png",
+    "icon": "img/assets/icons/grenades/grenades_001.png"
+  },
+  {
+    "id": 2908,
+    "name": "Granada de gas",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 2909,
+    "name": "Mina de proximidad",
+    "category": "grenades",
+    "sprite_id": "grenades_002",
+    "icon_id": "grenades_001",
+    "sprite": "img/assets/sprites/grenades/grenades_002.png",
+    "icon": "img/assets/icons/grenades/grenades_001.png"
+  },
+  {
+    "id": 2910,
+    "name": "Pistola de la Pólvora",
+    "category": "weapons",
+    "sprite_id": "weapons_024",
+    "icon_id": "weapons_033",
+    "sprite": "img/assets/sprites/weapons/weapons_024.png",
+    "icon": "img/assets/icons/weapons/weapons_033.png"
+  },
+  {
+    "id": 2911,
+    "name": "Escopeta del Bandido",
+    "category": "weapons",
+    "sprite_id": "weapons_072",
+    "icon_id": "weapons_057",
+    "sprite": "img/assets/sprites/weapons/weapons_072.png",
+    "icon": "img/assets/icons/weapons/weapons_057.png"
+  },
+  {
+    "id": 2912,
+    "name": "Rifle de dinamitero",
+    "category": "weapons",
+    "sprite_id": "weapons_007",
+    "icon_id": "weapons_001",
+    "sprite": "img/assets/sprites/weapons/weapons_007.png",
+    "icon": "img/assets/icons/weapons/weapons_001.png"
+  },
+  {
+    "id": 2913,
+    "name": "Chaleco de la Pólvora",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2914,
+    "name": "Casco de bandido",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 2915,
+    "name": "Armadura de voladura",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3100,
+    "name": "Módulo de Mejora para Casino",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3110,
+    "name": "Pistola gemela Vikki",
+    "category": "weapons",
+    "sprite_id": "weapons_030",
+    "icon_id": "weapons_007",
+    "sprite": "img/assets/sprites/weapons/weapons_030.png",
+    "icon": "img/assets/icons/weapons/weapons_007.png"
+  },
+  {
+    "id": 3111,
+    "name": "Chaqueta de crupier Vance",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3112,
+    "name": "Ficha de la suerte (V&V)",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3113,
+    "name": "Escopeta de mesa barata",
+    "category": "weapons",
+    "sprite_id": "weapons_034",
+    "icon_id": "weapons_021",
+    "sprite": "img/assets/sprites/weapons/weapons_034.png",
+    "icon": "img/assets/icons/weapons/weapons_021.png"
+  },
+  {
+    "id": 3114,
+    "name": "Amuleto de la casa V&V",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3115,
+    "name": "Bebida del crupier",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3120,
+    "name": "Láser de bar Atomic",
+    "category": "weapons",
+    "sprite_id": "weapons_031",
+    "icon_id": "weapons_010",
+    "sprite": "img/assets/sprites/weapons/weapons_031.png",
+    "icon": "img/assets/icons/weapons/weapons_010.png"
+  },
+  {
+    "id": 3121,
+    "name": "Armadura de camarero blindada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3122,
+    "name": "Cóctel radiactivo",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3123,
+    "name": "Revólver de neón",
+    "category": "weapons",
+    "sprite_id": "weapons_062",
+    "icon_id": "weapons_082",
+    "sprite": "img/assets/sprites/weapons/weapons_062.png",
+    "icon": "img/assets/icons/weapons/weapons_082.png"
+  },
+  {
+    "id": 3124,
+    "name": "Ficha atómica cargada",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3125,
+    "name": "Chaleco anti-rad de bar",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3140,
+    "name": "Cuchillo de Omerta",
+    "category": "weapons",
+    "sprite_id": "weapons_035",
+    "icon_id": "weapons_024",
+    "sprite": "img/assets/sprites/weapons/weapons_035.png",
+    "icon": "img/assets/icons/weapons/weapons_024.png"
+  },
+  {
+    "id": 3141,
+    "name": "Traje de familia Omerta",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3142,
+    "name": "Subfusil de casino",
+    "category": "weapons",
+    "sprite_id": "weapons_075",
+    "icon_id": "weapons_030",
+    "sprite": "img/assets/sprites/weapons/weapons_075.png",
+    "icon": "img/assets/icons/weapons/weapons_030.png"
+  },
+  {
+    "id": 3143,
+    "name": "Veneno de mesa",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3144,
+    "name": "Cóctel Omerta",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3145,
+    "name": "Guantes de matón",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3150,
+    "name": "Rifle de caza Ultra-Luxe",
+    "category": "weapons",
+    "sprite_id": "weapons_078",
+    "icon_id": "weapons_065",
+    "sprite": "img/assets/sprites/weapons/weapons_078.png",
+    "icon": "img/assets/icons/weapons/weapons_065.png"
+  },
+  {
+    "id": 3151,
+    "name": "Esmoquin reforzado White Glove",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3152,
+    "name": "Cuchillo de carnicero fino",
+    "category": "weapons",
+    "sprite_id": "weapons_083",
+    "icon_id": "weapons_035",
+    "sprite": "img/assets/sprites/weapons/weapons_083.png",
+    "icon": "img/assets/icons/weapons/weapons_035.png"
+  },
+  {
+    "id": 3153,
+    "name": "Filete de Ultra-Luxe",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3154,
+    "name": "Champán Ultra-Luxe",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3155,
+    "name": "Reloj de bolsillo White Glove",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3201,
+    "name": "Pistola V&V reforzada",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 3202,
+    "name": "Chaleco de crupier V&V",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3203,
+    "name": "Estimulante de la casa V&V",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3204,
+    "name": "RadAway de mostrador",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3205,
+    "name": "Sobre de suerte V&V",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3206,
+    "name": "Navaja de baraja",
+    "category": "weapons",
+    "sprite_id": "weapons_073",
+    "icon_id": "weapons_038",
+    "sprite": "img/assets/sprites/weapons/weapons_073.png",
+    "icon": "img/assets/icons/weapons/weapons_038.png"
+  },
+  {
+    "id": 3207,
+    "name": "Botiquín de mesa",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3208,
+    "name": "Ficha de prestigio V&V",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3211,
+    "name": "Rifle de plasma de bar",
+    "category": "weapons",
+    "sprite_id": "weapons_061",
+    "icon_id": "weapons_040",
+    "sprite": "img/assets/sprites/weapons/weapons_061.png",
+    "icon": "img/assets/icons/weapons/weapons_040.png"
+  },
+  {
+    "id": 3212,
+    "name": "Armadura anti-rad Atomic",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3213,
+    "name": "Cóctel atómico puro",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3214,
+    "name": "Inyección de adrenalina Atomic",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3215,
+    "name": "Pistola láser de mostrador",
+    "category": "weapons",
+    "sprite_id": "weapons_014",
+    "icon_id": "weapons_085",
+    "sprite": "img/assets/sprites/weapons/weapons_014.png",
+    "icon": "img/assets/icons/weapons/weapons_085.png"
+  },
+  {
+    "id": 3216,
+    "name": "Casco de jugador Atomic",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3217,
+    "name": "Superestimulante Atomic",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3218,
+    "name": "Token de energía",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3221,
+    "name": "Subfusil Omerta silenciado",
+    "category": "weapons",
+    "sprite_id": "weapons_047",
+    "icon_id": "weapons_020",
+    "sprite": "img/assets/sprites/weapons/weapons_047.png",
+    "icon": "img/assets/icons/weapons/weapons_020.png"
+  },
+  {
+    "id": 3222,
+    "name": "Traje de matón reforzado",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3223,
+    "name": "Veneno de mesa refinado",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3224,
+    "name": "Cuchillo ceremonial Omerta",
+    "category": "weapons",
+    "sprite_id": "weapons_022",
+    "icon_id": "weapons_084",
+    "sprite": "img/assets/sprites/weapons/weapons_022.png",
+    "icon": "img/assets/icons/weapons/weapons_084.png"
+  },
+  {
+    "id": 3225,
+    "name": "Inyección de fuerza Omerta",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3226,
+    "name": "Botiquín de familia",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3227,
+    "name": "Escopeta de escolta",
+    "category": "weapons",
+    "sprite_id": "weapons_034",
+    "icon_id": "weapons_021",
+    "sprite": "img/assets/sprites/weapons/weapons_034.png",
+    "icon": "img/assets/icons/weapons/weapons_021.png"
+  },
+  {
+    "id": 3228,
+    "name": "Ficha de la familia",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3241,
+    "name": "Rifle de caza White Glove",
+    "category": "weapons",
+    "sprite_id": "weapons_010",
+    "icon_id": "weapons_080",
+    "sprite": "img/assets/sprites/weapons/weapons_010.png",
+    "icon": "img/assets/icons/weapons/weapons_080.png"
+  },
+  {
+    "id": 3242,
+    "name": "Esmoquin blindado Ultra-Luxe",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3243,
+    "name": "Banquete White Glove",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3244,
+    "name": "Champán de reserva",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3245,
+    "name": "Pistola de elegancia",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 3246,
+    "name": "Guantes de seda reforzados",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3247,
+    "name": "Inyección de fortuna Ultra",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3248,
+    "name": "Ficha de platino Ultra-Luxe",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3301,
+    "name": "Pistola de mesa V&V",
+    "category": "weapons",
+    "sprite_id": "weapons_046",
+    "icon_id": "weapons_073",
+    "sprite": "img/assets/sprites/weapons/weapons_046.png",
+    "icon": "img/assets/icons/weapons/weapons_073.png"
+  },
+  {
+    "id": 3302,
+    "name": "Revólver de crupier V&V",
+    "category": "weapons",
+    "sprite_id": "weapons_070",
+    "icon_id": "weapons_013",
+    "sprite": "img/assets/sprites/weapons/weapons_070.png",
+    "icon": "img/assets/icons/weapons/weapons_013.png"
+  },
+  {
+    "id": 3303,
+    "name": "Escopeta de salón V&V",
+    "category": "weapons",
+    "sprite_id": "weapons_059",
+    "icon_id": "weapons_042",
+    "sprite": "img/assets/sprites/weapons/weapons_059.png",
+    "icon": "img/assets/icons/weapons/weapons_042.png"
+  },
+  {
+    "id": 3304,
+    "name": "Rifle de carretera V&V",
+    "category": "weapons",
+    "sprite_id": "weapons_040",
+    "icon_id": "weapons_022",
+    "sprite": "img/assets/sprites/weapons/weapons_040.png",
+    "icon": "img/assets/icons/weapons/weapons_022.png"
+  },
+  {
+    "id": 3305,
+    "name": "Navaja de la casa V&V",
+    "category": "weapons",
+    "sprite_id": "weapons_041",
+    "icon_id": "weapons_083",
+    "sprite": "img/assets/sprites/weapons/weapons_041.png",
+    "icon": "img/assets/icons/weapons/weapons_083.png"
+  },
+  {
+    "id": 3311,
+    "name": "Chaqueta de crupier V&V",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3312,
+    "name": "Chaleco acolchado V&V",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3313,
+    "name": "Traje de carretera V&V",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3314,
+    "name": "Botas reforzadas V&V",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3315,
+    "name": "Gorra de seguridad V&V",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3321,
+    "name": "Superestimulante V&V",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3322,
+    "name": "RadAway premium V&V",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3323,
+    "name": "Nuka-Cola V&V",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3324,
+    "name": "Bolsa de chapas V&V",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3325,
+    "name": "Inyección de suerte V&V",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3331,
+    "name": "Pistola láser Atomic",
+    "category": "weapons",
+    "sprite_id": "weapons_066",
+    "icon_id": "weapons_037",
+    "sprite": "img/assets/sprites/weapons/weapons_066.png",
+    "icon": "img/assets/icons/weapons/weapons_037.png"
+  },
+  {
+    "id": 3332,
+    "name": "Rifle de plasma Atomic",
+    "category": "weapons",
+    "sprite_id": "weapons_021",
+    "icon_id": "weapons_011",
+    "sprite": "img/assets/sprites/weapons/weapons_021.png",
+    "icon": "img/assets/icons/weapons/weapons_011.png"
+  },
+  {
+    "id": 3333,
+    "name": "Subfusil de bar Atomic",
+    "category": "weapons",
+    "sprite_id": "weapons_005",
+    "icon_id": "weapons_077",
+    "sprite": "img/assets/sprites/weapons/weapons_005.png",
+    "icon": "img/assets/icons/weapons/weapons_077.png"
+  },
+  {
+    "id": 3334,
+    "name": "Escopeta irradiada Atomic",
+    "category": "weapons",
+    "sprite_id": "weapons_012",
+    "icon_id": "weapons_050",
+    "sprite": "img/assets/sprites/weapons/weapons_012.png",
+    "icon": "img/assets/icons/weapons/weapons_050.png"
+  },
+  {
+    "id": 3335,
+    "name": "Porra electrificada Atomic",
+    "category": "weapons",
+    "sprite_id": "weapons_027",
+    "icon_id": "weapons_058",
+    "sprite": "img/assets/sprites/weapons/weapons_027.png",
+    "icon": "img/assets/icons/weapons/weapons_058.png"
+  },
+  {
+    "id": 3341,
+    "name": "Chaleco anti-rad Atomic",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3342,
+    "name": "Traje de bar Atomic",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3343,
+    "name": "Armadura ligera Atomic",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3344,
+    "name": "Casco de jugador Atomic",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3345,
+    "name": "Botas aislantes Atomic",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3351,
+    "name": "Superestimulante Atomic",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3352,
+    "name": "RadAway Atomic",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3353,
+    "name": "Cóctel atómico doble",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3354,
+    "name": "Inyección de agilidad Atomic",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3355,
+    "name": "Token de energía premium",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3361,
+    "name": "Subfusil Omerta",
+    "category": "weapons",
+    "sprite_id": "weapons_036",
+    "icon_id": "weapons_019",
+    "sprite": "img/assets/sprites/weapons/weapons_036.png",
+    "icon": "img/assets/icons/weapons/weapons_019.png"
+  },
+  {
+    "id": 3362,
+    "name": "Escopeta de escolta Omerta",
+    "category": "weapons",
+    "sprite_id": "weapons_002",
+    "icon_id": "weapons_028",
+    "sprite": "img/assets/sprites/weapons/weapons_002.png",
+    "icon": "img/assets/icons/weapons/weapons_028.png"
+  },
+  {
+    "id": 3363,
+    "name": "Cuchillo ceremonial Omerta+",
+    "category": "weapons",
+    "sprite_id": "weapons_071",
+    "icon_id": "weapons_009",
+    "sprite": "img/assets/sprites/weapons/weapons_071.png",
+    "icon": "img/assets/icons/weapons/weapons_009.png"
+  },
+  {
+    "id": 3364,
+    "name": "Rifle de francotirador Omerta",
+    "category": "weapons",
+    "sprite_id": "weapons_009",
+    "icon_id": "weapons_079",
+    "sprite": "img/assets/sprites/weapons/weapons_009.png",
+    "icon": "img/assets/icons/weapons/weapons_079.png"
+  },
+  {
+    "id": 3365,
+    "name": "Pistola silenciada Omerta",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 3371,
+    "name": "Traje de familia Omerta+",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3372,
+    "name": "Chaleco de matón Omerta",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3373,
+    "name": "Abrigo de escolta Omerta",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3374,
+    "name": "Guantes de matón Omerta",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3375,
+    "name": "Máscara de familia Omerta",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3381,
+    "name": "Botiquín de familia Omerta",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3382,
+    "name": "Inyección de fuerza Omerta+",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3383,
+    "name": "Cóctel Omerta premium",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3384,
+    "name": "Veneno de mesa Omerta",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3385,
+    "name": "Ficha de la familia premium",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3391,
+    "name": "Revólver Lucky 38 élite",
+    "category": "weapons",
+    "sprite_id": "weapons_023",
+    "icon_id": "weapons_031",
+    "sprite": "img/assets/sprites/weapons/weapons_023.png",
+    "icon": "img/assets/icons/weapons/weapons_031.png"
+  },
+  {
+    "id": 3392,
+    "name": "Escopeta de seguridad Tops+",
+    "category": "weapons",
+    "sprite_id": "weapons_002",
+    "icon_id": "weapons_028",
+    "sprite": "img/assets/sprites/weapons/weapons_002.png",
+    "icon": "img/assets/icons/weapons/weapons_028.png"
+  },
+  {
+    "id": 3393,
+    "name": "Pistola de la suerte Tops",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 3394,
+    "name": "Rifle de escenario Tops",
+    "category": "weapons",
+    "sprite_id": "weapons_040",
+    "icon_id": "weapons_022",
+    "sprite": "img/assets/sprites/weapons/weapons_040.png",
+    "icon": "img/assets/icons/weapons/weapons_022.png"
+  },
+  {
+    "id": 3395,
+    "name": "Navaja de farándula Tops",
+    "category": "weapons",
+    "sprite_id": "weapons_053",
+    "icon_id": "weapons_070",
+    "sprite": "img/assets/sprites/weapons/weapons_053.png",
+    "icon": "img/assets/icons/weapons/weapons_070.png"
+  },
+  {
+    "id": 3401,
+    "name": "Traje de show Tops+",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3402,
+    "name": "Chaqueta Lucky 38",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3403,
+    "name": "Armadura de seguridad Tops",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3404,
+    "name": "Chaleco de crupier Tops",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3405,
+    "name": "Sombrero de presentador Tops",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3411,
+    "name": "Estimulante de escenario+",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3412,
+    "name": "Nuka-Cola Victory Tops+",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3413,
+    "name": "Gafas de farándula+",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3414,
+    "name": "Anillo de jackpot+",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3415,
+    "name": "Maletín VIP Tops",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3421,
+    "name": "Rifle de caza White Glove+",
+    "category": "weapons",
+    "sprite_id": "weapons_010",
+    "icon_id": "weapons_080",
+    "sprite": "img/assets/sprites/weapons/weapons_010.png",
+    "icon": "img/assets/icons/weapons/weapons_080.png"
+  },
+  {
+    "id": 3422,
+    "name": "Pistola de elegancia+",
+    "category": "weapons",
+    "sprite_id": "weapons_030",
+    "icon_id": "weapons_007",
+    "sprite": "img/assets/sprites/weapons/weapons_030.png",
+    "icon": "img/assets/icons/weapons/weapons_007.png"
+  },
+  {
+    "id": 3423,
+    "name": "Escopeta de banquete Ultra",
+    "category": "weapons",
+    "sprite_id": "weapons_059",
+    "icon_id": "weapons_042",
+    "sprite": "img/assets/sprites/weapons/weapons_059.png",
+    "icon": "img/assets/icons/weapons/weapons_042.png"
+  },
+  {
+    "id": 3424,
+    "name": "Sable ceremonial Ultra",
+    "category": "weapons",
+    "sprite_id": "weapons_016",
+    "icon_id": "weapons_043",
+    "sprite": "img/assets/sprites/weapons/weapons_016.png",
+    "icon": "img/assets/icons/weapons/weapons_043.png"
+  },
+  {
+    "id": 3425,
+    "name": "Rifle láser Ultra-Luxe",
+    "category": "weapons",
+    "sprite_id": "weapons_082",
+    "icon_id": "weapons_086",
+    "sprite": "img/assets/sprites/weapons/weapons_082.png",
+    "icon": "img/assets/icons/weapons/weapons_086.png"
+  },
+  {
+    "id": 3431,
+    "name": "Esmoquin blindado Ultra+",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3432,
+    "name": "Traje White Glove",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3433,
+    "name": "Armadura de gala Ultra",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3434,
+    "name": "Guantes de seda Ultra+",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3435,
+    "name": "Máscara de gala Ultra",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3441,
+    "name": "Banquete White Glove+",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3442,
+    "name": "Champán de reserva+",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3443,
+    "name": "Inyección de fortuna Ultra+",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3444,
+    "name": "Ficha de platino Ultra+",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3445,
+    "name": "Estimulante de gala Ultra",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3451,
+    "name": "Carabina de escenario Tops",
+    "category": "weapons",
+    "sprite_id": "weapons_085",
+    "icon_id": "weapons_047",
+    "sprite": "img/assets/sprites/weapons/weapons_085.png",
+    "icon": "img/assets/icons/weapons/weapons_047.png"
+  },
+  {
+    "id": 3452,
+    "name": "Pistola de presentador Tops",
+    "category": "weapons",
+    "sprite_id": "weapons_030",
+    "icon_id": "weapons_007",
+    "sprite": "img/assets/sprites/weapons/weapons_030.png",
+    "icon": "img/assets/icons/weapons/weapons_007.png"
+  },
+  {
+    "id": 3453,
+    "name": "Maza de seguridad Tops",
+    "category": "weapons",
+    "sprite_id": "weapons_051",
+    "icon_id": "weapons_017",
+    "sprite": "img/assets/sprites/weapons/weapons_051.png",
+    "icon": "img/assets/icons/weapons/weapons_017.png"
+  },
+  {
+    "id": 3454,
+    "name": "Rifle de precisión Tops",
+    "category": "weapons",
+    "sprite_id": "weapons_009",
+    "icon_id": "weapons_079",
+    "sprite": "img/assets/sprites/weapons/weapons_009.png",
+    "icon": "img/assets/icons/weapons/weapons_079.png"
+  },
+  {
+    "id": 3455,
+    "name": "Escopeta de sala VIP Tops",
+    "category": "weapons",
+    "sprite_id": "weapons_034",
+    "icon_id": "weapons_021",
+    "sprite": "img/assets/sprites/weapons/weapons_034.png",
+    "icon": "img/assets/icons/weapons/weapons_021.png"
+  },
+  {
+    "id": 3461,
+    "name": "Traje de presentador Tops",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3462,
+    "name": "Chaleco antibalas Tops",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3463,
+    "name": "Botas de escenario Tops",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3464,
+    "name": "Guantes de crupier Tops",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3465,
+    "name": "Abrigo de la suerte Tops",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3471,
+    "name": "Superestimulante Tops",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3472,
+    "name": "RadAway de camerino Tops",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3473,
+    "name": "Cóctel de la casa Tops",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3474,
+    "name": "Inyección de suerte Tops",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3475,
+    "name": "Bolsa de fichas Tops",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3481,
+    "name": "Munición de cortesía V&V",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3482,
+    "name": "Bebida energizante Atomic",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3483,
+    "name": "Estimulante de familia Omerta",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3484,
+    "name": "Postre White Glove",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3500,
+    "name": "★ Módulo Legendario RobCo",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3601,
+    "name": "Cuchilla de la arena",
+    "category": "weapons",
+    "sprite_id": "weapons_060",
+    "icon_id": "weapons_064",
+    "sprite": "img/assets/sprites/weapons/weapons_060.png",
+    "icon": "img/assets/icons/weapons/weapons_064.png"
+  },
+  {
+    "id": 3602,
+    "name": "Pistola de gladiador",
+    "category": "weapons",
+    "sprite_id": "weapons_030",
+    "icon_id": "weapons_007",
+    "sprite": "img/assets/sprites/weapons/weapons_030.png",
+    "icon": "img/assets/icons/weapons/weapons_007.png"
+  },
+  {
+    "id": 3603,
+    "name": "Escopeta de combate CZ",
+    "category": "weapons",
+    "sprite_id": "weapons_051",
+    "icon_id": "weapons_017",
+    "sprite": "img/assets/sprites/weapons/weapons_051.png",
+    "icon": "img/assets/icons/weapons/weapons_017.png"
+  },
+  {
+    "id": 3604,
+    "name": "Rifle de francotirador CZ",
+    "category": "weapons",
+    "sprite_id": "weapons_009",
+    "icon_id": "weapons_079",
+    "sprite": "img/assets/sprites/weapons/weapons_009.png",
+    "icon": "img/assets/icons/weapons/weapons_079.png"
+  },
+  {
+    "id": 3605,
+    "name": "Guanteletes de titanio",
+    "category": "weapons",
+    "sprite_id": "weapons_001",
+    "icon_id": "weapons_060",
+    "sprite": "img/assets/sprites/weapons/weapons_001.png",
+    "icon": "img/assets/icons/weapons/weapons_060.png"
+  },
+  {
+    "id": 3611,
+    "name": "Armadura de gladiador",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3612,
+    "name": "Chaleco de la arena",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3613,
+    "name": "Casco de luchador CZ",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3614,
+    "name": "Armadura reforzada CZ",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3615,
+    "name": "Traje de campeón",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3621,
+    "name": "Estimulante de arena",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3622,
+    "name": "Superestimulante CZ",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3623,
+    "name": "Inyección de furia",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3624,
+    "name": "Buffout de gladiador",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3625,
+    "name": "Ticket dorado CZ",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3630,
+    "name": "Maza de la arena",
+    "category": "weapons",
+    "sprite_id": "weapons_019",
+    "icon_id": "weapons_075",
+    "sprite": "img/assets/sprites/weapons/weapons_019.png",
+    "icon": "img/assets/icons/weapons/weapons_075.png"
+  },
+  {
+    "id": 3631,
+    "name": "Subfusil CZ",
+    "category": "weapons",
+    "sprite_id": "weapons_036",
+    "icon_id": "weapons_019",
+    "sprite": "img/assets/sprites/weapons/weapons_036.png",
+    "icon": "img/assets/icons/weapons/weapons_019.png"
+  },
+  {
+    "id": 3632,
+    "name": "Lanza de gladiador",
+    "category": "weapons",
+    "sprite_id": "weapons_054",
+    "icon_id": "weapons_045",
+    "sprite": "img/assets/sprites/weapons/weapons_054.png",
+    "icon": "img/assets/icons/weapons/weapons_045.png"
+  },
+  {
+    "id": 3633,
+    "name": "Rifle automático CZ",
+    "category": "weapons",
+    "sprite_id": "weapons_063",
+    "icon_id": "weapons_032",
+    "sprite": "img/assets/sprites/weapons/weapons_063.png",
+    "icon": "img/assets/icons/weapons/weapons_032.png"
+  },
+  {
+    "id": 3634,
+    "name": "Martillo del campeón",
+    "category": "weapons",
+    "sprite_id": "weapons_080",
+    "icon_id": "weapons_025",
+    "sprite": "img/assets/sprites/weapons/weapons_080.png",
+    "icon": "img/assets/icons/weapons/weapons_025.png"
+  },
+  {
+    "id": 3635,
+    "name": "Ametralladora de la arena",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 3640,
+    "name": "Grebas de combatiente",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3641,
+    "name": "Peto de hierro CZ",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3642,
+    "name": "Armadura de veterano",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3643,
+    "name": "Servo parcial de la arena",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3650,
+    "name": "Kit médico de arena",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3651,
+    "name": "Adrenalina CZ",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3652,
+    "name": "Med-X de la arena",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3653,
+    "name": "Paquete de tickets CZ",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3660,
+    "name": "Espada del coliseo",
+    "category": "weapons",
+    "sprite_id": "weapons_052",
+    "icon_id": "weapons_023",
+    "sprite": "img/assets/sprites/weapons/weapons_052.png",
+    "icon": "img/assets/icons/weapons/weapons_023.png"
+  },
+  {
+    "id": 3661,
+    "name": "Rifle de plasma de la arena",
+    "category": "weapons",
+    "sprite_id": "weapons_061",
+    "icon_id": "weapons_040",
+    "sprite": "img/assets/sprites/weapons/weapons_061.png",
+    "icon": "img/assets/icons/weapons/weapons_040.png"
+  },
+  {
+    "id": 3662,
+    "name": "Armadura de legionario CZ",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3663,
+    "name": "Medicina de campeonato",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3664,
+    "name": "Lanzallamas de la jaula",
+    "category": "weapons",
+    "sprite_id": "weapons_080",
+    "icon_id": "weapons_025",
+    "sprite": "img/assets/sprites/weapons/weapons_080.png",
+    "icon": "img/assets/icons/weapons/weapons_025.png"
+  },
+  {
+    "id": 3665,
+    "name": "Casco de campeón invicto",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3666,
+    "name": "Traje de élite de la arena",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3667,
+    "name": "Estimulante de élite CZ",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3668,
+    "name": "Minigun de la arena",
+    "category": "weapons",
+    "sprite_id": "weapons_068",
+    "icon_id": "weapons_054",
+    "sprite": "img/assets/sprites/weapons/weapons_068.png",
+    "icon": "img/assets/icons/weapons/weapons_054.png"
+  },
+  {
+    "id": 3669,
+    "name": "Rifle Gauss de combatiente",
+    "category": "weapons",
+    "sprite_id": "weapons_055",
+    "icon_id": "weapons_016",
+    "sprite": "img/assets/sprites/weapons/weapons_055.png",
+    "icon": "img/assets/icons/weapons/weapons_016.png"
+  },
+  {
+    "id": 3670,
+    "name": "Servo-armadura de la arena",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3671,
+    "name": "Inyección de berserker",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3672,
+    "name": "Lanzamisiles de exhibición",
+    "category": "weapons",
+    "sprite_id": "weapons_019",
+    "icon_id": "weapons_075",
+    "sprite": "img/assets/sprites/weapons/weapons_019.png",
+    "icon": "img/assets/icons/weapons/weapons_075.png"
+  },
+  {
+    "id": 3673,
+    "name": "Armadura de leyenda CZ",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3674,
+    "name": "Granada de la arena",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 3675,
+    "name": "Paquete premium de tickets CZ",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3676,
+    "name": "Espada láser del campeón",
+    "category": "weapons",
+    "sprite_id": "weapons_079",
+    "icon_id": "weapons_052",
+    "sprite": "img/assets/sprites/weapons/weapons_079.png",
+    "icon": "img/assets/icons/weapons/weapons_052.png"
+  },
+  {
+    "id": 3677,
+    "name": "Servo completo CZ legendario",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3678,
+    "name": "Cinturón de campeón del Yermo",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3679,
+    "name": "Medicina de inmortal",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3701,
+    "name": "Pistola Nuka-World",
+    "category": "weapons",
+    "sprite_id": "weapons_058",
+    "icon_id": "weapons_049",
+    "sprite": "img/assets/sprites/weapons/weapons_058.png",
+    "icon": "img/assets/icons/weapons/weapons_049.png"
+  },
+  {
+    "id": 3702,
+    "name": "Rifle de feria",
+    "category": "weapons",
+    "sprite_id": "weapons_017",
+    "icon_id": "weapons_066",
+    "sprite": "img/assets/sprites/weapons/weapons_017.png",
+    "icon": "img/assets/icons/weapons/weapons_066.png"
+  },
+  {
+    "id": 3703,
+    "name": "Lanzador de confeti letal",
+    "category": "weapons",
+    "sprite_id": "weapons_003",
+    "icon_id": "weapons_003",
+    "sprite": "img/assets/sprites/weapons/weapons_003.png",
+    "icon": "img/assets/icons/weapons/weapons_003.png"
+  },
+  {
+    "id": 3704,
+    "name": "Cuchillo de acróbata",
+    "category": "weapons",
+    "sprite_id": "weapons_025",
+    "icon_id": "weapons_051",
+    "sprite": "img/assets/sprites/weapons/weapons_025.png",
+    "icon": "img/assets/icons/weapons/weapons_051.png"
+  },
+  {
+    "id": 3705,
+    "name": "Bazuca de fuegos Nuka",
+    "category": "weapons",
+    "sprite_id": "weapons_043",
+    "icon_id": "weapons_014",
+    "sprite": "img/assets/sprites/weapons/weapons_043.png",
+    "icon": "img/assets/icons/weapons/weapons_014.png"
+  },
+  {
+    "id": 3706,
+    "name": "Rifle láser de atracción",
+    "category": "weapons",
+    "sprite_id": "weapons_065",
+    "icon_id": "weapons_046",
+    "sprite": "img/assets/sprites/weapons/weapons_065.png",
+    "icon": "img/assets/icons/weapons/weapons_046.png"
+  },
+  {
+    "id": 3707,
+    "name": "Maza de payaso",
+    "category": "weapons",
+    "sprite_id": "weapons_001",
+    "icon_id": "weapons_060",
+    "sprite": "img/assets/sprites/weapons/weapons_001.png",
+    "icon": "img/assets/icons/weapons/weapons_060.png"
+  },
+  {
+    "id": 3708,
+    "name": "Ametralladora del circo",
+    "category": "weapons",
+    "sprite_id": "weapons_024",
+    "icon_id": "weapons_033",
+    "sprite": "img/assets/sprites/weapons/weapons_024.png",
+    "icon": "img/assets/icons/weapons/weapons_033.png"
+  },
+  {
+    "id": 3711,
+    "name": "Disfraz de feriante",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3712,
+    "name": "Chaleco Nuka-World",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3713,
+    "name": "Casco de montaña rusa",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3714,
+    "name": "Armadura de atracción",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3715,
+    "name": "Traje de maestro de ceremonias",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3716,
+    "name": "Servo Nuka festivo",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3721,
+    "name": "Nuka-Cola Quantum (circo)",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3722,
+    "name": "Algodón de azúcar irradiado",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3723,
+    "name": "Caramelo Jet",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3724,
+    "name": "Estimulante festivo",
+    "category": "aid",
+    "sprite_id": "aid_001",
+    "icon_id": "aid_001",
+    "sprite": "img/assets/sprites/aid/aid_001.png",
+    "icon": "img/assets/icons/aid/aid_001.png"
+  },
+  {
+    "id": 3725,
+    "name": "Nuka-Cola Dark",
+    "category": "food",
+    "sprite_id": "food_001",
+    "icon_id": "food_001",
+    "sprite": "img/assets/sprites/food/food_001.png",
+    "icon": "img/assets/icons/food/food_001.png"
+  },
+  {
+    "id": 3726,
+    "name": "Pack de tickets Nuka",
+    "category": "other",
+    "sprite_id": "other_001",
+    "icon_id": "other_001",
+    "sprite": "img/assets/sprites/other/other_001.png",
+    "icon": "img/assets/icons/other/other_001.png"
+  },
+  {
+    "id": 3727,
+    "name": "Máscara de payaso blindada",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  },
+  {
+    "id": 3728,
+    "name": "Botella-explosivo Nuka",
+    "category": "grenades",
+    "sprite_id": "grenades_001",
+    "icon_id": "grenades_002",
+    "sprite": "img/assets/sprites/grenades/grenades_001.png",
+    "icon": "img/assets/icons/grenades/grenades_002.png"
+  },
+  {
+    "id": 3729,
+    "name": "Rifle Gauss de feria",
+    "category": "weapons",
+    "sprite_id": "weapons_055",
+    "icon_id": "weapons_016",
+    "sprite": "img/assets/sprites/weapons/weapons_055.png",
+    "icon": "img/assets/icons/weapons/weapons_016.png"
+  },
+  {
+    "id": 3730,
+    "name": "Capa del director del circo",
+    "category": "armor",
+    "sprite_id": "armor_001",
+    "icon_id": "armor_001",
+    "sprite": "img/assets/sprites/armor/armor_001.png",
+    "icon": "img/assets/icons/armor/armor_001.png"
+  }
+]
