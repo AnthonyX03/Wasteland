@@ -1080,6 +1080,16 @@ body.mobile-mode .app {
 .equipped-tag { color: var(--accent); border: 1px solid var(--line); font-size: 10px; padding: 2px 4px; }
 .row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #003300; font-size: 13px; }
 
+#modal-body {
+  max-height: min(78vh, 640px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #3a4737 #0a120a;
+}
+#modal-body::-webkit-scrollbar { width: 8px; }
+#modal-body::-webkit-scrollbar-track { background: #0a120a; border-radius: 4px; }
+#modal-body::-webkit-scrollbar-thumb { background: #3a4737; border-radius: 4px; border: 1px solid #5a6550; }
+#modal-body::-webkit-scrollbar-thumb:hover { background: #5a6550; }
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.92); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 100; }
 .modal.show { display: flex; }
 .modal-content { background: var(--panel); border: 2px solid var(--accent); padding: 16px; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; }
@@ -1094,6 +1104,13 @@ body.mobile-mode .app {
 .lunchbox-card { background: #000a00; border: 1px solid #00aa2a; padding: 12px; text-align: center; }
 
 /* ===== COMBATE ESTILO PIP-BOY ===== */
+.combat-ammo-bar {
+  text-align: left;
+}
+.combat-ammo-bar .item-icon {
+  vertical-align: middle;
+  display: inline-flex;
+}
 .combat-title {
   color: var(--danger);
   text-align: center;
@@ -2315,6 +2332,7 @@ body.pc-mode .combat-arena.has-ally .combat-fighter img.combat-sprite {
 .item-icon.lg, .sprite-thumb.lg { width: 56px; height: 56px; font-size: 32px; }
 .item-icon.sm, .sprite-thumb.sm { width: 28px; height: 28px; font-size: 16px; }
 .enemy-icon.clickable { cursor: pointer; }
+.item.leg-companion { border-color: var(--gold) !important; box-shadow: 0 0 6px rgba(213,189,105,0.25); }
 .companion-card {
   display: flex;
   gap: 12px;
@@ -2578,7 +2596,7 @@ const DB_ITEMS = [
   { id: 197, name: "Escopeta Industrial", type: "weapon", damage: 72, ammoType: "Cartucho de escopeta", weight: 9, value: 710, stackable: false, shopTier: 6 },
   { id: 198, name: "Rifle de Asalto Táctico", type: "weapon", damage: 64, ammoType: "5.56mm", weight: 8.5, value: 920, stackable: false, shopTier: 7 },
   { id: 199, name: "Lanzanukes Experimental (Fat Man MKII)", type: "weapon", damage: 700, ammoType: "Mini Nukes", weight: 32, value: 6000, stackable: false, shopTier: 10 },
-  { id: 200, name: "El Destructor del Yermo (Arma Legendaria)", type: "weapon", damage: 250, ammoType: "Cartucho de 2mm", weight: 10, value: 10000, stackable: false, shopTier: 10, weaponCat: "energy", ammoPerShot: 5, legendary: true, abilityId: "w_destructor", abilityName: "Devastación del Yermo" },
+  { id: 200, name: "El Destructor del Yermo", type: "weapon", damage: 280, ammoType: "Cartucho de 2mm", weight: 10, value: 12000, stackable: false, shopTier: 10, weaponCat: "energy", ammoPerShot: 5, legendary: true, abilityId: "w_destructor", abilityName: "Aniquilación Absoluta" },
   // --- 50 ARMADURAS (Incluyendo Servoarmaduras) ---
   { id: 5, name: "Ropa de superviviente", type: "armor", def: 2, weight: 2, value: 15, stackable: false, shopTier: 1, radRes: 0 },
   { id: 6, name: "Chaqueta blindada", type: "armor", def: 7, weight: 6, value: 90, stackable: false, shopTier: 2, radRes: 0 },
@@ -3202,7 +3220,7 @@ const LEG_WEAPON_ABILITIES = [
   { id: 'w_fury', name: "Furia Desatada", desc: "+15 de daño cuando tienes menos del 40% HP." },
   { id: 'w_precision', name: "Precisión Mortal", desc: "Nunca fallas y +8 de daño base." },
   { id: 'w_legend', name: "Cazador de Leyendas", desc: "+35% de daño contra enemigos legendarios." },
-  { id: 'w_destructor', name: "Devastación del Yermo", desc: "Ignora el 50% de la defensa enemiga. 25% de probabilidad de daño doble. Arma única." }
+  { id: 'w_destructor', name: "Aniquilación Absoluta", desc: "Habilidad exclusiva. +30% daño. 30% de daño triple. Si el enemigo tiene <40% HP, 25% de ejecución instantánea." }
 ];
 
 // ========== HABILIDADES LEGENDARIAS DE ARMADURAS (20) ==========
@@ -3411,7 +3429,30 @@ const PERKS_DB = [
   { id: 'p_local', name: "Líder Local", desc: "La granja genera +25% chapas/hora (Nv.1) o +50% (Nv.2). No se acumula.", maxRank: 2 },
   { id: 'p_greedy', name: "Avaricioso", desc: "El Casino Sierra Madre genera +25% fichas/hora (Nv.1) o +50% (Nv.2). No se acumula.", maxRank: 2 },
   { id: 'p_autoritario', name: "Autoritario", desc: "Acceso a Los Reguladores. Cada humano abatido deja 1× Dedo de justicia (Otros) para canjear en su cuartel.", maxRank: 1 },
-  { id: 'p_hitman', name: "Asesino a sueldo", desc: "Acceso a Los Sicarios. En eventos aleatorios puedes atacar a civiles; si ganas, obtienes 1× Oreja (Otros) para canjear en El Desguace.", maxRank: 1 }
+  { id: 'p_hitman', name: "Asesino a sueldo", desc: "Acceso a Los Sicarios. En eventos aleatorios puedes atacar a civiles; si ganas, obtienes 1× Oreja (Otros) para canjear en El Desguace.", maxRank: 1 },
+  { id: 'p_grenadier', name: "Granadero", desc: "+15% daño con granadas por rango.", maxRank: 3 },
+  { id: 'p_heavy', name: "Artillero Pesado", desc: "+10% daño con miniguns y armas pesadas.", maxRank: 2 },
+  { id: 'p_sniper', name: "Francotirador", desc: "+10% probabilidad de crítico con rifles.", maxRank: 2 },
+  { id: 'p_chemist', name: "Químico del Yermo", desc: "Los efectos de drogas y chems duran +25% acciones.", maxRank: 2 },
+  { id: 'p_cook', name: "Cocinero Nuclear", desc: "La comida cura +20% de salud extra.", maxRank: 2 },
+  { id: 'p_radwall', name: "Muro Radiactivo", desc: "+10% resistencia a la radiación.", maxRank: 3 },
+  { id: 'p_explorer', name: "Explorador Nato", desc: "+15% XP al explorar zonas.", maxRank: 2 },
+  { id: 'p_collector', name: "Coleccionista de Tarteras", desc: "Las Tarteras dan recompensas ligeramente mejores.", maxRank: 2 },
+  { id: 'p_companion', name: "Líder de Manada", desc: "Tu compañero inflige +10% de daño.", maxRank: 3 },
+  { id: 'p_captor', name: "Cazador de Esclavos", desc: "+10% probabilidad de captura con colgantes.", maxRank: 2 },
+  { id: 'p_radio', name: "Operador de Radio", desc: "Mejores recompensas al captar señales.", maxRank: 2 },
+  { id: 'p_nightowl', name: "Búho Nocturno", desc: "+8% daño durante la noche.", maxRank: 2 },
+  { id: 'p_sunskin', name: "Hijo del Sol", desc: "+8% daño durante el día.", maxRank: 2 },
+  { id: 'p_looter', name: "Saqueador Experto", desc: "+15% chapas obtenidas del botín.", maxRank: 2 },
+  { id: 'p_gunsmith', name: "Armero del Yermo", desc: "Los módulos de arma dan +1 daño extra.", maxRank: 2 },
+  { id: 'p_armorsmith', name: "Forjador de Placas", desc: "Los módulos de armadura dan +1 defensa extra.", maxRank: 2 },
+  { id: 'p_gambler', name: "Tahúr del Strip", desc: "Mejor suerte en juegos de casino (+5% por rango).", maxRank: 3 },
+  { id: 'p_settler', name: "Colonizador Nato", desc: "La granja genera +10% chapas adicionales.", maxRank: 2 },
+  { id: 'p_roboticist', name: "Roboticista", desc: "Compañeros robot/synth +12% daño y defensa.", maxRank: 2 },
+  { id: 'p_quickdraw', name: "Desenfund Rápido", desc: "5% de atacar primero en combate.", maxRank: 2 },
+  { id: 'p_thickskin', name: "Piel de Acero", desc: "+3 defensa cuando tienes menos del 40% HP.", maxRank: 2 },
+  { id: 'p_scrounger', name: "Buscador de Balas", desc: "Al explorar encuentras un poco más de munición.", maxRank: 2 },
+  { id: 'p_fortune', name: "Afortunado del Yermo", desc: "+5% a eventos positivos al moverte.", maxRank: 2 }
 ];
 
 let P = {
@@ -3933,7 +3974,11 @@ function enemyIconHtml(name, isLegendary, size, typeHint) {
   let url = enemySpriteUrl(name, 'icons', typeHint);
   let combatUrl = enemySpriteUrl(name, 'combat', typeHint);
   let cls = 'enemy-icon clickable' + (isLegendary ? ' legendary' : '');
-  let st = size ? ('width:' + size + 'px;height:' + size + 'px;') : '';
+  let px = size;
+  if (size === 'sm') px = 36;
+  else if (size === 'lg') px = 72;
+  else if (size === 'md') px = 48;
+  let st = px ? ('width:' + px + 'px;height:' + px + 'px;') : '';
   let safeName = String(name || 'Enemigo').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
   let safeCombat = String(combatUrl || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
   let leg = isLegendary ? 'true' : 'false';
@@ -4294,6 +4339,88 @@ function formatFactionRewardText(rw) {
 }
 
 
+
+function ensureCodex() {
+  if (!P.codex || typeof P.codex !== 'object') P.codex = {};
+  if (!P.codex.weapons || typeof P.codex.weapons !== 'object') P.codex.weapons = {};
+  if (!P.codex.armor || typeof P.codex.armor !== 'object') P.codex.armor = {};
+  if (!P.codex.creatures || typeof P.codex.creatures !== 'object') P.codex.creatures = {};
+  // Migrar descubrimientos desde inventario actual
+  try {
+    (P.inv || []).forEach(function(inst) {
+      if (!inst) return;
+      let it = getItemBase(inst.id);
+      if (!it) return;
+      if (it.type === 'weapon') P.codex.weapons[String(inst.id)] = true;
+      if (it.type === 'armor') P.codex.armor[String(inst.id)] = true;
+    });
+  } catch (e) {}
+}
+function discoverItem(id) {
+  ensureCodex();
+  let it = getItemBase(id);
+  if (!it) return;
+  if (it.type === 'weapon') P.codex.weapons[String(id)] = true;
+  else if (it.type === 'armor') P.codex.armor[String(id)] = true;
+}
+function normalizeCreatureName(name) {
+  if (!name) return '';
+  return String(name)
+    .replace(/\s*\(Nv\.?\s*\d+\)\s*/gi, '')
+    .replace(/\s*·\s*Nv\.?\s*\d+/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function recordCreatureKill(name) {
+  if (!name) return;
+  ensureCodex();
+  let n = normalizeCreatureName(name);
+  if (!n) return;
+  P.codex.creatures[n] = (P.codex.creatures[n] || 0) + 1;
+  try { checkAchievements('kill'); } catch (e) {}
+}
+function getAllCodexCreatureNames() {
+  let names = {};
+  if (typeof ENEMIES !== 'undefined') {
+    ENEMIES.forEach(function(e) {
+      if (e && e.name && e.name !== 'Desarmado' && e.name !== 'Sin armadura') {
+        names[normalizeCreatureName(e.name)] = true;
+      }
+    });
+  }
+  // Extras de eventos / DLC / perks (siempre en el bestiario)
+  [
+    'Mercader ambulante', 'Caravana civil', 'Colonos perdidos', 'Comerciante solitario',
+    'Curandero itinerante', 'Granjero del yermo', 'Mensajero civil', 'Peregrino herido',
+    'Refugiado desarmado', 'Viajero del Yermo', 'Cazarrecompensas renegado',
+    'Asesino del Yermo', 'Mercenario del Yermo', 'Cazador del Yermo',
+    'Courser del Instituto', 'Centinela del Enclave', 'Asesino de la Hermandad',
+    'Synth defectuoso', 'Synth Gen-1', 'Synth Gen-2', 'Synth Gen-3',
+    'Zetan', 'Zetan de élite', 'Zetan experimental', 'Drone Zetan',
+    'Sonda de abducción', 'Zetan inquisidor', 'Zetan aniquilador',
+    'Sanguinario', 'Sanguinario alfa', 'Sanguinario joven',
+    'Devorador de muerte', 'Behemoth mutante', 'Assaultron defectuosa',
+    'Centinela robótico', 'Robot militar', 'Necrófago brillante',
+    'Necrófago experimento', 'Experimento enloquecido',
+    'Saqueador jefe', 'Saqueador de élite', 'Supermutante', 'Supermutante veterano',
+    'Supermutante behemoth', 'Necrófago legendario', 'Saqueador legendario'
+  ].forEach(function(n) { names[normalizeCreatureName(n)] = true; });
+  // Descubiertos en partida (incluye nombres únicos de contratos)
+  Object.keys(P.codex.creatures || {}).forEach(function(n) {
+    let nn = normalizeCreatureName(n);
+    if (nn) names[nn] = true;
+  });
+  // Fusionar contadores con nombre normalizado
+  let cleaned = {};
+  Object.keys(P.codex.creatures || {}).forEach(function(k) {
+    let nn = normalizeCreatureName(k);
+    if (!nn) return;
+    cleaned[nn] = (cleaned[nn] || 0) + (P.codex.creatures[k] || 0);
+  });
+  P.codex.creatures = cleaned;
+  return Object.keys(names).filter(Boolean).sort(function(a,b){ return a.localeCompare(b,'es'); });
+}
+
 function addLeveledGearToInv(baseId) {
   let it = getItemBase(baseId);
   if (!it) return false;
@@ -4306,13 +4433,21 @@ function addLeveledGearToInv(baseId) {
     return false;
   }
   let newUid = Date.now() + Math.floor(Math.random() * 100000);
-  P.inv.push({ uid: newUid, id: baseId, qty: 1, mods: [], itemLevel: P.lvl || 1 });
+  let entry = { uid: newUid, id: baseId, qty: 1, mods: [], itemLevel: P.lvl || 1 };
+  if (it.legendary) {
+    entry.legendary = true;
+    if (it.abilityId) entry.abilityId = it.abilityId;
+    if (it.abilityName) entry.abilityName = it.abilityName;
+  }
+  P.inv.push(entry);
+  try { discoverItem(baseId); } catch (e) {}
   return newUid;
 }
 
 function addItemToInv(baseId, count = 1) {
   let it = getItemBase(baseId);
   if (!it) return false;
+  try { if (it.type === 'weapon' || it.type === 'armor') discoverItem(baseId); } catch (e) {}
 
   if (it.type === 'ammo') {
     let addQty = (it.qty || 1) * count;
@@ -4479,11 +4614,13 @@ function getAmmoCount(ammoKey) {
 function formatCombatAmmo(w) {
   if (!w) return 'Sin arma';
   let cat = getWeaponCategory(w);
-  if (cat === 'melee' || cat === 'grenade') return getWeaponCategoryLabel(cat);
+  let label = getWeaponCategoryLabel(cat);
+  if (cat === 'melee' || cat === 'grenade') return label;
   let key = w.ammoType || '';
   let have = getAmmoCount(key);
   let per = getAmmoPerShot(w);
-  return have + '× ' + key + ' (−' + per + '/disp.)';
+  let wname = (w.name || '').replace(/\s*\(Arma Legendaria\)\s*/i, '');
+  return '<b style="color:#d7dec9;">' + wname + '</b> · ' + label + ' · <b style="color:#a8c47a;">' + have + '</b> ' + key + ' <span style="color:#8d9880;">(−' + per + '/disp.)</span>';
 }
 
 function getEquippedWeapon() {
@@ -4763,8 +4900,16 @@ function renderCharacter(sub) {
     { id: 'settlements', label: 'Asentamientos' },
     { id: 'wallet', label: 'Monedero' }
   ];
+  let playerIconUrl = './img/player/icons/Morador_de_refugio.png';
+  let playerCombatUrl = './img/player/combat/Morador_de_refugio.png';
   let html = `
-    <h2 style="text-align:center; color:var(--accent); margin:4px 0;">${P.playerName || 'Superviviente'}</h2>
+    <h2 style="text-align:center; color:var(--accent); margin:4px 0;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <img src="${playerIconUrl}" alt="" title="Ver superviviente" draggable="false"
+        style="width:36px;height:36px;image-rendering:pixelated;object-fit:contain;cursor:pointer;border:1px solid var(--line);border-radius:4px;background:#0a120a;"
+        onclick="openSpriteViewer({title:'${(P.playerName||'Superviviente').replace(/'/g,"\\'")}', subtitle:'Superviviente', img:'${playerCombatUrl}', emoji:'🧑'})"
+        onerror="this.style.display='none'" />
+      <span>${P.playerName || 'Superviviente'}</span>
+    </h2>
     <div class="subtabs" style="grid-template-columns:repeat(3,1fr);">
       ${tabs.map(t => `<button class="${sub===t.id?'active':''}" onclick="renderCharacter('${t.id}')">${t.label}</button>`).join('')}
     </div>
@@ -4859,7 +5004,7 @@ function renderCharacter(sub) {
       let st = getCompanionCombatStats(c);
       let radTxt = (st.radRes >= 100) ? 'Inmune' : ((st.radRes || 0) + '%');
       let ab = c.ability ? `<p style="color:var(--gold);margin:6px 0 0;font-size:12px;"><b>★ ${c.ability.name}</b><br><span style="color:#8d9880;">${c.ability.desc}</span></p>` : '';
-      html += `<div class="item" style="border-color:${c.isLegendary || c.isRex ? 'var(--gold)' : 'var(--line)'};">
+      html += `<div class="item" style="border-color:${c.isLegendary || c.isRex ? 'var(--gold)' : 'var(--line)'} !important;">
         <div class="companion-card">
           <div class="portrait">
             ${companionPortraitHtml(c, 'lg')}
@@ -5332,8 +5477,10 @@ function renderPrisonUI() {
       let armN = c.armor || (st && st.armor) || 'Ninguna';
       let radV = st.radRes != null ? st.radRes : (c.radRes || 0);
       let radTxt = radV >= 100 ? 'Inmune' : (radV + '%');
-      html += `<div class="item" style="${c.id === P.equippedCompanionId ? 'border-color:var(--accent);' : ''}">
-        <span class="companion-row-icon">${companionPortraitHtml(c, 'sm')}<b style="${c.isLegendary ? 'color:var(--gold);' : ''}">${c.isLegendary ? '★ ' : ''}${c.name}</b></span> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
+      let legC = !!(c.isLegendary || c.isRex);
+      let borderC = c.id === P.equippedCompanionId ? 'border-color:var(--accent) !important;' : (legC ? 'border-color:var(--gold) !important;' : '');
+      html += `<div class="item" style="${borderC}">
+        <span class="companion-row-icon">${companionPortraitHtml(c, 'sm')}<b style="${legC ? 'color:var(--gold);' : ''}">${legC ? '★ ' : ''}${c.name}</b></span> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
         ${c.resting ? ' <span style="color:var(--danger);">[DESCANSANDO]</span>' : ''}
         <br><span style="font-size:11px;color:#8d9880;">HP ${c.hp}/${c.maxHp} · ATK ${st.dmg} · DEF ${st.def || 0} · RAD ${radTxt}</span>
         <br><span style="font-size:11px;color:#8d9880;">${weap} · Armadura: ${armN}</span>
@@ -5610,13 +5757,16 @@ function renderKingsTheaterUI() {
 function showCompanionStats(id) {
   ensureCompanionIds();
   let c = (P.prison || []).find(x => x.id === id || x.uid === id);
+  if (!c) c = (P.homeCompanions || []).find(x => x.id === id || x.uid === id);
   if (!c) return;
   let st = getCompanionCombatStats(c);
+  let leg = !!(c.isLegendary || c.isRex);
   let ab = c.ability ? `<p style="color:var(--gold);"><b>★ ${c.ability.name}</b><br>${c.ability.desc}</p>` : '<p style="color:#8d9880;">Sin habilidad legendaria.</p>';
   let m = document.getElementById('modal');
   document.getElementById('modal-body').innerHTML = `
-    <h2 style="color:var(--accent);margin-top:0;">${c.isLegendary ? '★ ' : ''}${c.name}</h2>
-    <p style="font-size:12px;">Nivel ${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)} · Tipo: ${c.type}</p>
+    <div style="text-align:center;margin-bottom:8px;">${companionPortraitHtml(c, 'lg')}</div>
+    <h2 style="color:${leg ? 'var(--gold)' : 'var(--accent)'};margin-top:0;text-align:center;">${leg ? '★ ' : ''}${c.name}</h2>
+    <p style="font-size:12px;text-align:center;">Nivel ${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)} · Tipo: ${c.type}</p>
     <div class="row"><span>Salud</span><b>${c.hp} / ${c.maxHp}</b></div>
     <div class="row"><span>Ataque</span><b>${st.dmg}</b></div>
     <div class="row"><span>Defensa</span><b>${st.def || 0}</b></div>
@@ -5709,7 +5859,7 @@ function upgradeStorageCapacity() {
 
 
 function getStorageItemStyle(inst, it) {
-  let isLeg = !!inst.legendary;
+  let isLeg = !!(inst.legendary || (it && it.legendary));
   let border = '';
   let color = '';
   if (isLeg) { border = 'border-color:var(--gold);'; color = 'color:var(--gold);'; }
@@ -9076,8 +9226,9 @@ function executeCheat(raw) {
         if (P.sierraCasino) { P.sierraCasino.claimed = true; P.sierraCasino.travelBuilt = true; }
       } catch (e) {}
       try {
-        if (typeof ensureRobco === 'function') ensureRobco();
-        if (P.robco) { P.robco.claimed = true; P.robco.travelBuilt = true; }
+        if (typeof ensureRobcoFactory === 'function') ensureRobcoFactory();
+        if (P.robcoFactory) { P.robcoFactory.claimed = true; P.robcoFactory.travelBuilt = true; }
+        if (!P.fastTravelUnlocked.includes('robco_factory')) P.fastTravelUnlocked.push('robco_factory');
       } catch (e) {}
     }
     if (mode === 'facciones' || mode === 'todos' || mode === 'all') {
@@ -9233,8 +9384,14 @@ function ensureUISettings() {
     if (!P.ui.keys.action) P.ui.keys.action = 'e';
     if (!P.ui.keys.cancel) P.ui.keys.cancel = 'q';
   }
-  // Forzar modo según dispositivo en cada carga (PC ↔ móvil)
-  P.ui.hudMode = detectDefaultHudMode();
+  // Solo auto-detectar si aún no hay preferencia guardada
+  if (!P.ui.hudMode) {
+    try {
+      let saved = localStorage.getItem('wl_hud_mode');
+      if (saved === 'pc' || saved === 'mobile') P.ui.hudMode = saved;
+    } catch (e) {}
+  }
+  if (!P.ui.hudMode) P.ui.hudMode = detectDefaultHudMode();
   applyHudMode(P.ui.hudMode);
 }
 
@@ -9253,7 +9410,11 @@ function applyHudMode(mode) {
 
 function setHudMode(mode) {
   ensureUISettings();
+  mode = mode === 'pc' ? 'pc' : 'mobile';
+  P.ui.hudMode = mode;
   applyHudMode(mode);
+  try { localStorage.setItem('wl_hud_mode', mode); } catch (e) {}
+  try { saveGame(); } catch (e) {}
   logMsg(mode === 'pc' ? 'HUD: modo PC' : 'HUD: modo dispositivo');
   openAdaptabilidadUI();
   try { if (typeof renderMap === 'function' && (!P.location || P.location.type === undefined)) renderMap(); } catch (e) {}
@@ -9262,7 +9423,11 @@ function setHudMode(mode) {
 function setPcLayout(side) {
   ensureUISettings();
   P.ui.pcLayout = (side === 'log-right') ? 'log-right' : 'log-left';
+  P.ui.hudMode = 'pc';
   applyHudMode('pc');
+  try { localStorage.setItem('wl_hud_mode', 'pc'); } catch (e) {}
+  try { localStorage.setItem('wl_pc_layout', P.ui.pcLayout); } catch (e) {}
+  try { saveGame(); } catch (e) {}
   logMsg(P.ui.pcLayout === 'log-right' ? 'PC: mapa izquierda · registro derecha' : 'PC: registro izquierda · mapa derecha');
   openAdaptabilidadUI();
 }
@@ -9270,46 +9435,61 @@ function setPcLayout(side) {
 function openAdaptabilidadUI() {
   ensureUISettings();
   let m = P.ui.hudMode || 'mobile';
-  let k = P.ui.keys;
-  document.getElementById('modal-body').innerHTML = `
-    <h2 style="color:var(--accent);text-align:center;margin-top:0;">🖥 Adaptabilidad</h2>
-    <div class="item">
-      <b>Modo de interfaz</b><br>
-      <span style="font-size:11px;color:#8d9880;">Ajusta densidad y tamaño de botones.</span><br>
-      <button style="width:48%;margin:6px 1%;${m==='mobile'?'border-color:var(--accent);color:var(--accent);':''}" onclick="setHudMode('mobile')">📱 Dispositivo</button>
-      <button style="width:48%;margin:6px 1%;${m==='pc'?'border-color:var(--accent);color:var(--accent);':''}" onclick="setHudMode('pc')">🖥 Modo PC</button>
-      ${m==='pc' ? `<div style="margin-top:10px;padding-top:8px;border-top:1px solid #30362c;">
-        <b style="font-size:12px;">Disposición 16:9</b><br>
-        <span style="font-size:11px;color:#8d9880;">Elige qué panel va a cada lado.</span><br>
-        <button style="width:100%;margin:6px 0;${(P.ui.pcLayout||'log-left')==='log-left'?'border-color:var(--gold);color:var(--gold);':''}" onclick="setPcLayout('log-left')">📋 Registro izquierda · Mapa derecha</button>
-        <button style="width:100%;margin:4px 0;${(P.ui.pcLayout)==='log-right'?'border-color:var(--gold);color:var(--gold);':''}" onclick="setPcLayout('log-right')">🗺 Mapa izquierda · Registro derecha</button>
-      </div>` : ''}
-    </div>
-    <div class="item">
-      <b>Controles de teclado</b><br>
-      <span style="font-size:11px;color:#8d9880;">Por defecto: WASD mover · E explorar · Q entrar/salir · X Stim · Z RadAway.</span>
-      <div style="display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:8px;font-size:13px;align-items:center;">
-        <span>Arriba / Norte</span><button onclick="startRebindKey('up')">${(k.up||'w').toUpperCase()}</button>
-        <span>Abajo / Sur</span><button onclick="startRebindKey('down')">${(k.down||'s').toUpperCase()}</button>
-        <span>Izquierda / Oeste</span><button onclick="startRebindKey('left')">${(k.left||'a').toUpperCase()}</button>
-        <span>Derecha / Este</span><button onclick="startRebindKey('right')">${(k.right||'d').toUpperCase()}</button>
-        <span>Explorar (E)</span><button onclick="startRebindKey('action')">${(k.action||'e').toUpperCase()}</button>
-        <span>Estimulante</span><button onclick="startRebindKey('stim')">${(k.stim||'x').toUpperCase()}</button>
-        <span>RadAway</span><button onclick="startRebindKey('rad')">${(k.rad||'z').toUpperCase()}</button>
-        <span>Entrar / Salir (Q)</span><button onclick="startRebindKey('cancel')">${(k.cancel||'q').toUpperCase()}</button>
-      </div>
-      <button style="width:100%;margin-top:8px;" onclick="resetKeybinds()">Restablecer controles</button>
-    </div>
-    <p id="rebind-hint" style="font-size:12px;color:#8d9880;text-align:center;min-height:18px;"></p>
-    <div class="item" style="margin-top:8px;border-color:#66aaff;">
-      <b style="color:#66ccff;">Pantalla completa</b><br>
-      <span style="font-size:11px;color:#8d9880;">Recomendado en Modo PC para aprovechar todo el monitor.</span>
-      <button id="btn-fullscreen" style="width:100%;margin-top:8px;border-color:#66aaff;color:#66ccff;" onclick="toggleFullscreen();">${fullscreenBtnLabel()}</button>
-    </div>
-    <button style="width:100%;margin-top:8px;" onclick="openSettings()">← Volver a Ajustes</button>
-  `;
+  let k = P.ui.keys || {};
+  let keyRow = function(label, action) {
+    let val = (k[action] || '').toUpperCase();
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e2a1c;">' +
+      '<span style="font-size:12px;color:#c9d5a8;">' + label + '</span>' +
+      '<button style="min-width:42px;padding:4px 10px;border-color:#66ffaa;color:#66ffaa;background:#0a1a12;font-weight:bold;" onclick="startRebindKey(\'' + action + '\')">' + val + '</button></div>';
+  };
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:#66ccff;text-align:center;margin-top:0;">🧩 Adaptabilidad</h2>' +
+    '<p style="font-size:11px;color:#8d9880;text-align:center;">Ajusta la interfaz a tu dispositivo</p>' +
+    '<div id="rebind-hint" style="font-size:11px;text-align:center;min-height:16px;margin-bottom:6px;"></div>' +
+
+    '<div class="item" style="border-color:#66aadd;background:linear-gradient(180deg,#0c1824,#0a1014);">' +
+      '<b style="color:#88ccff;">📱 Modo de interfaz</b><br>' +
+      '<span style="font-size:11px;color:#8d9880;">Densidad y tamaño de botones según dispositivo.</span><br>' +
+      '<div style="display:flex;gap:8px;margin-top:8px;">' +
+        '<button style="flex:1;' + (m==='mobile'?'border-color:var(--gold);color:var(--gold);background:#1a1608;':'border-color:#66ffaa;color:#66ffaa;background:#0a1a12;') + '" onclick="setHudMode(\'mobile\')">📱 Dispositivo</button>' +
+        '<button style="flex:1;' + (m==='pc'?'border-color:var(--gold);color:var(--gold);background:#1a1608;':'border-color:#66ffaa;color:#66ffaa;background:#0a1a12;') + '" onclick="setHudMode(\'pc\')">🖥 Modo PC</button>' +
+      '</div>' +
+      (m==='pc' ? (
+        '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #2a3a4a;">' +
+        '<b style="color:#d5bd69;font-size:12px;">🖥 Disposición 16:9</b><br>' +
+        '<span style="font-size:11px;color:#8d9880;">Elige qué panel va a cada lado.</span><br>' +
+        '<button style="width:100%;margin:6px 0;' + ((P.ui.pcLayout||'log-left')==='log-left'?'border-color:var(--gold);color:var(--gold);background:#1a1608;':'border-color:#66ffaa;color:#66ffaa;background:#0a1a12;') + '" onclick="setPcLayout(\'log-left\')">📋 Registro izquierda · Mapa derecha</button>' +
+        '<button style="width:100%;margin:4px 0;' + ((P.ui.pcLayout||'log-left')==='log-right'?'border-color:var(--gold);color:var(--gold);background:#1a1608;':'border-color:#66ffaa;color:#66ffaa;background:#0a1a12;') + '" onclick="setPcLayout(\'log-right\')">🗺 Mapa izquierda · Registro derecha</button>' +
+        '</div>'
+      ) : '') +
+    '</div>' +
+
+    '<div class="item" style="border-color:#5a8aaa;background:linear-gradient(180deg,#0a141c,#080e12);">' +
+      '<b style="color:#88ccff;">⌨ Controles de teclado</b><br>' +
+      '<span style="font-size:11px;color:#8d9880;">Por defecto: WASD mover · E explorar · Q entrar/salir · X Stim · Z RadAway</span>' +
+      '<div style="margin-top:8px;">' +
+        keyRow('Arriba / Norte', 'up') +
+        keyRow('Abajo / Sur', 'down') +
+        keyRow('Izquierda / Oeste', 'left') +
+        keyRow('Derecha / Este', 'right') +
+        keyRow('Explorar', 'action') +
+        keyRow('Entrar / Salir', 'cancel') +
+        keyRow('Estimulante', 'stim') +
+        keyRow('RadAway', 'rad') +
+      '</div>' +
+      '<button style="width:100%;margin-top:10px;border-color:var(--danger);color:var(--danger);background:#1a0808;" onclick="resetKeybinds();openAdaptabilidadUI();">Restablecer teclas</button>' +
+    '</div>' +
+
+    '<div class="item" style="border-color:#66aaff;background:linear-gradient(180deg,#0c1420,#0a1018);">' +
+      '<b style="color:#66ccff;">⛶ Pantalla completa</b><br>' +
+      '<span style="font-size:11px;color:#8d9880;">Recomendado en Modo PC para aprovechar todo el monitor.</span>' +
+      '<button id="btn-fullscreen" style="width:100%;margin-top:8px;border-color:#66ffaa;color:#66ffaa;background:#0a1a12;" onclick="toggleFullscreen();">' + fullscreenBtnLabel() + '</button>' +
+    '</div>' +
+
+    '<button style="width:100%;margin-top:10px;border-color:#66ffaa;color:#66ffaa;background:#0a1a12;" onclick="openSettings()">← Volver a Ajustes</button>';
   document.getElementById('modal').classList.add('show');
 }
+
 
 let _rebindAction = null;
 function startRebindKey(action) {
@@ -9355,20 +9535,36 @@ function setupKeyboardControls() {
     let keyPeek = (ev.key || '').toLowerCase();
     ensureUISettings();
     let kPeek = P.ui.keys || {};
-    // Con modal abierto: solo cancelar (Q/Esc) o combate
+    // Combate activo: no mover, no explorar, no salir con Q/E
+    if (typeof combatState !== 'undefined' && combatState) {
+      ensureUISettings();
+      let kC = P.ui.keys || {};
+      let keyC = (ev.key || '').toLowerCase();
+      if (keyC === (kC.stim || 'x')) {
+        if (typeof quickUseStim === 'function') quickUseStim();
+        ev.preventDefault();
+      } else if (keyC === (kC.rad || 'z')) {
+        if (typeof quickUseRadAway === 'function') quickUseRadAway();
+        ev.preventDefault();
+      } else {
+        // Bloquear E, Q, WASD, etc. durante combate
+        ev.preventDefault();
+      }
+      return;
+    }
+    // Con modal abierto (sin combate): Q/Esc cierra
     if (modalOpen) {
       if (keyPeek === (kPeek.cancel || 'q') || keyPeek === 'escape') {
         if (typeof closeModal === 'function') closeModal();
         ev.preventDefault();
         return;
       }
-      if (!combatState) return;
+      return;
     }
     ensureUISettings();
     let k = P.ui.keys || {};
     let key = (ev.key || '').toLowerCase();
     let handled = true;
-    // Q: cerrar modal · entrar (yermo) · salir (interior/asentamiento)
     if (key === (k.cancel || 'q') || key === 'escape') {
       if (typeof tryEnterOrExitAction === 'function') tryEnterOrExitAction();
     } else if (key === (k.up || 'w') || key === 'arrowup') {
@@ -9384,7 +9580,6 @@ function setupKeyboardControls() {
     } else if (key === (k.rad || 'z')) {
       if (typeof quickUseRadAway === 'function') quickUseRadAway();
     } else if (key === (k.action || 'e') || key === 'enter') {
-      // E: solo explorar / registrar
       if (typeof tryExploreAction === 'function') tryExploreAction();
     } else {
       handled = false;
@@ -9537,46 +9732,44 @@ function fullscreenBtnLabel() {
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
   {
-    ver: '0.11.45',
+    ver: '0.11.52',
     date: '2026-10-08',
-    title: 'Categorías de armas y munición por disparo',
+    title: 'Colores Adaptabilidad',
     notes: [
-      'Categorías: pistola, revólver, escopeta, rifle, sniper, SMG, asalto, minigun, flamer, pesada, energía, melee.',
-      'Consumo de balas por disparo según categoría (minigun 20, SMG 5, asalto 3…).',
-      'Contador de munición en combate junto al superviviente.',
-      'El Destructor del Yermo: habilidad única Devastación del Yermo.'
+      'Teclas, pantalla completa y volver: mismo verde que modo.',
+      'Restablecer teclas en rojo.'
     ]
   },
   {
-    ver: '0.11.44',
+    ver: '0.11.51',
     date: '2026-10-08',
-    title: 'Iconos de objetos y comandos de asentamiento',
+    title: 'Modo activo Adaptabilidad',
     notes: [
-      'Iconos img/assets; comandos /ViajeRapido y /Asentamiento.'
+      'Amarillo al cambiar de modo.'
     ]
   },
   {
-    ver: '0.11.43',
+    ver: '0.11.50',
     date: '2026-10-08',
-    title: 'Entrada a asentamientos (fix)',
+    title: 'Sonido y logros',
     notes: [
-      'getAvailableFactionQuests.'
+      'Mute y logros.'
     ]
   },
   {
-    ver: '0.11.42',
+    ver: '0.11.49',
     date: '2026-10-08',
-    title: 'getFactionRep restaurada',
+    title: 'Logros y reinicios',
     notes: [
-      'Reputación de facciones.'
+      'Avisos Pip-Boy.'
     ]
   },
   {
-    ver: '0.11.41',
+    ver: '0.11.48',
     date: '2026-10-08',
-    title: 'Sprite del jugador',
+    title: 'Enciclopedia',
     notes: [
-      'img/player/combat/.'
+      'Bestiario.'
     ]
   }
 ];
@@ -9616,44 +9809,373 @@ function openVersionDetailUI(idx) {
   document.getElementById('modal').classList.add('show');
 }
 
+
+function openEncyclopediaUI(tab, page) {
+  ensureCodex();
+  tab = tab || P.codexTab || 'weapons';
+  P.codexTab = tab;
+  if (page !== undefined) P.codexPage = page;
+  if (P.codexPage === undefined || P.codexPage < 0) P.codexPage = 0;
+  const PER = (tab === 'creatures') ? 12 : 20;
+
+  let html = '<h2 style="color:#a8c47a;text-align:center;margin-top:0;">📖 Enciclopedia</h2>';
+  html += '<p style="font-size:11px;color:#8d9880;text-align:center;">Registro de lo descubierto en el Yermo</p>';
+  html += '<div class="subtabs">';
+  html += '<button class="' + (tab==='weapons'?'active':'') + '" onclick="openEncyclopediaUI(\'weapons\',0)">Armas</button>';
+  html += '<button class="' + (tab==='armor'?'active':'') + '" onclick="openEncyclopediaUI(\'armor\',0)">Armaduras</button>';
+  html += '<button class="' + (tab==='creatures'?'active':'') + '" onclick="openEncyclopediaUI(\'creatures\',0)">Criaturas</button>';
+  html += '</div>';
+
+  if (tab === 'weapons' || tab === 'armor') {
+    let type = tab === 'weapons' ? 'weapon' : 'armor';
+    let discovered = tab === 'weapons' ? P.codex.weapons : P.codex.armor;
+    let all = (typeof DB_ITEMS !== 'undefined' ? DB_ITEMS : []).filter(function(it) {
+      return it && it.type === type && !it.grenade;
+    }).slice().sort(function(a,b){ return (a.id||0)-(b.id||0); });
+    let totalPages = Math.max(1, Math.ceil(all.length / PER));
+    if (P.codexPage >= totalPages) P.codexPage = totalPages - 1;
+    let slice = all.slice(P.codexPage * PER, P.codexPage * PER + PER);
+    let found = all.filter(function(it){ return !!discovered[String(it.id)]; }).length;
+    html += '<p style="font-size:11px;color:#8d9880;">Descubiertas: <b style="color:var(--accent);">' + found + '</b> / ' + all.length + ' · Pág. ' + (P.codexPage+1) + '/' + totalPages + '</p>';
+    html += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0;">';
+    slice.forEach(function(it) {
+      let known = !!discovered[String(it.id)];
+      let leg = !!it.legendary;
+      let border = known ? (leg ? 'var(--gold)' : 'var(--line)') : '#2a3028';
+      let safeName = String(it.name || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      let cell = '<div style="border:1px solid ' + border + ';border-radius:4px;padding:4px;text-align:center;background:#0a120a;min-height:72px;">';
+      if (known) {
+        cell += itemIconHtml(it, 'sm', leg);
+        cell += '<div style="font-size:9px;color:' + (leg ? 'var(--gold)' : '#d7dec9') + ';margin-top:3px;line-height:1.15;max-height:2.4em;overflow:hidden;" title="' + safeName + '">' + safeName + '</div>';
+        cell += '<div style="font-size:8px;color:#5a6550;">#' + it.id + '</div>';
+      } else {
+        cell += '<div style="font-size:22px;color:#3a4737;line-height:36px;">?</div>';
+        cell += '<div style="font-size:9px;color:#3a4737;">#' + it.id + '</div>';
+      }
+      cell += '</div>';
+      html += cell;
+    });
+    html += '</div>';
+    if (totalPages > 1) {
+      html += '<div style="display:flex;justify-content:center;gap:10px;align-items:center;margin-top:8px;">';
+      html += '<button ' + (P.codexPage<=0?'disabled':'') + ' onclick="openEncyclopediaUI(\'' + tab + '\',' + (P.codexPage-1) + ')">◀</button>';
+      html += '<span style="font-size:11px;">' + (P.codexPage+1) + ' / ' + totalPages + '</span>';
+      html += '<button ' + (P.codexPage>=totalPages-1?'disabled':'') + ' onclick="openEncyclopediaUI(\'' + tab + '\',' + (P.codexPage+1) + ')">▶</button>';
+      html += '</div>';
+    }
+  } else {
+    let allNames = getAllCodexCreatureNames();
+    let totalPages = Math.max(1, Math.ceil(allNames.length / PER));
+    if (P.codexPage >= totalPages) P.codexPage = totalPages - 1;
+    let slice = allNames.slice(P.codexPage * PER, P.codexPage * PER + PER);
+    let found = allNames.filter(function(n){ return (P.codex.creatures[n]||0) > 0; }).length;
+    html += '<p style="font-size:11px;color:#8d9880;">Descubiertas: <b style="color:var(--accent);">' + found + '</b> / ' + allNames.length + ' · Pág. ' + (P.codexPage+1) + '/' + totalPages + '</p>';
+    html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0;">';
+    slice.forEach(function(n) {
+      let kills = P.codex.creatures[n] || 0;
+      let known = kills > 0;
+      let border = known ? 'var(--line)' : '#2a3028';
+      let cell = '<div style="border:1px solid ' + border + ';border-radius:4px;padding:6px 4px;text-align:center;background:#0a120a;min-height:78px;">';
+      if (known) {
+        if (typeof enemyIconHtml === 'function') {
+          cell += enemyIconHtml(n, false, 40);
+        } else {
+          let iconUrl = (typeof enemySpriteUrl === 'function') ? enemySpriteUrl(n, 'icons') : '';
+          if (iconUrl) {
+            cell += '<img src="' + iconUrl + '" alt="" style="width:36px;height:36px;image-rendering:pixelated;object-fit:contain;" onerror="this.outerHTML=\'<div style=font-size:22px>💀</div>\'" />';
+          } else {
+            cell += '<div style="font-size:22px;">💀</div>';
+          }
+        }
+        cell += '<div style="font-size:10px;color:#d7dec9;margin-top:3px;line-height:1.15;">' + n + '</div>';
+        cell += '<div style="font-size:9px;color:var(--accent);">Enfrentamientos: ' + kills + '</div>';
+      } else {
+        cell += '<div style="font-size:22px;color:#3a4737;line-height:36px;">?</div>';
+        cell += '<div style="font-size:9px;color:#3a4737;">???</div>';
+      }
+      cell += '</div>';
+      html += cell;
+    });
+    html += '</div>';
+    if (totalPages > 1) {
+      html += '<div style="display:flex;justify-content:center;gap:10px;align-items:center;margin-top:8px;">';
+      html += '<button ' + (P.codexPage<=0?'disabled':'') + ' onclick="openEncyclopediaUI(\'creatures\',' + (P.codexPage-1) + ')">◀</button>';
+      html += '<span style="font-size:11px;">' + (P.codexPage+1) + ' / ' + totalPages + '</span>';
+      html += '<button ' + (P.codexPage>=totalPages-1?'disabled':'') + ' onclick="openEncyclopediaUI(\'creatures\',' + (P.codexPage+1) + ')">▶</button>';
+      html += '</div>';
+    }
+  }
+
+  html += '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+
+
+
+const ACHIEVEMENTS_DB = [
+  { id: 'a_first_blood', name: 'Primera sangre', desc: 'Derrota a tu primer enemigo.' },
+  { id: 'a_kill_10', name: 'Cazador novato', desc: 'Derrota a 10 criaturas.' },
+  { id: 'a_kill_50', name: 'Cazador del Yermo', desc: 'Derrota a 50 criaturas.' },
+  { id: 'a_kill_100', name: 'Exterminador', desc: 'Derrota a 100 criaturas.' },
+  { id: 'a_lvl_5', name: 'Superviviente', desc: 'Alcanza el nivel 5.' },
+  { id: 'a_lvl_10', name: 'Veterano', desc: 'Alcanza el nivel 10.' },
+  { id: 'a_lvl_25', name: 'Leyenda del Yermo', desc: 'Alcanza el nivel 25.' },
+  { id: 'a_lvl_50', name: 'Inmortal', desc: 'Alcanza el nivel 50.' },
+  { id: 'a_weapon_10', name: 'Armero', desc: 'Descubre 10 armas en la Enciclopedia.' },
+  { id: 'a_weapon_50', name: 'Coleccionista de acero', desc: 'Descubre 50 armas.' },
+  { id: 'a_armor_10', name: 'Chatarra vestida', desc: 'Descubre 10 armaduras.' },
+  { id: 'a_creature_10', name: 'Naturalista mutante', desc: 'Descubre 10 criaturas.' },
+  { id: 'a_creature_25', name: 'Bestiario completo', desc: 'Descubre 25 criaturas.' },
+  { id: 'a_capture', name: 'Cazador de esclavos', desc: 'Captura a tu primer compañero.' },
+  { id: 'a_settlement', name: 'Colonizador', desc: 'Reclama tu propio asentamiento.' },
+  { id: 'a_caps_1k', name: 'Chapero', desc: 'Acumula 1000 chapas.' },
+  { id: 'a_caps_10k', name: 'Magnate del Yermo', desc: 'Acumula 10000 chapas.' },
+  { id: 'a_quest_5', name: 'Hacedor de favores', desc: 'Completa 5 misiones de facción.' },
+  { id: 'a_casino', name: 'Apostador', desc: 'Juega en un casino del Strip.' },
+  { id: 'a_radio', name: 'Ondas del Yermo', desc: 'Captura una señal de radio.' },
+  { id: 'a_legendary', name: 'Caza mayor', desc: 'Derrota a un enemigo legendario.' },
+  { id: 'a_nuka', name: 'Sed nuclear', desc: 'Bebe una Nuka-Cola.' }
+];
+
+function ensureAchievements() {
+  if (!P.achievements || typeof P.achievements !== 'object') P.achievements = {};
+}
+function totalCreatureKills() {
+  ensureCodex();
+  let n = 0;
+  Object.keys(P.codex.creatures || {}).forEach(function(k) { n += (P.codex.creatures[k] || 0); });
+  return n;
+}
+function unlockAchievement(id) {
+  ensureAchievements();
+  if (P.achievements[id]) return;
+  let a = ACHIEVEMENTS_DB.find(function(x){ return x.id === id; });
+  if (!a) return;
+  P.achievements[id] = { at: Date.now() };
+  logMsg('🏆 Logro desbloqueado: ' + a.name);
+  try { saveGame(); } catch (e) {}
+}
+function checkAchievements(reason) {
+  ensureAchievements();
+  ensureCodex();
+  let kills = totalCreatureKills();
+  if (kills >= 1) unlockAchievement('a_first_blood');
+  if (kills >= 10) unlockAchievement('a_kill_10');
+  if (kills >= 50) unlockAchievement('a_kill_50');
+  if (kills >= 100) unlockAchievement('a_kill_100');
+  let lvl = P.lvl || 1;
+  if (lvl >= 5) unlockAchievement('a_lvl_5');
+  if (lvl >= 10) unlockAchievement('a_lvl_10');
+  if (lvl >= 25) unlockAchievement('a_lvl_25');
+  if (lvl >= 50) unlockAchievement('a_lvl_50');
+  let w = Object.keys(P.codex.weapons || {}).length;
+  let ar = Object.keys(P.codex.armor || {}).length;
+  let cr = Object.keys(P.codex.creatures || {}).filter(function(k){ return (P.codex.creatures[k]||0) > 0; }).length;
+  if (w >= 10) unlockAchievement('a_weapon_10');
+  if (w >= 50) unlockAchievement('a_weapon_50');
+  if (ar >= 10) unlockAchievement('a_armor_10');
+  if (cr >= 10) unlockAchievement('a_creature_10');
+  if (cr >= 25) unlockAchievement('a_creature_25');
+  if ((P.caps || 0) >= 1000) unlockAchievement('a_caps_1k');
+  if ((P.caps || 0) >= 10000) unlockAchievement('a_caps_10k');
+  if ((P.prison || []).length > 0 || (P.homeCompanions || []).length > 0) unlockAchievement('a_capture');
+  if (P.playerSettlement && P.playerSettlement.claimed) unlockAchievement('a_settlement');
+  if (reason === 'legendary') unlockAchievement('a_legendary');
+  if (reason === 'casino') unlockAchievement('a_casino');
+  if (reason === 'radio') unlockAchievement('a_radio');
+  if (reason === 'nuka') unlockAchievement('a_nuka');
+}
+
+function openAchievementsUI() {
+  ensureAchievements();
+  try { checkAchievements(); } catch (e) {}
+  let unlocked = 0;
+  let html = '<h2 style="color:#ffd700;text-align:center;margin-top:0;">🏆 Logros</h2>';
+  html += '<p style="font-size:11px;color:#8d9880;text-align:center;">Progreso en el Yermo</p>';
+  ACHIEVEMENTS_DB.forEach(function(a) {
+    let done = !!P.achievements[a.id];
+    if (done) unlocked++;
+    let star = done
+      ? '<span style="color:#ffd700;font-size:18px;">★</span>'
+      : '<span style="color:#666666;font-size:18px;">☆</span>';
+    html += '<div class="item" style="border-color:' + (done ? '#ffd700' : '#2a3028') + ';">' +
+      '<div style="display:flex;align-items:center;gap:8px;">' + star +
+      '<div><b style="color:' + (done ? '#ffd700' : '#c9d5a8') + ';">' + a.name + '</b>' +
+      (done ? ' <span style="font-size:10px;color:#ffd700;">✓ Completado</span>' : '') +
+      '<br><span style="font-size:11px;color:#8d9880;">' + a.desc + '</span></div></div></div>';
+  });
+  html += '<p style="font-size:11px;color:#8d9880;text-align:center;margin-top:8px;">Desbloqueados: <b style="color:#ffd700;">' + unlocked + '</b> / ' + ACHIEVEMENTS_DB.length + '</p>';
+  html += '<button style="width:100%;margin-top:10px;" onclick="openSettings()">← Volver a Ajustes</button>';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+
+function showPipConfirm(title, message, onYes, backFn) {
+  let html = '<div class="item" style="border-color:var(--danger);background:#120808;">' +
+    '<h2 style="color:var(--danger);text-align:center;margin:0 0 8px;">' + title + '</h2>' +
+    '<p style="font-size:12px;color:#d7dec9;text-align:center;line-height:1.4;">' + message + '</p>' +
+    '<p style="font-size:11px;color:#c87962;text-align:center;margin-top:8px;">Esta acción no se puede deshacer.</p>' +
+    '<div style="display:flex;gap:8px;margin-top:14px;">' +
+    '<button style="flex:1;border-color:#556655;color:#8d9880;" onclick="' + (backFn || 'openSettingsReinicio()') + '">Cancelar</button>' +
+    '<button style="flex:1;border-color:var(--danger);color:var(--danger);background:#1a0808;" id="pip-confirm-yes">Confirmar</button>' +
+    '</div></div>';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+  let btn = document.getElementById('pip-confirm-yes');
+  if (btn) btn.onclick = function() { try { onYes(); } catch (e) { console.error(e); } };
+}
+
+function confirmResetGame() {
+  showPipConfirm(
+    '☠ Reiniciar partida',
+    'Se borrará <b>todo</b> el progreso: inventario, mapa, reputación, asentamientos, mazo de caravana y guardado local. Volverás al inicio.',
+    function() {
+      try { localStorage.removeItem('wl_save_v16'); } catch (e) {}
+      location.reload();
+    },
+    'openSettingsReinicio()'
+  );
+}
+
+function confirmResetCaravan() {
+  showPipConfirm(
+    '🃏 Reinicio de Caravana',
+    'Se restablecerá el <b>mazo de Caravana Crimson</b> a 30 cartas comunes y se borrará la colección de cartas descubiertas y sobres. El resto de la partida no se toca.',
+    function() {
+      P.crimsonCards = { collection: {}, deck: [], schema: 5 };
+      try { initStarterCrimsonDeck(); } catch (e) {}
+      logMsg('Mazo y colección de Caravana reiniciados.');
+      try { saveGame(); } catch (e) {}
+      openSettingsReinicio();
+    },
+    'openSettingsReinicio()'
+  );
+}
+
+function confirmResetCodex() {
+  showPipConfirm(
+    '📖 Reiniciar Enciclopedia',
+    'Se borrarán todos los descubrimientos de <b>armas</b>, <b>armaduras</b> y <b>criaturas</b> del bestiario. Podrás volver a descubrirlos jugando.',
+    function() {
+      P.codex = { weapons: {}, armor: {}, creatures: {} };
+      logMsg('Enciclopedia reiniciada.');
+      try { saveGame(); } catch (e) {}
+      openSettingsReinicio();
+    },
+    'openSettingsReinicio()'
+  );
+}
+
+function confirmResetAchievements() {
+  showPipConfirm(
+    '🏆 Reiniciar Logros',
+    'Se reiniciarán <b>todos los logros</b> desbloqueados. El progreso del juego no se borra.',
+    function() {
+      P.achievements = {};
+      logMsg('Logros reiniciados.');
+      try { saveGame(); } catch (e) {}
+      openSettingsReinicio();
+    },
+    'openSettingsReinicio()'
+  );
+}
+
 function openSettings() {
   let m = document.getElementById('modal');
-  document.getElementById('modal-body').innerHTML = `
-    <h2 style="color:var(--accent); text-align:center; margin-top:0;">⚙ AJUSTES</h2>
-    <p style="font-size:12px; color:#8d9880; text-align:center;">${P.playerName || 'Superviviente'} · ${formatGameDateTime()}</p>
-    <div style="height:1px;background:linear-gradient(90deg,transparent,#3a4737,transparent);margin:8px 0 12px;"></div>
-    <button style="width:100%; margin:6px 0; border-color:#e8b84a; color:#f0d78c; background:#1a1508;" onclick="openSettingsPartida();">💾 Partida</button>
-    <button style="width:100%; margin:6px 0; border-color:#66aadd; color:#88ccff; background:#0a1520;" onclick="openSettingsSonido();">🔊 Sonido</button>
-    <button style="width:100%; margin:6px 0; border-color:#88aadd; color:#88aadd; background:#0a1218;" onclick="openAdaptabilidadUI();">🖥 Adaptabilidad</button>
-    <button style="width:100%; margin:6px 0; border-color:#66ffaa; color:#66ffaa; background:#0a1a10;" onclick="openAdditionalContentUI();">📦 Contenido Adicional</button>
-    <button style="width:100%; margin:6px 0; border-color:#ff66cc; color:#ff88dd; background:#1a0a14;" onclick="openCheatConsole();">💻 Consola de comandos</button>
-    <button style="width:100%; margin:6px 0; border-color:#aa8866; color:#d5bd69; background:#151208;" onclick="openSettingsOtros();">📁 Otros</button>
-    <button style="width:100%; margin:6px 0; border-color:#aadd66; color:#c8e888; background:#101808;" onclick="openVersionHistoryUI();">📋 Versión</button>
-    <button style="width:100%; margin:6px 0; border-color:var(--danger); color:var(--danger); background:#1a0808;" onclick="openSettingsReinicio();">☠ Reinicio</button>
-    <div style="height:1px;background:linear-gradient(90deg,transparent,#3a4737,transparent);margin:12px 0 8px;"></div>
-    <button style="width:100%; margin-top:4px;" onclick="closeModal();">Cerrar</button>
-    <div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland ${getCurrentVersion()}</div>
-  `;
+  let tile = function(emoji, label, color, bg, onclick) {
+    return '<button onclick="' + onclick + '" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:72px;padding:8px 4px;border:1px solid ' + color + ';color:' + color + ';background:' + bg + ';border-radius:6px;font-size:11px;line-height:1.2;text-align:center;">' +
+      '<span style="font-size:22px;line-height:1;">' + emoji + '</span><span>' + label + '</span></button>';
+  };
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:var(--accent);text-align:center;margin-top:0;">⚙ AJUSTES</h2>' +
+    '<p style="font-size:12px;color:#8d9880;text-align:center;">' + (P.playerName || 'Superviviente') + ' · ' + formatGameDateTime() + '</p>' +
+    '<div style="height:1px;background:linear-gradient(90deg,transparent,#3a4737,transparent);margin:8px 0 12px;"></div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+      tile('💾', 'Partida', '#f0d78c', '#1a1508', 'openSettingsPartida()') +
+      tile('📖', 'Enciclopedia', '#c5e09a', '#0f1a0c', 'openEncyclopediaUI()') +
+      tile('🏆', 'Logros', '#ffd700', '#1a1608', 'openAchievementsUI()') +
+      tile('🔊', 'Sonido', '#88ccff', '#0a1520', 'openSettingsSonido()') +
+      tile('🧩', 'Adaptabilidad', '#88aadd', '#0a1218', 'openAdaptabilidadUI()') +
+      tile('📦', 'Contenido Adicional', '#66ffaa', '#0a1a10', 'openAdditionalContentUI()') +
+      tile('💻', 'Consola', '#ff88dd', '#1a0a14', 'openCheatConsole()') +
+      tile('📁', 'Otros', '#d5bd69', '#151208', 'openSettingsOtros()') +
+      tile('📋', 'Versión', '#c8e888', '#101808', 'openVersionHistoryUI()') +
+      tile('🔄', 'Reinicio', 'var(--danger)', '#1a0808', 'openSettingsReinicio()') +
+    '</div>' +
+    '<button style="width:100%;margin-top:14px;" onclick="closeModal();">Cerrar</button>' +
+    '<div style="text-align:right;font-size:10px;color:#556655;margin-top:10px;">Wasteland ' + getCurrentVersion() + '</div>';
   m.classList.add('show');
 }
 
+function getMusicVolume() {
+  if (P.muteMusic) return 0;
+  return (P.volMusic !== undefined) ? P.volMusic : 0.6;
+}
+function getSfxVolume() {
+  if (P.muteSfx) return 0;
+  return (P.volSfx !== undefined) ? P.volSfx : 0.7;
+}
+function applyAllAudioVolumes() {
+  let mv = getMusicVolume();
+  ['ambient-audio', 'radio-audio', 'casino-audio'].forEach(function(id) {
+    let el = document.getElementById(id);
+    if (el) el.volume = mv;
+  });
+  document.querySelectorAll('audio').forEach(function(a) {
+    if (a.id === 'ambient-audio' || a.id === 'radio-audio' || a.id === 'casino-audio' || a.dataset.role === 'music') {
+      a.volume = mv;
+    }
+  });
+}
+function setVolMusic(v) {
+  P.volMusic = Math.max(0, Math.min(1, Number(v) / 100));
+  applyAllAudioVolumes();
+  try { saveGame(); } catch (e) {}
+}
+function setVolSfx(v) {
+  P.volSfx = Math.max(0, Math.min(1, Number(v) / 100));
+  try { saveGame(); } catch (e) {}
+}
+function toggleMuteMusic(on) {
+  P.muteMusic = !!on;
+  applyAllAudioVolumes();
+  try { saveGame(); } catch (e) {}
+  openSettingsSonido();
+}
+function toggleMuteSfx(on) {
+  P.muteSfx = !!on;
+  try { saveGame(); } catch (e) {}
+  openSettingsSonido();
+}
 function openSettingsSonido() {
   let vm = P.volMusic !== undefined ? P.volMusic : 0.6;
   let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
-  document.getElementById('modal-body').innerHTML = `
-    <h2 style="color:#88ccff;text-align:center;margin-top:0;">🔊 Sonido</h2>
-    <p style="font-size:11px;color:#8d9880;text-align:center;">Ajusta la atmósfera del Yermo</p>
-    <div style="height:1px;background:linear-gradient(90deg,transparent,#66aadd55,transparent);margin:6px 0 12px;"></div>
-    <div class="item" style="margin:8px 0;border-color:#66aadd;background:#0a1520;">
-      <b style="color:#88ccff;">♪ Volumen música</b>
-      <input id="vol-music" type="range" min="0" max="100" value="${Math.round(vm * 100)}" style="width:100%;margin-top:6px;" oninput="setVolMusic(this.value)">
-    </div>
-    <div class="item" style="margin:8px 0;border-color:#66aadd;background:#0a1520;">
-      <b style="color:#88ccff;">🔔 Volumen efectos</b>
-      <input id="vol-sfx" type="range" min="0" max="100" value="${Math.round(vs * 100)}" style="width:100%;margin-top:6px;" oninput="setVolSfx(this.value)">
-    </div>
-    <button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>
-  `;
+  let mm = !!P.muteMusic;
+  let ms = !!P.muteSfx;
+  document.getElementById('modal-body').innerHTML =
+    '<h2 style="color:#88ccff;text-align:center;margin-top:0;">🔊 Sonido</h2>' +
+    '<p style="font-size:11px;color:#8d9880;text-align:center;">Ajusta la atmósfera del Yermo</p>' +
+    '<div style="height:1px;background:linear-gradient(90deg,transparent,#66aadd55,transparent);margin:6px 0 12px;"></div>' +
+    '<div class="item" style="margin:8px 0;border-color:#66aadd;background:#0a1520;">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
+        '<b style="color:#88ccff;">♪ Volumen música</b>' +
+        '<label style="font-size:11px;color:#8d9880;display:flex;align-items:center;gap:6px;cursor:pointer;">' +
+          '<input type="checkbox" ' + (mm ? 'checked' : '') + ' onchange="toggleMuteMusic(this.checked)" style="width:16px;height:16px;accent-color:#88ccff;"> Silenciar' +
+        '</label>' +
+      '</div>' +
+      '<input id="vol-music" type="range" min="0" max="100" value="' + Math.round(vm * 100) + '" style="width:100%;margin-top:6px;' + (mm ? 'opacity:0.4;' : '') + '" ' + (mm ? 'disabled' : '') + ' oninput="setVolMusic(this.value)">' +
+    '</div>' +
+    '<div class="item" style="margin:8px 0;border-color:#66aadd;background:#0a1520;">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
+        '<b style="color:#88ccff;">🔔 Volumen efectos</b>' +
+        '<label style="font-size:11px;color:#8d9880;display:flex;align-items:center;gap:6px;cursor:pointer;">' +
+          '<input type="checkbox" ' + (ms ? 'checked' : '') + ' onchange="toggleMuteSfx(this.checked)" style="width:16px;height:16px;accent-color:#88ccff;"> Silenciar' +
+        '</label>' +
+      '</div>' +
+      '<input id="vol-sfx" type="range" min="0" max="100" value="' + Math.round(vs * 100) + '" style="width:100%;margin-top:6px;' + (ms ? 'opacity:0.4;' : '') + '" ' + (ms ? 'disabled' : '') + ' oninput="setVolSfx(this.value)">' +
+    '</div>' +
+    '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
   document.getElementById('modal').classList.add('show');
 }
 
@@ -9722,13 +10244,16 @@ function importSaveFile(input) {
 
 function openSettingsReinicio() {
   document.getElementById('modal-body').innerHTML =
-    '<h2 style="color:var(--danger);text-align:center;margin-top:0;">☠ Reinicio</h2>' +
+    '<h2 style="color:var(--danger);text-align:center;margin-top:0;">🔄 Reinicio</h2>' +
     '<p style="font-size:12px;color:#8d9880;text-align:center;">Opciones irreversibles.</p>' +
-    '<button style="width:100%;margin:8px 0;border-color:var(--danger);color:var(--danger);" onclick="confirmResetGame()">☠ Reiniciar partida</button>' +
+    '<button style="width:100%;margin:8px 0;border-color:var(--danger);color:var(--danger);" onclick="confirmResetGame()">🔄 Borrar todo · Reiniciar partida</button>' +
     '<button style="width:100%;margin:8px 0;border-color:#cc3333;color:#cc3333;" onclick="confirmResetCaravan()">🃏 Reinicio de Caravana</button>' +
+    '<button style="width:100%;margin:8px 0;border-color:#a8c47a;color:#a8c47a;" onclick="confirmResetCodex()">📖 Reiniciar Enciclopedia</button>' +
+    '<button style="width:100%;margin:8px 0;border-color:#ffd700;color:#ffd700;" onclick="confirmResetAchievements()">🏆 Reiniciar Logros</button>' +
     '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
   document.getElementById('modal').classList.add('show');
 }
+
 
 function openSettingsOtros() {
   document.getElementById('modal-body').innerHTML =
@@ -11953,7 +12478,7 @@ function startCasinoMusic() {
     audio.src = src;
   }
   audio.loop = true;
-  audio.volume = (P.volMusic !== undefined) ? P.volMusic : 0.6;
+  audio.volume = (typeof getMusicVolume==='function') ? getMusicVolume() : ((P.volMusic !== undefined) ? P.volMusic : 0.6);
   const tryPlay = () => {
     audio.play().then(() => {
       // ok
@@ -11983,7 +12508,7 @@ function stopCasinoMusic() {
     radioPausedByCasino = false;
     let radio = document.getElementById('radio-audio');
     if (radio) {
-      radio.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
+      radio.volume = (typeof getMusicVolume==='function') ? getMusicVolume() : (P.volMusic !== undefined ? P.volMusic : 0.6);
       radio.play().catch(() => { radioPlaying = false; startAmbientMusic(); });
     }
   } else {
@@ -13985,25 +14510,30 @@ function renderPlayerHomeUI(tab) {
       list.forEach(function(c) {
         let st = getCompanionCombatStats(c);
         let radTxt = (st.radRes >= 100) ? 'Inmune' : ((st.radRes || 0) + '%');
-        let ab = c.ability ? '<p style="color:var(--gold);margin:6px 0 0;font-size:12px;"><b>★ ' + c.ability.name + '</b><br><span style="color:#8d9880;">' + (c.ability.desc || '') + '</span></p>' : '';
-        let leg = (c.isLegendary || c.isRex);
+        let leg = !!(c.isLegendary || c.isRex);
+        let ab = c.ability ? ('<br><span style="color:var(--gold);font-size:11px;">★ ' + c.ability.name + ': ' + (c.ability.desc || '') + '</span>') : '';
+        let weap = c.weapon ? ('Arma: ' + c.weapon) : 'Sin arma (cuerpo a cuerpo)';
+        let armN = c.armor || (st && st.armor) || 'Ninguna';
         let sp = c.special || {};
-        html += '<div class="item" style="border-color:' + (leg ? 'var(--gold)' : '#66ddaa') + ';">' +
-          '<b style="' + (leg ? 'color:var(--gold);' : '') + '">' + (leg ? '★ ' : '') + c.name + '</b>' +
-          '<span style="font-size:11px;color:#8d9880;"> · Nv.' + (c.level||1) + ' · ' + (c.type||'?') + (c.resting ? ' · <span style="color:var(--danger);">DESCANSANDO</span>' : '') + '</span>' +
-          '<div class="row" style="margin-top:6px;"><span>Salud</span><b>' + c.hp + ' / ' + c.maxHp + '</b></div>' +
-          '<div class="row"><span>Ataque</span><b>' + st.dmg + '</b></div>' +
-          '<div class="row"><span>Defensa</span><b>' + (st.def||0) + '</b></div>' +
-          '<div class="row"><span>Def. radiación</span><b>' + radTxt + '</b></div>' +
-          '<div class="row"><span>Arma</span><b>' + (c.weapon || 'Ninguna (melee)') + '</b></div>' +
-          '<div class="row"><span>Armadura</span><b>' + (c.armor || 'Ninguna') + '</b></div>' +
-          '<div class="row"><span>XP</span><b>' + (c.xp||0) + ' / ' + companionRequiredXP(c.level||1) + '</b></div>' +
-          '<p style="font-size:11px;color:#8d9880;margin:4px 0 0;">S' + (sp.S||'?') + ' P' + (sp.P||'?') + ' E' + (sp.E||'?') + ' C' + (sp.C||'?') + ' I' + (sp.I||'?') + ' A' + (sp.A||'?') + ' L' + (sp.L||'?') + '</p>' +
+        let border = leg ? 'border-color:var(--gold) !important;' : 'border-color:#66ddaa;';
+        let cid = c.id || c.uid;
+        html += '<div class="item" style="' + border + '">' +
+          '<span class="companion-row-icon">' + companionPortraitHtml(c, 'sm') +
+          '<b style="' + (leg ? 'color:var(--gold);' : '') + '">' + (leg ? '★ ' : '') + c.name + '</b></span>' +
+          ' · Nv.' + (c.level||1) + ' · XP ' + (c.xp||0) + '/' + companionRequiredXP(c.level||1) +
+          (c.resting ? ' <span style="color:var(--danger);">[DESCANSANDO]</span>' : '') +
+          '<br><span style="font-size:11px;color:#8d9880;">HP ' + c.hp + '/' + c.maxHp + ' · ATK ' + st.dmg + ' · DEF ' + (st.def||0) + ' · RAD ' + radTxt + '</span>' +
+          '<br><span style="font-size:11px;color:#8d9880;">' + weap + ' · Armadura: ' + armN + '</span>' +
+          '<br><span style="font-size:10px;">S' + (sp.S||1) + ' P' + (sp.P||1) + ' E' + (sp.E||1) + ' C' + (sp.C||1) + ' I' + (sp.I||1) + ' A' + (sp.A||1) + ' L' + (sp.L||1) + '</span>' +
           ab +
-          '<button style="margin-top:8px;width:100%;" onclick="equipHomeCompanion(\'' + c.id + '\')">Equipar y acompañar</button></div>';
+          '<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">' +
+          '<button onclick="equipHomeCompanion(\'' + cid + '\')">Equipar</button>' +
+          '<button onclick="showCompanionStats(\'' + cid + '\')">Stats</button>' +
+          '</div></div>';
       })
     }
-  } else if (tab === 'myroom') {
+    
+} else if (tab === 'myroom') {
     html += '<div class="item" style="border-color:var(--gold);"><b>🛏 Descansar</b><br>' +
       '<span style="font-size:12px;color:#8d9880;">Duerme en tu habitación. Recuperas salud según tu nivel.</span><br>' +
       '<button style="margin-top:6px;background:var(--accent);color:#111;" onclick="openHomeRestUI()">Descansar</button></div>' +
@@ -16033,7 +16563,7 @@ function playCurrentRadioTrack(userGesture) {
   try { audio.pause(); } catch (e) {}
 
   audio.loop = false;
-  audio.volume = (P.volMusic !== undefined ? P.volMusic : 0.6);
+  audio.volume = (typeof getMusicVolume==='function') ? getMusicVolume() : (P.volMusic !== undefined ? P.volMusic : 0.6);
   pauseAmbientMusic();
   let cas = document.getElementById('casino-audio');
   if (cas && !cas.paused) { try { cas.pause(); } catch (e) {} }
@@ -16199,7 +16729,7 @@ function startAmbientMusic() {
   if (radioPlaying || (typeof casinoActive !== 'undefined' && casinoActive)) return;
   let amb = document.getElementById('ambient-audio');
   if (!amb) return;
-  amb.volume = P.volMusic !== undefined ? P.volMusic : 0.6;
+  amb.volume = (typeof getMusicVolume==='function') ? getMusicVolume() : (P.volMusic !== undefined ? P.volMusic : 0.6);
   amb.loop = true;
   resolveAudioSrcCached('./audio/AmbientMap.mp3').then(function(src) {
     if (radioPlaying) return;
@@ -16996,14 +17526,16 @@ function renderCombatUI() {
   }
   document.getElementById('modal-body').innerHTML = `
     <div class="combat-title">${titleText}</div>
+    <div class="combat-ammo-bar" style="text-align:left;font-size:11px;color:#c9d5a8;margin:-8px 0 10px 0;padding:4px 8px;border:1px solid #3a4737;border-radius:4px;background:#0a120a;display:inline-block;max-width:100%;">
+      ${w ? itemIconHtml(w, 'sm', !!(w.legendary || (getItemBase(w.id||0)||{}).legendary)) : ''}
+      <span style="vertical-align:middle;margin-left:6px;">${typeof formatCombatAmmo==='function'?formatCombatAmmo(w):''}</span>
+    </div>
 
     <div class="combat-arena${compActive ? ' has-ally' : ''}">
       <div class="combat-side-player">
         <div class="combat-fighter player">
           ${playerSprite}
           <div class="cf-name">${(P.playerName || "Superviviente")}</div>
-          <div class="cf-weapon-icon" style="margin:2px 0;">${w ? itemIconHtml(w, 'sm', !!w.legendary) : ''}</div>
-          <div class="cf-ammo" style="font-size:10px;color:#c9d5a8;margin:2px 0;line-height:1.2;">${typeof formatCombatAmmo==='function'?formatCombatAmmo(w):''}</div>
           <div class="cf-hp"><div style="width:${playerPct}%;"></div></div>
           <div class="cf-hp-text">${P.hp} / ${maxhp}</div>
         </div>
@@ -17062,8 +17594,14 @@ function openCaptureUI() {
   pendants.forEach(p => {
     let b = getItemBase(p.id);
     let pct = Math.round((b.captureChance || 0) * 100);
-    html += `<div class="item"><b>${b.name}</b> (${p.qty}) — ${pct}%
-      <button style="margin-top:4px;" onclick="tryCapture(${p.uid})">Usar</button></div>`;
+    html += `<div class="item">
+      <div class="item-row-with-icon">${itemIconHtml(b)}
+        <div class="item-body">
+          <b>${b.name}</b> (x${p.qty}) — ${pct}%
+          <button style="margin-top:4px;" onclick="tryCapture(${p.uid})">Usar</button>
+        </div>
+      </div>
+    </div>`;
   });
   html += `<button style="width:100%;margin-top:8px;" onclick="renderCombatUI()">Cancelar</button>`;
   document.getElementById('modal-body').innerHTML = html;
@@ -17360,7 +17898,7 @@ function combatAttack() {
       if (wAb.id === 'w_rad') legDmgBonus += 10;
       if (wAb.id === 'w_burn') legDmgBonus += 12;
       if (wAb.id === 'w_legend' && combatState.isLegendary) legDmgBonus = Math.floor((w.damage) * 0.35);
-      if (wAb.id === 'w_destructor') legDmgBonus += Math.floor((w.damage || 0) * 0.15);
+      if (wAb.id === 'w_destructor') legDmgBonus += Math.floor((w.damage || 0) * 0.30);
     }
     if (aAb && aAb.id === 'a_power') legDmgBonus += 6;
     legDmgBonus += getEffectBonus('dmg');
@@ -17435,9 +17973,15 @@ function combatAttack() {
           hit = Math.floor(hit * critMult);
           combatLog("¡Golpe crítico mortífero!");
         }
-        if (wAb && wAb.id === 'w_destructor' && Math.random() < 0.25) {
-          hit = Math.floor(hit * 2);
-          combatLog("¡Devastación del Yermo! Daño doble.");
+        if (wAb && wAb.id === 'w_destructor') {
+          if (Math.random() < 0.30) {
+            hit = Math.floor(hit * 3);
+            combatLog("★ Aniquilación Absoluta: ¡daño triple!");
+          }
+          if (combatState.enemyHp / combatState.enemyMaxHp < 0.40 && Math.random() < 0.25) {
+            hit = Math.max(hit, combatState.enemyHp);
+            combatLog("★ Aniquilación Absoluta: ¡EJECUCIÓN!");
+          }
         }
         if (wAb && wAb.id === 'w_lucky' && Math.random() < 0.10) {
           hit = Math.floor(hit * 3);
@@ -17640,6 +18184,11 @@ function endCombat(victory) {
   let aAb = getArmorAbility();
 
   if (victory) {
+    try {
+      if (combatState.enemyName && !combatState.hypnoCapture && !combatState.combatZone) {
+        recordCreatureKill(combatState.enemyName);
+      }
+    } catch (e) {}
     if (combatState.hypnoCapture) {
       addItemToInv(2305, 1);
       logMsg("El esclavo se dirige a Paradise Falls. Obtienes 1× Esclavo (Otros). Sin chapas, XP ni botín de combate.");
@@ -17955,7 +18504,7 @@ function renderInv(sub = P.subtab, page) {
       let it = getItemBase(inst.id);
       let isEquipped = (inst.uid === P.equippedWeaponUid || inst.uid === P.equippedArmorUid || inst.uid === P.equippedGrenadeUid);
       let itemQty = inst.qty || 1;
-      let isLeg = !!inst.legendary;
+      let isLeg = !!(inst.legendary || (it && it.legendary));
       let ilvl = inst.itemLevel || 1;
       let displayName = it.stackable && itemQty > 1 ? `${it.name} (x${itemQty})` : it.name;
       if (isLeg) displayName = "★ " + displayName;
@@ -18036,8 +18585,21 @@ function renderInv(sub = P.subtab, page) {
         html += `<span style="font-size:11px; color:var(--gold);">Módulos: ${modNames}</span><br>`;
       }
 
-      if (isLeg && inst.abilityName) {
-        html += `<span style="font-size:12px; color:var(--gold);">★ ${inst.abilityName}: ${inst.abilityDesc}</span><br>`;
+      if (isLeg) {
+        let abName = inst.abilityName || (it && it.abilityName) || null;
+        let abDesc = inst.abilityDesc || null;
+        let abId = inst.abilityId || (it && it.abilityId) || null;
+        if (!abName && abId && typeof LEG_WEAPON_ABILITIES !== 'undefined') {
+          let ab = LEG_WEAPON_ABILITIES.find(a => a.id === abId);
+          if (ab) { abName = ab.name; abDesc = ab.desc; }
+        }
+        if (!abDesc && abId && typeof LEG_WEAPON_ABILITIES !== 'undefined') {
+          let ab = LEG_WEAPON_ABILITIES.find(a => a.id === abId);
+          if (ab) abDesc = ab.desc;
+        }
+        if (abName) {
+          html += `<span style="font-size:12px; color:var(--gold);">★ ${abName}${abDesc ? ': ' + abDesc : ''}</span><br>`;
+        }
       }
 
       let unitWeight = (it.weight * itemQty).toFixed(1);
@@ -18404,11 +18966,13 @@ function renderShop(sub = P.shopSubtab || 'weapon', page) {
       let basePrice = it.value * 2;
       let price = Math.max(1, Math.floor(basePrice * (1 - discountPct)));
 
+      let shopLeg = !!it.legendary;
       html += `
-        <div class="item">
-          <div class="item-row-with-icon">${itemIconHtml(it)}
+        <div class="item" style="${shopLeg ? 'border-color:var(--gold);' : ''}">
+          <div class="item-row-with-icon">${itemIconHtml(it, null, shopLeg)}
           <div class="item-body">
-          <b>${it.name}</b> — <span style="color:#e05050;">${capsPriceHtml(price)}</span><br>
+          <b style="${shopLeg ? 'color:var(--gold);' : ''}">${shopLeg ? '★ ' : ''}${it.name}</b>${shopLeg ? ' <span class="equipped-tag" style="border-color:var(--gold);color:var(--gold);">LEGENDARIA</span>' : ''} — <span style="color:#e05050;">${capsPriceHtml(price)}</span><br>
+          ${shopLeg && (it.abilityName || (typeof LEG_WEAPON_ABILITIES !== 'undefined' && it.abilityId)) ? '<span style="font-size:11px;color:var(--gold);">★ ' + (it.abilityName || (LEG_WEAPON_ABILITIES.find(a=>a.id===it.abilityId)||{}).name || '') + (it.abilityId && LEG_WEAPON_ABILITIES.find(a=>a.id===it.abilityId) ? ': ' + (LEG_WEAPON_ABILITIES.find(a=>a.id===it.abilityId).desc||'') : '') + '</span><br>' : ''}
           <span style="font-size:11px; color:#8d9880;">
             ${it.damage ? (it.grenade ? '💣 Granada · Daño base: ' + it.damage + ' (escala con tu nivel) · ' : 'Daño: ' + it.damage + ' · ') : ''}
             ${it.def ? 'Defensa: ' + it.def + ' · ' : ''}
