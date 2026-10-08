@@ -3761,12 +3761,23 @@ function itemIconEmoji(it) {
   let tp = it.type || '';
   if (tp === 'weapon' || it.weapon) {
     if (/granada|dinamita|molotov|mina/i.test(n)) return '💣';
-    if (/cuchillo|machete|hacha|espada|navaja|tubería|bate|lanza|melee|cuerpo/i.test(n)) return '🔪';
+    if (/sarten|sartén|sartenazo|pan/i.test(n)) return '🍳';
+    if (/porra|bast[oó]n|garrote/i.test(n)) return '🏑';
+    if (/martillo|supermartillo|maza|mazos/i.test(n)) return '🔨';
+    if (/motosierra|ripper|sierra/i.test(n)) return '⚙️';
+    if (/pu[nñ]o|guantelete|power fist|nudillo/i.test(n)) return '🥊';
+    if (/llave inglesa|destornillador|herramienta/i.test(n)) return '🔧';
+    if (/cuchillo|machete|navaja|wakizashi|katana|espada|l[aá]mina/i.test(n)) return '🔪';
+    if (/hacha|hachuela/i.test(n)) return '🪓';
+    if (/tuber[ií]a|tubo|bate|lanza|melee|cuerpo|desarmado|palanca|barra/i.test(n)) return '🪵';
+    let ammo = String(it.ammoType || '').toLowerCase();
+    if (!ammo || ammo.includes('ninguna') || ammo.includes('cuerpo') || ammo.includes('melee')) return '🗡️';
     if (/escopeta|shotgun/i.test(n)) return '🔫';
     if (/rifle|francotirador|asalto|carabina/i.test(n)) return '🎯';
-    if (/láser|energia|energía|plasma|gauss|blaster|alien/i.test(n)) return '⚡';
+    if (/l[aá]ser|energia|energía|plasma|gauss|blaster|alien/i.test(n)) return '⚡';
     if (/lanzallamas|flame/i.test(n)) return '🔥';
     if (/hipnotron/i.test(n)) return '🌀';
+    if (/minigun|gatling|ametralladora/i.test(n)) return '💥';
     return '🔫';
   }
   if (tp === 'armor') {
@@ -3840,7 +3851,53 @@ function getItemAsset(id) {
   if (id == null) return null;
   return ITEM_ASSET_BY_ID[Number(id)] || null;
 }
+
+// Iconos melee curados (no pistolas/rifles)
+const MELEE_ICON_POOL = [
+  'img/assets/icons/weapons_003.png',
+  'img/assets/icons/weapons_004.png',
+  'img/assets/icons/weapons_009.png',
+  'img/assets/icons/weapons_017.png',
+  'img/assets/icons/weapons_051.png',
+  'img/assets/icons/weapons_054.png',
+  'img/assets/icons/weapons_055.png',
+  'img/assets/icons/weapons_058.png',
+  'img/assets/icons/weapons_061.png',
+  'img/assets/icons/weapons_081.png',
+  'img/assets/icons/weapons_083.png',
+  'img/assets/icons/weapons_084.png',
+  'img/assets/icons/weapons_029.png',
+  'img/assets/icons/weapons_012.png'
+];
+function pickMeleeIconPath(it) {
+  if (!it) return MELEE_ICON_POOL[0];
+  let n = (it.name || '').toLowerCase();
+  if (/sarten|sartén|sartenazo|bate|tuber|tubo|porra|garrote|bast/i.test(n)) return MELEE_ICON_POOL[0];
+  if (/martillo|supermartillo|maza/i.test(n)) return MELEE_ICON_POOL[1];
+  if (/hacha|hachuela/i.test(n)) return MELEE_ICON_POOL[3];
+  if (/llave|destornillador/i.test(n)) return MELEE_ICON_POOL[4];
+  if (/pu[nñ]o|nudillo|guantelete|power fist|motosierra|ripper/i.test(n)) return MELEE_ICON_POOL[7];
+  if (/espada|wakizashi|katana|machete|cuchillo|navaja/i.test(n)) return MELEE_ICON_POOL[2];
+  if (/lanza/i.test(n)) return MELEE_ICON_POOL[8];
+  let id = it.id != null ? Number(it.id) : 0;
+  return MELEE_ICON_POOL[Math.abs(id) % MELEE_ICON_POOL.length];
+}
+function isMeleeWeaponItem(it) {
+  if (!it) return false;
+  if (it.type !== 'weapon' && !it.weapon) return false;
+  try {
+    if (typeof getWeaponCategory === 'function' && getWeaponCategory(it) === 'melee') return true;
+  } catch (e) {}
+  let ammo = String(it.ammoType || '').toLowerCase();
+  return !ammo || ammo.includes('ninguna') || ammo.includes('cuerpo') || ammo.includes('melee');
+}
+
 function getItemIconUrl(id) {
+  let it = (typeof getItemBase === 'function') ? getItemBase(id) : null;
+  if (it && isMeleeWeaponItem(it)) {
+    let p = pickMeleeIconPath(it);
+    return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
+  }
   let a = getItemAsset(id);
   if (!a || !a.icon) return null;
   return a.icon.startsWith('./') ? a.icon : ('./' + a.icon.replace(/^\//, ''));
@@ -9024,13 +9081,42 @@ function runCheatCommand() {
   try { if (typeof saveGame === 'function') saveGame(); } catch(e) {}
 }
 
+
+function downloadGameFile(path, filename) {
+  let a = document.createElement('a');
+  a.href = path;
+  a.download = filename || path.split('/').pop();
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { try { a.remove(); } catch (e) {} }, 500);
+}
+
 function executeCheat(raw) {
   let cmd = raw.replace(/^\/+/, '').trim();
   let low = cmd.toLowerCase();
   let parts = cmd.split(/\s+/);
 
   if (low === 'ayuda' || low === 'help' || low === '?') {
-    return { ok: true, msg: 'Ver /ayuda completa en other/comandos.txt · Claves: /ViajeRapido Todos | /Desbloquear Casas | /Asentamiento Maximo | /Reputacion Maxima | /Chapas +N | /TP X Y' };
+    return { ok: true, msg: 'Ver /ayuda · /Comandos.txt · /id.txt · /ViajeRapido Todos | /Desbloquear Casas | /Asentamiento Maximo | /Reputacion Maxima | /Chapas +N | /TP X Y' };
+  }
+
+  // Descargar listados
+  if (/^comandos\.txt$/i.test(cmd) || low === 'comandos' || low === 'comandos.txt') {
+    try {
+      downloadGameFile('./other/comandos.txt', 'comandos.txt');
+      return { ok: true, msg: 'Descargando comandos.txt…' };
+    } catch (e) {
+      return { ok: false, msg: 'No se pudo descargar comandos.txt: ' + e.message };
+    }
+  }
+  if (/^id\.txt$/i.test(cmd) || low === 'id.txt' || low === 'ids' || low === 'id') {
+    try {
+      downloadGameFile('./other/id.txt', 'id.txt');
+      return { ok: true, msg: 'Descargando id.txt…' };
+    } catch (e) {
+      return { ok: false, msg: 'No se pudo descargar id.txt: ' + e.message };
+    }
   }
 
   // /Reputacion Maxima
@@ -9223,7 +9309,20 @@ function executeCheat(raw) {
       } catch (e) {}
       try {
         if (typeof ensureSierraCasino === 'function') ensureSierraCasino();
-        if (P.sierraCasino) { P.sierraCasino.claimed = true; P.sierraCasino.travelBuilt = true; }
+        if (typeof ensureChips === 'function') ensureChips();
+        if (!P.sierraCasino) {
+          P.sierraCasino = { claimed: false, level: 0, employees: 0, pendingChips: 0, medicBuilt: false, roomBuilt: false, travelBuilt: false, officeBuilt: false };
+        }
+        P.sierraCasino.claimed = true;
+        P.sierraCasino.travelBuilt = true;
+        if (!P.sierraCasino.level || P.sierraCasino.level < 1) P.sierraCasino.level = 1;
+        // Fichas iniciales al reclamar (250) si aún no tiene
+        ensureChips();
+        if (!P.chipsByCasino) P.chipsByCasino = {};
+        if ((P.chipsByCasino.sierra || 0) < 250) {
+          P.chipsByCasino.sierra = Math.max(P.chipsByCasino.sierra || 0, 250);
+        }
+        if (!P.fastTravelUnlocked.includes('sierra_madre')) P.fastTravelUnlocked.push('sierra_madre');
       } catch (e) {}
       try {
         if (typeof ensureRobcoFactory === 'function') ensureRobcoFactory();
@@ -9732,18 +9831,34 @@ function fullscreenBtnLabel() {
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
   {
+    ver: '0.11.54',
+    date: '2026-10-08',
+    title: 'Iconos melee de assets',
+    notes: [
+      'Armas cuerpo a cuerpo usan iconos de assets (mazas, martillos, espadas, etc.).',
+      'Se evitan iconos de pistola/rifle en melee.'
+    ]
+  },
+  {
+    ver: '0.11.53',
+    date: '2026-10-08',
+    title: 'Asentamiento y Sierra Madre',
+    notes: [
+      'Renombrar asentamiento; fichas Sierra Madre; descargas consola.'
+    ]
+  },
+  {
     ver: '0.11.52',
     date: '2026-10-08',
     title: 'Colores Adaptabilidad',
     notes: [
-      'Teclas, pantalla completa y volver: mismo verde que modo.',
-      'Restablecer teclas en rojo.'
+      'Teclas en verde; restablecer en rojo.'
     ]
   },
   {
     ver: '0.11.51',
     date: '2026-10-08',
-    title: 'Modo activo Adaptabilidad',
+    title: 'Modo activo',
     notes: [
       'Amarillo al cambiar de modo.'
     ]
@@ -9754,22 +9869,6 @@ const VERSION_HISTORY = [
     title: 'Sonido y logros',
     notes: [
       'Mute y logros.'
-    ]
-  },
-  {
-    ver: '0.11.49',
-    date: '2026-10-08',
-    title: 'Logros y reinicios',
-    notes: [
-      'Avisos Pip-Boy.'
-    ]
-  },
-  {
-    ver: '0.11.48',
-    date: '2026-10-08',
-    title: 'Enciclopedia',
-    notes: [
-      'Bestiario.'
     ]
   }
 ];
@@ -10256,12 +10355,37 @@ function openSettingsReinicio() {
 
 
 function openSettingsOtros() {
+  let settleName = (P.playerSettlement && P.playerSettlement.claimed && P.playerSettlement.name)
+    ? P.playerSettlement.name : null;
   document.getElementById('modal-body').innerHTML =
     '<h2 style="color:#d5bd69;text-align:center;margin-top:0;">📁 Otros</h2>' +
     '<p style="font-size:12px;color:#8d9880;text-align:center;">Opciones generales del superviviente.</p>' +
-    '<button style="width:100%;margin:8px 0;" onclick="renameSurvivor();">✏ Renombrar superviviente</button>' +
-    '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
+    '<button style="width:100%;margin:8px 0;border-color:#66ffaa;color:#66ffaa;background:#0a1a12;" onclick="renameSurvivor();">✏ Renombrar superviviente</button>' +
+    '<button style="width:100%;margin:8px 0;border-color:#44ddaa;color:#44ddaa;background:#0a1a14;" onclick="renamePlayerSettlement();"' +
+      (settleName ? '' : ' disabled title="Reclama tu asentamiento primero"') +
+      '>🏕 Renombrar asentamiento' + (settleName ? ' (' + settleName + ')' : '') + '</button>' +
+    '<button style="width:100%;margin-top:12px;border-color:#66ffaa;color:#66ffaa;background:#0a1a12;" onclick="openSettings()">← Volver a Ajustes</button>';
   document.getElementById('modal').classList.add('show');
+}
+function renamePlayerSettlement() {
+  try { ensurePlayerSettlement(); } catch (e) {}
+  if (!P.playerSettlement || !P.playerSettlement.claimed) {
+    logMsg('Primero debes reclamar tu asentamiento.');
+    return;
+  }
+  let current = P.playerSettlement.name || 'Tu Asentamiento';
+  let name = prompt('Nombre del asentamiento:', current);
+  if (name === null) return;
+  name = name.trim().slice(0, 28);
+  if (!name) {
+    logMsg('Nombre no válido.');
+    return;
+  }
+  P.playerSettlement.name = name;
+  logMsg('Asentamiento renombrado: ' + name);
+  try { saveGame(); } catch (e) {}
+  try { updateStats(); } catch (e) {}
+  openSettingsOtros();
 }
 
 function ensurePlayerVault() {
