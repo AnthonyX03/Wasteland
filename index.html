@@ -2282,6 +2282,118 @@ body.pc-mode .combat-arena.has-ally .combat-fighter img.combat-sprite {
   gap: 6px;
 }
 
+
+/* --- Iconos de objetos y visor de sprites --- */
+.item-icon, .sprite-thumb {
+  width: 36px;
+  height: 36px;
+  image-rendering: pixelated;
+  vertical-align: middle;
+  border: 1px solid #3a4737;
+  border-radius: 4px;
+  background: #0a120a;
+  object-fit: contain;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.item-icon:hover, .sprite-thumb:hover, .enemy-icon.clickable:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px #00ff4166;
+}
+.item-icon.legendary, .sprite-thumb.legendary {
+  border-color: var(--gold);
+  box-shadow: 0 0 4px #d5bd6966;
+}
+.item-icon.lg, .sprite-thumb.lg { width: 56px; height: 56px; font-size: 32px; }
+.item-icon.sm, .sprite-thumb.sm { width: 28px; height: 28px; font-size: 16px; }
+.enemy-icon.clickable { cursor: pointer; }
+.companion-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.companion-card .portrait {
+  flex-shrink: 0;
+  text-align: center;
+}
+.companion-card .portrait img, .companion-card .portrait .sprite-thumb {
+  width: 72px;
+  height: 72px;
+}
+.companion-card .stats-col { flex: 1; min-width: 0; }
+.item-row-with-icon {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.item-row-with-icon .item-body { flex: 1; min-width: 0; }
+.sprite-viewer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.sprite-viewer-box {
+  background: #0a120a;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  max-width: 360px;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 0 24px #00ff4133;
+}
+.sprite-viewer-box h3 {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 15px;
+}
+.sprite-viewer-box .sprite-viewer-sub {
+  font-size: 11px;
+  color: #8d9880;
+  margin-bottom: 12px;
+}
+.sprite-viewer-box img.sprite-viewer-img {
+  width: min(240px, 70vw);
+  height: min(240px, 70vw);
+  object-fit: contain;
+  image-rendering: pixelated;
+  background: #050805;
+  border: 1px solid #3a4737;
+  border-radius: 6px;
+}
+.sprite-viewer-box .sprite-viewer-emoji {
+  width: min(240px, 70vw);
+  height: min(240px, 70vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 96px;
+  background: #050805;
+  border: 1px solid #3a4737;
+  border-radius: 6px;
+  margin: 0 auto;
+}
+.sprite-viewer-box button {
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px;
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: bold;
+}
+
 </style>
 </head>
 <body>
@@ -3598,6 +3710,172 @@ function resolveEnemySpriteKey(name, typeHint) {
   return 'Saqueador';
 }
 
+
+// ===== ICONOS DE OBJETOS + VISOR DE SPRITES =====
+function itemIconEmoji(it) {
+  if (!it) return '📦';
+  let n = (it.name || '').toLowerCase();
+  let tp = it.type || '';
+  if (tp === 'weapon' || it.weapon) {
+    if (/granada|dinamita|molotov|mina/i.test(n)) return '💣';
+    if (/cuchillo|machete|hacha|espada|navaja|tubería|bate|lanza|melee|cuerpo/i.test(n)) return '🔪';
+    if (/escopeta|shotgun/i.test(n)) return '🔫';
+    if (/rifle|francotirador|asalto|carabina/i.test(n)) return '🎯';
+    if (/láser|energia|energía|plasma|gauss|blaster|alien/i.test(n)) return '⚡';
+    if (/lanzallamas|flame/i.test(n)) return '🔥';
+    if (/hipnotron/i.test(n)) return '🌀';
+    return '🔫';
+  }
+  if (tp === 'armor') {
+    if (/servo|power|t-45|t-51|t-60|x-01/i.test(n)) return '🤖';
+    if (/casco|yelmo/i.test(n)) return '⛑️';
+    if (/traje|bata|vestido/i.test(n)) return '👔';
+    return '🛡️';
+  }
+  if (tp === 'ammo') return '🔳';
+  if (tp === 'med' || tp === 'chem') {
+    if (/radaway|rad-x|radiación/i.test(n)) return '☢️';
+    if (/stim|estimulante/i.test(n)) return '💉';
+    if (/mentats|psycho|buffout|jet|daddy/i.test(n)) return '💊';
+    return '💊';
+  }
+  if (tp === 'food') return '🍖';
+  if (tp === 'drink') {
+    if (/nuka/i.test(n)) return '🥤';
+    if (/agua|water/i.test(n)) return '💧';
+    if (/cerveza|whisky|vino|alcohol|beer/i.test(n)) return '🍺';
+    return '🧃';
+  }
+  if (tp === 'junk' || tp === 'ingredient') return '🔧';
+  if (tp === 'other' || tp === 'special') {
+    if (/tartera|lunchbox/i.test(n)) return '📦';
+    if (/esclavo|morador/i.test(n)) return '👤';
+    if (/dedo|oreja/i.test(n)) return '📎';
+    if (/libro|documento|nota/i.test(n)) return '📜';
+    if (/módulo|modulo/i.test(n)) return '⚙️';
+    if (/sangre.*zetan|zetan/i.test(n)) return '🛸';
+    if (/sobre|carta|caravana/i.test(n)) return '🃏';
+    return '📁';
+  }
+  return '📦';
+}
+
+function itemIconColor(it) {
+  if (!it) return '#3a4737';
+  if (it.legendary) return 'var(--gold)';
+  let tp = it.type || '';
+  if (tp === 'weapon') return '#c87962';
+  if (tp === 'armor') return '#6688aa';
+  if (tp === 'ammo') return '#aa8844';
+  if (tp === 'med' || tp === 'chem') return '#66cc88';
+  if (tp === 'food') return '#cc9944';
+  if (tp === 'drink') return '#55aacc';
+  if (tp === 'junk' || tp === 'ingredient') return '#888866';
+  if (it.id === 14) return '#55aaff';
+  if (it.id === 15) return '#e05050';
+  if (it.id === 29) return 'var(--gold)';
+  return '#3a4737';
+}
+
+function itemIconHtml(itOrId, size, isLeg) {
+  let it = (typeof itOrId === 'object' && itOrId) ? itOrId : getItemBase(itOrId);
+  if (!it && typeof itOrId === 'object') it = itOrId;
+  let leg = isLeg || (it && it.legendary) || false;
+  let emoji = itemIconEmoji(it);
+  let col = itemIconColor(it);
+  let sz = size === 'lg' ? 'lg' : (size === 'sm' ? 'sm' : '');
+  let name = (it && it.name) ? String(it.name).replace(/'/g, "\\'") : 'Objeto';
+  let tip = (it && it.name) ? it.name : 'Objeto';
+  // data attributes for viewer
+  let idAttr = (it && it.id != null) ? (' data-item-id="' + it.id + '"') : '';
+  return '<span class="item-icon ' + sz + (leg ? ' legendary' : '') + '" title="' + tip + ' (tocar para ampliar)"' + idAttr +
+    ' style="border-color:' + col + ';" onclick="event.stopPropagation();openItemSpriteViewer(' +
+    (it && it.id != null ? it.id : 'null') + ',' + (leg ? 'true' : 'false') + ')">' + emoji + '</span>';
+}
+
+function openItemSpriteViewer(itemId, isLeg) {
+  let it = getItemBase(itemId);
+  if (!it) { logMsg('Objeto desconocido.'); return; }
+  let emoji = itemIconEmoji(it);
+  let col = itemIconColor(it);
+  let title = (isLeg || it.legendary ? '★ ' : '') + it.name;
+  let sub = (it.type || 'objeto') + (it.damage ? ' · Daño ' + it.damage : '') + (it.defense ? ' · Def ' + it.defense : '');
+  openSpriteViewer({
+    title: title,
+    subtitle: sub,
+    emoji: emoji,
+    borderColor: col,
+    legendary: !!(isLeg || it.legendary)
+  });
+}
+
+function companionPortraitHtml(c, size) {
+  if (!c) return '';
+  let sz = size === 'lg' ? 72 : (size === 'sm' ? 28 : 40);
+  let url = enemySpriteUrl(c.name, 'icons', c.type);
+  let combatUrl = enemySpriteUrl(c.name, 'combat', c.type);
+  let leg = !!(c.isLegendary || c.isRex);
+  let safeName = String(c.name || 'Compañero').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  let safeCombat = String(combatUrl || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  let sub = 'Nv.' + (c.level || 1) + (leg ? ' · Legendario' : '');
+  return '<img class="enemy-icon clickable' + (leg ? ' legendary' : '') + '" src="' + url + '" alt="" style="width:' + sz + 'px;height:' + sz + 'px;cursor:pointer;" title="Ver sprite" onclick="event.stopPropagation();openSpriteViewer({title:\'' + safeName + '\',subtitle:\'' + sub + '\',img:\'' + safeCombat + '\',legendary:' + (leg ? 'true' : 'false') + '})" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'./img/enemies/icons/Saqueador.png\';}" />';
+}
+
+function openSpriteViewer(opts) {
+  opts = opts || {};
+  let old = document.getElementById('sprite-viewer');
+  if (old) old.remove();
+  let wrap = document.createElement('div');
+  wrap.id = 'sprite-viewer';
+  wrap.className = 'sprite-viewer-backdrop';
+  wrap.addEventListener('click', function(e) { if (e.target === wrap) closeSpriteViewer(); });
+  let border = opts.legendary ? 'var(--gold)' : (opts.borderColor || 'var(--accent)');
+  let box = document.createElement('div');
+  box.className = 'sprite-viewer-box';
+  box.style.borderColor = border;
+  let h = document.createElement('h3');
+  h.style.color = border;
+  h.textContent = opts.title || 'Vista';
+  box.appendChild(h);
+  if (opts.subtitle) {
+    let sub = document.createElement('div');
+    sub.className = 'sprite-viewer-sub';
+    sub.textContent = opts.subtitle;
+    box.appendChild(sub);
+  }
+  if (opts.img) {
+    let img = document.createElement('img');
+    img.className = 'sprite-viewer-img';
+    img.alt = '';
+    img.src = opts.img;
+    let emojiFallback = document.createElement('div');
+    emojiFallback.className = 'sprite-viewer-emoji';
+    emojiFallback.style.display = 'none';
+    emojiFallback.textContent = opts.emoji || '🖼️';
+    img.onerror = function() { img.style.display = 'none'; emojiFallback.style.display = 'flex'; };
+    box.appendChild(img);
+    box.appendChild(emojiFallback);
+  } else {
+    let emoji = document.createElement('div');
+    emoji.className = 'sprite-viewer-emoji';
+    emoji.textContent = opts.emoji || '📦';
+    box.appendChild(emoji);
+  }
+  let btn = document.createElement('button');
+  btn.type = 'button';
+  btn.textContent = 'Cerrar';
+  btn.onclick = closeSpriteViewer;
+  box.appendChild(btn);
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+  try { if (typeof pipClick === 'function') pipClick(); } catch (e) {}
+}
+
+function closeSpriteViewer() {
+  let el = document.getElementById('sprite-viewer');
+  if (el) el.remove();
+}
+
 function enemySpriteUrl(name, kind, typeHint) {
   let key = resolveEnemySpriteKey(name, typeHint);
   if (!key) key = 'Saqueador';
@@ -3610,10 +3888,14 @@ function enemySpriteUrl(name, kind, typeHint) {
 }
 function enemyIconHtml(name, isLegendary, size, typeHint) {
   let url = enemySpriteUrl(name, 'icons', typeHint);
-  let cls = 'enemy-icon' + (isLegendary ? ' legendary' : '');
+  let combatUrl = enemySpriteUrl(name, 'combat', typeHint);
+  let cls = 'enemy-icon clickable' + (isLegendary ? ' legendary' : '');
   let st = size ? ('width:' + size + 'px;height:' + size + 'px;') : '';
-  // onerror: probar Saqueador genérico
-  return '<img class="' + cls + '" src="' + url + '" alt="" style="' + st + '" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'img/enemies/icons/Saqueador.png\';}else{this.style.display=\'none\';}" />';
+  let safeName = String(name || 'Enemigo').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  let safeCombat = String(combatUrl || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  let leg = isLegendary ? 'true' : 'false';
+  let sub = isLegendary ? 'Legendario' : '';
+  return '<img class="' + cls + '" src="' + url + '" alt="" style="' + st + 'cursor:pointer;" title="Ver sprite" onclick="event.stopPropagation();openSpriteViewer({title:\'' + safeName + '\',subtitle:\'' + sub + '\',img:\'' + safeCombat + '\',legendary:' + leg + '})" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=\'./img/enemies/icons/Saqueador.png\';}" />';
 }
 function enemyCombatSpriteHtml(name, isLegendary, typeHint) {
   let url = enemySpriteUrl(name, 'combat', typeHint);
@@ -4452,18 +4734,26 @@ function renderCharacter(sub) {
       let radTxt = (st.radRes >= 100) ? 'Inmune' : ((st.radRes || 0) + '%');
       let ab = c.ability ? `<p style="color:var(--gold);margin:6px 0 0;font-size:12px;"><b>★ ${c.ability.name}</b><br><span style="color:#8d9880;">${c.ability.desc}</span></p>` : '';
       html += `<div class="item" style="border-color:${c.isLegendary || c.isRex ? 'var(--gold)' : 'var(--line)'};">
-        <b style="${c.isLegendary || c.isRex ? 'color:var(--gold);' : ''}">${c.isLegendary || c.isRex ? '★ ' : ''}${c.name}</b>
-        <span style="font-size:11px;color:#8d9880;"> · Nv.${c.level || 1} · ${c.type || '?'}</span>
-        ${c.resting ? ' <span style="color:var(--danger);font-size:11px;">[DESCANSANDO]</span>' : ''}
-        <div class="row" style="margin-top:6px;"><span>Salud</span><b>${c.hp} / ${c.maxHp}</b></div>
-        <div class="row"><span>Ataque</span><b>${st.dmg}</b></div>
-        <div class="row"><span>Defensa</span><b>${st.def || 0}</b></div>
-        <div class="row"><span>Def. radiación</span><b>${radTxt}</b></div>
-        <div class="row"><span>Arma</span><b>${c.weapon || 'Ninguna (melee)'}</b></div>
-        <div class="row"><span>Armadura</span><b>${c.armor || 'Ninguna'}</b></div>
-        <div class="row"><span>XP</span><b>${c.xp || 0} / ${companionRequiredXP(c.level || 1)}</b></div>
-        <p style="font-size:11px;color:#8d9880;margin:4px 0 0;">S${c.special?.S||'?'} P${c.special?.P||'?'} E${c.special?.E||'?'} C${c.special?.C||'?'} I${c.special?.I||'?'} A${c.special?.A||'?'} L${c.special?.L||'?'}</p>
-        ${ab}
+        <div class="companion-card">
+          <div class="portrait">
+            ${companionPortraitHtml(c, 'lg')}
+            <div style="font-size:10px;color:#8d9880;margin-top:4px;">Tocar imagen</div>
+          </div>
+          <div class="stats-col">
+            <b style="${c.isLegendary || c.isRex ? 'color:var(--gold);' : ''}">${c.isLegendary || c.isRex ? '★ ' : ''}${c.name}</b>
+            <span style="font-size:11px;color:#8d9880;"> · Nv.${c.level || 1} · ${c.type || '?'}</span>
+            ${c.resting ? ' <span style="color:var(--danger);font-size:11px;">[DESCANSANDO]</span>' : ''}
+            <div class="row" style="margin-top:6px;"><span>Salud</span><b>${c.hp} / ${c.maxHp}</b></div>
+            <div class="row"><span>Ataque</span><b>${st.dmg}</b></div>
+            <div class="row"><span>Defensa</span><b>${st.def || 0}</b></div>
+            <div class="row"><span>Def. radiación</span><b>${radTxt}</b></div>
+            <div class="row"><span>Arma</span><b style="font-size:11px;">${c.weapon || 'Ninguna (melee)'}</b></div>
+            <div class="row"><span>Armadura</span><b style="font-size:11px;">${c.armor || 'Ninguna'}</b></div>
+            <div class="row"><span>XP</span><b>${c.xp || 0} / ${companionRequiredXP(c.level || 1)}</b></div>
+            <p style="font-size:11px;color:#8d9880;margin:4px 0 0;">S${c.special?.S||'?'} P${c.special?.P||'?'} E${c.special?.E||'?'} C${c.special?.C||'?'} I${c.special?.I||'?'} A${c.special?.A||'?'} L${c.special?.L||'?'}</p>
+            ${ab}
+          </div>
+        </div>
         ${(c.isRex || c.id === 'rex_kings' || c.isUnique)
           ? `<button style="width:100%;margin-top:10px;border-color:#66ddaa;color:#66ddaa;" onclick="sendCompanionToHome('${c.id}')">Enviar al Hogar</button>
              ${(c.isRex || c.id === 'rex_kings') ? `<button style="width:100%;margin-top:6px;border-color:#e8c547;color:#e8c547;" onclick="returnRexToTheater('${c.id}');renderCharacter('companion');">Devolver al Teatro</button>` : ''}`
@@ -4904,7 +5194,7 @@ function renderPrisonUI() {
   let eq = getEquippedCompanion();
   let html = `<p style="font-size:12px;color:#8d9880;">Prisión Nv.${P.prisonLevel}/5 · Celdas ${P.prison.length}/${cap}. Equipa 1 compañero.</p>`;
   if (eq) {
-    html += `<div class="item" style="border-color:var(--accent);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="companion-row-icon">${enemyIconHtml(eq.name, eq.isLegendary, null, eq.type)}${eq.isLegendary ? '★ ' : ''}<b>${eq.name}</b></span> Nv.${eq.level} · HP ${eq.hp}/${eq.maxHp}${eq.resting ? ' · DESCANSANDO' : ''}</div>`;
+    html += `<div class="item" style="border-color:var(--accent);display:flex;align-items:center;gap:8px;flex-wrap:wrap;">${companionPortraitHtml(eq, 'sm')}<span>${eq.isLegendary ? '★ ' : ''}<b>${eq.name}</b></span> Nv.${eq.level} · HP ${eq.hp}/${eq.maxHp}${eq.resting ? ' · DESCANSANDO' : ''}<span style="font-size:10px;color:#8d9880;"> · toca icono</span></div>`;
   }
   if (slice.length === 0) {
     html += `<p style="font-size:12px;color:#8d9880;">Sin prisioneros. Usa Colgantes en combate para capturar enemigos.</p>`;
@@ -4917,7 +5207,7 @@ function renderPrisonUI() {
       let radV = st.radRes != null ? st.radRes : (c.radRes || 0);
       let radTxt = radV >= 100 ? 'Inmune' : (radV + '%');
       html += `<div class="item" style="${c.id === P.equippedCompanionId ? 'border-color:var(--accent);' : ''}">
-        <span class="companion-row-icon">${enemyIconHtml(c.name, c.isLegendary, null, c.type)}<b style="${c.isLegendary ? 'color:var(--gold);' : ''}">${c.isLegendary ? '★ ' : ''}${c.name}</b></span> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
+        <span class="companion-row-icon">${companionPortraitHtml(c, 'sm')}<b style="${c.isLegendary ? 'color:var(--gold);' : ''}">${c.isLegendary ? '★ ' : ''}${c.name}</b></span> · Nv.${c.level} · XP ${c.xp}/${companionRequiredXP(c.level)}
         ${c.resting ? ' <span style="color:var(--danger);">[DESCANSANDO]</span>' : ''}
         <br><span style="font-size:11px;color:#8d9880;">HP ${c.hp}/${c.maxHp} · ATK ${st.dmg} · DEF ${st.def || 0} · RAD ${radTxt}</span>
         <br><span style="font-size:11px;color:#8d9880;">${weap} · Armadura: ${armN}</span>
@@ -8923,13 +9213,23 @@ function fullscreenBtnLabel() {
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
   {
+    ver: '0.11.40',
+    date: '2026-10-08',
+    title: 'Iconos, sprites y ficha de compañero',
+    notes: [
+      'Ficha de compañero con retrato; al tocar se ve el sprite de combate.',
+      'Iconos en prisión, Synths y listados de compañeros.',
+      'Iconos de armas/armaduras/objetos en inventario; al tocar se amplían.',
+      'Visor de sprites con botón Cerrar.'
+    ]
+  },
+  {
     ver: '0.11.39',
     date: '2026-10-08',
     title: 'Misiones reparadas y archivos de imagen',
     notes: [
-      'Corregido el botón Misiones (faltaba ensureFactionDefaults).',
-      'Iconos de UI movidos a img/icons/.',
-      'Sprites del jugador (Morador de refugio) en img/player/icons y img/player/combat.'
+      'Botón Misiones corregido.',
+      'Iconos UI en img/icons/; jugador en img/player/.'
     ]
   },
   {
@@ -8937,8 +9237,7 @@ const VERSION_HISTORY = [
     date: '2026-10-08',
     title: 'Radio: menú Captar señal unificado',
     notes: [
-      'Un solo botón Captar señal con Botín y Socorro dentro.',
-      'Ambas misiones se registran en Misiones → Señales.'
+      'Captar señal con Botín y Socorro; registro en Misiones → Señales.'
     ]
   },
   {
@@ -8946,8 +9245,7 @@ const VERSION_HISTORY = [
     date: '2026-10-08',
     title: 'Señales de socorro, Ajustes y coordenadas',
     notes: [
-      'Viaje rápido con formato (X… / Y…).',
-      'Pestaña Señales y ajuste de Ajustes.'
+      'Formato (X… / Y…) y pestaña Señales.'
     ]
   },
   {
@@ -8955,16 +9253,7 @@ const VERSION_HISTORY = [
     date: '2026-10-08',
     title: 'Ajustes reorganizados y transferir partida',
     notes: [
-      'Exportar/importar partida .json.',
-      'Menú de Ajustes por secciones.'
-    ]
-  },
-  {
-    ver: '0.11.35',
-    date: '2026-10-07',
-    title: 'Pantalla completa',
-    notes: [
-      'Opción de pantalla completa para Modo PC.'
+      'Exportar/importar partida .json.'
     ]
   }
 ];
@@ -11248,10 +11537,13 @@ function openSynthHireUI(settlementId) {
   _synthHireOffers.forEach((o, idx) => {
     let c = o.companion;
     let st = getCompanionCombatStats(c);
-    html += `<div class="item">
+    html += `<div class="item" style="display:flex;gap:10px;align-items:flex-start;">
+      ${companionPortraitHtml(c, null)}
+      <div style="flex:1;">
       <b>${c.isLegendary ? '★ ' : ''}${c.name}</b> Nv.${c.level} — <span style="color:var(--gold);">${o.cost} chapas</span><br>
       <span style="font-size:11px;color:#8d9880;">HP ${c.maxHp} · ATK ${st.dmg} · DEF ${st.def}</span><br>
       <button style="margin-top:4px;" ${P.caps < o.cost ? 'disabled' : ''} onclick="hireSynthOffer(${idx},'${settlementId}')">Contratar</button>
+      </div>
     </div>`;
   });
   html += `<button style="width:100%;margin-top:6px;" onclick="_synthHireOffers=generateSynthOffer();openSynthHireUI('${settlementId}')">🔄 Rerolear oferta</button>
@@ -12159,10 +12451,13 @@ function openSynthHireGen1UI(settlementId) {
   _synthGen1Offers.forEach((o, idx) => {
     let c = o.companion;
     let st = getCompanionCombatStats(c);
-    html += `<div class="item">
+    html += `<div class="item" style="display:flex;gap:10px;align-items:flex-start;">
+      ${companionPortraitHtml(c, null)}
+      <div style="flex:1;">
       <b>${c.name}</b> Nv.1 — <span style="color:var(--gold);">${o.cost} chapas</span><br>
       <span style="font-size:11px;color:#8d9880;">HP ${c.maxHp} · ATK ${st.dmg} · DEF ${st.def}</span><br>
       <button style="margin-top:4px;" ${P.caps < o.cost ? 'disabled' : ''} onclick="hireSynthGen1(${idx},'${settlementId}')">Contratar</button>
+      </div>
     </div>`;
   });
   html += `<button style="width:100%;margin-top:6px;" onclick="_synthGen1Offers=generateSynthGen1Offer();openSynthHireGen1UI('${settlementId}')">🔄 Rerolear</button>
@@ -13179,11 +13474,15 @@ function renderRobcoCraftUI() {
   let html = `<h2 style="color:#a0a0a0;margin-top:0;">⚙ Fabricar robots</h2>
     <p style="font-size:12px;color:#8d9880;">Fabrica compañeros robot con chatarra. Reroleo infinito.</p>`;
   rf.craftOffers.forEach((o, idx) => {
-    html += `<div class="item" style="border-color:#a0a0a0 !important;">
+    let fakeC = { name: o.name, level: o.level, type: o.type || 'robot', isLegendary: !!o.isLegendary };
+    html += `<div class="item" style="border-color:#a0a0a0 !important;display:flex;gap:10px;align-items:flex-start;">
+      ${companionPortraitHtml(fakeC, null)}
+      <div style="flex:1;">
       <b style="color:#a0a0a0;">${o.name}</b> · Nv.${o.level}<br>
       <span style="font-size:11px;color:#8d9880;">HP ${o.hp} · ATK ${o.dmg}</span><br>
       <span style="font-size:11px;">Coste: ${formatReqs(o.cost)}</span><br>
       <button style="margin-top:4px;" ${!canPayReqs(o.cost)?'disabled':''} onclick="craftRobcoCompanion(${idx})">Fabricar</button>
+      </div>
     </div>`;
   });
   html += `<button style="width:100%;margin-top:6px;" onclick="rerollRobcoCraft()">🔄 Rerolear ofertas</button>
@@ -17323,6 +17622,9 @@ function renderInv(sub = P.subtab, page) {
 
       html += `
         <div class="item" style="${borderExtra}">
+          <div class="item-row-with-icon">
+            ${itemIconHtml(it, null, isLeg)}
+            <div class="item-body">
           <div class="item-head">
             <b style="${nameColor ? 'color:'+nameColor+';' : ''}">${displayName}</b>
             <span>
@@ -17421,7 +17723,7 @@ function renderInv(sub = P.subtab, page) {
         }
       }
 
-      html += `</div>`;
+      html += `</div></div></div>`;
     });
 
     // Controles de paginación
