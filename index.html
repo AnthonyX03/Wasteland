@@ -8001,6 +8001,7 @@ function openSecuredLoot(cell, theme, difficulty, kind) {
   // Extra chapas
   let bonusCaps = difficulty === 'hard' ? (40 + Math.floor(Math.random() * 60)) : (difficulty === 'normal' ? (20 + Math.floor(Math.random() * 30)) : (8 + Math.floor(Math.random() * 15)));
   entries.unshift({ kind: 'caps', qty: bonusCaps, name: bonusCaps + ' Chapas (botín seguro)', taken: false });
+  // Ganzúa Rápida (942) y Holocinta (940): solo comercio, nunca loot
   openLootUI({
     title: '🔓 ' + label,
     subtitle: 'Has superado el minijuego. Elige qué llevar.',
@@ -10208,6 +10209,25 @@ function fullscreenBtnLabel() {
 
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
+  {
+    ver: '0.12.9',
+    date: '2026-10-09',
+    title: 'Tools solo comercio',
+    notes: [
+      'Ganzúa Rápida y Holocinta de Hackeo: solo comprables en Comercio (no loot).',
+      'Ganzúa normal sigue apareciendo en loot de interiores.'
+    ]
+  },
+  {
+    ver: '0.12.8',
+    date: '2026-10-09',
+    title: 'Hack likeness, chapas SFX y loot tools',
+    notes: [
+      'Hackeo: muestra cuántas letras acertadas (sin marcar cuáles).',
+      'Chapas: pool precargado (sin retraso) y sin beep de loot.',
+      'Ajuste posterior: Rápida/Holocinta solo comercio.'
+    ]
+  },
   {
     ver: '0.12.7',
     date: '2026-10-09',
@@ -18922,7 +18942,8 @@ function buildFurnitureLootEntries(cell, theme) {
     entries.push({ kind: 'caps', qty: caps, name: caps + ' Chapas', taken: false });
   }
   let tierMax = Math.min(8, (P.shopLevel || 1) + 2);
-  let pool = DB_ITEMS.filter(i => i.shopTier <= tierMax && !i.grenade && i.type !== 'quest' && i.id !== 2305);
+  // 940 Holocinta y 942 Ganzúa Rápida: solo comercio (nunca loot)
+  let pool = DB_ITEMS.filter(i => i.shopTier <= tierMax && !i.grenade && i.type !== 'quest' && i.id !== 2305 && i.id !== 940 && i.id !== 942);
   if (theme === 'military' || theme === 'police') {
     pool = pool.filter(i => ['weapon','ammo','armor','med'].includes(i.type) || Math.random() < 0.3);
   } else if (theme === 'hospital') {
@@ -18946,16 +18967,10 @@ function buildFurnitureLootEntries(cell, theme) {
   if (Math.random() < 0.02) {
     entries.push({ kind: 'item', id: 29, qty: 1, name: '1× ★ Tartera Legendaria', taken: false, legendary: true });
   }
-  // Ganzúas en loot de ubicaciones únicas
-  if (Math.random() < 0.28) {
+  // Solo Ganzúa normal en loot de interiores (Rápida y Holocinta: solo comercio)
+  if (Math.random() < 0.32) {
     let gq = 1 + Math.floor(Math.random() * 3);
     entries.push({ kind: 'item', id: 941, qty: gq, name: gq + '× Ganzúa', taken: false });
-  }
-  if (Math.random() < 0.04) {
-    entries.push({ kind: 'item', id: 942, qty: 1, name: '1× Ganzúa Rápida', taken: false });
-  }
-  if (Math.random() < 0.03) {
-    entries.push({ kind: 'item', id: 940, qty: 1, name: '1× Holocinta de Hackeo Rápido', taken: false });
   }
   if (Math.random() < 0.04) {
     let inst = generateLegendaryItem();
@@ -19071,8 +19086,11 @@ function takeLootEntry(idx) {
   if (ok) {
     e.taken = true;
     try {
-      if (e.kind === 'caps') playCapsSound();
-      else playLootSound();
+      if (e.kind === 'caps') {
+        playCapsSound(); // solo Chapas.wav, sin beep de loot
+      } else {
+        playLootSound();
+      }
     } catch (err) {}
     updateStats();
     renderLootUI();
@@ -19269,12 +19287,12 @@ function escapeHtmlHack(s) {
     .replace(/\n/g, '<br>');
 }
 function formatHackWordLetters(word, password, used) {
-  // Sin resaltar letras acertadas: no dar pistas de posición
+  // No resaltar letras individuales: solo el contador de aciertos en el log
   return escapeHtmlHack(word);
 }
 
 function likeliness(a, b) {
-  // Conservada por compatibilidad; ya no se muestra al jugador
+  // Letras en la misma posición (estilo Fallout)
   let n = 0;
   let len = Math.min(a.length, b.length);
   for (let i = 0; i < len; i++) if (a[i] === b[i]) n++;
@@ -19321,8 +19339,9 @@ function tryHackWord(idx) {
     openSecuredLoot(cell, theme, diff, 'hack');
     return;
   }
+  let like = likeliness(word, s.password);
   s.attempts--;
-  s.log.push(word + ' → Entry denied.');
+  s.log.push(word + ' → Entry denied. ' + like + '/' + s.password.length + ' correct.');
   if (s.attempts <= 0) {
     s.log.push('LOCKOUT. Terminal blocked.');
     logMsg('Has fallado el hackeo. El terminal se bloquea.');
@@ -20613,23 +20632,39 @@ function playLootSound() {
   } catch (e) {}
 }
 
-let _capsAudio = null;
+let _capsPool = [];
+let _capsPoolIdx = 0;
+const _CAPS_SRC = './audio/Chapas.wav';
+function ensureCapsPool() {
+  if (_capsPool.length >= 3) return;
+  try {
+    for (let i = _capsPool.length; i < 3; i++) {
+      let a = new Audio(_CAPS_SRC);
+      a.preload = 'auto';
+      try { a.load(); } catch (e) {}
+      _capsPool.push(a);
+    }
+  } catch (e) {}
+}
 function playCapsSound() {
-  // Solo Chapas.wav — nunca el sonido de loot por defecto
+  // Solo Chapas.wav — nunca el beep de loot. Pool precargado para respuesta inmediata.
   try {
     let vol = (typeof getSfxVolume === 'function') ? getSfxVolume() : ((P && P.muteSfx) ? 0 : (P && P.volSfx !== undefined ? P.volSfx : 0.7));
     if (vol <= 0) return;
-    if (!_capsAudio) {
-      _capsAudio = new Audio('./audio/Chapas.wav');
-      _capsAudio.preload = 'auto';
+    ensureCapsPool();
+    let a = _capsPool[_capsPoolIdx % _capsPool.length];
+    _capsPoolIdx++;
+    if (!a) {
+      a = new Audio(_CAPS_SRC);
+      a.preload = 'auto';
     }
-    try { _capsAudio.pause(); } catch (e) {}
-    _capsAudio.currentTime = 0;
-    _capsAudio.volume = vol;
-    let p = _capsAudio.play();
+    try { a.pause(); } catch (e) {}
+    try { a.currentTime = 0; } catch (e) {}
+    a.volume = vol;
+    let p = a.play();
     if (p && p.catch) p.catch(function() {
       try {
-        let b = new Audio('./audio/Chapas.wav');
+        let b = new Audio(_CAPS_SRC);
         b.volume = vol;
         b.play().catch(function() {});
       } catch (e2) {}
@@ -20659,10 +20694,11 @@ function playWinCasinoSound() {
     });
   } catch (e) {}
 }
-// Precargar en la primera interacción del usuario
-(function warmBuySound() {
+// Precargar SFX en la primera interacción del usuario (sin retraso al primer uso)
+(function warmSfxPools() {
   let once = function() {
-    ensureBuyPool();
+    try { ensureBuyPool(); } catch (e) {}
+    try { ensureCapsPool(); } catch (e) {}
     document.removeEventListener('pointerdown', once, true);
     document.removeEventListener('touchstart', once, true);
     document.removeEventListener('click', once, true);
