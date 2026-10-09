@@ -1,5 +1,5 @@
-const CACHE = 'wasteland-v215';
-const AUDIO_CACHE = 'wasteland-audio-v1';
+const CACHE = 'wasteland-v223';
+const AUDIO_CACHE = 'wasteland-audio-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -165,11 +165,19 @@ const AUDIO_ASSETS = [
   './audio/RadioWasteland1.mp3',
   './audio/RadioWasteland2.mp3',
   './audio/RadioWasteland3.mp3',
+  './audio/RadioWasteland4.mp3',
   './audio/RadioWasteland5.mp3',
   './audio/RadioNewVegas1.mp3',
   './audio/RadioNewVegas2.mp3',
   './audio/RadioNewVegas3.mp3',
+  './audio/RadioNewVegas4.mp3',
   './audio/RadioNewVegas5.mp3',
+  './audio/RadioClasica1.mp3',
+  './audio/RadioClasica2.mp3',
+  './audio/RadioClasica3.mp3',
+  './audio/RadioClasica4.mp3',
+  './audio/RadioClasica5.mp3',
+  './audio/RadioNukaWorld.mp3',
   './audio/EnclaveRadio1.mp3',
   './audio/EnclaveRadio2.mp3',
   './audio/EnclaveRadio3.mp3',

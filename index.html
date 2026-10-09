@@ -1692,6 +1692,18 @@ body.pc-mode .map-compact .map-controls {
   box-shadow: 0 0 6px #00ff4166;
   font-weight: bold;
 }
+.unique-cell .player-map-face,
+.unique-cell.here img.player-map-face {
+  width: 85%;
+  height: 85%;
+  max-width: 28px;
+  max-height: 28px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+  margin: 0 auto;
+  pointer-events: none;
+}
 .unique-cell.loot { border-color: #ffcc00; }
 .unique-cell.exit { border-color: #00ff41; }
 .unique-cell.start { border-color: #66b3ff; }
@@ -2413,6 +2425,96 @@ body.pc-mode .combat-arena.has-ally .combat-fighter img.combat-sprite {
   font-weight: bold;
 }
 
+/* ===== Terminal de hackeo (estilo Fallout) ===== */
+.hack-terminal {
+  background: #001100;
+  border: 2px solid #00ff41;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: monospace;
+  color: #00ff41;
+  text-shadow: 0 0 4px #00ff4188;
+  max-height: 58vh;
+  overflow-y: auto;
+}
+.hack-terminal .ht-title {
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #33ff66;
+}
+.hack-terminal .ht-warn {
+  color: #ffcc00;
+  font-size: 11px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.hack-terminal .ht-boot {
+  font-size: 11px;
+  white-space: pre-wrap;
+  min-height: 48px;
+  margin-bottom: 8px;
+  color: #33ff66;
+}
+.hack-terminal .ht-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 10px;
+  font-size: 12px;
+  margin: 8px 0;
+}
+.hack-terminal .ht-word {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #00ff41;
+  padding: 4px 6px;
+  text-align: left;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 12px;
+}
+.hack-terminal .ht-word:hover { border-color: #00ff41; background: #003300; }
+.hack-terminal .ht-word.used { opacity: 0.35; pointer-events: none; }
+.hack-terminal .ht-log {
+  font-size: 11px;
+  min-height: 40px;
+  border-top: 1px solid #003300;
+  padding-top: 6px;
+  margin-top: 6px;
+}
+.hack-terminal .ht-attempts {
+  font-size: 12px;
+  color: #ffcc00;
+  margin: 4px 0;
+}
+
+/* ===== Cerradura (lockpick) ===== */
+.lockpick-wrap {
+  text-align: center;
+  padding: 8px;
+}
+.lockpick-canvas-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 10px auto;
+}
+.lockpick-canvas-wrap canvas {
+  width: 220px;
+  height: 220px;
+  display: block;
+}
+.lockpick-info {
+  font-size: 12px;
+  color: #c8d0b8;
+  margin: 6px 0;
+}
+.lockpick-picks {
+  font-size: 13px;
+  color: var(--gold);
+  margin: 4px 0;
+}
+
 </style>
 </head>
 <body>
@@ -3029,6 +3131,11 @@ const DB_ITEMS = [
   { id: 923, name: "Colgante para Prisioneros MK4", type: "other", weight: 0.2, value: 3500, stackable: true, shopTier: 9, captureChance: 0.80 },
   { id: 924, name: "Colgante para Prisioneros MK5", type: "other", weight: 0.2, value: 7000, stackable: true, shopTier: 10, captureChance: 1.0 },
 
+  // --- Hackeo y cerraduras ---
+  { id: 940, name: "Holocinta de Hackeo Rápido", type: "other", weight: 0.1, value: 2500, stackable: true, shopTier: 4, effectDesc: "Bypass 100% de cualquier terminal. Se consume al usarla.", useDesc: "Usar en un terminal bloqueado para abrirlo al instante." },
+  { id: 941, name: "Ganzúa", type: "other", weight: 0.05, value: 35, stackable: true, shopTier: 1, effectDesc: "Herramienta para abrir cerraduras. Cada intento gasta 1.", useDesc: "Necesaria para el minijuego de cerraduras. 1 intento = 1 ganzúa." },
+  { id: 942, name: "Ganzúa Rápida", type: "other", weight: 0.1, value: 2200, stackable: true, shopTier: 4, effectDesc: "Abre cualquier cerradura al 100% sin minijuego. Se consume al usarla.", useDesc: "Bypass 100% de cerraduras independientemente de la dificultad." },
+
   // --- OBJETOS EXCLUSIVOS DEL CASINO (solo fichas) ---
   // --- Módulo mejora casino ---
   { id: 3100, name: "Módulo de Mejora para Casino", type: "other", weight: 1, value: 0, stackable: true, casinoModule: true },
@@ -3512,7 +3619,8 @@ let P = {
     { uid: 105, id: 20, qty: 5 },
     { uid: 106, id: 21, qty: 4 },
     { uid: 107, id: 35, qty: 3 },
-    { uid: 108, id: 40, qty: 2 }
+    { uid: 108, id: 40, qty: 2 },
+    { uid: 109, id: 941, qty: 5 }
   ],
   storage: [],
   activeEffects: [],
@@ -3809,6 +3917,8 @@ function itemIconEmoji(it) {
     if (/módulo|modulo/i.test(n)) return '⚙️';
     if (/sangre.*zetan|zetan/i.test(n)) return '🛸';
     if (/sobre|carta|caravana/i.test(n)) return '🃏';
+    if (/holocinta|hackeo/i.test(n)) return '💾';
+    if (/ganz[uú]a/i.test(n)) return '🔑';
     return '📁';
   }
   return '📦';
@@ -7621,23 +7731,93 @@ function moveInUniqueInterior(dx, dy) {
 
 function searchUniqueCell() {
   if (!isInUniqueInterior()) return;
+  if (combatState) return;
   let loc = P.location;
   let cell = loc.grid[loc.py][loc.px];
   if (cell.searched) { logMsg('Ya registraste esta zona.'); return; }
-  cell.searched = true;
-  cell.icon = cell.isExit ? '⇨' : (cell.isStart ? '◎' : '·');
-  // loot / combat / nothing
   let roll = Math.random();
-  if (roll < 0.45 || cell.loot) {
-    findLoot();
-  } else if (roll < 0.70) {
+  // 16% terminal / 16% cerradura / 38% loot / 18% combate / resto nada
+  if (roll < 0.16) {
+    startHackMinigame(rollLockDifficulty(), cell, loc.theme || 'default');
+    return;
+  }
+  if (roll < 0.32) {
+    startLockpickMinigame(rollLockDifficulty(), cell, loc.theme || 'default');
+    return;
+  }
+  if (roll < 0.70 || cell.loot) {
+    cell.searched = true;
+    cell.icon = cell.isExit ? '⇨' : (cell.isStart ? '◎' : '·');
+    let label = furnitureLabelForCell(cell, loc.theme || 'default');
+    openFurnitureLootUI(label, cell, loc.theme || 'default', function() {
+      if (isInUniqueInterior()) renderUniqueInteriorMap();
+      else renderMap();
+      updateStats();
+    });
+    updateStats();
+    return;
+  }
+  if (roll < 0.88) {
     startCombat(false);
     return;
-  } else {
-    logMsg('No encuentras nada útil aquí.');
   }
+  cell.searched = true;
+  cell.icon = cell.isExit ? '⇨' : (cell.isStart ? '◎' : '·');
+  logMsg('No encuentras nada útil aquí.');
   renderUniqueInteriorMap();
   updateStats();
+}
+
+function rollLockDifficulty() {
+  let r = Math.random();
+  if (r < 0.45) return 'easy';
+  if (r < 0.80) return 'normal';
+  return 'hard';
+}
+
+function markUniqueCellSearched(cell) {
+  if (!cell) return;
+  cell.searched = true;
+  cell.icon = cell.isExit ? '⇨' : (cell.isStart ? '◎' : '·');
+}
+
+function refreshUniqueMapAfterMini() {
+  if (isInUniqueInterior()) renderUniqueInteriorMap();
+  else renderMap();
+  updateStats();
+}
+
+function openSecuredLoot(cell, theme, difficulty, kind) {
+  markUniqueCellSearched(cell);
+  let label = kind === 'hack'
+    ? ('Terminal · ' + (difficulty === 'hard' ? 'Difícil' : difficulty === 'normal' ? 'Normal' : 'Fácil'))
+    : ('Cerradura · ' + (difficulty === 'hard' ? 'Difícil' : difficulty === 'normal' ? 'Normal' : 'Fácil'));
+  let entries = buildFurnitureLootEntries(cell, theme);
+  // Bonus por dificultad
+  let mult = difficulty === 'hard' ? 2.4 : (difficulty === 'normal' ? 1.6 : 1.2);
+  entries.forEach(function(e) {
+    if (e.kind === 'caps') e.qty = Math.max(1, Math.floor((e.qty || 1) * mult));
+    if (e.kind === 'item' && e.qty) e.qty = Math.max(1, Math.floor(e.qty * (difficulty === 'hard' ? 1.5 : 1.2)));
+  });
+  if (difficulty === 'hard' && Math.random() < 0.35) {
+    let inst = generateLegendaryItem();
+    if (inst) {
+      let legBase = getItemBase(inst.id);
+      entries.push({ kind: 'legendary', inst: inst, name: '★ ' + (legBase ? legBase.name : 'Objeto') + ' · ' + (inst.abilityName || ''), taken: false, legendary: true });
+    }
+  } else if (difficulty !== 'easy' && Math.random() < 0.2) {
+    entries.push({ kind: 'item', id: 29, qty: 1, name: '1× ★ Tartera Legendaria', taken: false, legendary: true });
+  }
+  // Extra chapas
+  let bonusCaps = difficulty === 'hard' ? (40 + Math.floor(Math.random() * 60)) : (difficulty === 'normal' ? (20 + Math.floor(Math.random() * 30)) : (8 + Math.floor(Math.random() * 15)));
+  entries.unshift({ kind: 'caps', qty: bonusCaps, name: bonusCaps + ' Chapas (botín seguro)', taken: false });
+  openLootUI({
+    title: '🔓 ' + label,
+    subtitle: 'Has superado el minijuego. Elige qué llevar.',
+    entries: entries,
+    context: 'secured',
+    afterClose: refreshUniqueMapAfterMini
+  });
 }
 
 function renderUniqueInteriorMap() {
@@ -7658,7 +7838,9 @@ function renderUniqueInteriorMap() {
       if (c.loot && !c.searched) cls += ' loot';
       if (c.isExit) cls += ' exit';
       if (c.isStart) cls += ' start';
-      let content = isHere ? '<img class="player-map-face" src="img/icons/player-face.png" alt="" />' : (c.wall ? '▓' : (c.visited || c.isStart || c.isExit ? (c.icon || '·') : '·'));
+      let content = isHere
+        ? '<img class="player-map-face" src="img/icons/player-face.png" alt="Tú" onerror="this.onerror=null;this.src=\'img/player/icons/Morador_de_refugio.png\';" />'
+        : (c.wall ? '▓' : (c.visited || c.isStart || c.isExit ? (c.icon || '·') : '·'));
       cells += '<div class="' + cls + '">' + content + '</div>';
     }
   }
@@ -9837,44 +10019,46 @@ function fullscreenBtnLabel() {
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
   {
+    ver: '0.12.2',
+    date: '2026-10-09',
+    title: 'Expansión de radio',
+    notes: [
+      'Radio Wasteland y Radio New Vegas: +1 pista cada una (4).',
+      'Nueva emisora: Radio Clásica (5 pistas).',
+      'Nueva emisora: Radio Nuka World (1 pista, DLC Circo).',
+      'Reproducción offline vía caché de audio existente.'
+    ]
+  },
+  {
+    ver: '0.12.1',
+    date: '2026-10-09',
+    title: 'Cerradura v2 y fixes de mapa',
+    notes: [
+      'Cerradura rediseñada; hackeo más lento; fixes de mapa interior.'
+    ]
+  },
+  {
+    ver: '0.12.0',
+    date: '2026-10-09',
+    title: 'Hackeo y cerraduras',
+    notes: [
+      'Minijuegos de terminal y cerraduras; Holocinta / Ganzúas.'
+    ]
+  },
+  {
+    ver: '0.11.56',
+    date: '2026-10-09',
+    title: 'Saqueo de cadáveres y muebles',
+    notes: [
+      'Saqueo selectivo de cadáveres y muebles.'
+    ]
+  },
+  {
     ver: '0.11.55',
     date: '2026-10-08',
     title: 'Icono = sprite melee',
     notes: [
-      'Armas cuerpo a cuerpo: el sprite ampliado usa el mismo asset que el icono.',
-      'Se evitan sprites de pistola/rifle en melee (el pack de sprites casi no tiene melee).'
-    ]
-  },
-  {
-    ver: '0.11.54',
-    date: '2026-10-08',
-    title: 'Iconos melee de assets',
-    notes: [
-      'Iconos de mazas, martillos y espadas para melee.'
-    ]
-  },
-  {
-    ver: '0.11.53',
-    date: '2026-10-08',
-    title: 'Asentamiento y Sierra Madre',
-    notes: [
-      'Renombrar asentamiento; fichas; consola.'
-    ]
-  },
-  {
-    ver: '0.11.52',
-    date: '2026-10-08',
-    title: 'Colores Adaptabilidad',
-    notes: [
-      'Teclas en verde.'
-    ]
-  },
-  {
-    ver: '0.11.51',
-    date: '2026-10-08',
-    title: 'Modo activo',
-    notes: [
-      'Amarillo al cambiar de modo.'
+      'Armas cuerpo a cuerpo: sprite = icono.'
     ]
   }
 ];
@@ -16530,6 +16714,7 @@ const RADIO_STATIONS = {
       './audio/RadioWasteland1.mp3',
       './audio/RadioWasteland2.mp3',
       './audio/RadioWasteland3.mp3',
+      './audio/RadioWasteland4.mp3',
       './audio/RadioWasteland5.mp3'
     ],
     loopTrack: false
@@ -16543,7 +16728,22 @@ const RADIO_STATIONS = {
       './audio/RadioNewVegas1.mp3',
       './audio/RadioNewVegas2.mp3',
       './audio/RadioNewVegas3.mp3',
+      './audio/RadioNewVegas4.mp3',
       './audio/RadioNewVegas5.mp3'
+    ],
+    loopTrack: false
+  },
+  clasica: {
+    id: 'clasica',
+    name: 'Radio Clásica',
+    color: '#c9a227',
+    lore: 'Orquestas, valses y arias que sobrevivieron a las bombas. El Yermo aún tiene cultura.',
+    tracks: [
+      './audio/RadioClasica1.mp3',
+      './audio/RadioClasica2.mp3',
+      './audio/RadioClasica3.mp3',
+      './audio/RadioClasica4.mp3',
+      './audio/RadioClasica5.mp3'
     ],
     loopTrack: false
   },
@@ -16561,6 +16761,16 @@ const RADIO_STATIONS = {
       './audio/EnclaveRadio6.mp3',
       './audio/EnclaveRadio7.mp3',
       './audio/EnclaveRadio8.mp3'
+    ],
+    loopTrack: false
+  },
+  nukaworld: {
+    id: 'nukaworld',
+    name: 'Radio Nuka World',
+    color: '#e05050',
+    lore: 'Emisión del Circo de Nuka-World. Dulce, pegajosa y ligeramente radiactiva.',
+    tracks: [
+      './audio/RadioNukaWorld.mp3'
     ],
     loopTrack: false
   }
@@ -16584,18 +16794,26 @@ function openRadioTuneUI() {
     ? ('♪ En antena: ' + stName + trackLabel)
     : 'Radio apagada.';
 
-  let order = ['wasteland', 'newvegas', 'enclave'];
+  let order = ['wasteland', 'newvegas', 'clasica', 'enclave', 'nukaworld'];
+  let stationIcons = {
+    wasteland: '🎵',
+    newvegas: '🎰',
+    clasica: '🎻',
+    enclave: '📡',
+    nukaworld: '☢'
+  };
   let stationsHtml = order.map(id => {
     let st = RADIO_STATIONS[id];
     if (!st) return '';
     let isOn = active && radioStationId === id;
     let col = st.color || 'var(--accent)';
+    let icon = stationIcons[id] || '📻';
     let btn = isOn
       ? `<button style="width:100%; margin-top:8px; border-color:var(--danger); color:var(--danger); font-weight:bold;" onclick="stopRadioMusic()">■ Apagar</button>`
       : `<button style="width:100%; margin-top:8px; background:var(--accent); color:#111; font-weight:bold;" onclick="startRadioStation('${id}')">▶ Sintonizar</button>`;
     return `
       <div class="item" style="border-color:${col};">
-        <b style="color:${col};">${id === 'wasteland' ? '🎵' : id === 'newvegas' ? '🎰' : '📡'} ${st.name}</b><br>
+        <b style="color:${col};">${icon} ${st.name}</b><br>
         <span style="font-size:11px;color:#8d9880;">${st.lore || ''}</span>
         ${btn}
       </div>`;
@@ -18289,6 +18507,13 @@ function combatFlee() {
     logMsg("¡Lograste huir con éxito del combate!");
     combatState = null;
     closeModal();
+    if (typeof isOnZetanShip === 'function' && isOnZetanShip()) {
+      try { renderZetanShipMap(); } catch (e) {}
+    } else if (isInUniqueInterior()) {
+      renderUniqueInteriorMap();
+    } else {
+      renderMap();
+    }
     updateStats();
   } else {
     combatLog("¡No pudiste huir! El enemigo te alcanza.");
@@ -18307,6 +18532,759 @@ function combatFlee() {
     updateStats();
     renderCombatUI();
   }
+}
+
+// ===== SISTEMA DE SAQUEO (cadáver / muebles) =====
+let _lootSession = null;
+
+function buildCorpseLootEntries(cs) {
+  let entries = [];
+  if (!cs) return entries;
+  let wAb = getWeaponAbility();
+  let aAb = getArmorAbility();
+  let capsRange = cs.enemyCaps;
+  if (!capsRange || !Array.isArray(capsRange) || capsRange.length < 2) {
+    capsRange = [5, 15 + Math.floor((cs.enemyLevel || 1) * 2)];
+  }
+  let lo = Number(capsRange[0]) || 5;
+  let hi = Number(capsRange[1]) || lo + 10;
+  if (hi < lo) hi = lo;
+  let baseReward = lo + Math.floor(Math.random() * (hi - lo + 1));
+  let bonusMult = 1 + (((P.perks && P.perks.p_scav) || 0) * 0.25);
+  if (wAb && wAb.id === 'w_caps') bonusMult += 0.50;
+  if (aAb && aAb.id === 'a_caps') bonusMult += 0.30;
+  let reward = Math.max(1, Math.floor(baseReward * bonusMult));
+  entries.push({ kind: 'caps', qty: reward, name: reward + ' Chapas', taken: false });
+
+  let lootPool = (cs.enemyLoot && Array.isArray(cs.enemyLoot) && cs.enemyLoot.length) ? cs.enemyLoot.slice() : [20];
+  let drops = 1 + (Math.random() < 0.45 ? 1 : 0) + (Math.random() < 0.2 ? 1 : 0);
+  let used = {};
+  for (let i = 0; i < drops; i++) {
+    let itemDrop = lootPool[Math.floor(Math.random() * lootPool.length)];
+    if (itemDrop == null) continue;
+    let key = String(itemDrop);
+    if (used[key] && Math.random() < 0.6) continue;
+    used[key] = true;
+    let itemObj = getItemBase(itemDrop);
+    if (!itemObj) continue;
+    let itemQty = (itemObj.type === 'junk' || itemObj.type === 'med' || itemObj.type === 'ingredient' || itemObj.type === 'ammo')
+      ? (1 + Math.floor(Math.random() * 2)) : 1;
+    entries.push({ kind: 'item', id: itemDrop, qty: itemQty, name: formatItemGainName(itemObj, itemQty), taken: false, legendary: false });
+  }
+
+  if (cs.enemyHuman || (typeof isHumanEnemy === 'function' && isHumanEnemy(cs.enemyName))) {
+    if (Math.random() < 0.4) {
+      let ammoTypes = ['.38', '10mm', 'Cartucho de escopeta', '5.56mm', '.45 ACP'];
+      let at = ammoTypes[Math.floor(Math.random() * ammoTypes.length)];
+      let aq = 2 + Math.floor(Math.random() * 6);
+      entries.push({ kind: 'ammo', ammoType: at, qty: aq, name: aq + '× ' + at, taken: false });
+    }
+  }
+
+  if (cs.isZetan && Math.random() < 0.5) {
+    entries.push({ kind: 'item', id: 2400, qty: 1, name: '1× Sangre de Zetan', taken: false });
+  }
+
+  if (cs.isLegendary) {
+    let inst = generateLegendaryItem();
+    if (inst) {
+      let legBase = getItemBase(inst.id);
+      entries.push({ kind: 'legendary', inst: inst, name: '★ ' + (legBase ? legBase.name : 'Objeto') + ' · ' + (inst.abilityName || 'Habilidad'), taken: false, legendary: true });
+    }
+  }
+
+  if (wAb && wAb.id === 'w_ammo') {
+    let w = getEquippedWeapon();
+    if (w && w.ammoType && !String(w.ammoType).includes('Ninguna')) {
+      let ammoGain = 1 + Math.floor(Math.random() * 3);
+      entries.push({ kind: 'ammo', ammoType: w.ammoType, qty: ammoGain, name: ammoGain + '× ' + w.ammoType + ' (robo)', taken: false });
+    }
+  }
+  return entries;
+}
+
+function buildFurnitureLootEntries(cell, theme) {
+  let entries = [];
+  let caps = 5 + Math.floor(Math.random() * 25) + Math.floor((P.lvl || 1) * 1.5);
+  if (Math.random() < 0.85) {
+    entries.push({ kind: 'caps', qty: caps, name: caps + ' Chapas', taken: false });
+  }
+  let tierMax = Math.min(8, (P.shopLevel || 1) + 2);
+  let pool = DB_ITEMS.filter(i => i.shopTier <= tierMax && !i.grenade && i.type !== 'quest' && i.id !== 2305);
+  if (theme === 'military' || theme === 'police') {
+    pool = pool.filter(i => ['weapon','ammo','armor','med'].includes(i.type) || Math.random() < 0.3);
+  } else if (theme === 'hospital') {
+    pool = pool.filter(i => ['med','chem','junk'].includes(i.type) || Math.random() < 0.25);
+  } else if (theme === 'lab') {
+    pool = pool.filter(i => ['med','chem','junk','other'].includes(i.type) || Math.random() < 0.3);
+  }
+  if (!pool.length) pool = DB_ITEMS.filter(i => i.type === 'junk');
+  let n = 1 + (Math.random() < 0.5 ? 1 : 0) + (Math.random() < 0.25 ? 1 : 0);
+  if (cell && cell.loot) n = Math.max(n, 2);
+  for (let i = 0; i < n; i++) {
+    let it = pool[Math.floor(Math.random() * pool.length)];
+    if (!it) continue;
+    let qty = (it.type === 'junk' || it.type === 'med' || it.type === 'ingredient' || it.type === 'ammo')
+      ? (1 + Math.floor(Math.random() * 2)) : 1;
+    entries.push({ kind: 'item', id: it.id, qty: qty, name: formatItemGainName(it, qty), taken: false });
+  }
+  if (Math.random() < 0.06) {
+    entries.push({ kind: 'item', id: 14, qty: 1, name: '1× Tartera Vault-Tec', taken: false });
+  }
+  if (Math.random() < 0.02) {
+    entries.push({ kind: 'item', id: 29, qty: 1, name: '1× ★ Tartera Legendaria', taken: false, legendary: true });
+  }
+  // Ganzúas en loot de ubicaciones únicas
+  if (Math.random() < 0.28) {
+    let gq = 1 + Math.floor(Math.random() * 3);
+    entries.push({ kind: 'item', id: 941, qty: gq, name: gq + '× Ganzúa', taken: false });
+  }
+  if (Math.random() < 0.04) {
+    entries.push({ kind: 'item', id: 942, qty: 1, name: '1× Ganzúa Rápida', taken: false });
+  }
+  if (Math.random() < 0.03) {
+    entries.push({ kind: 'item', id: 940, qty: 1, name: '1× Holocinta de Hackeo Rápido', taken: false });
+  }
+  if (Math.random() < 0.04) {
+    let inst = generateLegendaryItem();
+    if (inst) {
+      let legBase = getItemBase(inst.id);
+      entries.push({ kind: 'legendary', inst: inst, name: '★ ' + (legBase ? legBase.name : 'Objeto') + ' · ' + (inst.abilityName || ''), taken: false, legendary: true });
+    }
+  }
+  return entries;
+}
+
+function furnitureLabelForCell(cell, theme) {
+  let names = {
+    military: ['Caja de munición', 'Taquilla militar', 'Mesa de operaciones', 'Baúl de campaña'],
+    police: ['Escritorio del sargento', 'Casillero', 'Caja de evidencias', 'Archivador'],
+    hospital: ['Armario médico', 'Carro de medicinas', 'Escritorio de enfermería', 'Caja de suministros'],
+    lab: ['Mesa de laboratorio', 'Armario de muestras', 'Escritorio del científico', 'Contenedor sellado'],
+    bank: ['Caja fuerte', 'Cajón del cajero', 'Archivador blindado', 'Maletín'],
+    office: ['Escritorio', 'Archivador', 'Cajón', 'Estantería'],
+    factory: ['Caja de herramientas', 'Estantería industrial', 'Contenedor', 'Taquilla de obrero'],
+    church: ['Confesionario', 'Cofre de ofrendas', 'Estantería de himnarios', 'Sacristía'],
+    default: ['Escritorio', 'Caja fuerte', 'Estantería', 'Baúl', 'Taquilla', 'Cajón', 'Caja de madera', 'Armario']
+  };
+  let pool = names[theme] || names.default;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function openLootUI(opts) {
+  _lootSession = {
+    title: opts.title || 'Botín',
+    subtitle: opts.subtitle || '',
+    entries: opts.entries || [],
+    context: opts.context || 'generic',
+    afterClose: opts.afterClose || null
+  };
+  renderLootUI();
+}
+
+function renderLootUI() {
+  if (!_lootSession) return;
+  let s = _lootSession;
+  let remaining = s.entries.filter(e => !e.taken);
+  let html = '<h2 style="color:var(--gold);text-align:center;margin-top:0;">' + s.title + '</h2>';
+  if (s.subtitle) html += '<p style="font-size:12px;color:#8d9880;text-align:center;margin-top:0;">' + s.subtitle + '</p>';
+  if (!remaining.length) {
+    html += '<p style="text-align:center;color:#8d9880;">Vacío. No queda nada que llevar.</p>';
+  } else {
+    html += '<div style="max-height:42vh;overflow-y:auto;margin:8px 0;">';
+    s.entries.forEach(function(e, idx) {
+      if (e.taken) return;
+      let border = e.legendary ? 'var(--gold)' : '#3a4737';
+      let nameCol = e.legendary ? 'var(--gold)' : 'var(--txt)';
+      let icon = '';
+      try {
+        if (e.kind === 'caps') icon = (typeof capsIconHtml === 'function' ? capsIconHtml(22) : '<img class="cap-icon" src="img/icons/nuka-cap.png" width="22" height="22" style="vertical-align:middle;" />');
+        else if (e.kind === 'ammo') icon = '🔳';
+        else if (e.kind === 'legendary' && e.inst) icon = itemIconHtml(e.inst, 'sm', true);
+        else if (e.kind === 'item' && e.id != null) icon = itemIconHtml(getItemBase(e.id), 'sm', !!e.legendary);
+      } catch (err) { icon = '📦'; }
+      html += '<div class="item" style="border-color:' + border + ';display:flex;align-items:center;gap:8px;padding:8px;">' +
+        '<div style="flex-shrink:0;">' + icon + '</div>' +
+        '<div style="flex:1;min-width:0;"><b style="color:' + nameCol + ';">' + e.name + '</b></div>' +
+        '<button style="flex-shrink:0;border-color:var(--accent);color:var(--accent);" onclick="takeLootEntry(' + idx + ')">Coger</button>' +
+        '</div>';
+    });
+    html += '</div>';
+  }
+  html += '<div style="display:flex;gap:8px;margin-top:10px;">' +
+    (remaining.length ? '<button style="flex:1;background:var(--accent);color:#111;font-weight:bold;" onclick="takeAllLoot()">Coger todo</button>' : '') +
+    '<button style="flex:1;border-color:#8d9880;color:#8d9880;" onclick="leaveLoot()">' + (remaining.length ? 'Dejar / Salir' : 'Cerrar') + '</button>' +
+    '</div>';
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+
+function takeLootEntry(idx) {
+  if (!_lootSession || !_lootSession.entries[idx] || _lootSession.entries[idx].taken) return;
+  let e = _lootSession.entries[idx];
+  let ok = false;
+  if (e.kind === 'caps') {
+    P.caps += (e.qty || 0);
+    ok = true;
+    logMsg('Recoges ' + e.qty + ' chapas.');
+  } else if (e.kind === 'ammo') {
+    if (!P.ammoBox) P.ammoBox = {};
+    P.ammoBox[e.ammoType] = (P.ammoBox[e.ammoType] || 0) + (e.qty || 1);
+    ok = true;
+    logMsg('Recoges ' + e.qty + '× ' + e.ammoType + '.');
+  } else if (e.kind === 'legendary' && e.inst) {
+    let base = getItemBase(e.inst.id);
+    let w = (P.inv || []).reduce(function(acc, i) {
+      let b = getItemBase(i.id);
+      return acc + ((b && b.weight || 0) * (i.qty || 1));
+    }, 0);
+    if (w + (base && base.weight || 1) > getMaxWeight()) {
+      logMsg('¡Mochila llena! No puedes cargar ' + (base ? base.name : 'el objeto') + '.');
+      return;
+    }
+    if (!e.inst.uid) e.inst.uid = Date.now() + Math.floor(Math.random() * 100000);
+    P.inv.push(e.inst);
+    try { discoverItem(e.inst.id); } catch (err) {}
+    ok = true;
+    logMsg('Recoges ★ ' + (base ? base.name : 'objeto legendario') + '.');
+  } else if (e.kind === 'item' && e.id != null) {
+    if (addItemToInv(e.id, e.qty || 1)) {
+      ok = true;
+      logMsg('Recoges ' + e.name + '.');
+    } else {
+      logMsg('¡Mochila llena!');
+      return;
+    }
+  }
+  if (ok) {
+    e.taken = true;
+    try { playBuySound(); } catch (err) {}
+    updateStats();
+    renderLootUI();
+  }
+}
+
+function takeAllLoot() {
+  if (!_lootSession) return;
+  for (let i = 0; i < _lootSession.entries.length; i++) {
+    if (!_lootSession.entries[i].taken) takeLootEntry(i);
+  }
+  if (_lootSession.entries.some(function(e) { return !e.taken; })) {
+    logMsg('Algunos objetos no caben en la mochila.');
+    return;
+  }
+  leaveLoot();
+}
+
+function leaveLoot() {
+  let after = _lootSession && _lootSession.afterClose;
+  _lootSession = null;
+  closeModal();
+  if (typeof after === 'function') {
+    try { after(); } catch (e) {}
+  } else {
+    try { renderMap(); } catch (e) {}
+  }
+  updateStats();
+}
+
+function openCorpseLootUI(cs, afterClose) {
+  let cleanName = (cs.enemyName || 'Enemigo').replace(/\s*\(Nv\.\d+\)/, '').replace(/^★\s*/, '');
+  let entries = buildCorpseLootEntries(cs);
+  openLootUI({
+    title: '💀 Saquear cadáver',
+    subtitle: cleanName + (cs.isLegendary ? ' ★ LEGENDARIO' : '') + ' · Elige qué llevar',
+    entries: entries,
+    context: 'corpse',
+    afterClose: afterClose
+  });
+}
+
+function openFurnitureLootUI(label, cell, theme, afterClose) {
+  let entries = buildFurnitureLootEntries(cell, theme);
+  openLootUI({
+    title: '📦 ' + (label || 'Registrar'),
+    subtitle: 'Revisas el contenido. Elige qué llevar.',
+    entries: entries,
+    context: 'furniture',
+    afterClose: afterClose
+  });
+}
+
+// ===== Icono de chapas unificado =====
+function capsIconHtml(size, clickable) {
+  size = size || 18;
+  let src = 'img/icons/nuka-cap.png';
+  try {
+    let el = document.querySelector('header .cap-icon:not(.chip-icon)');
+    if (el && el.src) src = el.getAttribute('src') || el.src || src;
+  } catch (e) {}
+  let onclick = clickable === false ? '' : ' onclick="event.stopPropagation();openCapsSpriteViewer()" style="cursor:pointer;" title="Ver chapa"';
+  return '<img class="cap-icon" src="' + src + '" alt="chapas" width="' + size + '" height="' + size + '" style="width:' + size + 'px;height:' + size + 'px;vertical-align:middle;object-fit:contain;image-rendering:auto;"' + onclick + ' />';
+}
+function openCapsSpriteViewer() {
+  let src = 'img/icons/nuka-cap.png';
+  try {
+    let el = document.querySelector('header .cap-icon:not(.chip-icon)');
+    if (el && el.src) src = el.getAttribute('src') || el.src || src;
+  } catch (e) {}
+  openSpriteViewer({
+    title: 'Chapa Nuka-Cola',
+    subtitle: 'Moneda del Yermo',
+    img: src,
+    borderColor: '#e05050',
+    legendary: false
+  });
+}
+
+// ===== HACKEO (estilo Fallout terminal) =====
+const HACK_WORD_POOLS = {
+  easy: ['DATA','FILE','CODE','LOCK','OPEN','DOOR','SAFE','DISK','CHIP','BYTE','PORT','USER','PASS','KEY','NODE','LINK','BOOT','LOAD','SAVE','EDIT'],
+  normal: ['SYSTEM','ACCESS','SECURE','MODULE','MEMORY','BUFFER','PACKET','ROUTER','SERVER','CLIENT','CIPHER','TOKEN','SIGNAL','FORBID','DENIED','GRANT','STATUS','VERIFY','PERMIT','BYPASS'],
+  hard: ['TERMINAL','PASSWORD','OVERRIDE','FIREWALL','PROTOCOL','DATABASE','SECURITY','ENCRYPTED','AUTHCODE','MAINFRAME','HARDWARE','SOFTWARE','BACKDOOR','INTRUSION','ADMINKEY','LOCKDOWN','NETWORKS','PROCESSOR','ALGORITHM','DEBUGMODE']
+};
+let _hackState = null;
+let _hackBootTimer = null;
+
+function countItemInInv(itemId) {
+  let n = 0;
+  (P.inv || []).forEach(function(x) {
+    if (x.id === itemId) n += (x.qty || 1);
+  });
+  return n;
+}
+function consumeItemFromInv(itemId, qty) {
+  qty = qty || 1;
+  for (let i = 0; i < (P.inv || []).length && qty > 0; i++) {
+    let inst = P.inv[i];
+    if (inst.id !== itemId) continue;
+    let have = inst.qty || 1;
+    if (have <= qty) {
+      qty -= have;
+      P.inv.splice(i, 1);
+      i--;
+    } else {
+      inst.qty = have - qty;
+      qty = 0;
+    }
+  }
+  return qty <= 0;
+}
+
+function startHackMinigame(difficulty, cell, theme) {
+  difficulty = difficulty || 'normal';
+  let pool = (HACK_WORD_POOLS[difficulty] || HACK_WORD_POOLS.normal).slice();
+  // Mezclar y elegir 12-16 palabras
+  for (let i = pool.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+  }
+  let count = difficulty === 'hard' ? 16 : (difficulty === 'normal' ? 14 : 12);
+  let words = pool.slice(0, Math.min(count, pool.length));
+  let password = words[Math.floor(Math.random() * words.length)];
+  _hackState = {
+    difficulty: difficulty,
+    words: words,
+    password: password,
+    attempts: 4,
+    used: {},
+    cell: cell,
+    theme: theme || 'default',
+    booting: true,
+    log: []
+  };
+  renderHackBoot();
+}
+
+function renderHackBoot() {
+  let m = document.getElementById('modal');
+  document.getElementById('modal-body').innerHTML =
+    '<div class="hack-terminal">' +
+    '<div class="ht-title">ROBCO INDUSTRIES (TM) TERMLINK PROTOCOL</div>' +
+    '<div class="ht-warn">!!! WARNING: LOCKOUT IMMINENT !!!</div>' +
+    '<div class="ht-boot" id="hack-boot">Iniciando BIOS...\n</div>' +
+    '</div>' +
+    '<button style="width:100%;margin-top:10px;border-color:#8d9880;color:#8d9880;" onclick="abortHackMinigame()">Salir</button>';
+  m.classList.add('show');
+  let steps = [
+    'ROBCO INDUSTRIES UNIFIED OPERATING SYSTEM',
+    'COPYRIGHT 2075-2077 ROBCO INDUSTRIES',
+    '-Server 1-',
+    '',
+    '0xF000  > ENTRY POINT',
+    '0xF004  > LOADING SECURITY MODULE',
+    '0xF008  > PASSWORD REQUIRED',
+    '',
+    'Acceso a terminal — elige la contraseña correcta.'
+  ];
+  let i = 0;
+  if (_hackBootTimer) clearInterval(_hackBootTimer);
+  _hackBootTimer = setInterval(function() {
+    let el = document.getElementById('hack-boot');
+    if (!el || !_hackState) { clearInterval(_hackBootTimer); return; }
+    if (i >= steps.length) {
+      clearInterval(_hackBootTimer);
+      _hackBootTimer = null;
+      _hackState.booting = false;
+      renderHackUI();
+      return;
+    }
+    el.textContent += steps[i] + '\n';
+    i++;
+  }, 320);
+}
+
+function likeliness(a, b) {
+  // Letras en la misma posición (estilo Fallout)
+  let n = 0;
+  let len = Math.min(a.length, b.length);
+  for (let i = 0; i < len; i++) if (a[i] === b[i]) n++;
+  return n;
+}
+
+function renderHackUI() {
+  if (!_hackState) return;
+  let s = _hackState;
+  let diffLabel = s.difficulty === 'hard' ? 'DIFÍCIL' : (s.difficulty === 'normal' ? 'NORMAL' : 'FÁCIL');
+  let holos = countItemInInv(940);
+  let wordsHtml = s.words.map(function(w, idx) {
+    let used = s.used[w];
+    return '<button class="ht-word' + (used ? ' used' : '') + '" ' + (used ? 'disabled' : '') +
+      ' onclick="tryHackWord(' + idx + ')">' + w + '</button>';
+  }).join('');
+  let logHtml = (s.log || []).map(function(l) { return '<div>> ' + l + '</div>'; }).join('');
+  document.getElementById('modal-body').innerHTML =
+    '<div class="hack-terminal">' +
+    '<div class="ht-title">ROBCO INDUSTRIES (TM) TERMLINK PROTOCOL</div>' +
+    '<div class="ht-warn">!!! WARNING: LOCKOUT IMMINENT !!!</div>' +
+    '<div class="ht-attempts">Intentos restantes: ' + s.attempts + ' · Dificultad: ' + diffLabel + '</div>' +
+    '<div class="ht-grid">' + wordsHtml + '</div>' +
+    '<div class="ht-log">' + (logHtml || '<div style="opacity:0.5;">> Esperando selección...</div>') + '</div>' +
+    '</div>' +
+    '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">' +
+    (holos > 0 ? '<button style="flex:1;border-color:var(--gold);color:var(--gold);" onclick="useHackHolotape()">Holocinta Rápida (' + holos + ')</button>' : '') +
+    '<button style="flex:1;border-color:#8d9880;color:#8d9880;" onclick="abortHackMinigame()">Salir</button>' +
+    '</div>';
+  document.getElementById('modal').classList.add('show');
+}
+
+function tryHackWord(idx) {
+  if (!_hackState || _hackState.booting) return;
+  let s = _hackState;
+  let word = s.words[idx];
+  if (!word || s.used[word]) return;
+  s.used[word] = true;
+  if (word === s.password) {
+    s.log.push('Exact match! Access granted.');
+    logMsg('Terminal desbloqueado (' + (s.difficulty === 'hard' ? 'Difícil' : s.difficulty === 'normal' ? 'Normal' : 'Fácil') + ').');
+    let cell = s.cell, theme = s.theme, diff = s.difficulty;
+    _hackState = null;
+    openSecuredLoot(cell, theme, diff, 'hack');
+    return;
+  }
+  let like = likeliness(word, s.password);
+  s.attempts--;
+  s.log.push(word + ' → Entry denied. ' + like + '/' + s.password.length + ' correct.');
+  if (s.attempts <= 0) {
+    s.log.push('LOCKOUT. Terminal blocked.');
+    logMsg('Has fallado el hackeo. El terminal se bloquea.');
+    markUniqueCellSearched(s.cell);
+    _hackState = null;
+    closeModal();
+    refreshUniqueMapAfterMini();
+    return;
+  }
+  renderHackUI();
+}
+
+function useHackHolotape() {
+  if (!_hackState) return;
+  if (!countItemInInv(940)) { logMsg('No tienes Holocinta de Hackeo Rápido.'); return; }
+  consumeItemFromInv(940, 1);
+  logMsg('Usas Holocinta de Hackeo Rápido. Acceso concedido.');
+  let cell = _hackState.cell, theme = _hackState.theme, diff = _hackState.difficulty;
+  _hackState = null;
+  openSecuredLoot(cell, theme, diff, 'hack');
+  updateStats();
+}
+
+function abortHackMinigame() {
+  if (_hackBootTimer) { clearInterval(_hackBootTimer); _hackBootTimer = null; }
+  if (_hackState && _hackState.cell) {
+    // No marcar searched: puedes reintentar
+    logMsg('Abandonas el terminal.');
+  }
+  _hackState = null;
+  closeModal();
+  refreshUniqueMapAfterMini();
+}
+
+// ===== CERRADURAS (lockpick v2) =====
+// Triángulo ORBITA FUERA del círculo (solo sentido horario).
+// Al pulsar Forzar: se para y avanza hacia la circunferencia.
+// Si toca la franja amarilla del anillo → éxito; si toca rojo → fallo y reinicia desde arriba.
+let _lockState = null;
+let _lockAnimId = null;
+
+function startLockpickMinigame(difficulty, cell, theme) {
+  difficulty = difficulty || 'normal';
+  // Franja amarilla sobre la circunferencia (grados): fácil amplia, difícil estrecha
+  let sector = difficulty === 'hard' ? 32 : (difficulty === 'normal' ? 52 : 78);
+  let ringR = 78;
+  let orbitR = 108;
+  _lockState = {
+    difficulty: difficulty,
+    sector: sector,
+    zoneStart: Math.random() * 360,
+    angle: 270, // arriba (canvas: 0=este, 270=norte) — reinicio siempre desde arriba
+    speed: difficulty === 'hard' ? 1.55 : (difficulty === 'normal' ? 1.15 : 0.85), // grados/frame, solo horario
+    attempts: 4,
+    cell: cell,
+    theme: theme || 'default',
+    phase: 'intro', // intro → orbit → plunge → resolve
+    introT: 0,
+    ringR: ringR,
+    orbitR: orbitR,
+    plungeR: orbitR,
+    running: true,
+    locking: false
+  };
+  renderLockpickUI();
+  startLockpickAnim();
+}
+
+function countLockpicks() { return countItemInInv(941); }
+function countQuickLockpicks() { return countItemInInv(942); }
+
+function renderLockpickUI() {
+  if (!_lockState) return;
+  let s = _lockState;
+  let diffLabel = s.difficulty === 'hard' ? 'DIFÍCIL' : (s.difficulty === 'normal' ? 'NORMAL' : 'FÁCIL');
+  let picks = countLockpicks();
+  let quick = countQuickLockpicks();
+  let canForce = s.phase === 'orbit' && !s.locking;
+  document.getElementById('modal-body').innerHTML =
+    '<div class="lockpick-wrap">' +
+    '<h2 style="color:var(--gold);margin:0 0 4px 0;font-size:16px;">🔓 Cerradura</h2>' +
+    '<div class="lockpick-info">Dificultad: <b>' + diffLabel + '</b> · Intentos: <b>' + s.attempts + '</b>/4</div>' +
+    '<div class="lockpick-picks">Ganzúas: ' + picks + (quick ? ' · Rápidas: ' + quick : '') + '</div>' +
+    '<div class="lockpick-canvas-wrap"><canvas id="lockpick-canvas" width="240" height="240"></canvas></div>' +
+    '<p style="font-size:11px;color:#8d9880;">El triángulo gira <b>fuera</b> del círculo. Pulsa <b>FORZAR</b> cuando esté alineado con la franja amarilla.</p>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">' +
+    '<button id="lock-force-btn" style="flex:1;min-width:120px;background:var(--accent);color:#111;font-weight:bold;" ' +
+      (canForce ? '' : 'disabled ') + 'onclick="tryLockpick()">Forzar</button>' +
+    (quick > 0 ? '<button style="flex:1;min-width:120px;border-color:var(--gold);color:var(--gold);" onclick="useQuickLockpick()">Ganzúa Rápida</button>' : '') +
+    '<button style="flex:1;min-width:120px;border-color:#8d9880;color:#8d9880;" onclick="abortLockpick()">Salir</button>' +
+    '</div></div>';
+  document.getElementById('modal').classList.add('show');
+  drawLockpick();
+}
+
+function startLockpickAnim() {
+  if (_lockAnimId) cancelAnimationFrame(_lockAnimId);
+  function frame() {
+    if (!_lockState || !_lockState.running) return;
+    let s = _lockState;
+    if (s.phase === 'intro') {
+      s.introT = Math.min(1, s.introT + 0.035);
+      if (s.introT >= 1) {
+        s.phase = 'orbit';
+        s.angle = 270; // desde arriba
+        let btn = document.getElementById('lock-force-btn');
+        if (btn) btn.disabled = false;
+      }
+    } else if (s.phase === 'orbit') {
+      // Solo sentido horario (ángulo aumenta en coords canvas con offset -90 → sumamos)
+      s.angle = (s.angle + s.speed) % 360;
+    } else if (s.phase === 'plunge') {
+      // Avanza hacia la circunferencia
+      s.plungeR -= 2.4;
+      if (s.plungeR <= s.ringR) {
+        s.plungeR = s.ringR;
+        s.phase = 'resolve';
+        resolveLockpickPlunge();
+        return;
+      }
+    }
+    drawLockpick();
+    _lockAnimId = requestAnimationFrame(frame);
+  }
+  _lockAnimId = requestAnimationFrame(frame);
+}
+
+function drawLockpick() {
+  let canvas = document.getElementById('lockpick-canvas');
+  if (!canvas || !_lockState) return;
+  let ctx = canvas.getContext('2d');
+  let s = _lockState;
+  let w = canvas.width, h = canvas.height;
+  let cx = w / 2, cy = h / 2;
+  let ringR = s.ringR;
+  let scale = s.phase === 'intro' ? (0.2 + 0.8 * s.introT) : 1;
+  let alpha = s.phase === 'intro' ? s.introT : 1;
+  ctx.clearRect(0, 0, w, h);
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.translate(cx, cy);
+  ctx.scale(scale, scale);
+  ctx.translate(-cx, -cy);
+
+  // Disco interior oscuro
+  ctx.beginPath();
+  ctx.arc(cx, cy, ringR - 10, 0, Math.PI * 2);
+  ctx.fillStyle = '#1a0808';
+  ctx.fill();
+
+  // Anillo ROJO (circunferencia completa)
+  ctx.beginPath();
+  ctx.arc(cx, cy, ringR, 0, Math.PI * 2);
+  ctx.lineWidth = 14;
+  ctx.strokeStyle = '#a02828';
+  ctx.stroke();
+  // Borde exterior del anillo
+  ctx.beginPath();
+  ctx.arc(cx, cy, ringR + 7, 0, Math.PI * 2);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#c04040';
+  ctx.stroke();
+
+  // Franja AMARILLA sobre la circunferencia (arco del anillo)
+  let z0 = (s.zoneStart - s.sector / 2) * Math.PI / 180;
+  let z1 = (s.zoneStart + s.sector / 2) * Math.PI / 180;
+  ctx.beginPath();
+  ctx.arc(cx, cy, ringR, z0, z1);
+  ctx.lineWidth = 14;
+  ctx.strokeStyle = '#e8c547';
+  ctx.lineCap = 'butt';
+  ctx.stroke();
+  // Brillo de la franja
+  ctx.beginPath();
+  ctx.arc(cx, cy, ringR, z0, z1);
+  ctx.lineWidth = 6;
+  ctx.strokeStyle = '#fff3a0';
+  ctx.stroke();
+
+  // Centro
+  ctx.beginPath();
+  ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+  ctx.fillStyle = '#d5bd69';
+  ctx.fill();
+  ctx.strokeStyle = '#886600';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Triángulo FUERA del círculo (o en plunge)
+  let triR = (s.phase === 'plunge' || s.phase === 'resolve') ? s.plungeR : s.orbitR;
+  if (s.phase === 'intro') triR = s.orbitR;
+  let ang = s.angle * Math.PI / 180;
+  let tx = cx + Math.cos(ang) * triR;
+  let ty = cy + Math.sin(ang) * triR;
+  ctx.save();
+  ctx.translate(tx, ty);
+  // Orientar punta hacia el centro
+  ctx.rotate(ang + Math.PI / 2);
+  ctx.beginPath();
+  ctx.moveTo(0, 11);   // punta hacia el centro
+  ctx.lineTo(9, -10);
+  ctx.lineTo(-9, -10);
+  ctx.closePath();
+  ctx.fillStyle = '#ffcc00';
+  ctx.fill();
+  ctx.strokeStyle = '#aa8800';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.restore();
+
+  ctx.restore();
+}
+
+function tryLockpick() {
+  if (!_lockState || _lockState.locking) return;
+  if (_lockState.phase !== 'orbit') return;
+  let picks = countLockpicks();
+  if (picks <= 0) {
+    logMsg('No tienes ganzúas. Cómpralas en Comercio o usa Ganzúa Rápida.');
+    return;
+  }
+  consumeItemFromInv(941, 1);
+  updateStats();
+  let s = _lockState;
+  s.locking = true;
+  s.phase = 'plunge';
+  s.plungeR = s.orbitR;
+  let btn = document.getElementById('lock-force-btn');
+  if (btn) btn.disabled = true;
+  // Actualizar contador de ganzúas en UI sin reiniciar animación
+  let picksEl = document.querySelector('.lockpick-picks');
+  if (picksEl) {
+    let quick = countQuickLockpicks();
+    picksEl.textContent = 'Ganzúas: ' + countLockpicks() + (quick ? ' · Rápidas: ' + quick : '');
+  }
+}
+
+function resolveLockpickPlunge() {
+  if (!_lockState) return;
+  let s = _lockState;
+  let a = ((s.angle % 360) + 360) % 360;
+  let z = ((s.zoneStart % 360) + 360) % 360;
+  let half = s.sector / 2;
+  let dist = Math.min(Math.abs(a - z), 360 - Math.abs(a - z));
+  let success = dist <= half;
+  s.attempts--;
+  if (success) {
+    s.running = false;
+    if (_lockAnimId) cancelAnimationFrame(_lockAnimId);
+    logMsg('¡Cerradura abierta! (Gastaste 1 ganzúa)');
+    let cell = s.cell, theme = s.theme, diffc = s.difficulty;
+    _lockState = null;
+    openSecuredLoot(cell, theme, diffc, 'lock');
+    updateStats();
+    return;
+  }
+  logMsg('Fallaste la cerradura... (quedan ' + s.attempts + ' intentos, ganzúas: ' + countLockpicks() + ')');
+  if (s.attempts <= 0) {
+    s.running = false;
+    if (_lockAnimId) cancelAnimationFrame(_lockAnimId);
+    logMsg('Has agotado los intentos. Cerradura bloqueada.');
+    markUniqueCellSearched(s.cell);
+    _lockState = null;
+    closeModal();
+    refreshUniqueMapAfterMini();
+    return;
+  }
+  // Reinicio: triángulo vuelve ARRIBA, solo horario, misma franja
+  s.angle = 270;
+  s.plungeR = s.orbitR;
+  s.phase = 'orbit';
+  s.locking = false;
+  s.speed = Math.min(2.4, s.speed + 0.12);
+  renderLockpickUI();
+  startLockpickAnim();
+  updateStats();
+}
+
+function useQuickLockpick() {
+  if (!_lockState) return;
+  if (!countQuickLockpicks()) { logMsg('No tienes Ganzúa Rápida.'); return; }
+  consumeItemFromInv(942, 1);
+  _lockState.running = false;
+  if (_lockAnimId) cancelAnimationFrame(_lockAnimId);
+  logMsg('Usas Ganzúa Rápida. Cerradura abierta.');
+  let cell = _lockState.cell, theme = _lockState.theme, diff = _lockState.difficulty;
+  _lockState = null;
+  openSecuredLoot(cell, theme, diff, 'lock');
+  updateStats();
+}
+
+function abortLockpick() {
+  if (_lockState) {
+    _lockState.running = false;
+    logMsg('Abandonas la cerradura.');
+  }
+  if (_lockAnimId) cancelAnimationFrame(_lockAnimId);
+  _lockState = null;
+  closeModal();
+  refreshUniqueMapAfterMini();
 }
 
 function endCombat(victory) {
@@ -18328,11 +19306,11 @@ function endCombat(victory) {
       combatState = null;
       closeModal();
       updateStats();
-      renderMap();
+      if (isInUniqueInterior()) renderUniqueInteriorMap();
+      else renderMap();
       return;
     }
     if (combatState.combatZone) {
-      // Solo tickets — sin chapas, loot, legendarios ni captura
       let tix = 3 + Math.floor(Math.random() * 5) + Math.floor((combatState.enemyLevel || 1) / 3);
       P.tickets = (P.tickets || 0) + tix;
       let xpGain = 25 + Math.floor((combatState.enemyLevel || 1) * 2);
@@ -18342,7 +19320,6 @@ function endCombat(victory) {
       updateQuestProgress('kill', 1);
       logMsg("Victoria en Combat Zone vs " + combatState.enemyName + ". +" + tix + " tickets · +" + xpGain + " XP.");
     } else if (combatState.vaultExperiment || combatState.noLoot) {
-      // Combate del laboratorio Vaul-Tec: XP, sin botín ni chapas
       let xpGain = 40 + Math.floor((combatState.enemyLevel || P.lvl || 1) * 3);
       addXP(xpGain);
       let comp = getEquippedCompanion();
@@ -18350,81 +19327,49 @@ function endCombat(victory) {
       updateQuestProgress('kill', 1);
       logMsg("Contienes al sujeto enloquecido. +" + xpGain + " XP. (Sin botín de combate)");
     } else {
-    let capsRange = combatState.enemyCaps;
-    if (!capsRange || !Array.isArray(capsRange) || capsRange.length < 2) {
-      capsRange = [5, 15 + Math.floor((combatState.enemyLevel || 1) * 2)];
-    }
-    let lo = Number(capsRange[0]) || 5;
-    let hi = Number(capsRange[1]) || lo + 10;
-    if (hi < lo) hi = lo;
-    let baseReward = lo + Math.floor(Math.random() * (hi - lo + 1));
-    let bonusMult = 1 + (((P.perks && P.perks.p_scav) || 0) * 0.25);
-    if (wAb && wAb.id === 'w_caps') bonusMult += 0.50;
-    if (aAb && aAb.id === 'a_caps') bonusMult += 0.30;
-    let reward = Math.floor(baseReward * bonusMult);
-
-    P.caps += reward;
-
-    // Drop normal (seguro si no hay loot)
-    let lootPool = combatState.enemyLoot;
-    if (!lootPool || !Array.isArray(lootPool) || lootPool.length < 1) {
-      lootPool = [20]; // chatarra genérica si falta
-    }
-    let itemDrop = lootPool[Math.floor(Math.random() * lootPool.length)];
-    let itemObj = getItemBase(itemDrop);
-    let itemQty = (itemObj && (itemObj.type === 'junk' || itemObj.type === 'med')) ? (1 + Math.floor(Math.random() * 2)) : 1;
-    let added = itemDrop != null ? addItemToInv(itemDrop, itemQty) : false;
-
-    // XP
-    let xpGain = combatState.isLegendary ? 90 : 35;
-    if (wAb && wAb.id === 'w_xp') xpGain = Math.floor(xpGain * 1.40);
-    if (aAb && aAb.id === 'a_xp') xpGain = Math.floor(xpGain * 1.25);
-    addXP(xpGain);
-    
-    let comp = getEquippedCompanion();
-    if (comp && !comp.resting) {
-      addCompanionXP(comp, 15 + Math.floor((combatState.enemyLevel || 1) * 3) + (combatState.isLegendary ? 40 : 0));
-    }
-updateQuestProgress('kill', 1);
-    if (combatState.isLegendary) updateQuestProgress('kill_leg', 1);
-    if (combatState.contractId) markContractComplete(combatState.contractId);
-    // Reguladores: Dedo de justicia por humano
-    if ((P.perks && P.perks.p_autoritario) && (combatState.enemyHuman || (typeof isHumanEnemy === 'function' && isHumanEnemy(combatState.enemyName)))) {
-      if (!combatState.goodCivilian) {
-        addItemToInv(2820, 1);
-        logMsg('Autoritario: obtienes 1× Dedo de justicia (Otros).');
+      let xpGain = combatState.isLegendary ? 90 : 35;
+      if (wAb && wAb.id === 'w_xp') xpGain = Math.floor(xpGain * 1.40);
+      if (aAb && aAb.id === 'a_xp') xpGain = Math.floor(xpGain * 1.25);
+      addXP(xpGain);
+      let comp = getEquippedCompanion();
+      if (comp && !comp.resting) {
+        addCompanionXP(comp, 15 + Math.floor((combatState.enemyLevel || 1) * 3) + (combatState.isLegendary ? 40 : 0));
       }
-    }
-    // Sicarios: Oreja por civil atacado
-    if ((typeof isHitman === 'function' ? isHitman() : (P.perks && P.perks.p_hitman)) && combatState.goodCivilian) {
-      addItemToInv(2821, 1);
-      logMsg('Asesino a sueldo: obtienes 1× Oreja (Otros).');
-    }
-
-    let lootTxt = added ? " y " + formatItemGainName(itemObj, itemQty) : " (mochila llena para el objeto)";
-
-    // Drop legendario garantizado
-    if (combatState.isLegendary) {
-      let legInst = addLegendaryToInv();
-      if (legInst) {
-        let legBase = getItemBase(legInst.id);
-        lootTxt += " ¡y un objeto LEGENDARIO: " + legBase.name + " ★ (" + legInst.abilityName + ")!";
-      } else {
-        lootTxt += " (mochila llena, no pudiste recoger el legendario).";
+      updateQuestProgress('kill', 1);
+      if (combatState.isLegendary) updateQuestProgress('kill_leg', 1);
+      if (combatState.contractId) markContractComplete(combatState.contractId);
+      if ((P.perks && P.perks.p_autoritario) && (combatState.enemyHuman || (typeof isHumanEnemy === 'function' && isHumanEnemy(combatState.enemyName)))) {
+        if (!combatState.goodCivilian) {
+          addItemToInv(2820, 1);
+          logMsg('Autoritario: obtienes 1× Dedo de justicia (Otros).');
+        }
       }
-    }
-
-    // Robo de Munición
-    if (wAb && wAb.id === 'w_ammo') {
-      let ammoGain = 1 + Math.floor(Math.random() * 3);
-      let w = getEquippedWeapon();
-      if (w.ammoType && !w.ammoType.includes("Ninguna")) {
-        P.ammoBox[w.ammoType] = (P.ammoBox[w.ammoType] || 0) + ammoGain;
-        lootTxt += " +" + ammoGain + " balas.";
+      if ((typeof isHitman === 'function' ? isHitman() : (P.perks && P.perks.p_hitman)) && combatState.goodCivilian) {
+        addItemToInv(2821, 1);
+        logMsg('Asesino a sueldo: obtienes 1× Oreja (Otros).');
       }
-    }
 
-    logMsg("Derrotaste a " + combatState.enemyName + ". Obtienes " + reward + " chapas" + lootTxt);
+      logMsg("Derrotaste a " + combatState.enemyName + ". +" + xpGain + " XP. Revisa el cadáver.");
+
+      let snap = {
+        enemyName: combatState.enemyName,
+        enemyCaps: combatState.enemyCaps,
+        enemyLoot: combatState.enemyLoot,
+        enemyLevel: combatState.enemyLevel,
+        enemyHuman: combatState.enemyHuman,
+        isLegendary: combatState.isLegendary,
+        isZetan: combatState.isZetan
+      };
+      let wasShip = combatState.isZetan && isOnZetanShip();
+      combatState = null;
+      openCorpseLootUI(snap, function() {
+        if (wasShip) { renderZetanShipMap(); updateStats(); return; }
+        if (isInUniqueInterior()) renderUniqueInteriorMap();
+        else renderMap();
+        updateStats();
+      });
+      updateStats();
+      return;
     }
   } else {
     if (isOnZetanShip()) {
@@ -18449,6 +19394,8 @@ updateQuestProgress('kill', 1);
     P.location = { type: 'settlement', settlementId: 'player_vault', name: 'Refugio experimental' };
     if (typeof renderPlayerVaultUI === 'function') renderPlayerVaultUI('lab');
     else renderMap();
+  } else if (isInUniqueInterior()) {
+    renderUniqueInteriorMap();
   } else {
     renderMap();
   }
