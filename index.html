@@ -1674,8 +1674,9 @@ body.pc-mode .map-compact .map-controls {
   margin: 4px auto;
 }
 .unique-cell {
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1;
   min-height: 0;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1683,6 +1684,8 @@ body.pc-mode .map-compact .map-controls {
   border: 1px solid #3a3010;
   background: #12100a;
   color: #c9a227;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 .unique-cell.wall { background: #050505; color: #333; border-color: #222; }
 .unique-cell.here {
@@ -1694,15 +1697,28 @@ body.pc-mode .map-compact .map-controls {
 }
 .unique-cell .player-map-face,
 .unique-cell.here img.player-map-face {
-  width: 85%;
-  height: 85%;
-  max-width: 28px;
-  max-height: 28px;
-  object-fit: contain;
+  width: auto !important;
+  height: auto !important;
+  max-width: 90% !important;
+  max-height: 90% !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: contain !important;
+  object-position: center !important;
   image-rendering: pixelated;
   display: block;
   margin: 0 auto;
   pointer-events: none;
+  flex-shrink: 0;
+}
+body.pc-mode .unique-cell .player-map-face,
+body.pc-mode .unique-cell.here img.player-map-face {
+  width: auto !important;
+  height: auto !important;
+  max-width: 26px !important;
+  max-height: 26px !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: contain !important;
+  object-position: center !important;
 }
 .unique-cell.loot { border-color: #ffcc00; }
 .unique-cell.exit { border-color: #00ff41; }
@@ -4057,39 +4073,38 @@ function getItemAsset(id) {
   return ITEM_ASSET_BY_ID[Number(id)] || null;
 }
 
-// Iconos melee curados (no pistolas/rifles)
-const MELEE_ICON_POOL = [
-  'img/assets/icons/weapons_003.png',
-  'img/assets/icons/weapons_004.png',
-  'img/assets/icons/weapons_009.png',
-  'img/assets/icons/weapons_017.png',
-  'img/assets/icons/weapons_051.png',
-  'img/assets/icons/weapons_054.png',
-  'img/assets/icons/weapons_055.png',
-  'img/assets/icons/weapons_058.png',
-  'img/assets/icons/weapons_061.png',
-  'img/assets/icons/weapons_081.png',
-  'img/assets/icons/weapons_083.png',
-  'img/assets/icons/weapons_084.png',
-  'img/assets/icons/weapons_029.png',
-  'img/assets/icons/weapons_012.png'
-];
-function pickMeleeIconPath(it) {
-  if (!it) return MELEE_ICON_POOL[0];
-  let n = (it.name || '').toLowerCase();
-  if (/sarten|sartén|sartenazo|bate|tuber|tubo|porra|garrote|bast/i.test(n)) return MELEE_ICON_POOL[0];
-  if (/martillo|supermartillo|maza/i.test(n)) return MELEE_ICON_POOL[1];
-  if (/hacha|hachuela/i.test(n)) return MELEE_ICON_POOL[3];
-  if (/llave|destornillador/i.test(n)) return MELEE_ICON_POOL[4];
-  if (/pu[nñ]o|nudillo|guantelete|power fist|motosierra|ripper/i.test(n)) return MELEE_ICON_POOL[7];
-  if (/espada|wakizashi|katana|machete|cuchillo|navaja/i.test(n)) return MELEE_ICON_POOL[2];
-  if (/lanza|pica|lanza/i.test(n)) return MELEE_ICON_POOL[2]; // espada/hoja alargada
-  let id = it.id != null ? Number(it.id) : 0;
-  return MELEE_ICON_POOL[Math.abs(id) % MELEE_ICON_POOL.length];
-}
+/**
+ * Catálogo visual de armas — IDs clasificados visualmente sobre el pack.
+ * Icono y sprite usan SIEMPRE el mismo ID (icons/ para lista, sprites/ para visor).
+ * Nunca se mezclan cuchillos con rifles ni pistolas con francotiradores.
+ */
+const WEAPON_ICON_BY_TYPE = {
+  // pistolas (compactas, empuñadura inferior)
+  pistol:   ['weapons_001', 'weapons_002', 'weapons_004', 'weapons_005', 'weapons_007', 'weapons_008', 'weapons_014', 'weapons_017', 'weapons_019', 'weapons_021', 'weapons_024', 'weapons_026', 'weapons_028', 'weapons_030', 'weapons_031', 'weapons_033', 'weapons_034', 'weapons_036', 'weapons_046', 'weapons_047', 'weapons_050', 'weapons_051', 'weapons_054', 'weapons_055', 'weapons_056', 'weapons_059', 'weapons_061', 'weapons_062', 'weapons_063', 'weapons_066', 'weapons_067', 'weapons_072', 'weapons_080', 'weapons_082', 'weapons_084', 'weapons_085'],
+  // revólveres
+  revolver: ['weapons_033', 'weapons_024', 'weapons_031', 'weapons_061'],
+  // escopetas (más voluminosas)
+  shotgun:  ['weapons_023', 'weapons_045', 'weapons_048', 'weapons_081'],
+  // SMG / subfusiles
+  smg:      ['weapons_003', 'weapons_027', 'weapons_029', 'weapons_032', 'weapons_040'],
+  // rifles de asalto / combate / fusil
+  assault:  ['weapons_006', 'weapons_040', 'weapons_045', 'weapons_048', 'weapons_065', 'weapons_078', 'weapons_081', 'weapons_086'],
+  // francotirador / rifle largo
+  sniper:   ['weapons_065', 'weapons_078', 'weapons_086', 'weapons_009', 'weapons_010'],
+  // energía (láser/plasma — anillos/brillos)
+  energy:   ['weapons_006', 'weapons_009', 'weapons_010', 'weapons_018', 'weapons_027', 'weapons_029', 'weapons_038', 'weapons_042', 'weapons_043', 'weapons_057', 'weapons_058', 'weapons_068', 'weapons_069', 'weapons_070', 'weapons_074', 'weapons_075', 'weapons_076', 'weapons_086'],
+  // pesadas
+  heavy:    ['weapons_045', 'weapons_048', 'weapons_081', 'weapons_023'],
+  // melee (cuchillos, hachas, martillos, porras — NUNCA en ranged)
+  melee:    ['weapons_011', 'weapons_012', 'weapons_013', 'weapons_015', 'weapons_016', 'weapons_020', 'weapons_022', 'weapons_025', 'weapons_035', 'weapons_037', 'weapons_039', 'weapons_041', 'weapons_044', 'weapons_049', 'weapons_052', 'weapons_053', 'weapons_060', 'weapons_064', 'weapons_071', 'weapons_073', 'weapons_077', 'weapons_079', 'weapons_083', 'weapons_087'],
+  // granadas
+  grenade:  ['weapons_011', 'weapons_037']
+};
+
 function isMeleeWeaponItem(it) {
   if (!it) return false;
   if (it.type !== 'weapon' && !it.weapon) return false;
+  if (it.grenade) return false;
   try {
     if (typeof getWeaponCategory === 'function' && getWeaponCategory(it) === 'melee') return true;
   } catch (e) {}
@@ -4097,74 +4112,102 @@ function isMeleeWeaponItem(it) {
   return !ammo || ammo.includes('ninguna') || ammo.includes('cuerpo') || ammo.includes('melee');
 }
 
-/** Elige un id de asset de arma coherente con el nombre (mismo id para icono y sprite). */
-function pickWeaponAssetBase(it) {
-  if (!it) return null;
+/** Detecta tipo visual del arma por nombre + munición + categoría. */
+function resolveWeaponVisualType(it) {
+  if (!it) return 'assault';
+  if (it.grenade) return 'grenade';
   let n = (it.name || '').toLowerCase();
-  // Mismo número en icons/ y sprites/ para que coincidan
-  if (/minigun|gatling|lanzallamas|lanzacohetes|lanzamisil|pesad/i.test(n)) return 'weapons_040';
-  if (/escopeta|shotgun|recortad/i.test(n)) return 'weapons_002';
-  if (/francotir|sniper|\.308|anti-?mater/i.test(n)) return 'weapons_055';
-  if (/asalt|fusil|rifle de asalto|combat rifle|5\.56|7\.62/i.test(n)) return 'weapons_022';
-  if (/l[aá]ser|plasma|gauss|energ[ií]a|blaster|alien|hipnotron/i.test(n)) return 'weapons_016';
-  if (/revolver|revólver|\.44|\.357|magnum/i.test(n)) return 'weapons_046';
-  if (/pistola|10mm|\.45|\.38|pistol/i.test(n)) return 'weapons_073';
-  if (/ametralladora|smg|subfusil|thompson/i.test(n)) return 'weapons_028';
-  if (/granada|dinamita|molotov|mina/i.test(n)) return 'weapons_009';
-  // fallback por id estable
-  let id = it.id != null ? Number(it.id) : 0;
-  let pool = ['weapons_073','weapons_046','weapons_002','weapons_022','weapons_055','weapons_016','weapons_028','weapons_040'];
-  return pool[Math.abs(id) % pool.length];
+  let ammo = String(it.ammoType || '').toLowerCase();
+  let cat = '';
+  try { cat = (typeof getWeaponCategory === 'function') ? getWeaponCategory(it) : ''; } catch (e) {}
+
+  if (isMeleeWeaponItem(it) || cat === 'melee') return 'melee';
+  if (cat === 'grenade' || /granada|dinamita|molotov|mina|explosiv/i.test(n)) return 'grenade';
+  if (cat === 'minigun' || cat === 'heavy' || cat === 'flamer' ||
+      /minigun|gatling|lanzallamas|lanzacohetes|lanzamisil|fat man|pesad/i.test(n)) return 'heavy';
+  if (cat === 'shotgun' || /escopeta|shotgun|recortad/i.test(n) || ammo.includes('escopeta')) return 'shotgun';
+  if (cat === 'sniper' || /francotir|sniper|anti-?mater|\.308/i.test(n) || ammo.includes('.308')) return 'sniper';
+  if (cat === 'smg' || /ametralladora|smg|subfusil|thompson|uzi/i.test(n)) return 'smg';
+  if (cat === 'energy' || /l[aá]ser|plasma|gauss|energ[ií]a|blaster|alien|hipnotron|fusi[oó]n/i.test(n) ||
+      /energ|plasma|fusi[oó]n|microfusi/i.test(ammo)) return 'energy';
+  if (cat === 'revolver' || /revolver|revólver|\.44|\.357|magnum/i.test(n) ||
+      ammo.includes('.44') || ammo.includes('.357')) return 'revolver';
+  if (cat === 'pistol' || /pistola|pistol|10mm|\.45|\.38/i.test(n) ||
+      ammo.includes('10mm') || ammo.includes('.45') || ammo.includes('.38')) return 'pistol';
+  // rifles de combate / asalto / fusil genérico
+  if (cat === 'assault' || cat === 'rifle' ||
+      /asalt|fusil|rifle|combat|carabina|5\.56|7\.62/i.test(n) ||
+      ammo.includes('5.56') || ammo.includes('7.62')) return 'assault';
+  // fallback por categoría conocida
+  if (cat && WEAPON_ICON_BY_TYPE[cat]) return cat;
+  return 'assault';
 }
 
-function pairedAssetPaths(a, it) {
-  // Forzar mismo base id en icon y sprite para que coincidan visualmente
-  let base = null;
-  if (it && (it.type === 'weapon' || it.weapon) && !isMeleeWeaponItem(it) && !it.grenade) {
-    base = pickWeaponAssetBase(it);
-  }
-  if (!base && a) {
-    // Preferir sprite_id; si no, icon_id (mismo archivo en ambas carpetas)
-    base = a.sprite_id || a.icon_id || null;
-    if (base && typeof base === 'string') {
-      base = base.replace(/^.*\//, '').replace(/\.(png|webp|jpg)$/i, '');
-    }
-  }
-  if (!base) return null;
-  return {
-    icon: 'img/assets/icons/' + base + '.png',
-    sprite: 'img/assets/sprites/' + base + '.png'
-  };
+/** Elige un ID de arma coherente con el tipo visual (mismo ID para icono y sprite). */
+function pickWeaponBaseId(it) {
+  let type = resolveWeaponVisualType(it);
+  let pool = WEAPON_ICON_BY_TYPE[type] || WEAPON_ICON_BY_TYPE.assault;
+  let id = it && it.id != null ? Math.abs(Number(it.id)) : 0;
+  return pool[id % pool.length];
+}
+
+/** Icono de lista: carpeta icons/ */
+function pickWeaponIconPath(it) {
+  return 'img/assets/icons/' + pickWeaponBaseId(it) + '.png';
+}
+
+/** Sprite de visor: carpeta sprites/ — MISMO ID que el icono */
+function pickWeaponSpritePath(it) {
+  return 'img/assets/sprites/' + pickWeaponBaseId(it) + '.png';
+}
+
+function pickMeleeIconPath(it) {
+  return pickWeaponIconPath(it);
 }
 
 function getItemIconUrl(id) {
   let it = (typeof getItemBase === 'function') ? getItemBase(id) : null;
-  if (it && isMeleeWeaponItem(it)) {
-    let p = pickMeleeIconPath(it);
+  // Armas: siempre por tipo de nombre (nunca cuchillo en rifle)
+  if (it && (it.type === 'weapon' || it.weapon || it.grenade)) {
+    let p = pickWeaponIconPath(it);
     return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
   }
   let a = getItemAsset(id);
-  let paired = pairedAssetPaths(a, it);
-  if (paired && paired.icon) {
-    return paired.icon.startsWith('./') ? paired.icon : ('./' + paired.icon.replace(/^\//, ''));
-  }
   if (!a || !a.icon) return null;
-  return a.icon.startsWith('./') ? a.icon : ('./' + a.icon.replace(/^\//, ''));
+  let icon = a.icon;
+  if (typeof icon === 'string' && icon.indexOf('/sprites/') >= 0) {
+    icon = icon.replace('/sprites/', '/icons/');
+  }
+  return icon.startsWith('./') ? icon : ('./' + String(icon).replace(/^\//, ''));
 }
 function getItemSpriteUrl(id) {
-  // Melee: mismo asset que el icono (los sprites del pack suelen ser pistolas/rifles)
+  // Armas: mismo ID que el icono, carpeta sprites/ (visor grande)
   let it = (typeof getItemBase === 'function') ? getItemBase(id) : null;
-  if (it && isMeleeWeaponItem(it)) {
-    let p = pickMeleeIconPath(it);
+  if (it && (it.type === 'weapon' || it.weapon || it.grenade)) {
+    let p = pickWeaponSpritePath(it);
     return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
   }
+  // Resto: sprite_id → sprites/, fallback icon
   let a = getItemAsset(id);
-  let paired = pairedAssetPaths(a, it);
-  if (paired && paired.sprite) {
-    return paired.sprite.startsWith('./') ? paired.sprite : ('./' + paired.sprite.replace(/^\//, ''));
+  if (a) {
+    let base = a.sprite_id || a.icon_id || null;
+    if (base && typeof base === 'string') {
+      base = base.replace(/^.*\//, '').replace(/\.(png|webp|jpg)$/i, '');
+      return './img/assets/sprites/' + base + '.png';
+    }
+    if (a.sprite) {
+      let sp = a.sprite;
+      return sp.startsWith('./') ? sp : ('./' + String(sp).replace(/^\//, ''));
+    }
+    if (a.icon) {
+      let icon = a.icon;
+      if (typeof icon === 'string' && icon.indexOf('/icons/') >= 0) {
+        icon = icon.replace('/icons/', '/sprites/');
+      }
+      return icon.startsWith('./') ? icon : ('./' + String(icon).replace(/^\//, ''));
+    }
   }
-  if (!a || !a.sprite) return null;
-  return a.sprite.startsWith('./') ? a.sprite : ('./' + a.sprite.replace(/^\//, ''));
+  return null;
 }
 
 function itemIconHtml(itOrId, size, isLeg) {
@@ -10166,6 +10209,29 @@ function fullscreenBtnLabel() {
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
   {
+    ver: '0.12.7',
+    date: '2026-10-09',
+    title: 'Cerradura, hackeo y sonido',
+    notes: [
+      'Cerradura: el triángulo gira más rápido a mayor dificultad.',
+      'Hackeo: sin pista de letras acertadas (solo Entry denied).',
+      'Chapas de loot: solo Chapas.wav (sin sonido de loot por defecto).',
+      'Mute de efectos silencia todos los SFX (clics, compra, armas…).',
+      'Barras de volumen muestran el porcentaje al lado.'
+    ]
+  },
+  {
+    ver: '0.12.6',
+    date: '2026-10-09',
+    title: 'Almacén RobCo, armas e interiores',
+    notes: [
+      'Chatarrería: botón «Entrar al almacén» bajo Contratar robot; retiro con pad.',
+      'Iconos/sprites de armas reclasificados por tipo (sin cuchillo en rifle).',
+      'Cara del mapa interior en PC ya no se deforma.',
+      'Lore Radio Nuka World ampliado; listado de estaciones actualizado.'
+    ]
+  },
+  {
     ver: '0.12.5',
     date: '2026-10-09',
     title: 'Almacén Refugio 500kg y almacén RobCo',
@@ -10566,10 +10632,14 @@ function applyAllAudioVolumes() {
 function setVolMusic(v) {
   P.volMusic = Math.max(0, Math.min(1, Number(v) / 100));
   applyAllAudioVolumes();
+  let el = document.getElementById('vol-music-pct');
+  if (el) el.textContent = Math.round(P.volMusic * 100) + '%';
   try { saveGame(); } catch (e) {}
 }
 function setVolSfx(v) {
   P.volSfx = Math.max(0, Math.min(1, Number(v) / 100));
+  let el = document.getElementById('vol-sfx-pct');
+  if (el) el.textContent = Math.round(P.volSfx * 100) + '%';
   try { saveGame(); } catch (e) {}
 }
 function toggleMuteMusic(on) {
@@ -10588,27 +10658,29 @@ function openSettingsSonido() {
   let vs = P.volSfx !== undefined ? P.volSfx : 0.7;
   let mm = !!P.muteMusic;
   let ms = !!P.muteSfx;
+  let vmPct = Math.round(vm * 100);
+  let vsPct = Math.round(vs * 100);
   document.getElementById('modal-body').innerHTML =
     '<h2 style="color:#88ccff;text-align:center;margin-top:0;">🔊 Sonido</h2>' +
     '<p style="font-size:11px;color:#8d9880;text-align:center;">Ajusta la atmósfera del Yermo</p>' +
     '<div style="height:1px;background:linear-gradient(90deg,transparent,#66aadd55,transparent);margin:6px 0 12px;"></div>' +
     '<div class="item" style="margin:8px 0;border-color:#66aadd;background:#0a1520;">' +
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
-        '<b style="color:#88ccff;">♪ Volumen música</b>' +
+        '<b style="color:#88ccff;">♪ Volumen música <span id="vol-music-pct" style="color:#a0d0ff;font-weight:normal;">' + vmPct + '%</span></b>' +
         '<label style="font-size:11px;color:#8d9880;display:flex;align-items:center;gap:6px;cursor:pointer;">' +
           '<input type="checkbox" ' + (mm ? 'checked' : '') + ' onchange="toggleMuteMusic(this.checked)" style="width:16px;height:16px;accent-color:#88ccff;"> Silenciar' +
         '</label>' +
       '</div>' +
-      '<input id="vol-music" type="range" min="0" max="100" value="' + Math.round(vm * 100) + '" style="width:100%;margin-top:6px;' + (mm ? 'opacity:0.4;' : '') + '" ' + (mm ? 'disabled' : '') + ' oninput="setVolMusic(this.value)">' +
+      '<input id="vol-music" type="range" min="0" max="100" value="' + vmPct + '" style="width:100%;margin-top:6px;' + (mm ? 'opacity:0.4;' : '') + '" ' + (mm ? 'disabled' : '') + ' oninput="setVolMusic(this.value)">' +
     '</div>' +
     '<div class="item" style="margin:8px 0;border-color:#66aadd;background:#0a1520;">' +
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
-        '<b style="color:#88ccff;">🔔 Volumen efectos</b>' +
+        '<b style="color:#88ccff;">🔔 Volumen efectos <span id="vol-sfx-pct" style="color:#a0d0ff;font-weight:normal;">' + vsPct + '%</span></b>' +
         '<label style="font-size:11px;color:#8d9880;display:flex;align-items:center;gap:6px;cursor:pointer;">' +
           '<input type="checkbox" ' + (ms ? 'checked' : '') + ' onchange="toggleMuteSfx(this.checked)" style="width:16px;height:16px;accent-color:#88ccff;"> Silenciar' +
         '</label>' +
       '</div>' +
-      '<input id="vol-sfx" type="range" min="0" max="100" value="' + Math.round(vs * 100) + '" style="width:100%;margin-top:6px;' + (ms ? 'opacity:0.4;' : '') + '" ' + (ms ? 'disabled' : '') + ' oninput="setVolSfx(this.value)">' +
+      '<input id="vol-sfx" type="range" min="0" max="100" value="' + vsPct + '" style="width:100%;margin-top:6px;' + (ms ? 'opacity:0.4;' : '') + '" ' + (ms ? 'disabled' : '') + ' oninput="setVolSfx(this.value)">' +
     '</div>' +
     '<button style="width:100%;margin-top:12px;" onclick="openSettings()">← Volver a Ajustes</button>';
   document.getElementById('modal').classList.add('show');
@@ -14586,28 +14658,6 @@ function renderRobcoFactoryUI(tab) {
       <p style="font-size:11px;color:#8d9880;margin:6px 0 0 0;">La producción se guarda en el almacén infinito de la fábrica (no va al inventario).</p>
     </div>`;
 
-    // Almacén infinito de chatarra (solo retirar)
-    html += `<div class="item" style="border-color:#88aacc !important;">
-      <b style="color:#88aacc;">📦 Almacén de chatarra RobCo</b><br>
-      <span style="font-size:11px;color:#8d9880;">Capacidad infinita. Solo puedes <b>retirar</b> al inventario (no se puede meter ni devolver).</span><br>`;
-    if (totalWh <= 0) {
-      html += `<p style="font-size:12px;color:#8d9880;margin:8px 0;">Almacén vacío.</p>`;
-    } else {
-      html += `<div style="margin-top:8px;">`;
-      Object.keys(wh).forEach(jid => {
-        let q = wh[jid] || 0;
-        if (q <= 0) return;
-        let it = getItemBase(parseInt(jid,10));
-        let name = it ? it.name : jid;
-        html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid #2a2a2a;">
-          <span style="font-size:12px;">${name}: <b style="color:#a0a0a0;">${q}</b></span>
-          <button style="font-size:11px;padding:4px 10px;border-color:#88aacc;color:#88aacc;" onclick="withdrawRobcoWarehouse(${jid})">Retirar</button>
-        </div>`;
-      });
-      html += `</div>`;
-    }
-    html += `</div>`;
-
     let maxR = Math.min(10, lvl);
     let hireCost = getRobcoHireCost();
     html += `<div class="item" style="border-color:#a0a0a0 !important;">
@@ -14616,6 +14666,14 @@ function renderRobcoFactoryUI(tab) {
       <span style="font-size:11px;">${formatReqs(hireCost)}</span><br>
       <button style="margin-top:6px;" ${robots>=maxR || !canPayReqs(hireCost) ? 'disabled':''} onclick="hireRobcoWorker()">Contratar robot</button>
       ${robots>=maxR && lvl<10 ? '<p style="font-size:11px;color:var(--danger);">Mejora la fábrica para más robots.</p>':''}
+    </div>`;
+
+    // Acceso al almacén (debajo de contratar robot)
+    html += `<div class="item" style="border-color:#88aacc !important;">
+      <b style="color:#88aacc;">📦 Almacén de chatarra RobCo</b><br>
+      <span style="font-size:11px;color:#8d9880;">Capacidad infinita. Solo retirar al inventario (no se puede meter ni devolver).</span><br>
+      <span style="font-size:13px;">Stock actual: <b style="color:#88aacc;">${totalWh}</b> piezas</span><br>
+      <button style="margin-top:8px;background:#88aacc;color:#111;font-weight:bold;" onclick="renderRobcoWarehouseUI()">Entrar al almacén</button>
     </div>`;
   } else if (tab === 'factory') {
     html += `<div class="item" style="border-color:#a0a0a0 !important;">
@@ -14750,6 +14808,35 @@ function claimRobcoScrap() {
   updateStats();
 }
 
+/** Vista dedicada del almacén infinito de chatarra RobCo (solo retirar). */
+function renderRobcoWarehouseUI() {
+  ensureRobcoFactory();
+  let wh = P.robcoFactory.scrapWarehouse || {};
+  let totalWh = Object.values(wh).reduce((a,b)=>a+(b||0),0);
+  let html = `<div style="text-align:center;">
+    <h2 style="color:#88aacc;margin:4px 0;">📦 Almacén de chatarra RobCo</h2>
+    <div style="font-size:12px;color:#8d9880;">Capacidad infinita. Solo puedes retirar al inventario (no se puede meter ni devolver).</div>
+  </div>`;
+  html += `<div class="item" style="border-color:#88aacc !important;">`;
+  if (totalWh <= 0) {
+    html += `<p style="font-size:13px;color:#8d9880;margin:8px 0;text-align:center;">Almacén vacío.</p>`;
+  } else {
+    Object.keys(wh).forEach(jid => {
+      let q = wh[jid] || 0;
+      if (q <= 0) return;
+      let it = getItemBase(parseInt(jid,10));
+      let name = it ? it.name : jid;
+      html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #2a2a2a;">
+        <span style="font-size:13px;color:#00ff41;">${name}: <b style="color:#a0a0a0;">${q}</b></span>
+        <button style="font-size:12px;padding:5px 14px;border-color:#88aacc;color:#88aacc;" onclick="withdrawRobcoWarehouse(${jid})">Retirar</button>
+      </div>`;
+    });
+  }
+  html += `</div>
+    <button style="width:100%;margin-top:10px;" onclick="renderRobcoFactoryUI('scrap')">← VOLVER A CHATARRERÍA</button>`;
+  document.getElementById('main-view').innerHTML = html;
+}
+
 /** Retirar chatarra del almacén RobCo al inventario (pad numérico). No se puede devolver. */
 function withdrawRobcoWarehouse(itemId) {
   ensureRobcoFactory();
@@ -14772,7 +14859,7 @@ function withdrawRobcoWarehouse(itemId) {
       P.robcoFactory.scrapWarehouse[itemId] -= qty;
       if (P.robcoFactory.scrapWarehouse[itemId] <= 0) delete P.robcoFactory.scrapWarehouse[itemId];
       logMsg("Retiras " + qty + "× " + (it ? it.name : itemId) + " del almacén RobCo.");
-      renderRobcoFactoryUI('scrap');
+      renderRobcoWarehouseUI();
       updateStats();
     });
   } else {
@@ -14782,7 +14869,7 @@ function withdrawRobcoWarehouse(itemId) {
     P.robcoFactory.scrapWarehouse[itemId] -= qty;
     if (P.robcoFactory.scrapWarehouse[itemId] <= 0) delete P.robcoFactory.scrapWarehouse[itemId];
     logMsg("Retiras " + qty + "× " + (it ? it.name : itemId) + " del almacén RobCo.");
-    renderRobcoFactoryUI('scrap');
+    renderRobcoWarehouseUI();
     updateStats();
   }
 }
@@ -16876,7 +16963,7 @@ function openRadioUI() {
       <button style="width:100%; margin:8px 0; padding:14px; background:#001a00; border-color:var(--gold); color:var(--gold); font-weight:bold;" onclick="pipClick(); openRadioCaptureUI()">📡 CAPTAR SEÑAL</button>
       <p style="font-size:11px; color:#8d9880; margin-top:-4px;">Botín o socorro · Las misiones aparecen en Misiones → Señales.</p>
       <button style="width:100%; margin:8px 0; padding:14px; background:#001a00; border-color:var(--accent); color:var(--accent); font-weight:bold;" onclick="pipClick(); openRadioTuneUI()">🎛 SINTONIZAR</button>
-      <p style="font-size:11px; color:#8d9880; margin-top:-4px;">Estaciones: Wasteland, New Vegas y Enclave.</p>
+      <p style="font-size:11px; color:#8d9880; margin-top:-4px;">Estaciones: Wasteland, New Vegas, Clásica, Enclave y Nuka World.</p>
       <button style="width:100%; margin-top:12px;" onclick="renderMap()">← VOLVER AL MAPA</button>
     </div>
   `;
@@ -16993,7 +17080,7 @@ const RADIO_STATIONS = {
     id: 'nukaworld',
     name: 'Radio Nuka World',
     color: '#e05050',
-    lore: 'Emisión del Circo de Nuka-World. Dulce, pegajosa y ligeramente radiactiva.',
+    lore: 'Desde el Circo de Nuka-World: jingles de soda, risas de payasos radiactivos y promesas de premios que brillan en la oscuridad. Dulce, pegajosa y ligeramente radiactiva. ¡Bebe Nuka-Cola!',
     tracks: [
       './audio/RadioNukaWorld.mp3'
     ],
@@ -19182,22 +19269,12 @@ function escapeHtmlHack(s) {
     .replace(/\n/g, '<br>');
 }
 function formatHackWordLetters(word, password, used) {
-  if (!used) return escapeHtmlHack(word);
-  let html = '';
-  let len = word.length;
-  for (let i = 0; i < len; i++) {
-    let ch = word[i];
-    if (password && password[i] === ch) {
-      html += '<span class="ht-letter-ok">' + escapeHtmlHack(ch) + '</span>';
-    } else {
-      html += escapeHtmlHack(ch);
-    }
-  }
-  return html;
+  // Sin resaltar letras acertadas: no dar pistas de posición
+  return escapeHtmlHack(word);
 }
 
 function likeliness(a, b) {
-  // Letras en la misma posición (estilo Fallout)
+  // Conservada por compatibilidad; ya no se muestra al jugador
   let n = 0;
   let len = Math.min(a.length, b.length);
   for (let i = 0; i < len; i++) if (a[i] === b[i]) n++;
@@ -19244,9 +19321,8 @@ function tryHackWord(idx) {
     openSecuredLoot(cell, theme, diff, 'hack');
     return;
   }
-  let like = likeliness(word, s.password);
   s.attempts--;
-  s.log.push(word + ' → Entry denied. ' + like + '/' + s.password.length + ' correct.');
+  s.log.push(word + ' → Entry denied.');
   if (s.attempts <= 0) {
     s.log.push('LOCKOUT. Terminal blocked.');
     logMsg('Has fallado el hackeo. El terminal se bloquea.');
@@ -19299,7 +19375,8 @@ function startLockpickMinigame(difficulty, cell, theme) {
     sector: sector,
     zoneStart: Math.random() * 360,
     angle: 270, // arriba (canvas: 0=este, 270=norte) — reinicio siempre desde arriba
-    speed: difficulty === 'hard' ? 1.55 : (difficulty === 'normal' ? 1.15 : 0.85), // grados/frame, solo horario
+    // A más dificultad, el triángulo gira más rápido
+    speed: difficulty === 'hard' ? 2.35 : (difficulty === 'normal' ? 1.45 : 0.75), // grados/frame, solo horario
     attempts: 4,
     cell: cell,
     theme: theme || 'default',
@@ -20456,8 +20533,9 @@ function getAudioCtx() {
 }
 function pipClick() {
   try {
+    let vol = (typeof getSfxVolume === 'function') ? getSfxVolume() : ((P && P.muteSfx) ? 0 : (P.volSfx !== undefined ? P.volSfx : 0.7));
+    if (vol <= 0) return;
     let ctx = getAudioCtx();
-    let vol = (P.volSfx !== undefined ? P.volSfx : 0.7);
     let t = ctx.currentTime;
     let osc = ctx.createOscillator();
     let gain = ctx.createGain();
@@ -20489,8 +20567,9 @@ function ensureBuyPool() {
 }
 function playBuySound() {
   try {
+    let vol = (typeof getSfxVolume === 'function') ? getSfxVolume() : ((P && P.muteSfx) ? 0 : (P && P.volSfx !== undefined ? P.volSfx : 0.7));
+    if (vol <= 0) return;
     ensureBuyPool();
-    let vol = (P && P.volSfx !== undefined) ? P.volSfx : 0.7;
     // Reusar instancias precargadas (sin clone) para evitar retardo en móvil/PWA
     let a = _buyPool[_buyPoolIdx % _buyPool.length];
     _buyPoolIdx++;
@@ -20503,7 +20582,6 @@ function playBuySound() {
     a.volume = vol;
     let p = a.play();
     if (p && p.catch) p.catch(() => {
-      // Reintento con nueva instancia si el pool falló
       try {
         let b = new Audio(_buySrc);
         b.volume = vol;
@@ -20513,12 +20591,13 @@ function playBuySound() {
   } catch (e) {}
 }
 
-/** Efecto al coger objetos del loot (no es el de tienda) */
+/** Efecto al coger objetos del loot (no es el de tienda ni chapas) */
 function playLootSound() {
   try {
-    if (P && P.muteSfx) return;
+    let base = (typeof getSfxVolume === 'function') ? getSfxVolume() : ((P && P.muteSfx) ? 0 : (P && P.volSfx !== undefined ? P.volSfx : 0.7));
+    if (base <= 0) return;
     let ctx = getAudioCtx();
-    let vol = (P && P.volSfx !== undefined ? P.volSfx : 0.7) * 0.22;
+    let vol = base * 0.22;
     let t = ctx.currentTime;
     let osc = ctx.createOscillator();
     let gain = ctx.createGain();
@@ -20536,9 +20615,10 @@ function playLootSound() {
 
 let _capsAudio = null;
 function playCapsSound() {
+  // Solo Chapas.wav — nunca el sonido de loot por defecto
   try {
-    if (P && P.muteSfx) return;
-    let vol = (P && P.volSfx !== undefined) ? P.volSfx : 0.7;
+    let vol = (typeof getSfxVolume === 'function') ? getSfxVolume() : ((P && P.muteSfx) ? 0 : (P && P.volSfx !== undefined ? P.volSfx : 0.7));
+    if (vol <= 0) return;
     if (!_capsAudio) {
       _capsAudio = new Audio('./audio/Chapas.wav');
       _capsAudio.preload = 'auto';
@@ -20554,16 +20634,14 @@ function playCapsSound() {
         b.play().catch(function() {});
       } catch (e2) {}
     });
-  } catch (e) {
-    try { playLootSound(); } catch (e2) {}
-  }
+  } catch (e) {}
 }
 
 let _winCasinoAudio = null;
 function playWinCasinoSound() {
   try {
-    if (P && P.muteSfx) return;
-    let vol = (P && P.volSfx !== undefined) ? P.volSfx : 0.7;
+    let vol = (typeof getSfxVolume === 'function') ? getSfxVolume() : ((P && P.muteSfx) ? 0 : (P && P.volSfx !== undefined ? P.volSfx : 0.7));
+    if (vol <= 0) return;
     if (!_winCasinoAudio) {
       _winCasinoAudio = new Audio('./audio/WinCasino.mp3');
       _winCasinoAudio.preload = 'auto';
@@ -20595,13 +20673,14 @@ function playWinCasinoSound() {
 })();
 
 function playWeaponSound(weapon) {
+  let sfxBase = (typeof getSfxVolume === 'function') ? getSfxVolume() : ((P && P.muteSfx) ? 0 : (P && P.volSfx !== undefined ? P.volSfx : 0.7));
+  if (sfxBase <= 0) return;
   if (weapon && weapon.grenade) {
-    // reutilizar sonido fuerte tipo escopeta / explosión
     try {
       let ctx = window._sfxCtx || (window._sfxCtx = new (window.AudioContext || window.webkitAudioContext)());
       let o = ctx.createOscillator(); let g = ctx.createGain();
       o.type = 'square'; o.frequency.value = 80;
-      g.gain.setValueAtTime(0.15 * (P.volSfx || 0.7), ctx.currentTime);
+      g.gain.setValueAtTime(0.15 * sfxBase, ctx.currentTime);
       g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
       o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 0.25);
     } catch (e) {}
@@ -20610,7 +20689,7 @@ function playWeaponSound(weapon) {
 
   try {
     let ctx = getAudioCtx();
-    let vol = (P.volSfx !== undefined ? P.volSfx : 0.7) * 0.35;
+    let vol = sfxBase * 0.35;
     let t = ctx.currentTime;
     let ammo = (weapon && weapon.ammoType) || 'Ninguna';
     let name = ((weapon && weapon.name) || '').toLowerCase();
