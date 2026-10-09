@@ -2425,41 +2425,86 @@ body.pc-mode .combat-arena.has-ally .combat-fighter img.combat-sprite {
   font-weight: bold;
 }
 
-/* ===== Terminal de hackeo (estilo Fallout) ===== */
+/* ===== Terminal de hackeo (estilo Fallout) — glow móvil-safe ===== */
 .hack-terminal {
   background: #001100;
   border: 2px solid #00ff41;
   border-radius: 4px;
   padding: 10px;
-  font-family: monospace;
+  font-family: 'Courier New', Courier, monospace;
   color: #00ff41;
-  text-shadow: 0 0 4px #00ff4188;
+  /* Múltiples capas: iOS/Android a veces ignoran una sola text-shadow tenue */
+  text-shadow:
+    0 0 1px #00ff41,
+    0 0 3px #00ff41,
+    0 0 6px rgba(0,255,65,0.85),
+    0 0 12px rgba(0,255,65,0.45);
   max-height: 58vh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
 }
 .hack-terminal .ht-title {
   text-align: center;
   font-size: 13px;
   margin-bottom: 6px;
-  color: #33ff66;
+  color: #66ff88;
+  font-weight: bold;
+  text-shadow:
+    0 0 2px #00ff41,
+    0 0 8px rgba(0,255,65,0.9);
+  animation: ht-glow-pulse 1.6s ease-in-out infinite;
 }
 .hack-terminal .ht-warn {
   color: #ffcc00;
   font-size: 11px;
   text-align: center;
   margin-bottom: 8px;
+  text-shadow: 0 0 4px #ffcc00, 0 0 8px rgba(255,200,0,0.5);
 }
 .hack-terminal .ht-boot {
   font-size: 11px;
   white-space: pre-wrap;
-  min-height: 48px;
+  word-break: break-word;
+  min-height: 72px;
   margin-bottom: 8px;
-  color: #33ff66;
+  color: #66ff88;
+  line-height: 1.35;
+  text-shadow:
+    0 0 1px #00ff41,
+    0 0 4px rgba(0,255,65,0.9),
+    0 0 10px rgba(0,255,65,0.5);
+}
+.hack-terminal .ht-boot .ht-cursor {
+  display: inline-block;
+  width: 0.55em;
+  background: #00ff41;
+  color: #00ff41;
+  margin-left: 1px;
+  animation: ht-blink 0.7s step-end infinite;
+  box-shadow: 0 0 6px #00ff41;
+  vertical-align: text-bottom;
+  height: 1em;
+}
+@keyframes ht-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes ht-glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 2px #00ff41, 0 0 8px rgba(0,255,65,0.7);
+    color: #66ff88;
+  }
+  50% {
+    text-shadow: 0 0 4px #00ff41, 0 0 14px rgba(0,255,65,1), 0 0 22px rgba(0,255,65,0.6);
+    color: #aaffbb;
+  }
 }
 .hack-terminal .ht-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px 10px;
+  gap: 6px 10px;
   font-size: 12px;
   margin: 8px 0;
 }
@@ -2467,25 +2512,75 @@ body.pc-mode .combat-arena.has-ally .combat-fighter img.combat-sprite {
   background: transparent;
   border: 1px solid transparent;
   color: #00ff41;
-  padding: 4px 6px;
+  padding: 8px 6px;
   text-align: left;
   cursor: pointer;
-  font-family: monospace;
-  font-size: 12px;
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  text-shadow:
+    0 0 1px #00ff41,
+    0 0 4px rgba(0,255,65,0.8);
+  min-height: 36px;
 }
-.hack-terminal .ht-word:hover { border-color: #00ff41; background: #003300; }
-.hack-terminal .ht-word.used { opacity: 0.35; pointer-events: none; }
+.hack-terminal .ht-word:hover,
+.hack-terminal .ht-word:focus,
+.hack-terminal .ht-word:active {
+  border-color: #00ff41;
+  background: #003300;
+  outline: none;
+  color: #aaffbb;
+  text-shadow:
+    0 0 2px #00ff41,
+    0 0 8px #00ff41,
+    0 0 14px rgba(0,255,65,0.9);
+}
+.hack-terminal .ht-word.used {
+  opacity: 0.55;
+  pointer-events: none;
+  color: #2a6a2a;
+  text-shadow: none;
+}
+.hack-terminal .ht-word.used .ht-letter-ok {
+  color: #ffcc00 !important;
+  text-shadow: 0 0 3px #ffcc00, 0 0 8px rgba(255,200,0,0.8) !important;
+  opacity: 1;
+}
+.hack-terminal .ht-letter-ok {
+  color: #ffee66;
+  text-shadow: 0 0 3px #ffcc00, 0 0 8px rgba(255,200,0,0.85);
+  font-weight: bold;
+}
 .hack-terminal .ht-log {
   font-size: 11px;
   min-height: 40px;
   border-top: 1px solid #003300;
   padding-top: 6px;
   margin-top: 6px;
+  text-shadow: 0 0 2px rgba(0,255,65,0.6);
 }
 .hack-terminal .ht-attempts {
   font-size: 12px;
   color: #ffcc00;
   margin: 4px 0;
+  text-shadow: 0 0 4px rgba(255,200,0,0.6);
+}
+@media (max-width: 600px) {
+  .hack-terminal {
+    max-height: 62vh;
+    padding: 12px 10px;
+  }
+  .hack-terminal .ht-word {
+    font-size: 14px;
+    padding: 10px 8px;
+    min-height: 40px;
+  }
+  .hack-terminal .ht-boot {
+    font-size: 12px;
+    min-height: 80px;
+  }
 }
 
 /* ===== Cerradura (lockpick) ===== */
@@ -4002,6 +4097,46 @@ function isMeleeWeaponItem(it) {
   return !ammo || ammo.includes('ninguna') || ammo.includes('cuerpo') || ammo.includes('melee');
 }
 
+/** Elige un id de asset de arma coherente con el nombre (mismo id para icono y sprite). */
+function pickWeaponAssetBase(it) {
+  if (!it) return null;
+  let n = (it.name || '').toLowerCase();
+  // Mismo número en icons/ y sprites/ para que coincidan
+  if (/minigun|gatling|lanzallamas|lanzacohetes|lanzamisil|pesad/i.test(n)) return 'weapons_040';
+  if (/escopeta|shotgun|recortad/i.test(n)) return 'weapons_002';
+  if (/francotir|sniper|\.308|anti-?mater/i.test(n)) return 'weapons_055';
+  if (/asalt|fusil|rifle de asalto|combat rifle|5\.56|7\.62/i.test(n)) return 'weapons_022';
+  if (/l[aá]ser|plasma|gauss|energ[ií]a|blaster|alien|hipnotron/i.test(n)) return 'weapons_016';
+  if (/revolver|revólver|\.44|\.357|magnum/i.test(n)) return 'weapons_046';
+  if (/pistola|10mm|\.45|\.38|pistol/i.test(n)) return 'weapons_073';
+  if (/ametralladora|smg|subfusil|thompson/i.test(n)) return 'weapons_028';
+  if (/granada|dinamita|molotov|mina/i.test(n)) return 'weapons_009';
+  // fallback por id estable
+  let id = it.id != null ? Number(it.id) : 0;
+  let pool = ['weapons_073','weapons_046','weapons_002','weapons_022','weapons_055','weapons_016','weapons_028','weapons_040'];
+  return pool[Math.abs(id) % pool.length];
+}
+
+function pairedAssetPaths(a, it) {
+  // Forzar mismo base id en icon y sprite para que coincidan visualmente
+  let base = null;
+  if (it && (it.type === 'weapon' || it.weapon) && !isMeleeWeaponItem(it) && !it.grenade) {
+    base = pickWeaponAssetBase(it);
+  }
+  if (!base && a) {
+    // Preferir sprite_id; si no, icon_id (mismo archivo en ambas carpetas)
+    base = a.sprite_id || a.icon_id || null;
+    if (base && typeof base === 'string') {
+      base = base.replace(/^.*\//, '').replace(/\.(png|webp|jpg)$/i, '');
+    }
+  }
+  if (!base) return null;
+  return {
+    icon: 'img/assets/icons/' + base + '.png',
+    sprite: 'img/assets/sprites/' + base + '.png'
+  };
+}
+
 function getItemIconUrl(id) {
   let it = (typeof getItemBase === 'function') ? getItemBase(id) : null;
   if (it && isMeleeWeaponItem(it)) {
@@ -4009,6 +4144,10 @@ function getItemIconUrl(id) {
     return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
   }
   let a = getItemAsset(id);
+  let paired = pairedAssetPaths(a, it);
+  if (paired && paired.icon) {
+    return paired.icon.startsWith('./') ? paired.icon : ('./' + paired.icon.replace(/^\//, ''));
+  }
   if (!a || !a.icon) return null;
   return a.icon.startsWith('./') ? a.icon : ('./' + a.icon.replace(/^\//, ''));
 }
@@ -4020,6 +4159,10 @@ function getItemSpriteUrl(id) {
     return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
   }
   let a = getItemAsset(id);
+  let paired = pairedAssetPaths(a, it);
+  if (paired && paired.sprite) {
+    return paired.sprite.startsWith('./') ? paired.sprite : ('./' + paired.sprite.replace(/^\//, ''));
+  }
   if (!a || !a.sprite) return null;
   return a.sprite.startsWith('./') ? a.sprite : ('./' + a.sprite.replace(/^\//, ''));
 }
@@ -6047,6 +6190,10 @@ function getStorageItemStyle(inst, it) {
 
 function renderStorageUI() {
   ensureVaultDefaults();
+  // Capacidad base del almacén: 500 kg
+  if (P.storageMaxWeight == null || (P.storageMaxWeight === 100 && !(P.storageUpgradeRank > 0))) {
+    P.storageMaxWeight = 500;
+  }
   let sub = P.storageSubtab || 'weapon';
   let page = P.storagePage || 0;
   const PER_PAGE = 10;
@@ -10019,14 +10166,37 @@ function fullscreenBtnLabel() {
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
   {
+    ver: '0.12.5',
+    date: '2026-10-09',
+    title: 'Almacén Refugio 500kg y almacén RobCo',
+    notes: [
+      'Almacén del Refugio: capacidad inicial 500 kg (antes 100).',
+      'Fábrica RobCo: al reclamar chatarra va a un almacén infinito propio.',
+      'En Chatarrería puedes retirar al inventario con pad numérico (solo salida).'
+    ]
+  },
+  {
+    ver: '0.12.4',
+    date: '2026-10-09',
+    title: 'Hackeo móvil: letras iluminadas',
+    notes: [
+      'Boot letra a letra; glow móvil; letras correctas en dorado.'
+    ]
+  },
+  {
+    ver: '0.12.3',
+    date: '2026-10-09',
+    title: 'SFX loot/casino y assets',
+    notes: [
+      'SFX de loot/chapas/casino; icono=sprite por categoría; radio 5 pistas.'
+    ]
+  },
+  {
     ver: '0.12.2',
     date: '2026-10-09',
     title: 'Expansión de radio',
     notes: [
-      'Radio Wasteland y Radio New Vegas: +1 pista cada una (4).',
-      'Nueva emisora: Radio Clásica (5 pistas).',
-      'Nueva emisora: Radio Nuka World (1 pista, DLC Circo).',
-      'Reproducción offline vía caché de audio existente.'
+      'Radio Clásica, Nuka World y pistas extra.'
     ]
   },
   {
@@ -10035,30 +10205,6 @@ const VERSION_HISTORY = [
     title: 'Cerradura v2 y fixes de mapa',
     notes: [
       'Cerradura rediseñada; hackeo más lento; fixes de mapa interior.'
-    ]
-  },
-  {
-    ver: '0.12.0',
-    date: '2026-10-09',
-    title: 'Hackeo y cerraduras',
-    notes: [
-      'Minijuegos de terminal y cerraduras; Holocinta / Ganzúas.'
-    ]
-  },
-  {
-    ver: '0.11.56',
-    date: '2026-10-09',
-    title: 'Saqueo de cadáveres y muebles',
-    notes: [
-      'Saqueo selectivo de cadáveres y muebles.'
-    ]
-  },
-  {
-    ver: '0.11.55',
-    date: '2026-10-08',
-    title: 'Icono = sprite melee',
-    notes: [
-      'Armas cuerpo a cuerpo: sprite = icono.'
     ]
   }
 ];
@@ -13212,6 +13358,7 @@ function spinSlots(casinoId) {
     }
     if (win) {
       addCasinoChips(casinoId, win);
+      try { playWinCasinoSound(); } catch (e) {}
       // Resaltar fila central ganadora
       for (let col = 0; col < 3; col++) {
         let cell = document.getElementById('slot-c1' + col);
@@ -13388,7 +13535,10 @@ function bjStand() {
   else if (p > d) { win = st.bet * 2; msg = 'Tú ' + p + ' vs ' + d + '. Ganas +' + win; }
   else if (p === d) { win = st.bet; msg = 'Empate ' + p + '. Se devuelve la apuesta.'; }
   else { msg = 'Tú ' + p + ' vs ' + d + '. Pierdes.'; }
-  if (win) addCasinoChips(st.casinoId, win);
+  if (win) {
+    addCasinoChips(st.casinoId, win);
+    if (win > st.bet) { try { playWinCasinoSound(); } catch (e) {} }
+  }
   st.result = msg;
   logMsg(msg);
   renderBlackjackTable();
@@ -13579,7 +13729,10 @@ function spinAmericanRoulette(casinoId) {
     else addWin('col3', 2, 'Columna 3');
   }
 
-  if (win > 0) addCasinoChips(casinoId, win);
+  if (win > 0) {
+    addCasinoChips(casinoId, win);
+    try { playWinCasinoSound(); } catch (e) {}
+  }
   let colorLabel = color === 'red' ? 'rojo' : color === 'black' ? 'negro' : 'verde';
   let msg = 'Salió <b style="color:' + (color==='red'?'#ff6666':color==='green'?'#66ff66':'#ccc') + ';">' + num + '</b> (' + colorLabel + '). ';
   if (win > 0) msg += '<span style="color:var(--gold);font-weight:bold;">Ganas ' + win + ' fichas</span>' + (hits.length ? ' · ' + hits.join(', ') : '');
@@ -14236,6 +14389,7 @@ function drawPokerCards() {
   let win = st.bet * res.mult;
   if (win > 0) {
     addCasinoChips(st.casinoId, win);
+    try { playWinCasinoSound(); } catch (e) {}
     logMsg('Póker: ' + res.name + ' +' + win + ' fichas');
   } else {
     logMsg('Póker: ' + res.name + ' — sin premio');
@@ -14352,13 +14506,15 @@ function ensureRobcoFactory() {
   if (!P.robcoFactory || typeof P.robcoFactory !== 'object') {
     P.robcoFactory = {
       claimed: false, level: 1, robots: 0,
-      pendingScrap: {}, // { itemId: qty }
+      pendingScrap: {}, // producción pendiente de reclamar → almacén
+      scrapWarehouse: {}, // almacén infinito de chatarra (solo salida)
       medicBuilt: false, roomBuilt: false, travelBuilt: false,
       lastMedicHour: -9999,
       craftOffers: null
     };
   }
   if (!P.robcoFactory.pendingScrap) P.robcoFactory.pendingScrap = {};
+  if (!P.robcoFactory.scrapWarehouse) P.robcoFactory.scrapWarehouse = {};
   return P.robcoFactory;
 }
 
@@ -14408,14 +14564,16 @@ function renderRobcoFactoryUI(tab) {
   if (tab === 'scrap') {
     let pending = rf.pendingScrap || {};
     let totalPend = Object.values(pending).reduce((a,b)=>a+(b||0),0);
-    let rate = robots; // 1 scrap unit equivalent per robot per hour distributed
+    let wh = rf.scrapWarehouse || {};
+    let totalWh = Object.values(wh).reduce((a,b)=>a+(b||0),0);
+    let rate = robots;
     html += `<div class="item" style="border-color:#a0a0a0 !important;">
       <b style="color:#a0a0a0;">🔧 Producción de chatarrería</b><br>
       <span style="font-size:12px;color:#8d9880;">${robots} robots · ~${rate} piezas de chatarra/hora</span><br>`;
     if (totalPend <= 0) {
-      html += `<span style="font-size:13px;">Acumulado: <b style="color:#a0a0a0;">0</b></span><br>`;
+      html += `<span style="font-size:13px;">Pendiente de reclamar: <b style="color:#a0a0a0;">0</b></span><br>`;
     } else {
-      html += `<span style="font-size:12px;color:#8d9880;">Acumulado:</span><br>`;
+      html += `<span style="font-size:12px;color:#8d9880;">Pendiente de reclamar (va al almacén RobCo):</span><br>`;
       Object.keys(pending).forEach(jid => {
         let q = pending[jid];
         if (q > 0) {
@@ -14424,8 +14582,32 @@ function renderRobcoFactoryUI(tab) {
         }
       });
     }
-    html += `<button style="margin-top:8px;background:#a0a0a0;color:#111;" ${totalPend<=0?'disabled':''} onclick="claimRobcoScrap()">Reclamar chatarra</button>
+    html += `<button style="margin-top:8px;background:#a0a0a0;color:#111;" ${totalPend<=0?'disabled':''} onclick="claimRobcoScrap()">Reclamar → Almacén</button>
+      <p style="font-size:11px;color:#8d9880;margin:6px 0 0 0;">La producción se guarda en el almacén infinito de la fábrica (no va al inventario).</p>
     </div>`;
+
+    // Almacén infinito de chatarra (solo retirar)
+    html += `<div class="item" style="border-color:#88aacc !important;">
+      <b style="color:#88aacc;">📦 Almacén de chatarra RobCo</b><br>
+      <span style="font-size:11px;color:#8d9880;">Capacidad infinita. Solo puedes <b>retirar</b> al inventario (no se puede meter ni devolver).</span><br>`;
+    if (totalWh <= 0) {
+      html += `<p style="font-size:12px;color:#8d9880;margin:8px 0;">Almacén vacío.</p>`;
+    } else {
+      html += `<div style="margin-top:8px;">`;
+      Object.keys(wh).forEach(jid => {
+        let q = wh[jid] || 0;
+        if (q <= 0) return;
+        let it = getItemBase(parseInt(jid,10));
+        let name = it ? it.name : jid;
+        html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid #2a2a2a;">
+          <span style="font-size:12px;">${name}: <b style="color:#a0a0a0;">${q}</b></span>
+          <button style="font-size:11px;padding:4px 10px;border-color:#88aacc;color:#88aacc;" onclick="withdrawRobcoWarehouse(${jid})">Retirar</button>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+    html += `</div>`;
+
     let maxR = Math.min(10, lvl);
     let hireCost = getRobcoHireCost();
     html += `<div class="item" style="border-color:#a0a0a0 !important;">
@@ -14506,6 +14688,7 @@ function claimRobcoFactory() {
   P.robcoFactory.level = 1;
   P.robcoFactory.robots = 0;
   P.robcoFactory.pendingScrap = {};
+  P.robcoFactory.scrapWarehouse = {};
   logMsg("¡Fábrica RobCo Industries reclamada!");
   renderRobcoFactoryUI('scrap');
   updateStats();
@@ -14548,18 +14731,60 @@ function hireRobcoWorker() {
 function claimRobcoScrap() {
   ensureRobcoFactory();
   let pending = P.robcoFactory.pendingScrap || {};
+  if (!P.robcoFactory.scrapWarehouse) P.robcoFactory.scrapWarehouse = {};
+  let wh = P.robcoFactory.scrapWarehouse;
   let any = false;
+  let total = 0;
   Object.keys(pending).forEach(jid => {
     let q = pending[jid] || 0;
     if (q > 0) {
-      addItemToInv(parseInt(jid,10), q);
+      wh[jid] = (wh[jid] || 0) + q;
+      total += q;
       any = true;
     }
   });
   P.robcoFactory.pendingScrap = {};
-  if (any) logMsg("Chatarra reclamada de la chatarrería RobCo.");
+  if (any) logMsg("Chatarra reclamada → Almacén RobCo (+" + total + " piezas). Retírala cuando quieras.");
+  else logMsg("No hay chatarra pendiente.");
   renderRobcoFactoryUI('scrap');
   updateStats();
+}
+
+/** Retirar chatarra del almacén RobCo al inventario (pad numérico). No se puede devolver. */
+function withdrawRobcoWarehouse(itemId) {
+  ensureRobcoFactory();
+  itemId = parseInt(itemId, 10);
+  if (!P.robcoFactory.scrapWarehouse) P.robcoFactory.scrapWarehouse = {};
+  let maxQ = P.robcoFactory.scrapWarehouse[itemId] || 0;
+  if (maxQ < 1) { logMsg("No hay de ese material en el almacén."); return; }
+  let it = getItemBase(itemId);
+  let title = 'Retirar ' + (it ? it.name : itemId) + ' (máx ' + maxQ + ')';
+  if (typeof openQtyPad === 'function') {
+    openQtyPad(maxQ, title, function(qty) {
+      qty = Math.floor(Number(qty) || 0);
+      if (qty < 1) return;
+      qty = Math.min(qty, P.robcoFactory.scrapWarehouse[itemId] || 0);
+      if (qty < 1) return;
+      if (!addItemToInv(itemId, qty)) {
+        logMsg("Inventario lleno. No se pudo retirar.");
+        return;
+      }
+      P.robcoFactory.scrapWarehouse[itemId] -= qty;
+      if (P.robcoFactory.scrapWarehouse[itemId] <= 0) delete P.robcoFactory.scrapWarehouse[itemId];
+      logMsg("Retiras " + qty + "× " + (it ? it.name : itemId) + " del almacén RobCo.");
+      renderRobcoFactoryUI('scrap');
+      updateStats();
+    });
+  } else {
+    let qty = promptQty(maxQ, title);
+    if (qty < 1) return;
+    if (!addItemToInv(itemId, qty)) { logMsg("Inventario lleno."); return; }
+    P.robcoFactory.scrapWarehouse[itemId] -= qty;
+    if (P.robcoFactory.scrapWarehouse[itemId] <= 0) delete P.robcoFactory.scrapWarehouse[itemId];
+    logMsg("Retiras " + qty + "× " + (it ? it.name : itemId) + " del almacén RobCo.");
+    renderRobcoFactoryUI('scrap');
+    updateStats();
+  }
 }
 
 function tickRobcoScrap() {
@@ -18758,7 +18983,10 @@ function takeLootEntry(idx) {
   }
   if (ok) {
     e.taken = true;
-    try { playBuySound(); } catch (err) {}
+    try {
+      if (e.kind === 'caps') playCapsSound();
+      else playLootSound();
+    } catch (err) {}
     updateStats();
     renderLootUI();
   }
@@ -18902,11 +19130,11 @@ function renderHackBoot() {
     '<div class="hack-terminal">' +
     '<div class="ht-title">ROBCO INDUSTRIES (TM) TERMLINK PROTOCOL</div>' +
     '<div class="ht-warn">!!! WARNING: LOCKOUT IMMINENT !!!</div>' +
-    '<div class="ht-boot" id="hack-boot">Iniciando BIOS...\n</div>' +
+    '<div class="ht-boot" id="hack-boot"></div>' +
     '</div>' +
     '<button style="width:100%;margin-top:10px;border-color:#8d9880;color:#8d9880;" onclick="abortHackMinigame()">Salir</button>';
   m.classList.add('show');
-  let steps = [
+  let fullText = [
     'ROBCO INDUSTRIES UNIFIED OPERATING SYSTEM',
     'COPYRIGHT 2075-2077 ROBCO INDUSTRIES',
     '-Server 1-',
@@ -18916,22 +19144,56 @@ function renderHackBoot() {
     '0xF008  > PASSWORD REQUIRED',
     '',
     'Acceso a terminal — elige la contraseña correcta.'
-  ];
+  ].join('\n');
   let i = 0;
   if (_hackBootTimer) clearInterval(_hackBootTimer);
+  // Escritura carácter a carácter (letras iluminadas visibles en móvil)
   _hackBootTimer = setInterval(function() {
     let el = document.getElementById('hack-boot');
-    if (!el || !_hackState) { clearInterval(_hackBootTimer); return; }
-    if (i >= steps.length) {
-      clearInterval(_hackBootTimer);
+    if (!el || !_hackState) {
+      if (_hackBootTimer) clearInterval(_hackBootTimer);
       _hackBootTimer = null;
-      _hackState.booting = false;
-      renderHackUI();
       return;
     }
-    el.textContent += steps[i] + '\n';
-    i++;
-  }, 320);
+    if (i >= fullText.length) {
+      clearInterval(_hackBootTimer);
+      _hackBootTimer = null;
+      el.innerHTML = escapeHtmlHack(fullText) + '<span class="ht-cursor">█</span>';
+      setTimeout(function() {
+        if (!_hackState) return;
+        _hackState.booting = false;
+        renderHackUI();
+      }, 420);
+      return;
+    }
+    // Avance por bloques para no ir demasiado lento en textos largos
+    let chunk = 2;
+    let next = fullText.slice(0, i + chunk);
+    i += chunk;
+    el.innerHTML = escapeHtmlHack(next) + '<span class="ht-cursor">█</span>';
+    try { el.scrollTop = el.scrollHeight; } catch (e) {}
+  }, 28);
+}
+function escapeHtmlHack(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\n/g, '<br>');
+}
+function formatHackWordLetters(word, password, used) {
+  if (!used) return escapeHtmlHack(word);
+  let html = '';
+  let len = word.length;
+  for (let i = 0; i < len; i++) {
+    let ch = word[i];
+    if (password && password[i] === ch) {
+      html += '<span class="ht-letter-ok">' + escapeHtmlHack(ch) + '</span>';
+    } else {
+      html += escapeHtmlHack(ch);
+    }
+  }
+  return html;
 }
 
 function likeliness(a, b) {
@@ -18948,18 +19210,18 @@ function renderHackUI() {
   let diffLabel = s.difficulty === 'hard' ? 'DIFÍCIL' : (s.difficulty === 'normal' ? 'NORMAL' : 'FÁCIL');
   let holos = countItemInInv(940);
   let wordsHtml = s.words.map(function(w, idx) {
-    let used = s.used[w];
-    return '<button class="ht-word' + (used ? ' used' : '') + '" ' + (used ? 'disabled' : '') +
-      ' onclick="tryHackWord(' + idx + ')">' + w + '</button>';
+    let used = !!s.used[w];
+    return '<button type="button" class="ht-word' + (used ? ' used' : '') + '" ' + (used ? 'disabled' : '') +
+      ' onclick="tryHackWord(' + idx + ')">' + formatHackWordLetters(w, s.password, used) + '</button>';
   }).join('');
-  let logHtml = (s.log || []).map(function(l) { return '<div>> ' + l + '</div>'; }).join('');
+  let logHtml = (s.log || []).map(function(l) { return '<div>&gt; ' + l + '</div>'; }).join('');
   document.getElementById('modal-body').innerHTML =
     '<div class="hack-terminal">' +
     '<div class="ht-title">ROBCO INDUSTRIES (TM) TERMLINK PROTOCOL</div>' +
     '<div class="ht-warn">!!! WARNING: LOCKOUT IMMINENT !!!</div>' +
     '<div class="ht-attempts">Intentos restantes: ' + s.attempts + ' · Dificultad: ' + diffLabel + '</div>' +
     '<div class="ht-grid">' + wordsHtml + '</div>' +
-    '<div class="ht-log">' + (logHtml || '<div style="opacity:0.5;">> Esperando selección...</div>') + '</div>' +
+    '<div class="ht-log">' + (logHtml || '<div style="opacity:0.6;">&gt; Esperando selección...</div>') + '</div>' +
     '</div>' +
     '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">' +
     (holos > 0 ? '<button style="flex:1;border-color:var(--gold);color:var(--gold);" onclick="useHackHolotape()">Holocinta Rápida (' + holos + ')</button>' : '') +
@@ -20250,6 +20512,75 @@ function playBuySound() {
     });
   } catch (e) {}
 }
+
+/** Efecto al coger objetos del loot (no es el de tienda) */
+function playLootSound() {
+  try {
+    if (P && P.muteSfx) return;
+    let ctx = getAudioCtx();
+    let vol = (P && P.volSfx !== undefined ? P.volSfx : 0.7) * 0.22;
+    let t = ctx.currentTime;
+    let osc = ctx.createOscillator();
+    let gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(520, t);
+    osc.frequency.exponentialRampToValueAtTime(280, t + 0.08);
+    gain.gain.setValueAtTime(vol, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.12);
+  } catch (e) {}
+}
+
+let _capsAudio = null;
+function playCapsSound() {
+  try {
+    if (P && P.muteSfx) return;
+    let vol = (P && P.volSfx !== undefined) ? P.volSfx : 0.7;
+    if (!_capsAudio) {
+      _capsAudio = new Audio('./audio/Chapas.wav');
+      _capsAudio.preload = 'auto';
+    }
+    try { _capsAudio.pause(); } catch (e) {}
+    _capsAudio.currentTime = 0;
+    _capsAudio.volume = vol;
+    let p = _capsAudio.play();
+    if (p && p.catch) p.catch(function() {
+      try {
+        let b = new Audio('./audio/Chapas.wav');
+        b.volume = vol;
+        b.play().catch(function() {});
+      } catch (e2) {}
+    });
+  } catch (e) {
+    try { playLootSound(); } catch (e2) {}
+  }
+}
+
+let _winCasinoAudio = null;
+function playWinCasinoSound() {
+  try {
+    if (P && P.muteSfx) return;
+    let vol = (P && P.volSfx !== undefined) ? P.volSfx : 0.7;
+    if (!_winCasinoAudio) {
+      _winCasinoAudio = new Audio('./audio/WinCasino.mp3');
+      _winCasinoAudio.preload = 'auto';
+    }
+    try { _winCasinoAudio.pause(); } catch (e) {}
+    _winCasinoAudio.currentTime = 0;
+    _winCasinoAudio.volume = vol;
+    let p = _winCasinoAudio.play();
+    if (p && p.catch) p.catch(function() {
+      try {
+        let b = new Audio('./audio/WinCasino.mp3');
+        b.volume = vol;
+        b.play().catch(function() {});
+      } catch (e2) {}
+    });
+  } catch (e) {}
+}
 // Precargar en la primera interacción del usuario
 (function warmBuySound() {
   let once = function() {
@@ -20357,7 +20688,8 @@ function loadGame() {
     if (parsed.rads === undefined) parsed.rads = 0;
     if (!parsed.storage) parsed.storage = [];
     if (!parsed.activeEffects) parsed.activeEffects = [];
-    if (parsed.storageMaxWeight === undefined) parsed.storageMaxWeight = 100;
+    if (parsed.storageMaxWeight === undefined) parsed.storageMaxWeight = 500;
+    if (parsed.storageMaxWeight === 100 && !(parsed.storageUpgradeRank > 0)) parsed.storageMaxWeight = 500;
     if (parsed.worldHours === undefined) parsed.worldHours = 9;
     if (!parsed.weather) parsed.weather = 'day';
     if (!parsed.reputation) parsed.reputation = {};
@@ -20493,7 +20825,11 @@ if (savedData) {
     if (parsed.alchemyLevel === undefined) parsed.alchemyLevel = 1;
     if (parsed.ammoLevel === undefined) parsed.ammoLevel = 1;
     if (parsed.cookLevel === undefined) parsed.cookLevel = 1;
-    if (parsed.storageMaxWeight === undefined) parsed.storageMaxWeight = 100;
+    if (parsed.storageMaxWeight === undefined) parsed.storageMaxWeight = 500;
+    // Migración: almacén base era 100 → ahora 500 (solo si no se había ampliado)
+    if (parsed.storageMaxWeight === 100 && !(parsed.storageUpgradeRank > 0)) {
+      parsed.storageMaxWeight = 500;
+    }
     if (parsed.storageUpgradeRank === undefined) parsed.storageUpgradeRank = 0;
     if (!parsed.storage) parsed.storage = [];
     if (!parsed.activeEffects) parsed.activeEffects = [];
