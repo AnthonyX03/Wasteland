@@ -4074,31 +4074,31 @@ function getItemAsset(id) {
 }
 
 /**
- * Catálogo visual de armas — separado por forma del asset (aspect ratio del pack).
- * LONG (ancha): siluetas de arma de fuego. SHORT (alta): melee.
- * Icono y sprite usan SIEMPRE el mismo ID. Nunca melee en ranged ni al revés.
+ * Catálogo visual de armas — clasificado sobre el pack FOTOREALISTA real.
+ * 1–38 = melee; 39+ = armas de fuego / energía.
+ * Icono y sprite usan SIEMPRE el mismo ID (icons/ lista, sprites/ visor).
  */
 const WEAPON_ICON_BY_TYPE = {
-  // Pistolas / compactas (solo siluetas horizontales de arma de fuego)
-  pistol:   ['weapons_001', 'weapons_002', 'weapons_005', 'weapons_008', 'weapons_019', 'weapons_026', 'weapons_033', 'weapons_034', 'weapons_036', 'weapons_047', 'weapons_050', 'weapons_051', 'weapons_054', 'weapons_059', 'weapons_072', 'weapons_080'],
-  // Revólveres
-  revolver: ['weapons_033', 'weapons_026', 'weapons_034', 'weapons_047', 'weapons_059'],
-  // Escopetas
-  shotgun:  ['weapons_045', 'weapons_029', 'weapons_042', 'weapons_057', 'weapons_067', 'weapons_075'],
-  // SMG / subfusiles
-  smg:      ['weapons_003', 'weapons_012', 'weapons_019', 'weapons_029', 'weapons_038', 'weapons_050'],
-  // Rifles de asalto / combate / fusil (silueta larga de rifle)
-  assault:  ['weapons_045', 'weapons_029', 'weapons_042', 'weapons_057', 'weapons_067', 'weapons_068', 'weapons_074', 'weapons_075', 'weapons_080'],
-  // Francotirador / rifle largo
-  sniper:   ['weapons_045', 'weapons_057', 'weapons_067', 'weapons_068', 'weapons_074', 'weapons_075'],
-  // Energía (láser/plasma)
-  energy:   ['weapons_038', 'weapons_042', 'weapons_057', 'weapons_068', 'weapons_074', 'weapons_080'],
-  // Pesadas (minigun, lanzacohetes…) — solo forma de arma de fuego
-  heavy:    ['weapons_045', 'weapons_057', 'weapons_067', 'weapons_075', 'weapons_029'],
-  // Melee (cuchillos, hachas, martillos, nudillos) — SOLO siluetas altas/cortas
-  melee:    ['weapons_011', 'weapons_013', 'weapons_015', 'weapons_016', 'weapons_020', 'weapons_022', 'weapons_025', 'weapons_035', 'weapons_037', 'weapons_044', 'weapons_048', 'weapons_049', 'weapons_052', 'weapons_053', 'weapons_060', 'weapons_064', 'weapons_071', 'weapons_073', 'weapons_079', 'weapons_087'],
-  // Granadas
-  grenade:  ['weapons_037', 'weapons_044', 'weapons_011']
+  // Pistolas semiautomáticas (39–41, 44–47)
+  pistol:   ['weapons_039', 'weapons_040', 'weapons_041', 'weapons_044', 'weapons_045', 'weapons_046', 'weapons_047'],
+  // Revólveres (42, 43, 48)
+  revolver: ['weapons_042', 'weapons_043', 'weapons_048'],
+  // Escopetas (49–54, 73, 83)
+  shotgun:  ['weapons_049', 'weapons_050', 'weapons_051', 'weapons_052', 'weapons_053', 'weapons_054', 'weapons_073', 'weapons_083'],
+  // SMG / subfusiles (sin pack dedicado: pistolas compactas + asalto corto)
+  smg:      ['weapons_045', 'weapons_046', 'weapons_047', 'weapons_055', 'weapons_056'],
+  // Rifles de asalto / combate / fusil (55–57 AK / assault)
+  assault:  ['weapons_055', 'weapons_056', 'weapons_057'],
+  // Francotirador con mira (58–61)
+  sniper:   ['weapons_058', 'weapons_059', 'weapons_060', 'weapons_061'],
+  // Energía láser/plasma (66–71, 74, 76–81, 84, 86–87 + 62)
+  energy:   ['weapons_066', 'weapons_067', 'weapons_068', 'weapons_069', 'weapons_070', 'weapons_071', 'weapons_074', 'weapons_076', 'weapons_077', 'weapons_078', 'weapons_079', 'weapons_080', 'weapons_081', 'weapons_084', 'weapons_086', 'weapons_087', 'weapons_062'],
+  // Pesadas: ametralladora, minigun, RPG (63–65)
+  heavy:    ['weapons_063', 'weapons_064', 'weapons_065'],
+  // Melee: cuchillos, hachas, bates, martillos, nudillos, lanzas (1–38 + 75, 85)
+  melee:    ['weapons_001', 'weapons_002', 'weapons_003', 'weapons_004', 'weapons_005', 'weapons_006', 'weapons_007', 'weapons_008', 'weapons_009', 'weapons_010', 'weapons_011', 'weapons_012', 'weapons_013', 'weapons_014', 'weapons_015', 'weapons_016', 'weapons_017', 'weapons_018', 'weapons_019', 'weapons_020', 'weapons_021', 'weapons_022', 'weapons_023', 'weapons_024', 'weapons_025', 'weapons_026', 'weapons_027', 'weapons_028', 'weapons_029', 'weapons_030', 'weapons_031', 'weapons_032', 'weapons_033', 'weapons_034', 'weapons_035', 'weapons_036', 'weapons_037', 'weapons_038', 'weapons_075', 'weapons_085'],
+  // Granadas / explosivos
+  grenade:  ['weapons_004', 'weapons_010', 'weapons_008']
 };
 
 function isMeleeWeaponItem(it) {
@@ -10210,6 +10210,16 @@ function fullscreenBtnLabel() {
 
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
+  {
+    ver: '0.12.11',
+    date: '2026-10-09',
+    title: 'Assets fotorealistas y mapeo de armas',
+    notes: [
+      'Pack de imágenes fotorealistas integrado.',
+      'Mapeo icono/sprite revisado visualmente: pistola→pistola, rifle→rifle, cuchillo→cuchillo.',
+      'Melee 1–38; armas de fuego desde 39 (escopetas, asalto, francotirador, energía…).'
+    ]
+  },
   {
     ver: '0.12.10',
     date: '2026-10-09',
