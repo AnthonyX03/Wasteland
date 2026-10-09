@@ -4074,30 +4074,32 @@ function getItemAsset(id) {
 }
 
 /**
- * Catálogo visual de armas — clasificado sobre el pack FOTOREALISTA real.
- * 1–38 = melee; 39+ = armas de fuego / energía.
- * Icono y sprite usan SIEMPRE el mismo ID (icons/ lista, sprites/ visor).
+ * Catálogo visual de armas — pack FOTOREALISTA clasificado a ojo.
+ * Melee subdividido: cuchillo, hacha, bate, lanza, martillo, etc.
+ * Icono y sprite = mismo ID (icons/ lista, sprites/ visor).
  */
 const WEAPON_ICON_BY_TYPE = {
-  // Pistolas semiautomáticas (39–41, 44–47)
   pistol:   ['weapons_039', 'weapons_040', 'weapons_041', 'weapons_044', 'weapons_045', 'weapons_046', 'weapons_047'],
-  // Revólveres (42, 43, 48)
   revolver: ['weapons_042', 'weapons_043', 'weapons_048'],
-  // Escopetas (49–54, 73, 83)
   shotgun:  ['weapons_049', 'weapons_050', 'weapons_051', 'weapons_052', 'weapons_053', 'weapons_054', 'weapons_073', 'weapons_083'],
-  // SMG / subfusiles (sin pack dedicado: pistolas compactas + asalto corto)
   smg:      ['weapons_045', 'weapons_046', 'weapons_047', 'weapons_055', 'weapons_056'],
-  // Rifles de asalto / combate / fusil (55–57 AK / assault)
   assault:  ['weapons_055', 'weapons_056', 'weapons_057'],
-  // Francotirador con mira (58–61)
   sniper:   ['weapons_058', 'weapons_059', 'weapons_060', 'weapons_061'],
-  // Energía láser/plasma (66–71, 74, 76–81, 84, 86–87 + 62)
   energy:   ['weapons_066', 'weapons_067', 'weapons_068', 'weapons_069', 'weapons_070', 'weapons_071', 'weapons_074', 'weapons_076', 'weapons_077', 'weapons_078', 'weapons_079', 'weapons_080', 'weapons_081', 'weapons_084', 'weapons_086', 'weapons_087', 'weapons_062'],
-  // Pesadas: ametralladora, minigun, RPG (63–65)
   heavy:    ['weapons_063', 'weapons_064', 'weapons_065'],
-  // Melee: cuchillos, hachas, bates, martillos, nudillos, lanzas (1–38 + 75, 85)
-  melee:    ['weapons_001', 'weapons_002', 'weapons_003', 'weapons_004', 'weapons_005', 'weapons_006', 'weapons_007', 'weapons_008', 'weapons_009', 'weapons_010', 'weapons_011', 'weapons_012', 'weapons_013', 'weapons_014', 'weapons_015', 'weapons_016', 'weapons_017', 'weapons_018', 'weapons_019', 'weapons_020', 'weapons_021', 'weapons_022', 'weapons_023', 'weapons_024', 'weapons_025', 'weapons_026', 'weapons_027', 'weapons_028', 'weapons_029', 'weapons_030', 'weapons_031', 'weapons_032', 'weapons_033', 'weapons_034', 'weapons_035', 'weapons_036', 'weapons_037', 'weapons_038', 'weapons_075', 'weapons_085'],
-  // Granadas / explosivos
+  // --- Melee por subtipo ---
+  knife:    ['weapons_001', 'weapons_002', 'weapons_003', 'weapons_018', 'weapons_019', 'weapons_020', 'weapons_021', 'weapons_022', 'weapons_023', 'weapons_025', 'weapons_026', 'weapons_036', 'weapons_037', 'weapons_038'],
+  cleaver:  ['weapons_004'],  // hacha de carnicero / cleaver
+  axe:      ['weapons_005', 'weapons_028', 'weapons_034'],
+  bat:      ['weapons_006', 'weapons_007', 'weapons_011', 'weapons_013', 'weapons_027', 'weapons_035', 'weapons_075', 'weapons_085'],
+  hammer:   ['weapons_012', 'weapons_016', 'weapons_029', 'weapons_030'],
+  spear:    ['weapons_017', 'weapons_032', 'weapons_033'],
+  pipe:     ['weapons_008', 'weapons_009', 'weapons_014', 'weapons_015'],  // llave, crowbar, tubería
+  knuckles: ['weapons_010'],
+  pickaxe:  ['weapons_031'],
+  chainsaw: ['weapons_024'],
+  // fallback melee genérico (cualquier cuerpo a cuerpo)
+  melee:    ['weapons_001', 'weapons_002', 'weapons_003', 'weapons_006', 'weapons_012', 'weapons_017', 'weapons_018', 'weapons_022', 'weapons_028', 'weapons_036'],
   grenade:  ['weapons_004', 'weapons_010', 'weapons_008']
 };
 
@@ -4112,6 +4114,22 @@ function isMeleeWeaponItem(it) {
   return !ammo || ammo.includes('ninguna') || ammo.includes('cuerpo') || ammo.includes('melee');
 }
 
+/** Subtipo visual de melee por nombre (cuchillo ≠ bate ≠ lanza). */
+function resolveMeleeVisualSubtype(it) {
+  let n = ((it && it.name) || '').toLowerCase();
+  if (/motosierra|chainsaw|ripper/i.test(n)) return 'chainsaw';
+  if (/puño|nudillo|knuckle|power fist|guantelete/i.test(n)) return 'knuckles';
+  if (/lanza|pica|tridente|spear|jabalina/i.test(n)) return 'spear';
+  if (/pico|pickaxe|piqueta/i.test(n)) return 'pickaxe';
+  if (/martillo|maza|sledge|supermartillo/i.test(n)) return 'hammer';
+  if (/hacha|axe|bombero/i.test(n)) return 'axe';
+  if (/bate|porra|club|pinchos|béisbol|beisbol/i.test(n)) return 'bat';
+  if (/tuber[ií]a|llave|crowbar|palanca|pipe|wrench/i.test(n)) return 'pipe';
+  if (/cuchilla|cleaver|carnicero/i.test(n)) return 'cleaver';
+  if (/cuchillo|machete|navaja|wakizashi|espada|katana|knife|blade|daga/i.test(n)) return 'knife';
+  return 'melee';
+}
+
 /** Detecta tipo visual del arma por nombre + munición + categoría. */
 function resolveWeaponVisualType(it) {
   if (!it) return 'assault';
@@ -4121,7 +4139,7 @@ function resolveWeaponVisualType(it) {
   let cat = '';
   try { cat = (typeof getWeaponCategory === 'function') ? getWeaponCategory(it) : ''; } catch (e) {}
 
-  if (isMeleeWeaponItem(it) || cat === 'melee') return 'melee';
+  if (isMeleeWeaponItem(it) || cat === 'melee') return resolveMeleeVisualSubtype(it);
   if (cat === 'grenade' || /granada|dinamita|molotov|mina|explosiv/i.test(n)) return 'grenade';
   // Escopeta / sniper / SMG / energía ANTES de "pesado" (evitar "Rifle … Pesado" → heavy)
   if (cat === 'shotgun' || /escopeta|shotgun|recortad/i.test(n) || ammo.includes('escopeta')) return 'shotgun';
@@ -10210,6 +10228,15 @@ function fullscreenBtnLabel() {
 
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
+  {
+    ver: '0.12.12',
+    date: '2026-10-09',
+    title: 'Melee por subtipo',
+    notes: [
+      'Melee subdividido: cuchillo, carnicero, hacha, bate, lanza, martillo, puño, tubería…',
+      'Lanza de cazador → lanza; Cuchillo de carnicero → cuchilla; etc.'
+    ]
+  },
   {
     ver: '0.12.11',
     date: '2026-10-09',
