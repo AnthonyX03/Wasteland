@@ -2626,6 +2626,52 @@ body.pc-mode .combat-arena.has-ally .combat-fighter img.combat-sprite {
   margin: 4px 0;
 }
 
+
+/* Tartera open animation */
+.lunchbox-open-wrap { text-align: center; }
+.lunchbox-open-stage {
+  position: relative;
+  width: 120px; height: 120px;
+  margin: 8px auto 4px;
+  display: flex; align-items: center; justify-content: center;
+}
+.lunchbox-open-img {
+  width: 96px; height: 96px;
+  object-fit: contain;
+  animation: lunchbox-shake 0.55s ease-in-out 1;
+  filter: drop-shadow(0 0 8px rgba(0,255,65,0.35));
+}
+.lunchbox-open-img.lunchbox-burst {
+  animation: lunchbox-burst 0.7s ease-out forwards;
+}
+.lunchbox-spark {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(255,220,100,0.55) 0%, transparent 70%);
+}
+.lunchbox-spark.on {
+  animation: lunchbox-spark 0.8s ease-out forwards;
+}
+@keyframes lunchbox-shake {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  20% { transform: rotate(-8deg) scale(1.05); }
+  40% { transform: rotate(8deg) scale(1.08); }
+  60% { transform: rotate(-6deg) scale(1.04); }
+  80% { transform: rotate(4deg) scale(1.02); }
+}
+@keyframes lunchbox-burst {
+  0% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 8px rgba(0,255,65,0.35)); }
+  40% { transform: scale(1.35); opacity: 1; filter: drop-shadow(0 0 22px rgba(255,220,80,0.8)); }
+  100% { transform: scale(0.85) translateY(-6px); opacity: 0.92; filter: drop-shadow(0 0 14px rgba(0,255,65,0.5)); }
+}
+@keyframes lunchbox-spark {
+  0% { opacity: 0; transform: scale(0.4); }
+  40% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(1.8); }
+}
+
 </style>
 </head>
 <body>
@@ -4074,34 +4120,48 @@ function getItemAsset(id) {
 }
 
 /**
- * Catálogo visual de armas — pack FOTOREALISTA clasificado a ojo.
- * Melee subdividido: cuchillo, hacha, bate, lanza, martillo, etc.
- * Icono y sprite = mismo ID (icons/ lista, sprites/ visor).
+ * Assets limpios v3 (img/assets/) — nombres legibles, icono=sprite.
+ * Pistola→pistola, rifle→rifle, cuchillo→cuchillo. Sin mezclar tipos.
  */
-const WEAPON_ICON_BY_TYPE = {
-  pistol:   ['weapons_039', 'weapons_040', 'weapons_041', 'weapons_044', 'weapons_045', 'weapons_046', 'weapons_047'],
-  revolver: ['weapons_042', 'weapons_043', 'weapons_048'],
-  shotgun:  ['weapons_049', 'weapons_050', 'weapons_051', 'weapons_052', 'weapons_053', 'weapons_054', 'weapons_073', 'weapons_083'],
-  smg:      ['weapons_045', 'weapons_046', 'weapons_047', 'weapons_055', 'weapons_056'],
-  assault:  ['weapons_055', 'weapons_056', 'weapons_057'],
-  sniper:   ['weapons_058', 'weapons_059', 'weapons_060', 'weapons_061'],
-  energy:   ['weapons_066', 'weapons_067', 'weapons_068', 'weapons_069', 'weapons_070', 'weapons_071', 'weapons_074', 'weapons_076', 'weapons_077', 'weapons_078', 'weapons_079', 'weapons_080', 'weapons_081', 'weapons_084', 'weapons_086', 'weapons_087', 'weapons_062'],
-  heavy:    ['weapons_063', 'weapons_064', 'weapons_065'],
-  // --- Melee por subtipo ---
-  knife:    ['weapons_001', 'weapons_002', 'weapons_003', 'weapons_018', 'weapons_019', 'weapons_020', 'weapons_021', 'weapons_022', 'weapons_023', 'weapons_025', 'weapons_026', 'weapons_036', 'weapons_037', 'weapons_038'],
-  cleaver:  ['weapons_004'],  // hacha de carnicero / cleaver
-  axe:      ['weapons_005', 'weapons_028', 'weapons_034'],
-  bat:      ['weapons_006', 'weapons_007', 'weapons_011', 'weapons_013', 'weapons_027', 'weapons_035', 'weapons_075', 'weapons_085'],
-  hammer:   ['weapons_012', 'weapons_016', 'weapons_029', 'weapons_030'],
-  spear:    ['weapons_017', 'weapons_032', 'weapons_033'],
-  pipe:     ['weapons_008', 'weapons_009', 'weapons_014', 'weapons_015'],  // llave, crowbar, tubería
-  knuckles: ['weapons_010'],
-  pickaxe:  ['weapons_031'],
-  chainsaw: ['weapons_024'],
-  // fallback melee genérico (cualquier cuerpo a cuerpo)
-  melee:    ['weapons_001', 'weapons_002', 'weapons_003', 'weapons_006', 'weapons_012', 'weapons_017', 'weapons_018', 'weapons_022', 'weapons_028', 'weapons_036'],
-  grenade:  ['weapons_004', 'weapons_010', 'weapons_008']
+const CLEAN_BASE = 'img/assets';
+
+/** Tarteras: cajas clean (gris=Vault-Tec, roja=Nuka, amarilla/media=Legendaria) */
+const LUNCHBOX_ASSETS = {
+  14: { icon: 'img/assets/other/icons/guildredbagSmall.webp', sprite: 'img/assets/other/sprites/guildredbagSmall.webp', color: '#88aacc', label: 'Vault-Tec' },
+  15: { icon: 'img/assets/other/icons/guildredbagLarge.webp', sprite: 'img/assets/other/sprites/guildredbagLarge.webp', color: '#e05050', label: 'Nuka-Cola' },
+  29: { icon: 'img/assets/other/icons/guildredbagMiddle.webp', sprite: 'img/assets/other/sprites/guildredbagMiddle.webp', color: '#e8c547', label: 'Legendaria' }
 };
+
+
+const WEAPON_ICON_BY_TYPE = {
+  pistol:   ['10mm_Pistol', '32_Pistol', 'Pipe_Pistol', 'Institute_Pistol', 'Laser_Pistol', 'Plasma_Pistol', 'T60_Pistol', 'Rusty_Gauss_Pistol'],
+  revolver: ['Ghoul_Revolver', 'Scoped_44', 'Mares_Leg'],
+  shotgun:  ['Sawed_Off_Shotgun', 'Combat_Shotgun', 'Double_barreled_Shotgun'],
+  smg:      ['Pipe_Rifle', 'Pipe_Pistol', '32_Pistol', 'Institute_Pistol'],
+  assault:  ['Assault_rifle', 'BOS_Assault_Rifle', 'Institute_Rifle', 'Pipe_Rifle'],
+  sniper:   ['Sniper_Rifle', 'Hunting_Rifle', 'Lever-action_rifle', 'Gauss_Rifle', 'Railway_Rifle'],
+  energy:   ['Laser_Rifle', 'Laser_Pistol', 'Plasma_Rifle', 'Plasma_Pistol', 'Gatling_Laser', 'Alien_Blaster', 'Alien_Disintegrator', 'Laser_Musket', 'Institute_Pistol', 'Institute_Rifle', 'Gauss_Rifle'],
+  heavy:    ['Minigun', 'Missile_Launcher', 'Fat_Man', 'Flamer', 'Gatling_Laser', 'Plasma_Thrower', 'Junk_Jet'],
+  knife:    ['Kitchen_Knife', 'Butcher_Knife'],
+  cleaver:  ['Butcher_Knife'],
+  axe:      ['Pickaxe'],
+  bat:      ['Baseball_Bat', 'Hydrant_Bat', 'Pool_Cue'],
+  hammer:   ['Hydrant_Bat', 'Pickaxe'],
+  spear:    ['Pool_Cue', 'Raider_Sword'],
+  pipe:     ['Pool_Cue', 'Pipe_Pistol', 'Hydrant_Bat'],
+  knuckles: ['Fist', 'Eds_Custom_Power_Fist'],
+  pickaxe:  ['Pickaxe'],
+  chainsaw: ['Ripper', 'Surgical_Ripper'],
+  melee:    ['Kitchen_Knife', 'Baseball_Bat', 'Raider_Sword', 'Fist', 'Pickaxe', 'Butcher_Knife'],
+  grenade:  ['Baseball_Bat'] // fallback; grenades use clean/grenades
+};
+
+function cleanWeaponPath(base, kind) {
+  // kind: 'icons' | 'sprites'
+  if (!base) base = 'Assault_rifle';
+  base = String(base).replace(/\.webp$/i, '');
+  return CLEAN_BASE + '/weapons/' + kind + '/' + base + '.webp';
+}
 
 function isMeleeWeaponItem(it) {
   if (!it) return false;
@@ -4162,7 +4222,6 @@ function resolveWeaponVisualType(it) {
   return 'assault';
 }
 
-/** Elige un ID de arma coherente con el tipo visual (mismo ID para icono y sprite). */
 function pickWeaponBaseId(it) {
   let type = resolveWeaponVisualType(it);
   let pool = WEAPON_ICON_BY_TYPE[type] || WEAPON_ICON_BY_TYPE.assault;
@@ -4170,64 +4229,200 @@ function pickWeaponBaseId(it) {
   return pool[id % pool.length];
 }
 
-/** Icono de lista: carpeta icons/ */
 function pickWeaponIconPath(it) {
-  return 'img/assets/icons/' + pickWeaponBaseId(it) + '.png';
+  return cleanWeaponPath(pickWeaponBaseId(it), 'icons');
 }
 
-/** Sprite de visor: carpeta sprites/ — MISMO ID que el icono */
 function pickWeaponSpritePath(it) {
-  return 'img/assets/sprites/' + pickWeaponBaseId(it) + '.png';
+  return cleanWeaponPath(pickWeaponBaseId(it), 'sprites');
 }
 
 function pickMeleeIconPath(it) {
   return pickWeaponIconPath(it);
 }
 
+const ARMOR_ICON_POOL = {
+  light: ['Leather_Armor', 'Survivor_Armor', 'Merc_Armor', 'Raider_Armor'],
+  combat: ['Combat_Armor', 'Battle_Armor', 'Merc_Armor', 'Engineer_Armor'],
+  power: ['T-45_power_armor', 'T-51_power_armor', 'T-60_power_armor', 'T45_Outfit', 'T51_Outfit'],
+  vault: ['Armored_Vault_Suit', 'Jumpsuit_Blue', 'Institute_jumper'],
+  robe: ['Elder_Robe', 'Scribe_Robes', 'Initiate_robe', 'Labcoat'],
+  military: ['Military_Fatigues', 'Soldier_Uniform', 'BoS_uniform', 'Autumn_Uniform', 'Knight_armor'],
+  casual: ['Business_suit', 'Fancy_Suit', 'Civvies', 'Rags', 'Handyman_Outfit']
+};
+function resolveArmorVisualType(it) {
+  let n = ((it && it.name) || '').toLowerCase();
+  if (/servo|power|t-?45|t-?51|t-?60|x-?01/i.test(n)) return 'power';
+  if (/combate|combat|battle|mercenar/i.test(n)) return 'combat';
+  if (/vault|traje de refugio|mono/i.test(n)) return 'vault';
+  if (/túnica|robe|scribe|lab|bata/i.test(n)) return 'robe';
+  if (/militar|hermandad|bos|soldado|oficial/i.test(n)) return 'military';
+  if (/cuero|ligera|raider|saqueador|superviviente/i.test(n)) return 'light';
+  return 'casual';
+}
+function pickArmorIconPath(it) {
+  let t = resolveArmorVisualType(it);
+  let pool = ARMOR_ICON_POOL[t] || ARMOR_ICON_POOL.casual;
+  let id = it && it.id != null ? Math.abs(Number(it.id)) : 0;
+  let base = pool[id % pool.length];
+  return CLEAN_BASE + '/outfits/icons/' + base + '.webp';
+}
+function pickArmorSpritePath(it) {
+  let t = resolveArmorVisualType(it);
+  let pool = ARMOR_ICON_POOL[t] || ARMOR_ICON_POOL.casual;
+  let id = it && it.id != null ? Math.abs(Number(it.id)) : 0;
+  let base = pool[id % pool.length];
+  // prefer sprites folder if exists, else icons
+  return CLEAN_BASE + '/outfits/sprites/' + base + '.webp';
+}
+
+
+
 function getItemIconUrl(id) {
   let it = (typeof getItemBase === 'function') ? getItemBase(id) : null;
-  // Armas: siempre por tipo de nombre (nunca cuchillo en rifle)
-  if (it && (it.type === 'weapon' || it.weapon || it.grenade)) {
+  let nid = id != null ? Number(id) : (it && it.id != null ? Number(it.id) : null);
+  // Tarteras
+  if (nid != null && typeof LUNCHBOX_ASSETS !== 'undefined' && LUNCHBOX_ASSETS[nid]) {
+    let p = LUNCHBOX_ASSETS[nid].icon;
+    return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
+  }
+  if (!it && nid != null) it = (typeof getItemBase === 'function') ? getItemBase(nid) : null;
+  if (!it) return null;
+  let n = (it.name || '').toLowerCase();
+  let t = it.type || '';
+
+  // Granadas
+  if (it.grenade || t === 'grenade' || /granada|molotov|dinamita|mina|c4/i.test(n)) {
+    return './' + CLEAN_BASE + '/grenades/icons/Baseball_Grenade.webp';
+  }
+  // Armas
+  if (t === 'weapon' || it.weapon) {
     let p = pickWeaponIconPath(it);
     return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
   }
-  let a = getItemAsset(id);
-  if (!a || !a.icon) return null;
-  let icon = a.icon;
-  if (typeof icon === 'string' && icon.indexOf('/sprites/') >= 0) {
-    icon = icon.replace('/sprites/', '/icons/');
+  // Armadura
+  if (t === 'armor') {
+    let ap = pickArmorIconPath(it);
+    if (ap) return ap.startsWith('./') ? ap : ('./' + ap.replace(/^\//, ''));
   }
-  return icon.startsWith('./') ? icon : ('./' + String(icon).replace(/^\//, ''));
+  // Chatarra / junk
+  if (t === 'junk' || t === 'ingredient') {
+    return './' + cleanJunkPath(it, 'icons');
+  }
+  // Munición
+  if (t === 'ammo' || /munición|municion|cartucho|bala|\.38|\.44|10mm|5\.56|7\.62|\.308/i.test(n)) {
+    return './' + CLEAN_BASE + '/other/icons/ForcePointCoin01.webp';
+  }
+  // Meds / chem
+  if (t === 'med' || t === 'chem' || /stim|radaway|rad-x|med-x|buffout|psycho|jet|mentats/i.test(n)) {
+    if (/stim/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Item_Stimpack.webp';
+    return './' + CLEAN_BASE + '/other/icons/PveBuff_C_KuangBaoYao.webp';
+  }
+  // Comida / bebida
+  if (t === 'food' || t === 'drink' || /nuka|cola|agua|carne|sopa|comida/i.test(n)) {
+    if (/nuka|cola/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Cola_Victory_2.webp';
+    if (/agua|water|milk|leche/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Water_M.webp';
+    return './' + CLEAN_BASE + '/other/icons/Milk.webp';
+  }
+  // Holocintas / terminales / other tools
+  if (/holocinta|holograma|holotape/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Fo4_holotape.webp';
+  if (/ganzúa|ganzua|lockpick/i.test(n)) return './' + CLEAN_BASE + '/other/icons/BanShou.webp';
+  if (/terminal|hack/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Terminal_icon.webp';
+  if (/geck/i.test(n)) return './' + CLEAN_BASE + '/other/icons/GECK.webp';
+  if (/ticket|ficha|token/i.test(n)) return './' + CLEAN_BASE + '/other/icons/HappyTicket.webp';
+  if (t === 'other' || t === 'quest' || t === 'special') {
+    return './' + cleanOtherPath(it, 'icons');
+  }
+  // Fallback other
+  return './' + CLEAN_BASE + '/other/icons/LingJianBao.webp';
 }
+
 function getItemSpriteUrl(id) {
-  // Armas: mismo ID que el icono, carpeta sprites/ (visor grande)
   let it = (typeof getItemBase === 'function') ? getItemBase(id) : null;
-  if (it && (it.type === 'weapon' || it.weapon || it.grenade)) {
+  let nid = id != null ? Number(id) : (it && it.id != null ? Number(it.id) : null);
+  if (nid != null && typeof LUNCHBOX_ASSETS !== 'undefined' && LUNCHBOX_ASSETS[nid]) {
+    let p = LUNCHBOX_ASSETS[nid].sprite;
+    return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
+  }
+  if (!it && nid != null) it = (typeof getItemBase === 'function') ? getItemBase(nid) : null;
+  if (!it) return null;
+  let n = (it.name || '').toLowerCase();
+  let t = it.type || '';
+  if (it.grenade || t === 'grenade' || /granada|molotov|dinamita|mina|c4/i.test(n)) {
+    return './' + CLEAN_BASE + '/grenades/sprites/Baseball_Grenade.webp';
+  }
+  if (t === 'weapon' || it.weapon) {
     let p = pickWeaponSpritePath(it);
     return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
   }
-  // Resto: sprite_id → sprites/, fallback icon
-  let a = getItemAsset(id);
-  if (a) {
-    let base = a.sprite_id || a.icon_id || null;
-    if (base && typeof base === 'string') {
-      base = base.replace(/^.*\//, '').replace(/\.(png|webp|jpg)$/i, '');
-      return './img/assets/sprites/' + base + '.png';
-    }
-    if (a.sprite) {
-      let sp = a.sprite;
-      return sp.startsWith('./') ? sp : ('./' + String(sp).replace(/^\//, ''));
-    }
-    if (a.icon) {
-      let icon = a.icon;
-      if (typeof icon === 'string' && icon.indexOf('/icons/') >= 0) {
-        icon = icon.replace('/icons/', '/sprites/');
-      }
-      return icon.startsWith('./') ? icon : ('./' + String(icon).replace(/^\//, ''));
-    }
+  if (t === 'armor') {
+    let ap = pickArmorSpritePath(it);
+    if (ap) return ap.startsWith('./') ? ap : ('./' + ap.replace(/^\//, ''));
   }
-  return null;
+  if (t === 'junk' || t === 'ingredient') {
+    return './' + cleanJunkPath(it, 'sprites');
+  }
+  if (t === 'ammo' || /munición|municion|cartucho|bala/i.test(n)) {
+    return './' + CLEAN_BASE + '/other/sprites/ForcePointCoin01.webp';
+  }
+  if (t === 'med' || t === 'chem' || /stim/i.test(n)) {
+    if (/stim/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Item_Stimpack.webp';
+    return './' + CLEAN_BASE + '/other/sprites/PveBuff_C_KuangBaoYao.webp';
+  }
+  if (t === 'food' || t === 'drink' || /nuka|cola|agua|carne|sopa/i.test(n)) {
+    if (/nuka|cola/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Cola_Victory_2.webp';
+    if (/agua|water|milk|leche/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Water_M.webp';
+    return './' + CLEAN_BASE + '/other/sprites/Milk.webp';
+  }
+  if (/holocinta|holotape/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Fo4_holotape.webp';
+  if (t === 'other' || t === 'quest' || t === 'special') {
+    return './' + cleanOtherPath(it, 'sprites');
+  }
+  return './' + CLEAN_BASE + '/other/sprites/LingJianBao.webp';
 }
+
+const JUNK_ICON_POOL = [
+  'duct_tape', 'wonderglue', 'alarm_clock', 'camera', 'desk_fan', 'toaster', 'typewriter',
+  'teddy_bear', 'toy_car', 'globe', 'gold_watch', 'microscope', 'chemistry_flask',
+  'military_circuit_board', 'military_duct_tape', 'pre-War_money', 'shovel', 'yarn',
+  'baseball_glove', 'brahmin_hide', 'yao_guai_hide', 'Cleaner', 'Lamp', 'Giddyup_Buttercup'
+];
+const OTHER_ICON_POOL = [
+  'LingJianBao', 'BanShou', 'GearWrench', 'Tool_biao', 'crafting', 'UpgradeFit3',
+  'Fo4_holotape', 'Terminal_icon', 'GECK', 'HappyTicket', 'StarterPack', 'Tecfiles'
+];
+function cleanJunkPath(it, kind) {
+  let id = it && it.id != null ? Math.abs(Number(it.id)) : 0;
+  let n = ((it && it.name) || '').toLowerCase();
+  // name hints
+  if (/cinta|tape|duct/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/duct_tape.webp';
+  if (/pegamento|glue|wonder/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/wonderglue.webp';
+  if (/reloj|watch/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/gold_watch.webp';
+  if (/ventilador|fan/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/desk_fan.webp';
+  if (/cámara|camara|camera/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/camera.webp';
+  if (/osito|teddy|oso/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/teddy_bear.webp';
+  if (/circuito|circuit/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/military_circuit_board.webp';
+  if (/dinero|money|pre-war|preguerra/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/pre-War_money.webp';
+  if (/pellejo|hide|cuero|piel/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/brahmin_hide.webp';
+  if (/muelle|spring|resorte/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/tanhuang1.webp';
+  if (/tornillo|screw|engranaje/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/military_duct_tape.webp';
+  let base = JUNK_ICON_POOL[id % JUNK_ICON_POOL.length];
+  return CLEAN_BASE + '/junk/' + kind + '/' + base + '.webp';
+}
+function cleanOtherPath(it, kind) {
+  let id = it && it.id != null ? Math.abs(Number(it.id)) : 0;
+  let n = ((it && it.name) || '').toLowerCase();
+  if (/holocinta|holotape/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/Fo4_holotape.webp';
+  if (/ganzúa|ganzua/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/BanShou.webp';
+  if (/terminal/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/Terminal_icon.webp';
+  if (/geck/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/GECK.webp';
+  if (/ticket|ficha/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/HappyTicket.webp';
+  if (/plano|blueprint|receta/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/ZhiZaoLanTu.webp';
+  if (/llave|wrench|herramienta/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/GearWrench.webp';
+  let base = OTHER_ICON_POOL[id % OTHER_ICON_POOL.length];
+  return CLEAN_BASE + '/other/' + kind + '/' + base + '.webp';
+}
+
 
 function itemIconHtml(itOrId, size, isLeg) {
   let it = (typeof itOrId === 'object' && itOrId) ? itOrId : getItemBase(itOrId);
@@ -5600,20 +5795,23 @@ function renderVault(sub = P.vaultSubtab || 'lunchboxes') {
     html += `
       <p style="font-size:12px; color:#8d9880;">Nivel Tarteras Vault-Tec: <b style="color:var(--accent);">${P.lunchboxLevel}/5</b></p>
       <div class="vault-container" style="grid-template-columns: 1fr 1fr 1fr;">
-        <div class="lunchbox-card" style="border-color:#3388ff;">
-          <h3 style="color:#55aaff; margin-top:0;">📦 TARTERA VAULT-TEC</h3>
+        <div class="lunchbox-card" style="border-color:#88aacc;">
+          <div style="text-align:center;margin:4px 0;"><img src="./img/assets/other/icons/guildredbagSmall.webp" alt="Vault-Tec" style="width:56px;height:56px;object-fit:contain;image-rendering:auto;" onerror="this.style.display='none'"/></div>
+          <h3 style="color:#88aacc; margin-top:0;font-size:12px;">TARTERA VAULT-TEC</h3>
           <p style="font-size:11px; color:#8d9880;">Chapas y suministros. Nivel ${P.lunchboxLevel} mejora recompensas.</p>
-          <p style="font-size:16px; color:#55aaff;"><b>Disponibles: ${vaultBoxCount}</b></p>
+          <p style="font-size:16px; color:#88aacc;"><b>Disponibles: ${vaultBoxCount}</b></p>
           <button style="width:100%; background:#3388ff; color:#111; font-weight:bold;" ${vaultBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(14)">ABRIR</button>
         </div>
         <div class="lunchbox-card" style="border-color:#e05050;">
-          <h3 style="color:#e05050; margin-top:0;">🥤 TARTERA NUKA-COLA</h3>
+          <div style="text-align:center;margin:4px 0;"><img src="./img/assets/other/icons/guildredbagLarge.webp" alt="Nuka" style="width:56px;height:56px;object-fit:contain;image-rendering:auto;" onerror="this.style.display='none'"/></div>
+          <h3 style="color:#e05050; margin-top:0;font-size:12px;">TARTERA NUKA-COLA</h3>
           <p style="font-size:11px; color:#8d9880;">Arma o armadura de calidad.</p>
           <p style="font-size:16px; color:#e05050;"><b>Disponibles: ${nukaBoxCount}</b></p>
           <button style="width:100%; background:#e05050; color:#111; font-weight:bold;" ${nukaBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(15)">ABRIR</button>
         </div>
         <div class="lunchbox-card" style="border-color:var(--gold);">
-          <h3 style="color:var(--gold); margin-top:0;">★ TARTERA LEGENDARIA</h3>
+          <div style="text-align:center;margin:4px 0;"><img src="./img/assets/other/icons/guildredbagMiddle.webp" alt="Legendaria" style="width:56px;height:56px;object-fit:contain;image-rendering:auto;" onerror="this.style.display='none'"/></div>
+          <h3 style="color:var(--gold); margin-top:0;font-size:12px;">★ TARTERA LEGENDARIA</h3>
           <p style="font-size:11px; color:#8d9880;">Objeto legendario garantizado.</p>
           <p style="font-size:16px; color:var(--gold);"><b>Disponibles: ${legBoxCount}</b></p>
           <button style="width:100%; background:var(--gold); color:#111; font-weight:bold;" ${legBoxCount === 0 ? 'disabled' : ''} onclick="openLunchbox(29)">ABRIR</button>
@@ -6155,9 +6353,20 @@ function showCompanionStats(id) {
     <h3 style="color:var(--accent);font-size:13px;">S.P.E.C.I.A.L.</h3>
     <p style="font-size:12px;">S${c.special.S} P${c.special.P} E${c.special.E} C${c.special.C} I${c.special.I} A${c.special.A} L${c.special.L}</p>
     ${ab}
-    <button style="width:100%;margin-top:8px;" onclick="closeModal();renderVault('prison');">Cerrar</button>
+    <button style="width:100%;margin-top:8px;" onclick="closeCompanionStatsModal('${id}');">Cerrar</button>
   `;
   m.classList.add('show');
+}
+
+
+function closeCompanionStatsModal(id) {
+  closeModal();
+  let atHome = (P.homeCompanions || []).some(function(x) { return x && (x.id === id || x.uid === id); });
+  if (atHome) {
+    try { renderPlayerHomeUI((P.playerHome && P.playerHome.tab) || 'rooms'); } catch (e) { renderMap(); }
+  } else {
+    try { renderVault('prison'); } catch (e) { renderMap(); }
+  }
 }
 
 function renderVaultUpgradesUI() {
@@ -6703,18 +6912,39 @@ function openLunchbox(boxBaseId) {
   }
 
   logMsg("¡Abriste una " + getItemBase(boxBaseId).name + "! Conseguiste: " + rewards.join(", "));
-  
+
   let m = document.getElementById('modal');
-  let titleColor = isLegendaryBox ? "#ff66cc" : (isNuka ? "var(--gold)" : "var(--accent)");
+  let titleColor = isLegendaryBox ? "#ff66cc" : (isNuka ? "#e05050" : "#88aacc");
+  let asset = (typeof LUNCHBOX_ASSETS !== 'undefined' && LUNCHBOX_ASSETS[boxBaseId]) ? LUNCHBOX_ASSETS[boxBaseId] : null;
+  let imgSrc = asset ? ('./' + asset.sprite.replace(/^\.\//, '')) : '';
   document.getElementById('modal-body').innerHTML = `
-    <h2 style="color:${titleColor}; text-align:center;">🎉 ¡TARTERA ABIERTA!</h2>
-    <p style="text-align:center; font-size:13px;">Has obtenido:</p>
-    <div style="background:#10130e; border:1px solid #30362c; padding:12px; margin:12px 0; text-align:center;">
-      ${rewards.map(r => `<div style="font-size:14px; font-weight:bold; color:var(--txt); margin:4px 0;">• ${r}</div>`).join('')}
+    <div class="lunchbox-open-wrap">
+      <div class="lunchbox-open-stage">
+        <img class="lunchbox-open-img" src="${imgSrc}" alt="Tartera" onerror="this.style.display='none'"/>
+        <div class="lunchbox-spark"></div>
+      </div>
+      <h2 style="color:${titleColor}; text-align:center; margin:8px 0 4px;">¡TARTERA ABIERTA!</h2>
+      <p style="text-align:center; font-size:13px; color:#8d9880;">Has obtenido:</p>
+      <div class="lunchbox-rewards" style="background:#10130e; border:1px solid #30362c; padding:12px; margin:12px 0; text-align:center; opacity:0;">
+        ${rewards.map(r => `<div style="font-size:14px; font-weight:bold; color:var(--txt); margin:4px 0;">• ${r}</div>`).join('')}
+      </div>
+      <button style="width:100%; opacity:0;" id="lunchbox-accept-btn" onclick="closeModal(); renderVault();">ACEPTAR</button>
     </div>
-    <button style="width:100%;" onclick="closeModal(); renderVault();">ACEPTAR</button>
   `;
   m.classList.add('show');
+  // Animación de apertura
+  setTimeout(function() {
+    let img = document.querySelector('.lunchbox-open-img');
+    if (img) img.classList.add('lunchbox-burst');
+    let spark = document.querySelector('.lunchbox-spark');
+    if (spark) spark.classList.add('on');
+  }, 80);
+  setTimeout(function() {
+    let rw = document.querySelector('.lunchbox-rewards');
+    let btn = document.getElementById('lunchbox-accept-btn');
+    if (rw) { rw.style.transition = 'opacity 0.45s ease'; rw.style.opacity = '1'; }
+    if (btn) { btn.style.transition = 'opacity 0.45s ease'; btn.style.opacity = '1'; }
+  }, 700);
   updateStats();
 }
 
@@ -10228,6 +10458,17 @@ function fullscreenBtnLabel() {
 
 // Historial de versiones (máx. 5; [0] = actual)
 const VERSION_HISTORY = [
+  {
+    ver: '0.13.3',
+    date: '2026-10-13',
+    title: 'Clean assets full + chapas SFX',
+    notes: [
+      'Assets antiguos de img/assets eliminados; todo vía img/assets.',
+      'Granadas, chatarra, other y munición usan pack clean.',
+      'Chapas: sonido instantáneo (sin pitido de loot ni retraso).',
+      'Tarteras, armas, armaduras y fixes de Hogar.'
+    ]
+  },
   {
     ver: '0.12.12',
     date: '2026-10-09',
@@ -17149,7 +17390,7 @@ const RADIO_STATIONS = {
     id: 'nukaworld',
     name: 'Radio Nuka World',
     color: '#e05050',
-    lore: 'Desde el Circo de Nuka-World: jingles de soda, risas de payasos radiactivos y promesas de premios que brillan en la oscuridad. Dulce, pegajosa y ligeramente radiactiva. ¡Bebe Nuka-Cola!',
+    lore: 'Desde el Circo de Nuka-World: jingles, payasos y premios radiactivos. ¡Bebe Nuka-Cola!',
     tracks: [
       './audio/RadioNukaWorld.mp3'
     ],
@@ -19082,13 +19323,13 @@ function renderLootUI() {
       html += '<div class="item" style="border-color:' + border + ';display:flex;align-items:center;gap:8px;padding:8px;">' +
         '<div style="flex-shrink:0;">' + icon + '</div>' +
         '<div style="flex:1;min-width:0;"><b style="color:' + nameCol + ';">' + e.name + '</b></div>' +
-        '<button style="flex-shrink:0;border-color:var(--accent);color:var(--accent);" onclick="takeLootEntry(' + idx + ')">Coger</button>' +
+        '<button data-no-pip style="flex-shrink:0;border-color:var(--accent);color:var(--accent);" onclick="takeLootEntry(' + idx + ')">Coger</button>' +
         '</div>';
     });
     html += '</div>';
   }
   html += '<div style="display:flex;gap:8px;margin-top:10px;">' +
-    (remaining.length ? '<button style="flex:1;background:var(--accent);color:#111;font-weight:bold;" onclick="takeAllLoot()">Coger todo</button>' : '') +
+    (remaining.length ? '<button data-no-pip style="flex:1;background:var(--accent);color:#111;font-weight:bold;" onclick="takeAllLoot()">Coger todo</button>' : '') +
     '<button style="flex:1;border-color:#8d9880;color:#8d9880;" onclick="leaveLoot()">' + (remaining.length ? 'Dejar / Salir' : 'Cerrar') + '</button>' +
     '</div>';
   document.getElementById('modal-body').innerHTML = html;
@@ -19148,11 +19389,54 @@ function takeLootEntry(idx) {
 
 function takeAllLoot() {
   if (!_lootSession) return;
+  let hadCaps = false, hadOther = false;
   for (let i = 0; i < _lootSession.entries.length; i++) {
-    if (!_lootSession.entries[i].taken) takeLootEntry(i);
+    let e = _lootSession.entries[i];
+    if (!e || e.taken) continue;
+    // tomar en silencio; SFX al final
+    let prevKind = e.kind;
+    let okBefore = e.taken;
+    // inline take without sound
+    let ok = false;
+    if (e.kind === 'caps') {
+      P.caps += (e.qty || 0); ok = true;
+      logMsg('Recoges ' + e.qty + ' chapas.');
+    } else if (e.kind === 'ammo') {
+      if (!P.ammoBox) P.ammoBox = {};
+      P.ammoBox[e.ammoType] = (P.ammoBox[e.ammoType] || 0) + (e.qty || 1);
+      ok = true; logMsg('Recoges ' + e.qty + '× ' + e.ammoType + '.');
+    } else if (e.kind === 'legendary' && e.inst) {
+      let base = getItemBase(e.inst.id);
+      let w = (P.inv || []).reduce(function(acc, i) {
+        let b = getItemBase(i.id);
+        return acc + ((b && b.weight || 0) * (i.qty || 1));
+      }, 0);
+      if (w + (base && base.weight || 1) > getMaxWeight()) {
+        logMsg('¡Mochila llena! No puedes cargar ' + (base ? base.name : 'el objeto') + '.');
+        continue;
+      }
+      if (!e.inst.uid) e.inst.uid = Date.now() + Math.floor(Math.random() * 100000);
+      P.inv.push(e.inst);
+      try { discoverItem(e.inst.id); } catch (err) {}
+      ok = true; logMsg('Recoges ★ ' + (base ? base.name : 'objeto legendario') + '.');
+    } else if (e.kind === 'item' && e.id != null) {
+      if (addItemToInv(e.id, e.qty || 1)) { ok = true; logMsg('Recoges ' + e.name + '.'); }
+      else { logMsg('¡Mochila llena!'); continue; }
+    }
+    if (ok) {
+      e.taken = true;
+      if (prevKind === 'caps') hadCaps = true;
+      else hadOther = true;
+    }
   }
+  try {
+    if (hadCaps) playCapsSound();
+    else if (hadOther) playLootSound();
+  } catch (err) {}
+  updateStats();
   if (_lootSession.entries.some(function(e) { return !e.taken; })) {
     logMsg('Algunos objetos no caben en la mochila.');
+    renderLootUI();
     return;
   }
   leaveLoot();
@@ -20684,6 +20968,7 @@ function playLootSound() {
 let _capsPool = [];
 let _capsPoolIdx = 0;
 const _CAPS_SRC = './audio/Chapas.wav';
+let _capsFileReady = false;
 function ensureCapsPool() {
   if (_capsPool.length >= 3) return;
   try {
@@ -20691,33 +20976,47 @@ function ensureCapsPool() {
       let a = new Audio(_CAPS_SRC);
       a.preload = 'auto';
       try { a.load(); } catch (e) {}
+      a.addEventListener('canplaythrough', function() { _capsFileReady = true; }, { once: true });
       _capsPool.push(a);
     }
   } catch (e) {}
 }
+/** Chapas: sonido instantáneo (WebAudio). Nunca el pitido de loot ni pipClick. */
 function playCapsSound() {
-  // Solo Chapas.wav — nunca el beep de loot. Pool precargado para respuesta inmediata.
   try {
     let vol = (typeof getSfxVolume === 'function') ? getSfxVolume() : ((P && P.muteSfx) ? 0 : (P && P.volSfx !== undefined ? P.volSfx : 0.7));
     if (vol <= 0) return;
-    ensureCapsPool();
-    let a = _capsPool[_capsPoolIdx % _capsPool.length];
-    _capsPoolIdx++;
-    if (!a) {
-      a = new Audio(_CAPS_SRC);
-      a.preload = 'auto';
-    }
-    try { a.pause(); } catch (e) {}
-    try { a.currentTime = 0; } catch (e) {}
-    a.volume = vol;
-    let p = a.play();
-    if (p && p.catch) p.catch(function() {
-      try {
-        let b = new Audio(_CAPS_SRC);
-        b.volume = vol;
-        b.play().catch(function() {});
-      } catch (e2) {}
-    });
+    // 1) Instantáneo: cascada de "chapas" sintéticas
+    try {
+      let ctx = getAudioCtx();
+      let t = ctx.currentTime;
+      for (let i = 0; i < 3; i++) {
+        let o = ctx.createOscillator();
+        let g = ctx.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(1200 - i * 180, t + i * 0.04);
+        o.frequency.exponentialRampToValueAtTime(400 - i * 40, t + i * 0.04 + 0.07);
+        g.gain.setValueAtTime(0.0001, t + i * 0.04);
+        g.gain.exponentialRampToValueAtTime(0.12 * vol, t + i * 0.04 + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.04 + 0.09);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t + i * 0.04);
+        o.stop(t + i * 0.04 + 0.1);
+      }
+    } catch (e) {}
+    // 2) Opcional: archivo Chapas.wav si está disponible (sin bloquear)
+    try {
+      ensureCapsPool();
+      if (_capsFileReady && _capsPool.length) {
+        let a = _capsPool[_capsPoolIdx % _capsPool.length];
+        _capsPoolIdx++;
+        try { a.pause(); } catch (e) {}
+        try { a.currentTime = 0; } catch (e) {}
+        a.volume = Math.min(1, vol * 0.85);
+        let pr = a.play();
+        if (pr && pr.catch) pr.catch(function() {});
+      }
+    } catch (e) {}
   } catch (e) {}
 }
 
@@ -21047,11 +21346,12 @@ document.addEventListener('pointerdown', function ambientUnlockOnce() {
   document.removeEventListener('pointerdown', ambientUnlockOnce);
 }, { once: true });
 
-// Clic Pip-Boy en todos los botones
+// Clic Pip-Boy en botones (excepto data-no-pip: loot/chapas tienen su propio SFX)
 document.addEventListener('click', function(e) {
-  if (e.target && e.target.closest && e.target.closest('button')) {
-    pipClick();
-  }
+  let btn = e.target && e.target.closest && e.target.closest('button');
+  if (!btn) return;
+  if (btn.hasAttribute('data-no-pip') || btn.closest('[data-no-pip]')) return;
+  pipClick();
 }, true);
 
 // PWA: registrar Service Worker (offline)
