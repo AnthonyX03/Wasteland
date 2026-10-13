@@ -2348,7 +2348,7 @@ body.pc-mode .combat-arena.has-ally .combat-fighter img.combat-sprite {
   user-select: none;
   transition: border-color 0.12s, box-shadow 0.12s;
 }
-.item-icon img { width:100%; height:100%; object-fit:contain; image-rendering:pixelated; pointer-events:none; }
+.item-icon img { width:100%; height:100%; object-fit:contain; image-rendering:auto; pointer-events:none; }
 .item-icon:hover, .sprite-thumb:hover, .enemy-icon.clickable:hover {
   border-color: var(--accent);
   box-shadow: 0 0 6px #00ff4166;
@@ -4065,22 +4065,7 @@ function itemIconEmoji(it) {
     if (/cerveza|whisky|vino|alcohol|beer/i.test(n)) return '🍺';
     return '🧃';
   }
-  if (tp === 'junk' || tp === 'ingredient') {
-    if (/cinta|tape/i.test(n)) return '📎';
-    if (/pegamento|adhesivo|glue/i.test(n)) return '🧴';
-    if (/tornillo|tuerca|engranaje|muelle/i.test(n)) return '⚙️';
-    if (/circuito|electr/i.test(n)) return '🔌';
-    if (/cuero|pellejo|retal/i.test(n)) return '🟤';
-    if (/hierro|acero|placa|metal|aluminio|titanio/i.test(n)) return '🔩';
-    if (/cobre|cable/i.test(n)) return '🟠';
-    if (/vidrio|cristal|cer[aá]mica/i.test(n)) return '🪟';
-    if (/pl[aá]stico|caucho|goma/i.test(n)) return '🧱';
-    if (/aceite|aceite|oil/i.test(n)) return '🛢️';
-    if (/[aá]cido|antiséptico|antis/i.test(n)) return '🧪';
-    if (/carne|ma[ií]z|patata|seta|zanahoria|harina/i.test(n)) return '🍖';
-    if (/agua/i.test(n)) return '💧';
-    return '🔧';
-  }
+  if (tp === 'junk' || tp === 'ingredient') return '🔧';
   if (tp === 'other' || tp === 'special') {
     if (/tartera|lunchbox/i.test(n)) return '📦';
     if (/esclavo|morador/i.test(n)) return '👤';
@@ -4149,29 +4134,30 @@ const LUNCHBOX_ASSETS = {
 
 
 const WEAPON_ICON_BY_TYPE = {
-  pistol:   ['10mm_Pistol', '32_Pistol', 'Pipe_Pistol', 'T60_Pistol'],
+  pistol:   ['10mm_Pistol', '32_Pistol', 'Pipe_Pistol', 'Institute_Pistol', 'Laser_Pistol', 'Plasma_Pistol', 'T60_Pistol', 'Rusty_Gauss_Pistol'],
   revolver: ['Ghoul_Revolver', 'Scoped_44', 'Mares_Leg'],
   shotgun:  ['Sawed_Off_Shotgun', 'Combat_Shotgun', 'Double_barreled_Shotgun'],
-  smg:      ['Pipe_Rifle', '32_Pistol', 'Pipe_Pistol'],
-  assault:  ['Assault_rifle', 'BOS_Assault_Rifle', 'Pipe_Rifle'],
-  sniper:   ['Sniper_Rifle', 'Hunting_Rifle', 'Lever-action_rifle'],
-  energy:   ['Laser_Rifle', 'Plasma_Rifle', 'Gauss_Rifle', 'Laser_Pistol', 'Plasma_Pistol'],
-  heavy:    ['Minigun', 'Missile_Launcher', 'Fat_Man', 'Flamer', 'Gatling_Laser', 'Junk_Jet'],
+  smg:      ['Pipe_Rifle', 'Pipe_Pistol', '32_Pistol', 'Institute_Pistol'],
+  assault:  ['Assault_rifle', 'BOS_Assault_Rifle', 'Institute_Rifle', 'Pipe_Rifle'],
+  sniper:   ['Sniper_Rifle', 'Hunting_Rifle', 'Lever-action_rifle', 'Gauss_Rifle', 'Railway_Rifle'],
+  energy:   ['Laser_Rifle', 'Laser_Pistol', 'Plasma_Rifle', 'Plasma_Pistol', 'Gatling_Laser', 'Alien_Blaster', 'Alien_Disintegrator', 'Laser_Musket', 'Institute_Pistol', 'Institute_Rifle', 'Gauss_Rifle'],
+  heavy:    ['Minigun', 'Missile_Launcher', 'Fat_Man', 'Flamer', 'Gatling_Laser', 'Plasma_Thrower', 'Junk_Jet'],
   knife:    ['Kitchen_Knife', 'Butcher_Knife'],
   cleaver:  ['Butcher_Knife'],
   axe:      ['Pickaxe'],
   bat:      ['Baseball_Bat', 'Hydrant_Bat', 'Pool_Cue'],
   hammer:   ['Hydrant_Bat', 'Pickaxe'],
   spear:    ['Pool_Cue', 'Raider_Sword'],
-  pipe:     ['Pool_Cue', 'Hydrant_Bat'],
+  pipe:     ['Pool_Cue', 'Pipe_Pistol', 'Hydrant_Bat'],
   knuckles: ['Fist', 'Eds_Custom_Power_Fist'],
   pickaxe:  ['Pickaxe'],
   chainsaw: ['Ripper', 'Surgical_Ripper'],
-  melee:    ['Kitchen_Knife', 'Baseball_Bat', 'Raider_Sword', 'Fist', 'Pickaxe'],
-  grenade:  ['Baseball_Bat']
+  melee:    ['Kitchen_Knife', 'Baseball_Bat', 'Raider_Sword', 'Fist', 'Pickaxe', 'Butcher_Knife'],
+  grenade:  ['Baseball_Bat'] // fallback; grenades use clean/grenades
 };
 
 function cleanWeaponPath(base, kind) {
+  // kind: 'icons' | 'sprites'
   if (!base) base = 'Assault_rifle';
   base = String(base).replace(/\.webp$/i, '');
   return CLEAN_BASE + '/weapons/' + kind + '/' + base + '.webp';
@@ -4188,107 +4174,192 @@ function isMeleeWeaponItem(it) {
   return !ammo || ammo.includes('ninguna') || ammo.includes('cuerpo') || ammo.includes('melee');
 }
 
-/** Elige asset de arma por NOMBRE (prioridad) → tipo. Icono = diseño coherente. */
+/** Subtipo visual de melee por nombre (cuchillo ≠ bate ≠ lanza). */
+function resolveMeleeVisualSubtype(it) {
+  let n = ((it && it.name) || '').toLowerCase();
+  if (/motosierra|chainsaw|ripper/i.test(n)) return 'chainsaw';
+  if (/puño|nudillo|knuckle|power fist|guantelete/i.test(n)) return 'knuckles';
+  if (/lanza|pica|tridente|spear|jabalina/i.test(n)) return 'spear';
+  if (/pico|pickaxe|piqueta/i.test(n)) return 'pickaxe';
+  if (/martillo|maza|sledge|supermartillo/i.test(n)) return 'hammer';
+  if (/hacha|axe|bombero/i.test(n)) return 'axe';
+  if (/bate|porra|club|pinchos|béisbol|beisbol/i.test(n)) return 'bat';
+  if (/tuber[ií]a|llave|crowbar|palanca|pipe|wrench/i.test(n)) return 'pipe';
+  if (/cuchilla|cleaver|carnicero/i.test(n)) return 'cleaver';
+  if (/cuchillo|machete|navaja|wakizashi|espada|katana|knife|blade|daga/i.test(n)) return 'knife';
+  return 'melee';
+}
+
+/** Detecta tipo visual del arma por nombre + munición + categoría. */
+function resolveWeaponVisualType(it) {
+  if (!it) return 'assault';
+  if (it.grenade) return 'grenade';
+  let n = (it.name || '').toLowerCase();
+  let ammo = String(it.ammoType || '').toLowerCase();
+  let cat = '';
+  try { cat = (typeof getWeaponCategory === 'function') ? getWeaponCategory(it) : ''; } catch (e) {}
+
+  if (isMeleeWeaponItem(it) || cat === 'melee') return resolveMeleeVisualSubtype(it);
+  if (cat === 'grenade' || /granada|dinamita|molotov|mina|explosiv/i.test(n)) return 'grenade';
+  // Escopeta / sniper / SMG / energía ANTES de "pesado" (evitar "Rifle … Pesado" → heavy)
+  if (cat === 'shotgun' || /escopeta|shotgun|recortad/i.test(n) || ammo.includes('escopeta')) return 'shotgun';
+  if (cat === 'sniper' || /francotir|sniper|anti-?mater|\.308/i.test(n) || ammo.includes('.308')) return 'sniper';
+  if (cat === 'smg' || /ametralladora|smg|subfusil|thompson|uzi/i.test(n)) return 'smg';
+  if (cat === 'energy' || /l[aá]ser|plasma|gauss|energ[ií]a|blaster|alien|hipnotron|fusi[oó]n/i.test(n) ||
+      /energ|plasma|fusi[oó]n|microfusi/i.test(ammo)) return 'energy';
+  if (cat === 'revolver' || /revolver|revólver|\.44|\.357|magnum/i.test(n) ||
+      ammo.includes('.44') || ammo.includes('.357')) return 'revolver';
+  if (cat === 'pistol' || /pistola|pistol|10mm|\.45|\.38/i.test(n) ||
+      ammo.includes('10mm') || ammo.includes('.45') || ammo.includes('.38')) return 'pistol';
+  // Rifles de combate / asalto / fusil (incluye "Rifle de Asalto Pesado")
+  if (cat === 'assault' || cat === 'rifle' ||
+      /asalt|fusil|rifle|combat|carabina|5\.56|7\.62/i.test(n) ||
+      ammo.includes('5.56') || ammo.includes('7.62')) return 'assault';
+  // Pesadas reales: minigun, lanzacohetes, etc. (NO la palabra "pesado" suelta)
+  if (cat === 'minigun' || cat === 'heavy' || cat === 'flamer' ||
+      /minigun|gatling|lanzallamas|lanzacohetes|lanzamisil|fat man|arma pesada/i.test(n)) return 'heavy';
+  if (cat && WEAPON_ICON_BY_TYPE[cat]) return cat;
+  return 'assault';
+}
+
 function pickWeaponBaseId(it) {
   if (!it) return 'Assault_rifle';
   let n = (it.name || '').toLowerCase();
   let ammo = String(it.ammoType || '').toLowerCase();
   let id = it.id != null ? Math.abs(Number(it.id)) : 0;
 
-  // --- Nombre exacto / keywords específicos (orden importa) ---
   if (/fat man|lanzanuke|nukes/i.test(n)) return 'Fat_Man';
   if (/minigun/i.test(n)) return 'Minigun';
-  if (/lanzamisil|misil|missile|cohete/i.test(n)) return 'Missile_Launcher';
+  if (/lanzamisil|misil|missile|cohete|bazuca/i.test(n)) return 'Missile_Launcher';
   if (/lanzallamas|flamer|flame/i.test(n)) return 'Flamer';
   if (/gatling.*l[aá]ser|l[aá]ser.*gatling|laser-gatling/i.test(n)) return 'Gatling_Laser';
   if (/railway|ferrocarril|riel/i.test(n)) return 'Railway_Rifle';
   if (/junk.?jet|chatarrero|basura autom/i.test(n)) return 'Junk_Jet';
-  if (/plasma.?throw|lanzapasma|lanzador de plasma/i.test(n)) return 'Plasma_Thrower';
-  if (/alien.*disintegr|desintegrador/i.test(n)) return 'Alien_Disintegrator';
-  if (/alien|blaster|zetan|hipnotron/i.test(n)) return 'Alien_Blaster';
-  if (/gauss/i.test(n) && /pistola|pistol/i.test(n)) return 'Rusty_Gauss_Pistol';
-  if (/gauss/i.test(n)) return 'Gauss_Rifle';
-  if (/musket|mosquete/i.test(n)) return 'Laser_Musket';
-  if (/plasma/i.test(n) && /pistola|pistol/i.test(n)) return 'Plasma_Pistol';
-  if (/plasma/i.test(n)) return 'Plasma_Rifle';
-  if (/l[aá]ser|laser/i.test(n) && /pistola|pistol/i.test(n)) return 'Laser_Pistol';
-  if (/l[aá]ser|laser|energ[ií]a/i.test(n)) return 'Laser_Rifle';
-  if (/institute|instituto/i.test(n) && /pistola|pistol/i.test(n)) return 'Institute_Pistol';
-  if (/institute|instituto/i.test(n)) return 'Institute_Rifle';
-  if (/francotir|sniper|experimental.*francotir/i.test(n)) return 'Sniper_Rifle';
-  if (/caza|hunting/i.test(n)) return 'Hunting_Rifle';
-  if (/palanca|lever/i.test(n)) return 'Lever-action_rifle';
-  if (/doble ca[nñ][oó]n|double.?barrel/i.test(n)) return 'Double_barreled_Shotgun';
-  if (/recortad|sawed/i.test(n)) return 'Sawed_Off_Shotgun';
-  if (/escopeta|shotgun|bombeo/i.test(n) || ammo.includes('escopeta')) return (id % 2 === 0 ? 'Combat_Shotgun' : 'Sawed_Off_Shotgun');
-  if (/bos|hermandad/i.test(n) && /rifle|fusil|asalto/i.test(n)) return 'BOS_Assault_Rifle';
-  if (/asalto|combat|fusil|carabina|infanter[ií]a|asalt/i.test(n) || /5\.56|7\.62/i.test(ammo)) {
-    return ['Assault_rifle', 'BOS_Assault_Rifle', 'Pipe_Rifle'][id % 3];
+  if (/destructor/i.test(n)) {
+    if (/2mm|gauss/i.test(ammo) || /gauss/i.test(n)) return 'Gauss_Rifle';
+    if (/misil/i.test(ammo)) return 'Missile_Launcher';
+    return 'Minigun';
   }
-  if (/subfusil|smg|thompson|uzi|ametralladora ligera|tambor/i.test(n)) return 'Pipe_Rifle';
-  if (/\.44|44|western|magnum|rev[oó]lver|mares/i.test(n) || ammo.includes('.44') || ammo.includes('.357')) {
+  if (/ca[nñ][oó]n/i.test(n) && !/escopeta/i.test(n)) {
+    if (/plasma/i.test(n) || /plasma/i.test(ammo)) return 'Plasma_Rifle';
+    if (/2mm/i.test(ammo)) return 'Gauss_Rifle';
+    return 'Missile_Launcher';
+  }
+  if (/desintegrador|disintegrator/i.test(n)) return 'Alien_Disintegrator';
+  if (/alien|blaster|zetan|hipnotron/i.test(n) || ammo.includes('alien')) return 'Alien_Blaster';
+  if (/gauss/i.test(n) || ammo.includes('2mm')) {
+    if (/pistola|pistol/i.test(n)) return 'Rusty_Gauss_Pistol';
+    return 'Gauss_Rifle';
+  }
+  if (/musket|mosquete/i.test(n)) return 'Laser_Musket';
+  if (/plasma/i.test(n) || ammo.includes('plasma')) {
+    if (/pistola|pistol/i.test(n)) return 'Plasma_Pistol';
+    return 'Plasma_Rifle';
+  }
+  if (/l[aá]ser|laser/i.test(n) || /fusi[oó]n|c[eé]lula/i.test(ammo)) {
+    if (/pistola|pistol/i.test(n)) return 'Laser_Pistol';
+    if (/espada/i.test(n)) return 'Ripper';
+    return 'Laser_Rifle';
+  }
+  if (/francotir|sniper|anti-?mater/i.test(n) || ammo.includes('.308')) return 'Sniper_Rifle';
+  if (/caza|hunting/i.test(n)) return 'Hunting_Rifle';
+  if (/palanca|lever/i.test(n) && /rifle|carabina|fusil/i.test(n)) return 'Lever-action_rifle';
+  if (/doble ca[nñ]|double.?barrel/i.test(n)) return 'Double_barreled_Shotgun';
+  if (/recortad|sawed/i.test(n)) return 'Sawed_Off_Shotgun';
+  if (/escopeta|shotgun|bombeo/i.test(n) || ammo.includes('escopeta')) return id % 2 === 0 ? 'Combat_Shotgun' : 'Sawed_Off_Shotgun';
+  if (/destructor/i.test(n)) {
+    if (ammo.includes('2mm')) return 'Gauss_Rifle';
+    if (ammo.includes('misil')) return 'Missile_Launcher';
+    if (ammo.includes('plasma')) return 'Plasma_Rifle';
+    return 'Minigun';
+  }
+  if (/ca[nñ][oó]n/i.test(n) && !/escopeta/i.test(n)) {
+    if (/plasma/i.test(n) || /plasma/i.test(ammo)) return 'Plasma_Rifle';
+    if (/2mm/i.test(ammo)) return 'Gauss_Rifle';
+    return 'Missile_Launcher';
+  }
+  if (/asalto|combat|fusil|carabina|infanter|rifle/i.test(n) || /5\.56|7\.62/i.test(ammo)) {
+    if (/pipe|chatarra|casero/i.test(n)) return 'Pipe_Rifle';
+    return id % 2 === 0 ? 'Assault_rifle' : 'BOS_Assault_Rifle';
+  }
+  if (/subfusil|smg|thompson|uzi|ametralladora/i.test(n) || ammo === '5mm') return 'Pipe_Rifle';
+  if (/\.44|western|magnum|rev[oó]lver|mares/i.test(n) || ammo.includes('.44') || ammo.includes('.357')) {
     return ['Scoped_44', 'Ghoul_Revolver', 'Mares_Leg'][id % 3];
   }
-  if (/10mm/i.test(n) && /pistola|pistol/i.test(n)) return '10mm_Pistol';
-  if (/pipe|tuber[ií]a.*pistola|casera/i.test(n) && /pistola|pistol/i.test(n)) return 'Pipe_Pistol';
-  if (/pipe|tuber[ií]a/i.test(n) && /rifle|fusil/i.test(n)) return 'Pipe_Rifle';
-  if (/bb.?gun|perdig[oó]n|aire comprimido/i.test(n)) return 'BB_Gun';
+  if (/10mm/i.test(n)) return '10mm_Pistol';
+  if (/bb/i.test(n)) return 'BB_Gun';
   if (/tranq|dardo|bengala|clavo|lanzadardos/i.test(n)) return 'Tranq_Gun';
-  if (/t-?60.*pistola|pistola.*t-?60/i.test(n)) return 'T60_Pistol';
-  if (/pistola|pistol/i.test(n) || ammo.includes('10mm') || ammo.includes('.45') || ammo.includes('.38')) {
-    return ['10mm_Pistol', '32_Pistol', 'Pipe_Pistol', 'T60_Pistol'][id % 4];
+  if (/pistola|pistol/i.test(n) || /10mm|\.45|\.38/.test(ammo)) {
+    return ['10mm_Pistol', '32_Pistol', 'Pipe_Pistol'][id % 3];
   }
-  // Melee por nombre
-  if (/ripper|cuchilla a motor|motosierra|sierra/i.test(n)) return (id % 2 ? 'Surgical_Ripper' : 'Ripper');
-  if (/power fist|pu[nñ]o asistido|guantelete/i.test(n)) return 'Eds_Custom_Power_Fist';
-  if (/pu[nñ]o|nudillo|fist|knuckle/i.test(n)) return 'Fist';
-  if (/carnicero|cleaver|cuchilla/i.test(n)) return 'Butcher_Knife';
-  if (/cuchillo|machete|navaja|wakizashi|espada|katana|daga|blade/i.test(n)) {
-    return (id % 2 ? 'Butcher_Knife' : 'Kitchen_Knife');
-  }
-  if (/espada|sword/i.test(n)) return 'Raider_Sword';
-  if (/bate|b[eé]isbol|beisbol|porra|club/i.test(n)) return ['Baseball_Bat', 'Hydrant_Bat', 'Pool_Cue'][id % 3];
-  if (/martillo|maza|sledge|supermartillo/i.test(n)) return 'Hydrant_Bat';
-  if (/hacha|axe|bombero|pico|pickaxe|piqueta/i.test(n)) return 'Pickaxe';
-  if (/lanza|pica|spear|jabalina/i.test(n)) return 'Pool_Cue';
-  if (/tuber[ií]a|tubo|llave inglesa|palanca|crowbar|wrench|destornillador|sarten/i.test(n)) return 'Pool_Cue';
+  if (/ripper|motosierra|sierra/i.test(n)) return id % 2 ? 'Surgical_Ripper' : 'Ripper';
+  if (/power fist|asistido|guantelete/i.test(n)) return 'Eds_Custom_Power_Fist';
+  if (/pu[nñ]o|nudillo|fist/i.test(n)) return 'Fist';
+  if (/carnicero|cleaver/i.test(n)) return 'Butcher_Knife';
+  if (/espada|sword|revoluci[oó]n|proscrit/i.test(n)) return 'Raider_Sword';
+  if (/cuchillo|machete|navaja|wakizashi|katana|daga/i.test(n)) return id % 2 ? 'Butcher_Knife' : 'Kitchen_Knife';
+  if (/bate|b[eé]isbol|porra|club|pinchos/i.test(n)) return ['Baseball_Bat', 'Hydrant_Bat', 'Pool_Cue'][id % 3];
+  if (/martillo|maza|sledge/i.test(n)) return 'Hydrant_Bat';
+  if (/hacha|axe|bombero|pico|pick/i.test(n)) return 'Pickaxe';
+  if (/lanza|pica|spear/i.test(n)) return 'Pool_Cue';
+  if (/tuber[ií]a|tubo|llave|palanca|wrench|destornillador|sarten/i.test(n)) return 'Pool_Cue';
   if (isMeleeWeaponItem(it)) return ['Kitchen_Knife', 'Baseball_Bat', 'Raider_Sword', 'Fist'][id % 4];
-  // fallback rifle
-  return ['Assault_rifle', 'Hunting_Rifle', 'Pipe_Rifle'][id % 3];
+  if (ammo.includes('2mm')) return 'Gauss_Rifle';
+  if (ammo === '5mm') return 'Minigun';
+  if (ammo.includes('misil')) return 'Missile_Launcher';
+  if (ammo.includes('combustible')) return 'Flamer';
+  if (/plasma/i.test(ammo)) return 'Plasma_Rifle';
+  if (/fusi[oó]n|c[eé]lula/i.test(ammo)) return 'Laser_Rifle';
+  return 'Assault_rifle';
 }
 
 function pickWeaponIconPath(it) {
   return cleanWeaponPath(pickWeaponBaseId(it), 'icons');
 }
+
 function pickWeaponSpritePath(it) {
   return cleanWeaponPath(pickWeaponBaseId(it), 'sprites');
 }
+
 function pickMeleeIconPath(it) {
   return pickWeaponIconPath(it);
 }
 
-/** Armadura: asset por nombre (servo, combate, cuero, etc.). */
+const ARMOR_ICON_POOL = {
+  light: ['Leather_Armor', 'Survivor_Armor', 'Merc_Armor', 'Raider_Armor'],
+  combat: ['Combat_Armor', 'Battle_Armor', 'Merc_Armor', 'Engineer_Armor'],
+  power: ['T-45_power_armor', 'T-51_power_armor', 'T-60_power_armor', 'T45_Outfit', 'T51_Outfit'],
+  vault: ['Armored_Vault_Suit', 'Jumpsuit_Blue', 'Institute_jumper'],
+  robe: ['Elder_Robe', 'Scribe_Robes', 'Initiate_robe', 'Labcoat'],
+  military: ['Military_Fatigues', 'Soldier_Uniform', 'BoS_uniform', 'Autumn_Uniform', 'Knight_armor'],
+  casual: ['Business_suit', 'Fancy_Suit', 'Civvies', 'Rags', 'Handyman_Outfit']
+};
+function resolveArmorVisualType(it) {
+  let n = ((it && it.name) || '').toLowerCase();
+  if (/servo|power|t-?45|t-?51|t-?60|x-?01/i.test(n)) return 'power';
+  if (/combate|combat|battle|mercenar/i.test(n)) return 'combat';
+  if (/vault|traje de refugio|mono/i.test(n)) return 'vault';
+  if (/túnica|robe|scribe|lab|bata/i.test(n)) return 'robe';
+  if (/militar|hermandad|bos|soldado|oficial/i.test(n)) return 'military';
+  if (/cuero|ligera|raider|saqueador|superviviente/i.test(n)) return 'light';
+  return 'casual';
+}
 function pickArmorBaseId(it) {
   if (!it) return 'Survivor_Armor';
   let n = (it.name || '').toLowerCase();
   let id = it.id != null ? Math.abs(Number(it.id)) : 0;
-
   if (/x-?01/i.test(n)) return 'X-01_Mk_IV_Power_Armor';
   if (/t-?60/i.test(n)) return 'T-60_power_armor';
   if (/t-?51/i.test(n)) return 'T-51_power_armor';
   if (/t-?45/i.test(n)) return 'T-45_power_armor';
-  if (/servo|power.?armor|incursor.*servo|chatarra.*servo/i.test(n)) {
-    return ['T-45_power_armor', 'T-51_power_armor', 'T-60_power_armor'][id % 3];
-  }
+  if (/servo|power.?armor|incursor.*servo/i.test(n)) return ['T-45_power_armor', 'T-51_power_armor', 'T-60_power_armor'][id % 3];
   if (/sintetizador|synth/i.test(n)) return 'synth_armor';
   if (/combate|combat/i.test(n)) return 'Combat_Armor';
   if (/met[aá]lic|metal/i.test(n)) return 'metal_armor';
   if (/saqueador|raider|merodeador/i.test(n)) return 'Raider_Armor';
   if (/cuero|leather/i.test(n)) return 'Leather_Armor';
   if (/hazmat|antirradi|radiaci[oó]n|aislamiento|rad.?suit/i.test(n)) return 'radiation_suit';
-  if (/vault|refugio|mono del refugio/i.test(n)) {
-    return (/blindado|armored/i.test(n) ? 'Armored_Vault_Suit' : 'Vault_Suit');
-  }
+  if (/vault|refugio|mono del refugio/i.test(n)) return /blindado|armored/i.test(n) ? 'Armored_Vault_Suit' : 'Vault_Suit';
   if (/hermandad|bos|brotherhood/i.test(n)) return 'BoS_uniform';
   if (/militar|fatiga|soldado|artillero|oficial/i.test(n)) return 'Military_Fatigues';
   if (/cient[ií]fico|lab|bata|cirujano/i.test(n)) return 'Labcoat';
@@ -4317,9 +4388,12 @@ function pickArmorSpritePath(it) {
   return CLEAN_BASE + '/outfits/sprites/' + pickArmorBaseId(it) + '.webp';
 }
 
+
+
 function getItemIconUrl(id) {
   let it = (typeof getItemBase === 'function') ? getItemBase(id) : null;
   let nid = id != null ? Number(id) : (it && it.id != null ? Number(it.id) : null);
+  // Tarteras
   if (nid != null && typeof LUNCHBOX_ASSETS !== 'undefined' && LUNCHBOX_ASSETS[nid]) {
     let p = LUNCHBOX_ASSETS[nid].icon;
     return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
@@ -4329,44 +4403,50 @@ function getItemIconUrl(id) {
   let n = (it.name || '').toLowerCase();
   let t = it.type || '';
 
+  // Granadas
   if (it.grenade || t === 'grenade' || /granada|molotov|dinamita|mina|c4/i.test(n)) {
     return './' + CLEAN_BASE + '/grenades/icons/Baseball_Grenade.webp';
   }
+  // Armas
   if (t === 'weapon' || it.weapon) {
     let p = pickWeaponIconPath(it);
     return p.startsWith('./') ? p : ('./' + p.replace(/^\//, ''));
   }
+  // Armadura
   if (t === 'armor') {
     let ap = pickArmorIconPath(it);
-    return ap ? (ap.startsWith('./') ? ap : ('./' + ap.replace(/^\//, ''))) : null;
+    if (ap) return ap.startsWith('./') ? ap : ('./' + ap.replace(/^\//, ''));
   }
-  // Meds
+  // Chatarra / junk
+  if (t === 'junk' || t === 'ingredient') {
+    let _jp = matchJunkAsset(it, 'icons'); return _jp ? ('./' + _jp) : null;
+  }
+  // Munición
+  if (t === 'ammo' || /munición|municion|cartucho|bala|\.38|\.44|10mm|5\.56|7\.62|\.308/i.test(n)) {
+    return null; // munición → emoji
+  }
+  // Meds / chem
   if (t === 'med' || t === 'chem' || /stim|radaway|rad-x|med-x|buffout|psycho|jet|mentats/i.test(n)) {
     if (/stim/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Item_Stimpack.webp';
-    // chem genérico: emoji (no hay asset claro)
-    return null;
+    return './' + CLEAN_BASE + '/other/icons/PveBuff_C_KuangBaoYao.webp';
   }
-  // Bebida / comida con asset claro
-  if (/nuka|cola/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Cola_Victory_2.webp';
-  if (/agua purificada|agua limpia|^agua$/i.test(n) || (t === 'drink' && /agua|water/i.test(n))) {
-    return './' + CLEAN_BASE + '/other/icons/Water_M.webp';
+  // Comida / bebida
+  if (t === 'food' || t === 'drink' || /nuka|cola|agua|carne|sopa|comida/i.test(n)) {
+    if (/nuka|cola/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Cola_Victory_2.webp';
+    if (/agua|water|milk|leche/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Water_M.webp';
+    return './' + CLEAN_BASE + '/other/icons/Milk.webp';
   }
-  if (t === 'food' || t === 'drink') return null; // emoji
-
-  // Munición → emoji (fichas no parecen balas)
-  if (t === 'ammo' || /munición|municion|cartucho|^bala/i.test(n)) return null;
-
-  // Chatarra / ingredientes: solo si el nombre encaja con un asset real
-  if (t === 'junk' || t === 'ingredient') {
-    let jp = matchJunkAsset(it, 'icons');
-    return jp ? ('./' + jp) : null;
-  }
-  // Other / quest / special (excepto tarteras ya cubiertas)
+  // Holocintas / terminales / other tools
+  if (/holocinta|holograma|holotape/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Fo4_holotape.webp';
+  if (/ganzúa|ganzua|lockpick/i.test(n)) return './' + CLEAN_BASE + '/other/icons/BanShou.webp';
+  if (/terminal|hack/i.test(n)) return './' + CLEAN_BASE + '/other/icons/Terminal_icon.webp';
+  if (/geck/i.test(n)) return './' + CLEAN_BASE + '/other/icons/GECK.webp';
+  if (/ticket|ficha|token/i.test(n)) return './' + CLEAN_BASE + '/other/icons/HappyTicket.webp';
   if (t === 'other' || t === 'quest' || t === 'special') {
-    let op = matchOtherAsset(it, 'icons');
-    return op ? ('./' + op) : null;
+    let _op = matchOtherAsset(it, 'icons'); return _op ? ('./' + _op) : null;
   }
-  return null;
+  // Fallback other
+  return null; // sin asset coherente → emoji
 }
 
 function getItemSpriteUrl(id) {
@@ -4389,29 +4469,74 @@ function getItemSpriteUrl(id) {
   }
   if (t === 'armor') {
     let ap = pickArmorSpritePath(it);
-    return ap ? (ap.startsWith('./') ? ap : ('./' + ap.replace(/^\//, ''))) : null;
+    if (ap) return ap.startsWith('./') ? ap : ('./' + ap.replace(/^\//, ''));
   }
-  if (t === 'med' || t === 'chem') {
-    if (/stim/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Item_Stimpack.webp';
-    return null;
-  }
-  if (/nuka|cola/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Cola_Victory_2.webp';
-  if (/agua purificada|agua limpia|^agua$/i.test(n) || (t === 'drink' && /agua|water/i.test(n))) {
-    return './' + CLEAN_BASE + '/other/sprites/Water_M.webp';
-  }
-  if (t === 'food' || t === 'drink' || t === 'ammo') return null;
   if (t === 'junk' || t === 'ingredient') {
-    let jp = matchJunkAsset(it, 'sprites');
-    return jp ? ('./' + jp) : null;
+    let _jp = matchJunkAsset(it, 'sprites'); return _jp ? ('./' + _jp) : null;
   }
+  if (t === 'ammo' || /munición|municion|cartucho|bala/i.test(n)) {
+    return null; // munición → emoji
+  }
+  if (t === 'med' || t === 'chem' || /stim/i.test(n)) {
+    if (/stim/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Item_Stimpack.webp';
+    return './' + CLEAN_BASE + '/other/sprites/PveBuff_C_KuangBaoYao.webp';
+  }
+  if (t === 'food' || t === 'drink' || /nuka|cola|agua|carne|sopa/i.test(n)) {
+    if (/nuka|cola/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Cola_Victory_2.webp';
+    if (/agua|water|milk|leche/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Water_M.webp';
+    return './' + CLEAN_BASE + '/other/sprites/Milk.webp';
+  }
+  if (/holocinta|holotape/i.test(n)) return './' + CLEAN_BASE + '/other/sprites/Fo4_holotape.webp';
   if (t === 'other' || t === 'quest' || t === 'special') {
-    let op = matchOtherAsset(it, 'sprites');
-    return op ? ('./' + op) : null;
+    let _op = matchOtherAsset(it, 'sprites'); return _op ? ('./' + _op) : null;
   }
-  return null;
+  return null; // sin asset coherente → emoji
 }
 
-/** Solo devuelve path si el nombre encaja con un asset de chatarra real. */
+const JUNK_ICON_POOL = [
+  'duct_tape', 'wonderglue', 'alarm_clock', 'camera', 'desk_fan', 'toaster', 'typewriter',
+  'teddy_bear', 'toy_car', 'globe', 'gold_watch', 'microscope', 'chemistry_flask',
+  'military_circuit_board', 'military_duct_tape', 'pre-War_money', 'shovel', 'yarn',
+  'baseball_glove', 'brahmin_hide', 'yao_guai_hide', 'Cleaner', 'Lamp', 'Giddyup_Buttercup'
+];
+const OTHER_ICON_POOL = [
+  'LingJianBao', 'BanShou', 'GearWrench', 'Tool_biao', 'crafting', 'UpgradeFit3',
+  'Fo4_holotape', 'Terminal_icon', 'GECK', 'HappyTicket', 'StarterPack', 'Tecfiles'
+];
+function cleanJunkPath(it, kind) {
+  let id = it && it.id != null ? Math.abs(Number(it.id)) : 0;
+  let n = ((it && it.name) || '').toLowerCase();
+  // name hints
+  if (/cinta|tape|duct/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/duct_tape.webp';
+  if (/pegamento|glue|wonder/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/wonderglue.webp';
+  if (/reloj|watch/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/gold_watch.webp';
+  if (/ventilador|fan/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/desk_fan.webp';
+  if (/cámara|camara|camera/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/camera.webp';
+  if (/osito|teddy|oso/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/teddy_bear.webp';
+  if (/circuito|circuit/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/military_circuit_board.webp';
+  if (/dinero|money|pre-war|preguerra/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/pre-War_money.webp';
+  if (/pellejo|hide|cuero|piel/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/brahmin_hide.webp';
+  if (/muelle|spring|resorte/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/tanhuang1.webp';
+  if (/tornillo|screw|engranaje/i.test(n)) return CLEAN_BASE + '/junk/' + kind + '/military_duct_tape.webp';
+  let base = JUNK_ICON_POOL[id % JUNK_ICON_POOL.length];
+  return CLEAN_BASE + '/junk/' + kind + '/' + base + '.webp';
+}
+function cleanOtherPath(it, kind) {
+  let id = it && it.id != null ? Math.abs(Number(it.id)) : 0;
+  let n = ((it && it.name) || '').toLowerCase();
+  if (/holocinta|holotape/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/Fo4_holotape.webp';
+  if (/ganzúa|ganzua/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/BanShou.webp';
+  if (/terminal/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/Terminal_icon.webp';
+  if (/geck/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/GECK.webp';
+  if (/ticket|ficha/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/HappyTicket.webp';
+  if (/plano|blueprint|receta/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/ZhiZaoLanTu.webp';
+  if (/llave|wrench|herramienta/i.test(n)) return CLEAN_BASE + '/other/' + kind + '/GearWrench.webp';
+  let base = OTHER_ICON_POOL[id % OTHER_ICON_POOL.length];
+  return CLEAN_BASE + '/other/' + kind + '/' + base + '.webp';
+}
+
+
+
 function matchJunkAsset(it, kind) {
   let n = ((it && it.name) || '').toLowerCase();
   let map = [
@@ -4420,35 +4545,29 @@ function matchJunkAsset(it, kind) {
     [/reloj|watch/i, 'gold_watch'],
     [/ventilador|fan/i, 'desk_fan'],
     [/c[aá]mara|camara|camera/i, 'camera'],
-    [/osito|teddy|oso de peluche/i, 'teddy_bear'],
+    [/osito|teddy|oso/i, 'teddy_bear'],
     [/circuito|circuit|electr[oó]nic/i, 'military_circuit_board'],
     [/dinero|pre-?war|preguerra|billete/i, 'pre-War_money'],
-    [/pellejo|hide|cuero|retal|piel|brahm[aá]n/i, 'brahmin_hide'],
-    [/yao.?guai|saiy/i, 'yao_guai_hide'],
+    [/pellejo|hide|cuero|retal|piel|brahm/i, 'brahmin_hide'],
     [/muelle|spring|resorte/i, 'tanhuang1'],
     [/tornillo|screw|tuerca|engranaje/i, 'military_duct_tape'],
     [/pala|shovel/i, 'shovel'],
     [/lupa|magnif/i, 'magnifying_glass'],
     [/microscopio/i, 'microscope'],
-    [/matraz|frasco|flask|qu[ií]mic/i, 'chemistry_flask'],
+    [/matraz|frasco|flask/i, 'chemistry_flask'],
     [/tostadora|toaster/i, 'Toaster'],
-    [/m[aá]quina de escribir|typewriter/i, 'Typewriter'],
+    [/typewriter|escribir/i, 'Typewriter'],
     [/l[aá]mpara|lamp/i, 'Lamp'],
     [/despertador|alarm/i, 'alarm_clock'],
-    [/guante.*b[eé]isbol|baseball.?glove/i, 'baseball_glove'],
-    [/juguete|coche de juguete|toy/i, 'toy_car'],
-    [/ovillo|lana|yarn/i, 'yarn'],
-    [/globo|globe/i, 'globe'],
+    [/globe|globo/i, 'globe'],
     [/bandera|flag/i, 'American_flag'],
-    [/giddyup|pony|caballo de juguete/i, 'Giddyup_Buttercup']
+    [/giddyup|pony/i, 'Giddyup_Buttercup']
   ];
   for (let i = 0; i < map.length; i++) {
     if (map[i][0].test(n)) return CLEAN_BASE + '/junk/' + kind + '/' + map[i][1] + '.webp';
   }
-  return null; // → emoji
+  return null;
 }
-
-/** Solo path si hay asset other coherente (no tarteras aquí). */
 function matchOtherAsset(it, kind) {
   let n = ((it && it.name) || '').toLowerCase();
   let map = [
@@ -4460,13 +4579,13 @@ function matchOtherAsset(it, kind) {
     [/plano|blueprint|receta|esquema/i, 'ZhiZaoLanTu'],
     [/llave inglesa|wrench|herramienta/i, 'GearWrench'],
     [/gu[ií]a|libro.*vault|university/i, 'Schmault_Tec_University_Guidebook'],
-    [/documento|informe|diario|nota|libro antiguo/i, 'Tecfiles'],
+    [/documento|informe|diario|nota|libro/i, 'Tecfiles'],
     [/stim/i, 'Item_Stimpack']
   ];
   for (let i = 0; i < map.length; i++) {
     if (map[i][0].test(n)) return CLEAN_BASE + '/other/' + kind + '/' + map[i][1] + '.webp';
   }
-  return null; // → emoji
+  return null;
 }
 
 function itemIconHtml(itOrId, size, isLeg) {
